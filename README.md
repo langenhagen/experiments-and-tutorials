@@ -2,7 +2,7 @@
 Files and projects related to learning programming concepts, languages, their libraries as well as
 prototypes.
 
-Find prototypes and small proofs of concepts to the in the programming language and its libraries
+Find prototypes and small proofs of concepts to a set of programming languages and their libraries
 here.
 
 Some of the stuff in here dates back until around the year 2000. Most of the programming languages
