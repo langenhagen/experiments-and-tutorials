@@ -1,4 +1,4 @@
-# Rxperiments and Tutorials
+# Experiments and Tutorials
 Files and projects related to learning programming concepts, languages, their libraries as well as
 prototypes.
 
