@@ -1,0 +1,23 @@
+compositor omega/compositor/merge_textures
+{
+	technique
+	{
+		texture scene target_height target_width PF_R8G8B8
+
+		target scene
+		{
+			input previous
+		}
+
+		target_output
+		{
+			input none
+
+			pass render_quad
+			{
+				material omega/material/merge_textures
+				input 0 scene
+			}
+		}
+	}
+}

@@ -1,0 +1,1 @@
+/usr/bin/g++    -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/playground_qtc.dir/main.cpp.o CMakeFiles/playground_qtc.dir/My.cpp.o  -o playground_qtc  

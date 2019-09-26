@@ -1,0 +1,15 @@
+# Die Files.
+# Use -nocpp if necessary.
+
+ShmTexture.hpp
+
+
+# So Standard setup Kram. Muss man eigentlich nur selten ändern.
+# Die Reihenfolge der ganzen Statements ist egal.
+author: barn
+namespace: Trip
+HPath:	G:\Cpp\Trip\src\
+CppPath: G:\Cpp\Trip\src\
+HTemplate: Template.h
+HppTemplate: Template.hpp
+CppTemplate: Template.cpp

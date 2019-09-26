@@ -1,0 +1,31 @@
+<metatype-provider>
+  <objectclass load="false">
+    <name>
+      Logging Categories
+    </name>
+    <id>ContextModel.logging.category</id>
+    <description>
+      Logging levels for the individual categories
+    </description>
+    <attribute modifier="req">
+      <name>Level</name>
+      <id>level</id>
+      <description>Logging level</description>
+      <type>&string;</type>
+      <cardinality>0</cardinality>
+      <value>
+	<scalar>INFO</scalar>
+      </value>
+    </attribute>
+    <attribute modifier="req">
+      <name>Category</name>
+      <id>name</id>
+      <description>Logging Categories</description>
+      <type>&string;</type>
+      <cardinality>0</cardinality>
+      <value>
+	<scalar></scalar>
+      </value>
+    </attribute>
+  </objectclass>
+</metatype-provider>

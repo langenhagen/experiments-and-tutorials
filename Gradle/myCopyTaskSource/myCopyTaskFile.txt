@@ -1,0 +1,1 @@
+I am an original hand-crafted file for the myCopyTask in my gradle hello world project

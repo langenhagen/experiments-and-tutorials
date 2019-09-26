@@ -1,0 +1,56 @@
+final String sketchName = "SKETCHNAME";
+
+// something like a debug macro, works well whithin the whole project.
+final boolean __DEBUG__ = false;
+
+int width = 800;
+int height = 600;
+int halfWidth = width/2;
+int halfHeight = height/2;
+
+
+
+void setup() {  
+  size(width, height, P3D);
+  
+}
+
+
+
+void draw() {
+  setWinTitleAndFps();
+  
+  
+}
+
+
+
+void keyPressed() {
+  
+  // beware of the difference between key and keyCode
+  if( keyCode == 123) {
+    // F12
+    save("result_" + timestamp() + ".png");
+  }
+  if( key == 'p') {
+    // PRINT SOMETHING
+    println( " => " +sketchName + " " + millis() + " ms [" + (frameRate) + " fps]");
+  }
+  
+  //println("(int)key: " + (int)key + "\tkey: " + key + "\tkeyCode: " + keyCode);
+}
+
+
+
+// STANDARD HELPER FUNCTIONS //////////////////////////////////////////////////////////////////////
+
+String timestamp() {
+  return year() + nf(month(), 2) + nf(day(), 2) + "-"  + nf(hour(), 2) + nf(minute(), 2) + nf(second(), 2);
+}
+
+
+
+void setWinTitleAndFps() {
+  if( frameCount % 100 == 0)
+    frame.setTitle( sketchName + " [" + (frameRate) + " fps]");
+}

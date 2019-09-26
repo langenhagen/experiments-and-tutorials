@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.here.hello">
+
+
+    <application
+        android:name=".application.Miau"
+        android:allowBackup="false"
+        android:myOwnStuff="true"
+        android:extractNativeLibs="false"
+        tools:targetApi="m"
+        tools:replace="android:name">
+
+        <activity
+            android:name=".app.SecondActivity"
+            android:label="@string/maauuuz"
+            android:theme="@style/AppTheme.Katz"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.TRAIN" />
+
+                <category android:name="android.intent.category.BROWNCHAIR" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Context:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Context="http://www.dai-labor.de/~masp/Context-1.3.ecore" xmlns:Properties="http://www.dai-labor.de/~masp/Properties.ecore">
+  <places xsi:type="Context:Room" id="Kitchen" name="Kitchen" elements="//@devices.1">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="Kitchen - Living Room Door" name="" target="//@places.1">
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="Living Room" name="Living Room" elements="//@devices.0">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="Living Room - Office Door" name="" target="//@places.2">
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="Office" name="Office">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="Office - Bedroom Door" name="" target="//@places.3">
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="Bedroom" name="Bedroom">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="Bedroom - Office Door" name="" target="//@places.2">
+      <span/>
+    </doors>
+  </places>
+  <devices xsi:type="Context:Lamp" id="MeineTolleLampe" name="MeineTolleLampe" place="//@places.1">
+    <position/>
+    <on actor="//@serviceContainers.0/@services.2" sensor="//@serviceContainers.0/@services.1"/>
+    <powerUsage xsi:type="Properties:DoubleProperty"/>
+  </devices>
+  <devices xsi:type="Context:Cooker" id="BSH Herd" name="BSH Herd" place="//@places.0">
+    <position/>
+    <powerUsage xsi:type="Properties:DoubleProperty" sensor="//@serviceContainers.1/@services.1"/>
+    <subDevice xsi:type="Context:Oven" id="BSH Ofen" name="BSH Ofen">
+      <on/>
+      <powerUsage xsi:type="Properties:DoubleProperty"/>
+    </subDevice>
+    <subDevice xsi:type="Context:CookTop" id="BSH Kochfeld" name="BSH Kochfeld">
+      <subDevice xsi:type="Context:Hob" id="Hauptkochfeld" name="Hauptkochfeld">
+        <on/>
+        <powerUsage xsi:type="Properties:DoubleProperty"/>
+      </subDevice>
+      <subDevice xsi:type="Context:Hob" id="Kochfeld1" name="Kochfeld1">
+        <on/>
+        <powerUsage xsi:type="Properties:DoubleProperty"/>
+      </subDevice>
+      <subDevice xsi:type="Context:Hob" id="Kochfeld2" name="Kochfeld2">
+        <on/>
+        <powerUsage xsi:type="Properties:DoubleProperty"/>
+      </subDevice>
+      <subDevice xsi:type="Context:Hob" id="Kochfeld3" name="Kochfeld3">
+        <on/>
+        <powerUsage xsi:type="Properties:DoubleProperty"/>
+      </subDevice>
+    </subDevice>
+  </devices>
+  <serviceContainers id="DirkIstDoof,urn:upnp-org:serviceId:Switch">
+    <services xsi:type="Properties:Sensor" id="DirkIstDoof,urn:upnp-org:serviceId:Switch,Target" available="true" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="DirkIstDoof" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="Target" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="DirkIstDoof,urn:upnp-org:serviceId:Switch,Status" available="true" properties="//@devices.0/@on" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="DirkIstDoof" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="Status" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Actor" id="DirkIstDoof,urn:upnp-org:serviceId:Switch,SetTarget" available="true" properties="//@devices.0/@on" actorWrapperClassName="org.sercho.masp.models.Context.upnp.SetterActionActorWrapper">
+      <configuration value="DirkIstDoof" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="SetTarget" key="ActionName"/>
+    </services>
+  </serviceContainers>
+  <serviceContainers id="DirkIstDoof,urn:upnp-org:serviceId:PowerSensor">
+    <services xsi:type="Properties:Sensor" id="DirkIstDoof,urn:upnp-org:serviceId:PowerSensor,Unit" available="true" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="DirkIstDoof" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:PowerSensor" key="ServiceID"/>
+      <configuration value="Unit" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="DirkIstDoof,urn:upnp-org:serviceId:PowerSensor,Value" available="true" properties="//@devices.1/@powerUsage" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="DirkIstDoof" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:PowerSensor" key="ServiceID"/>
+      <configuration value="Value" key="StateVariable"/>
+    </services>
+  </serviceContainers>
+</Context:Environment>

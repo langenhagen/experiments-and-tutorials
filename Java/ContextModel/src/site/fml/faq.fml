@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<faqs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://maven.apache.org/maven-1.x/plugins/faq/faq.xsd"
+  title="Frequently Asked Questions" toplink="false">
+  <part id="general">
+    <title>General</title>
+    <faq id="why-empty">
+      <question> Why is this empty? </question>
+      <answer>
+        <p>Because I have no time ;)</p>
+      </answer>
+    </faq>
+    <faq id="whats-bar">
+      <question> What is Bar? </question>
+      <answer>
+        <p>some markup goes here</p>
+      </answer>
+    </faq>
+  </part>
+  <part id="install">
+    <title>Installation</title>
+    <faq id="how-install">
+      <question> How do I install Foo? </question>
+      <answer>
+        <p>some markup goes here</p>
+      </answer>
+    </faq>
+  </part>
+</faqs>

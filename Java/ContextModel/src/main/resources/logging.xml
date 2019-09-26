@@ -1,0 +1,43 @@
+<metatype-provider>
+  <objectclass load="false">
+    <name>
+      Logging Configuration
+    </name>
+    <id>ContextModel.logging.config</id>
+    <description>
+      Logging message formatting
+    </description>
+    <attribute modifier="req">
+      <name>Category Configuration</name>
+      <id>category-factory.enabled</id>
+      <description>
+	Enables FactoryService for configuring category log-levels
+      </description>
+      <type>&boolean;</type>
+      <cardinality>0</cardinality>
+      <value>
+	<scalar>false</scalar>
+      </value>
+    </attribute>
+    <attribute modifier="req">
+      <name>StdErr Log-Level</name>
+      <id>stderr.level</id>
+      <description></description>
+      <type>&string;</type>
+      <cardinality>0</cardinality>
+      <value>
+	<scalar></scalar>
+      </value>
+    </attribute>
+    <attribute modifier="req">
+      <name>Log-Service Log-Level</name>
+      <id>logservice.level</id>
+      <description></description>
+      <type>&string;</type>
+      <cardinality>0</cardinality>
+      <value>
+	<scalar></scalar>
+      </value>
+    </attribute>
+  </objectclass>
+</metatype-provider>

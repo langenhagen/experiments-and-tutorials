@@ -1,0 +1,14 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>H:\Microsoft Robotics Dev Studio 2008 R3\</StartWorkingDirectory>
+    <StartProgram>H:\Microsoft Robotics Dev Studio 2008 R3\bin\dsshost.exe</StartProgram>
+    <StartArguments>/p:50000 /t:50001 /m:"G:/C#/CCR_Test_1/CCR_Test_1.manifest.xml"</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>H:\Microsoft Robotics Dev Studio 2008 R3\</StartWorkingDirectory>
+    <StartProgram>H:\Microsoft Robotics Dev Studio 2008 R3\bin\dsshost.exe</StartProgram>
+    <StartArguments>/p:50000 /t:50001 /m:"G:/C#/CCR_Test_1/CCR_Test_1.manifest.xml"</StartArguments>
+  </PropertyGroup>
+</Project>

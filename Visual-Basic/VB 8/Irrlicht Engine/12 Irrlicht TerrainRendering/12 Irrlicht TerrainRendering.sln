@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Basic Express 2005
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Irrlicht TerrainRendering", "Irrlicht TerrainRendering\Irrlicht TerrainRendering.vbproj", "{290B584A-0463-4A84-AFE2-01370547D0ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{290B584A-0463-4A84-AFE2-01370547D0ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290B584A-0463-4A84-AFE2-01370547D0ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290B584A-0463-4A84-AFE2-01370547D0ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290B584A-0463-4A84-AFE2-01370547D0ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

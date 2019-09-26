@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClassTemplates(from FloatVek)", "ClassTemplates(from FloatVek).vcproj", "{7268723A-C493-4E4D-9B70-C53CE7D8F8E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7268723A-C493-4E4D-9B70-C53CE7D8F8E9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7268723A-C493-4E4D-9B70-C53CE7D8F8E9}.Debug|Win32.Build.0 = Debug|Win32
+		{7268723A-C493-4E4D-9B70-C53CE7D8F8E9}.Release|Win32.ActiveCfg = Release|Win32
+		{7268723A-C493-4E4D-9B70-C53CE7D8F8E9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

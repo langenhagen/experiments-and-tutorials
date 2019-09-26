@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SeqContainers(PriorQueues,pop(),top())", "SeqContainers(PriorQueues,pop(),top()).vcproj", "{D35EF57F-5DC7-43A6-8283-F932A2ADC987}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D35EF57F-5DC7-43A6-8283-F932A2ADC987}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D35EF57F-5DC7-43A6-8283-F932A2ADC987}.Debug|Win32.Build.0 = Debug|Win32
+		{D35EF57F-5DC7-43A6-8283-F932A2ADC987}.Release|Win32.ActiveCfg = Release|Win32
+		{D35EF57F-5DC7-43A6-8283-F932A2ADC987}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

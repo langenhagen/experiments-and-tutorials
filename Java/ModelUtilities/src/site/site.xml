@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ModelUtilities">
+  <bannerLeft>
+    <name>DAI-Labor</name>
+    <src>http://www.dai-labor.de/img/logo1.jpg</src>
+    <href>http://www.dai-labor.de/</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>http://www.dai-labor.de/img/logo2.jpg</src>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="DAI-Labor" href="http://www.dai-labor.de"/>
+      <item name="MASP-Wiki" href="http://wiki.dai-labor.de/index.php/MASP:Hauptseite"/>
+    </links>
+    <menu name="Project">
+      <item name="Documentation" collapsed="false" href="index.html">
+        <item name="FAQ" href="faq.html"/>
+        <item name="MASP in DAI-Wiki" href="http://wiki.dai-labor.de/MASP:Hauptseite"/>
+      </item>
+    </menu>
+    <menu ref="parent" />
+    <menu ref="modules" />
+    <menu ref="reports" />
+  </body>
+</project>

@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:UI="http://www.dai-labor.de/~lehmann/UI.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="UI" ecore:package="org.sercho.masp.models.UI" targetNamespace="http://www.dai-labor.de/~lehmann/UI.ecore">
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="UIModel" type="UI:UIModel"/>
+  <xsd:element ecore:ignore="true" name="Interactor" type="UI:Interactor"/>
+  <xsd:element ecore:ignore="true" name="AbstractInteractor" type="UI:AbstractInteractor"/>
+  <xsd:element ecore:ignore="true" name="DataSlot" type="UI:DataSlot"/>
+  <xsd:element ecore:ignore="true" name="Choice" type="UI:Choice"/>
+  <xsd:element ecore:ignore="true" name="Command" type="UI:Command"/>
+  <xsd:element ecore:ignore="true" name="UserInput" type="UI:UserInput"/>
+  <xsd:element ecore:ignore="true" name="OutputOnly" type="UI:OutputOnly"/>
+  <xsd:element ecore:ignore="true" name="GraphicalOutput" type="UI:GraphicalOutput"/>
+  <xsd:element ecore:ignore="true" name="Image" type="UI:Image"/>
+  <xsd:element ecore:ignore="true" name="MessageOutput" type="UI:MessageOutput"/>
+  <xsd:element ecore:ignore="true" name="TextLabel" type="UI:TextLabel"/>
+  <xsd:element ecore:ignore="true" name="ConcreteInteractor" type="UI:ConcreteInteractor"/>
+  <xsd:element ecore:ignore="true" name="OutputInteractor" type="UI:OutputInteractor"/>
+  <xsd:element ecore:ignore="true" name="Pointing" type="UI:Pointing"/>
+  <xsd:element ecore:ignore="true" name="ArbitraryMessages" type="UI:ArbitraryMessages"/>
+  <xsd:element ecore:ignore="true" name="InputInteractor" type="UI:InputInteractor"/>
+  <xsd:element ecore:ignore="true" name="MessageInput" type="UI:MessageInput"/>
+  <xsd:element ecore:ignore="true" name="PredefinedMessage" type="UI:PredefinedMessage"/>
+  <xsd:element ecore:ignore="true" name="GraphicalChoice" type="UI:GraphicalChoice"/>
+  <xsd:element ecore:ignore="true" name="GraphicalNavigation" type="UI:GraphicalNavigation"/>
+  <xsd:element ecore:ignore="true" name="GraphicalUserInput" type="UI:GraphicalUserInput"/>
+  <xsd:element ecore:ignore="true" name="GraphicalOutputWidget" type="UI:GraphicalOutputWidget"/>
+  <xsd:element ecore:ignore="true" name="TwoDimensional" type="UI:TwoDimensional"/>
+  <xsd:element ecore:ignore="true" name="OneDimensional" type="UI:OneDimensional"/>
+  <xsd:element ecore:ignore="true" name="MASPFeature" type="UI:MASPFeature"/>
+  <xsd:element ecore:ignore="true" name="GraphicalPropertySet" type="UI:GraphicalPropertySet"/>
+  <xsd:element ecore:ignore="true" name="Button" type="UI:Button"/>
+  <xsd:element ecore:ignore="true" name="CustomButton" type="UI:CustomButton"/>
+  <xsd:element ecore:ignore="true" name="LookAndFeel" type="UI:LookAndFeel"/>
+  <xsd:element ecore:ignore="true" name="ArbitraryInput" type="UI:ArbitraryInput"/>
+  <xsd:element ecore:ignore="true" name="AlertMessage" type="UI:AlertMessage"/>
+  <xsd:element ecore:ignore="true" name="Text" type="UI:Text"/>
+  <xsd:element ecore:ignore="true" name="TextConstant" type="UI:TextConstant"/>
+  <xsd:element ecore:ignore="true" name="TextVariable" type="UI:TextVariable"/>
+  <xsd:element ecore:ignore="true" name="ItemValueTextVariable" type="UI:ItemValueTextVariable"/>
+  <xsd:element ecore:ignore="true" name="OldInputTextVariable" type="UI:OldInputTextVariable"/>
+  <xsd:element ecore:ignore="true" name="Color" type="UI:Color"/>
+  <xsd:element ecore:ignore="true" name="White" type="UI:White"/>
+  <xsd:element ecore:ignore="true" name="Black" type="UI:Black"/>
+  <xsd:element ecore:ignore="true" name="Red" type="UI:Red"/>
+  <xsd:element ecore:ignore="true" name="Blue" type="UI:Blue"/>
+  <xsd:element ecore:ignore="true" name="Green" type="UI:Green"/>
+  <xsd:element ecore:ignore="true" name="Yellow" type="UI:Yellow"/>
+  <xsd:element ecore:ignore="true" name="Gray" type="UI:Gray"/>
+  <xsd:element ecore:ignore="true" name="Item" type="UI:Item"/>
+  <xsd:element ecore:ignore="true" name="Next" type="UI:Next"/>
+  <xsd:element ecore:ignore="true" name="Previous" type="UI:Previous"/>
+  <xsd:element ecore:ignore="true" name="Selection" type="UI:Selection"/>
+  <xsd:element ecore:ignore="true" name="Cancel" type="UI:Cancel"/>
+  <xsd:element ecore:ignore="true" name="Up" type="UI:Up"/>
+  <xsd:element ecore:ignore="true" name="Down" type="UI:Down"/>
+  <xsd:element ecore:ignore="true" name="Left" type="UI:Left"/>
+  <xsd:element ecore:ignore="true" name="Right" type="UI:Right"/>
+  <xsd:element ecore:ignore="true" name="Signal" type="UI:Signal"/>
+  <xsd:complexType name="UIModel">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="setPointing">
+          <parameter lowerBound="1" name="globalX" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="globalY" type="ecore:EInt"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:opposite="model" ecore:resolveProxies="true" ecore:type="UI:AbstractInteractor{?}" maxOccurs="unbounded" name="abstractInteractors" type="UI:AbstractInteractor"/>
+      <xsd:element ecore:unique="true" maxOccurs="unbounded" minOccurs="0" name="pts" nillable="true" type="ecore:EString"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="features" type="UI:MASPFeature"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="lookAndFeels" type="UI:LookAndFeel"/>
+    </xsd:sequence>
+    <xsd:attribute ecore:unsettable="false" name="pointingX" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:unsettable="false" name="pointingY" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:reference="UI:AbstractInteractor{?}" name="focusedInteractor" type="xsd:anyURI"/>
+    <xsd:attribute ecore:derived="true" name="focusedInteractorName" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Interactor">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="activate" type="ecore:EBoolean"/>
+        <operation lowerBound="1" name="deactivate" type="ecore:EBoolean"/>
+        <operation lowerBound="1" name="sameID" type="ecore:EBoolean">
+          <parameter lowerBound="1" name="other" type="UI:Interactor"/>
+        </operation>
+        <operation lowerBound="1" name="focus" type="ecore:EBoolean"/>
+        <operation lowerBound="1" name="unfocus" type="ecore:EBoolean"/>
+        <operation lowerBound="1" name="select" type="ecore:EBoolean"/>
+        <operation lowerBound="1" name="unselect" type="ecore:EBoolean"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute name="id" type="ecore:EString" use="required"/>
+    <xsd:attribute name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute ecore:default="Inactive" ecore:unsettable="false" name="state" type="UI:InteractorState" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="AbstractInteractor">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter bounds="UI:GraphicalOutput" name="G"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="generateHint"/>
+        <operation name="getGraphicalOutput" type="G" upperBound="-1"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:Interactor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="focusInput" type="UI:InputInteractor"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="unfocusInput" type="UI:PredefinedMessage"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="messageOutput" type="UI:MessageOutput"/>
+        </xsd:sequence>
+        <xsd:attribute name="interactionHint" type="ecore:EString"/>
+        <xsd:attribute ecore:opposite="abstractInteractors" ecore:reference="UI:UIModel" name="model" type="xsd:anyURI" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="DataSlot">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter name="C"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="setNewValue">
+          <parameter lowerBound="1" name="newValue" type="C"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute ecore:default="java.lang.Object" ecore:type="ecore:EJavaClass{C}" ecore:unsettable="false" name="dataClass" type="ecore:EJavaClass" use="required"/>
+    <xsd:attribute ecore:type="C" name="value" type="ecore:EJavaObject"/>
+    <xsd:attribute ecore:id="true" name="name" type="ecore:EString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="UI:AbstractInteractor{UI:GraphicalChoice}" name="Choice">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter name="I"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="choose">
+          <parameter lowerBound="1" name="selectedKey" type="ecore:EString"/>
+        </operation>
+        <operation name="choose"/>
+        <operation name="previous"/>
+        <operation name="next"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:AbstractInteractor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" ecore:type="UI:DataSlot{ecore:EMap{ecore:EString, I}}" name="list" type="UI:DataSlot"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="focusItemInput" type="UI:ArbitraryInput"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="chooseItemInput" type="UI:ArbitraryInput"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="chooseInput" type="UI:InputInteractor"/>
+          <xsd:element ecore:opposite="choice" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="graphicalOutput" type="UI:GraphicalChoice"/>
+          <xsd:element ecore:resolveProxies="true" ecore:type="UI:DataSlot{ecore:EEList{I}}" name="selectedItems" type="UI:DataSlot"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:default="1" ecore:unsettable="false" name="minCardinality" type="ecore:EInt" use="required"/>
+        <xsd:attribute ecore:default="1" ecore:unsettable="false" name="maxCardinality" type="ecore:EInt" use="required"/>
+        <xsd:attribute ecore:unsettable="false" name="submit" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute ecore:unsettable="false" name="focusedNext" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute ecore:unsettable="false" name="focusedPrevious" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute name="focusedItem" type="ecore:EString"/>
+        <xsd:attribute ecore:default="false" ecore:unsettable="false" name="minimumSelected" type="ecore:EBoolean" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="UI:AbstractInteractor{UI:GraphicalNavigation}" name="Command">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="execute"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:AbstractInteractor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="executeInput" type="UI:InputInteractor"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="graphicalOutput" type="UI:GraphicalNavigation"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="UI:AbstractInteractor{UI:GraphicalUserInput}" name="UserInput">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="input">
+          <parameter lowerBound="1" name="newInput" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:AbstractInteractor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" ecore:type="UI:DataSlot{ecore:EString}" minOccurs="0" name="oldInput" type="UI:DataSlot"/>
+          <xsd:element ecore:resolveProxies="true" ecore:type="UI:DataSlot{ecore:EString}" name="newInput" type="UI:DataSlot"/>
+          <xsd:element ecore:resolveProxies="true" name="input" type="UI:ArbitraryMessages"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="graphicalOutput" type="UI:GraphicalUserInput"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="submit" type="ecore:EBoolean" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="UI:AbstractInteractor{UI:GraphicalOutputWidget}" name="OutputOnly">
+    <xsd:complexContent>
+      <xsd:extension base="UI:AbstractInteractor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="inputs" type="UI:DataSlot"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="graphicalOutput" type="UI:GraphicalOutputWidget"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" ecore:implements="UI:TwoDimensional" name="GraphicalOutput">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="newPointing">
+          <parameter lowerBound="1" name="relativeX" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="relativeY" type="ecore:EInt"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:OutputInteractor">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="titleOutput" type="UI:GraphicalOutputWidget"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="pointingX" type="ecore:EInt" use="required"/>
+        <xsd:attribute ecore:unsettable="false" name="pointingY" type="ecore:EInt" use="required"/>
+        <xsd:attribute ecore:reference="UI:LookAndFeel" name="lookAndFeel" type="xsd:anyURI"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Image">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalOutputWidget">
+        <xsd:attribute name="url" type="ecore:EString" use="required"/>
+        <xsd:attribute default="-1" ecore:unsettable="false" name="pixelWidth" type="ecore:EInt"/>
+        <xsd:attribute default="-1" ecore:unsettable="false" name="pixelHeight" type="ecore:EInt"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:implements="UI:OneDimensional" name="MessageOutput">
+    <xsd:complexContent>
+      <xsd:extension base="UI:OutputInteractor">
+        <xsd:attribute name="message" type="ecore:EString" use="required"/>
+        <xsd:attribute name="title" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="TextLabel">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalOutputWidget">
+        <xsd:attribute name="text" type="ecore:EString" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="ConcreteInteractor">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Interactor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OutputInteractor">
+    <xsd:complexContent>
+      <xsd:extension base="UI:ConcreteInteractor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:implements="UI:ArbitraryInput" name="Pointing">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="newPointing" type="ecore:EBoolean">
+          <parameter lowerBound="1" name="globalX" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="globalY" type="ecore:EInt"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:InputInteractor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:implements="UI:ArbitraryInput" name="ArbitraryMessages">
+    <xsd:complexContent>
+      <xsd:extension base="UI:MessageInput"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="InputInteractor">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="newInput" type="ecore:EBoolean"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:ConcreteInteractor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="InteractorState">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Inactive"/>
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Focused"/>
+      <xsd:enumeration value="Selected"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" ecore:implements="UI:OneDimensional" name="MessageInput">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="newMessage" type="ecore:EBoolean">
+          <parameter lowerBound="1" name="newMessage" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:InputInteractor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PredefinedMessage">
+    <xsd:complexContent>
+      <xsd:extension base="UI:MessageInput">
+        <xsd:attribute name="message" type="ecore:EString" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="GraphicalChoice">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="addItem">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+          <parameter lowerBound="1" name="item" type="ecore:EJavaObject"/>
+        </operation>
+        <operation name="removeItem">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+        <operation name="removeAll"/>
+        <operation lowerBound="1" name="getItem" type="ecore:EString">
+          <parameter lowerBound="1" name="xCoordinate" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="yCoordinate" type="ecore:EInt"/>
+        </operation>
+        <operation name="select">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+        <operation name="unselect">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+        <operation name="focus">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+        <operation name="unfocus">
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalOutput">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" name="itemCUI" type="UI:GraphicalNavigation"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="items" type="UI:Item"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="previous" type="UI:GraphicalNavigation"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="next" type="UI:GraphicalNavigation"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:default="1" ecore:unsettable="false" name="columns" type="ecore:EInt" use="required"/>
+        <xsd:attribute ecore:opposite="graphicalOutput" ecore:reference="UI:Choice" name="choice" type="xsd:anyURI"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="GraphicalNavigation">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalOutput"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="GraphicalUserInput">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalOutput">
+        <xsd:attribute ecore:default="1" ecore:unsettable="false" name="numberOfLines" type="ecore:EInt" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="GraphicalOutputWidget">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalNavigation"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" ecore:interface="true" name="TwoDimensional">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="setPosition">
+          <parameter lowerBound="1" name="newX" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="newY" type="ecore:EInt"/>
+        </operation>
+        <operation lowerBound="1" name="setSize">
+          <parameter lowerBound="1" name="newWidth" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="newHeight" type="ecore:EInt"/>
+        </operation>
+        <operation lowerBound="1" name="contains" type="ecore:EBoolean">
+          <parameter lowerBound="1" name="xCoordinate" type="ecore:EInt"/>
+          <parameter lowerBound="1" name="yCoordinate" type="ecore:EInt"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute ecore:unsettable="false" name="width" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:unsettable="false" name="height" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:unsettable="false" name="x" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:unsettable="false" name="y" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:default="1" ecore:unsettable="false" name="z" type="ecore:EInt" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" ecore:interface="true" name="OneDimensional">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="setNewPosition">
+          <parameter lowerBound="1" name="newPosition" type="ecore:EInt"/>
+        </operation>
+        <operation lowerBound="1" name="setNewLength">
+          <parameter lowerBound="1" name="newLength" type="ecore:EInt"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute ecore:unsettable="false" name="position" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:unsettable="false" name="length" type="ecore:EInt" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="MASPFeature"/>
+  <xsd:complexType name="GraphicalPropertySet">
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="fontColor" type="UI:Color"/>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="backgroundColor" type="UI:Color"/>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="borderColor" type="UI:Color"/>
+    </xsd:sequence>
+    <xsd:attribute name="fontName" type="ecore:EString"/>
+    <xsd:attribute ecore:unsettable="false" name="fontStyle" type="UI:FontStyle"/>
+    <xsd:attribute name="fontSize" type="ecore:EIntegerObject"/>
+    <xsd:attribute name="hasBorder" type="ecore:EBooleanObject"/>
+    <xsd:attribute name="borderWidth" type="ecore:EIntegerObject"/>
+  </xsd:complexType>
+  <xsd:simpleType name="FontStyle">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Normal"/>
+      <xsd:enumeration value="Italic"/>
+      <xsd:enumeration value="Bold"/>
+      <xsd:enumeration value="BoldItalic"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="Button">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalNavigation">
+        <xsd:attribute ecore:default="OK" ecore:unsettable="false" name="text" type="ecore:EString" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="CustomButton">
+    <xsd:complexContent>
+      <xsd:extension base="UI:GraphicalNavigation">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="selected" type="UI:Image"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="focused" type="UI:Image"/>
+          <xsd:element ecore:resolveProxies="true" name="active" type="UI:Image"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LookAndFeel">
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="active" type="UI:GraphicalPropertySet"/>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="focused" type="UI:GraphicalPropertySet"/>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="selected" type="UI:GraphicalPropertySet"/>
+      <xsd:element ecore:opposite="parent" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="children" type="UI:LookAndFeel"/>
+    </xsd:sequence>
+    <xsd:attribute ecore:id="true" name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute ecore:opposite="children" ecore:reference="UI:LookAndFeel" name="parent" type="xsd:anyURI"/>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" ecore:interface="true" name="ArbitraryInput">
+    <xsd:complexContent>
+      <xsd:extension base="UI:InputInteractor"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="AlertMessage">
+    <xsd:complexContent>
+      <xsd:extension base="UI:MessageOutput"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Text">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="eval" type="ecore:EString">
+          <parameter lowerBound="1" name="variables" type="ecore:EMap{ecore:EString, ecore:EJavaObject}"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="TextConstant">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Text">
+        <xsd:attribute name="text" type="ecore:EString" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="TextVariable">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Text">
+        <xsd:attribute name="query" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ItemValueTextVariable">
+    <xsd:complexContent>
+      <xsd:extension base="UI:TextVariable"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="OldInputTextVariable">
+    <xsd:complexContent>
+      <xsd:extension base="UI:TextVariable"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Color">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="getRGBHex" type="ecore:EString"/>
+        <operation name="decode" type="UI:Color">
+          <parameter lowerBound="1" name="encodedColor" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute ecore:default="255" ecore:unsettable="false" name="red" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:default="0" ecore:unsettable="false" name="green" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:default="255" ecore:unsettable="false" name="blue" type="ecore:EInt" use="required"/>
+    <xsd:attribute ecore:default="255" ecore:unsettable="false" name="alpha" type="ecore:EInt" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="White">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Black">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Red">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Blue">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Green">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Yellow">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Gray">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Color"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Item">
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" name="interactor" type="UI:GraphicalNavigation"/>
+    </xsd:sequence>
+    <xsd:attribute name="key" type="ecore:EString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Next">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Previous">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Selection">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Cancel">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Up">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Down">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Left">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Right">
+    <xsd:complexContent>
+      <xsd:extension base="UI:Signal"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Signal">
+    <xsd:complexContent>
+      <xsd:extension base="UI:PredefinedMessage"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

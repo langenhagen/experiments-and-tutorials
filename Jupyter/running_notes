@@ -1,0 +1,665 @@
+#usr/binenv python3
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({"A": 1.,
+                   "B": pd.Timestamp("20130102"),
+                   "C": pd.Series(1, index=list(range(4)), dtype="float32"),
+                   "D": np.array([3] * 4, dtype="int32"),
+                   "E": pd.Categorical(["test", "train", "test", "train"]),
+                   "F": "foo"})
+
+df2 = pd.DataFrame({"A": [True, True],
+                    "B": [True, False]})
+
+df[["is_internal_transfer", "is_income", "is_expense"]].sum(axis=1)
+
+
+df.dtypes  # datatypes
+
+df.head()
+df.tail(3)
+
+df.index   # prints Int64Index([0, 1, 2, 3], dtype="int64")
+df.columns
+df.values
+
+# prints a quick statistic summary, e.g. count, mean, min, max, ...
+df2.describe()
+
+df.T   # transposed version
+
+
+df.sort_index(axis=1, ascending=False)   # no clue
+df.sort_values(by="E")   # sorts by values in COlumn E
+
+
+df["A"]
+df[0:3]  # slices rows
+df.iloc[[2]]  # get 2nd row
+
+
+df["20130102":"20130104"]
+
+df.loc[dates[0]]   # first row / cross section
+
+df.loc[:, ["A", "B"]]
+df.loc[dates[2], ["A", "B"]]
+df.loc["20130102":"20130104", ["A", "B"]]
+
+df.loc[dates[0], "A"]
+df.at[dates[0], "A"]  # same effect, but faster
+
+
+# ds.i    is for indexed access
+df.iloc[3]
+df.iloc[3:5, 0:2]
+df.iloc[[1, 2, 4], [0, 2]]
+df.iloc[1:3, :]
+df.iat[1, 1]
+
+# predicate access
+df[df.A > 0]
+
+df[df > 0]   # gives back Row and column that matters and everything that is <=0 will be set to NaN
+
+
+df2 = df.copy()
+df2["E"] = ["one", "one", "two", "three", "four", "three"]
+df2[df2["E"].isin(["two", "four"])]
+
+df2[df2 > 0] = -df2  # make all negative :DDD
+
+
+np.nan  # is used to describe missing data. is then also left gracefully out of operations
+
+df1 = df.reindex(index=dates[0:4], columns=list(df.columns) + ["E"])
+
+df1.loc[dates[0]:dates[1], "E"] = 1
+
+
+df1.dropna(how="any")  # drop all rows that contain any missing data
+
+df1.fillna(value=5)  # fill missing data
+
+pd.isna(df1)  # get a matrix that contains bools whether data is missin or not
+
+df.mean()  # along y axis, i.e. f.e. column
+df.mean(1)  # along x axis, i.e. f.e. row
+
+df.apply(np.cumsum)  # apply functions to data
+
+
+s = pd.Series(np.random.randint(0, 7, size=10))
+s.value_counts()   # histogram
+
+tuples = list(zip(*[["bar", "bar", "baz", "baz",
+                     "foo", "foo", "qux", "qux"],
+                    ["one", "two", "one", "two",
+                     "one", "two", "one", "two"]]))
+
+
+>> > a[["Buchungstag", "Betrag"]]
+
+import pathlib
+
+pathlib.Path.cwd()  # current absolute path
+
+
+b = a[["Buchungstag", "Betrag"]].groupby(by="Buchungstag").sum()
+b.plot(kind="bar")
+plt.show()
+
+# also: fill with empty DATES for the time series: in day-intervals
+
+f = a[a["Buchungstag"] = "2018-12-27"]
+f.sum()
+
+df[df.mauz.str.contains("KARTENZAHLUNG")]
+
+
+df = pd.concat([df1, df4], ignore_index=True)
+
+# --------------------------------------------------------------------------------------------------
+
+
+
+df["A"][(df["B"] > 50) & (df["C"] == 900)]
+
+
+df = all_transfers
+
+df[df["amount"] > 0 & df["correspondent"] !=
+    "Andreas Langenhagen" & df["source"] != "dkb-visa"]
+
+
+all_transfers[all_transfers["amount"] > 0][all_transfers["correspondent"]
+                                           != "Andreas Langenhagen"][all_transfers["source"] != "dkb-visa"].loc[8]
+
+
+df = all_transfers
+df = df[(df["amount"] > 0) & (df["correspondent"] !=
+                              "ANDREAS LANGENHAGEN") & (df["source"] != "dkb-visa")]
+
+
+from enum import Enum
+
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.getcwd()))
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import sys
+import blog
+%matplotlib inline
+import my_utils
+blog.set_blog_style()
+
+
+etypes = list("ABCDZ")  # New columns
+
+# Define a date range - Pandas will automatically make this into an index
+idx = pd.date_range(start="2018-10-09 16:00:00",
+                    end="2018-10-09 23:59:00", freq="15T")  # 15T is for 15 minutes
+type(idx)
+pt.reindex(idx, columns=etypes, fill_value=0).head()
+
+
+# Let"s put this in a function - This will help us later.
+def get_all_types_and_timestamps(df, min_date="2018-10-09 16:00:00",
+                                 max_date="2018-10-09 23:59:00", etypes=list("ABCDZ")):
+    ret = df.copy()
+    time_idx = pd.date_range(start=min_date, end=max_date, freq="15T")
+    # Indices work like set. This is a good practive so we don"t override our intended index
+    idx = ret.index.union(time_idx)
+    etypes = df.columns.union(set(etypes))
+    ret = ret.reindex(idx, columns=etypes, fill_value=0)
+    return ret
+
+
+
+# Assign is for creating new columns on the dataframes. This is instead of
+# df[new_col] = function(df[old_col]). They are both one lines, but .assign doesn"t break the flow.
+pt.assign(mean_all=pt.mean(axis=1)).head()
+
+
+# --------------------------------------------------------------------------------------------------
+import pandas as pd
+
+
+def start():
+    options = {
+        "display": {
+            "max_columns": None,
+            "max_colwidth": 25,
+            "expand_frame_repr": False,  # Don"t wrap to multiple pages
+            "max_rows": 14,
+            "max_seq_items": 50,         # Max length of printed sequence
+            "precision": 4,
+            "show_dimensions": False
+        },
+        "mode": {
+            "chained_assignment": None   # Controls SettingWithCopyWarning
+        }
+    }
+
+    for category, option in options.items():
+        for op, value in option.items():
+            pd.set_option(f"{category}.{op}", value)  # Python 3.6+
+
+
+if __name__ == "__main__":
+    start()
+    del start  # Clean up namespace in the interpreter
+# --------------------------------------------------------------------------------------------------
+
+daterng.dt.day_name()
+daterng[daterng.dt.is_year_end]
+daterng[daterng.dt.quarter > 2]
+
+
+df.nlargest(3, "amount")
+df.nsmallest(3, "amount")
+
+pd.read_clipboard()  # Ppaste directly from a DataFrame or a copied Excel cells
+
+df.to_json("df.json.gz", orient="records", lines=True,
+           compression="gzip")  # write the dataframe to json file
+
+# --------------------------------------------------------------------------------------------------
+
+%load_ext autoreload
+%autoreload 2
+
+# --------------------------------------------------------------------------------------------------
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# --------------------------------------------------------------------------------------------------
+
+help(plt.plot)
+
+plt.savefig("bubbleplot.png", transparent=True, dpi=120)
+
+# --------------------------------------------------------------------------------------------------
+
+
+use PyScaffold
+
+
+?<obj > prints documentation
+??<obj? prints source code
+
+use a Bubbleplot for showing where you have Many Expenses, the size of the sum of the expenses
+
+
+Shift+Tab in Jupyter for function interface
+upgrade to Pandas 0.24.0
+    use .array instead of .values
+    pser = pd.Series(pd.period_range("2000", freq="D", periods=5))
+
+
+# --------------------------------------------------------------------------------------------------
+
+
+pd.set_option("max_rows", 7)
+
+pd.reset_option("max_rows")
+
+
+# cells with longer names will be abbreviated with an ellipsis...
+display.max_colwidth
+
+pd.set_option("precision", 7)  # numeric precision when printing the numbers
+
+
+ax.plot(monthly_incomes, color="blue", linewidth=2.0, drawstyle="steps-post")
+ax.plot(monthly_expenses.abs(), color="red",
+        linewidth=1.0, drawstyle="steps-post")
+
+ax.fill_between(monthly_expenses.index, monthly_expenses.amount.abs(),
+                where=True, step="post", facecolor="red")
+ax.fill_between(monthly_incomes.index, monthly_incomes.amount.abs(),
+                where=True, step="post", facecolor="blue")
+
+
+# --------------------------------------------------------------------------------------------------
+# temporary style application with with
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+with plt.style.context(("dark_background")):
+    plt.plot(np.sin(np.linspace(0, 2 * np.pi)), "r-o")
+
+# Some plotting code with the default style
+
+plt.show()
+
+
+# also, found here https://matplotlib.org/tutorials/introductory/customizing.html
+
+mpl.rcParams["lines.linewidth"] = 2
+mpl.rc("lines", linewidth=4, color="g")
+mpl.rcParams["lines.color"] = "r"
+# [...]
+plt.plot(data)
+
+
+matplotlib.rcdefaults()  # restore to defaults
+
+# --------------------------------------------------------------------------------------------------
+
+# The following is possible with mpl.rc()
+
+KeysView(RcParams({"_internal.classic_mode": False,
+                   "agg.path.chunksize": 0,
+                   "animation.avconv_args": [],
+                   "animation.avconv_path": "avconv",
+                   "animation.bitrate": -1,
+                   "animation.codec": "h264",
+                   "animation.convert_args": [],
+                   "animation.convert_path": "convert",
+                   "animation.embed_limit": 20.0,
+                   "animation.ffmpeg_args": [],
+                   "animation.ffmpeg_path": "ffmpeg",
+                   "animation.frame_format": "png",
+                   "animation.html": "none",
+                   "animation.html_args": [],
+                   "animation.writer": "ffmpeg",
+                   "axes.autolimit_mode": "data",
+                   "axes.axisbelow": "line",
+                   "axes.edgecolor": "black",
+                   "axes.facecolor": "white",
+                   "axes.formatter.limits": [-7, 7],
+                   "axes.formatter.min_exponent": 0,
+                   "axes.formatter.offset_threshold": 4,
+                   "axes.formatter.use_locale": False,
+                   "axes.formatter.use_mathtext": False,
+                   "axes.formatter.useoffset": True,
+                   "axes.grid": False,
+                   "axes.grid.axis": "both",
+                   "axes.grid.which": "major",
+                   "axes.labelcolor": "black",
+                   "axes.labelpad": 4.0,
+                   "axes.labelsize": "medium",
+                   "axes.labelweight": "normal",
+                   "axes.linewidth": 0.8,
+                   "axes.prop_cycle": cycler("color", ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]),
+                   "axes.spines.bottom": True,
+                   "axes.spines.left": True,
+                   "axes.spines.right": True,
+                   "axes.spines.top": True,
+                   "axes.titlepad": 6.0,
+                   "axes.titlesize": "large",
+                   "axes.titleweight": "normal",
+                   "axes.unicode_minus": True,
+                   "axes.xmargin": 0.05,
+                   "axes.ymargin": 0.05,
+                   "axes3d.grid": True,
+                   "backend": "module://ipykernel.pylab.backend_inline",
+                   "backend.qt4": None,
+                   "backend.qt5": None,
+                   "backend_fallback": True,
+                   "boxplot.bootstrap": None,
+                   "boxplot.boxprops.color": "black",
+                   "boxplot.boxprops.linestyle": "-",
+                   "boxplot.boxprops.linewidth": 1.0,
+                   "boxplot.capprops.color": "black",
+                   "boxplot.capprops.linestyle": "-",
+                   "boxplot.capprops.linewidth": 1.0,
+                   "boxplot.flierprops.color": "black",
+                   "boxplot.flierprops.linestyle": "none",
+                   "boxplot.flierprops.linewidth": 1.0,
+                   "boxplot.flierprops.marker": "o",
+                   "boxplot.flierprops.markeredgecolor": "black",
+                   "boxplot.flierprops.markerfacecolor": "none",
+                   "boxplot.flierprops.markersize": 6.0,
+                   "boxplot.meanline": False,
+                   "boxplot.meanprops.color": "C2",
+                   "boxplot.meanprops.linestyle": "--",
+                   "boxplot.meanprops.linewidth": 1.0,
+                   "boxplot.meanprops.marker": "^",
+                   "boxplot.meanprops.markeredgecolor": "C2",
+                   "boxplot.meanprops.markerfacecolor": "C2",
+                   "boxplot.meanprops.markersize": 6.0,
+                   "boxplot.medianprops.color": "C1",
+                   "boxplot.medianprops.linestyle": "-",
+                   "boxplot.medianprops.linewidth": 1.0,
+                   "boxplot.notch": False,
+                   "boxplot.patchartist": False,
+                   "boxplot.showbox": True,
+                   "boxplot.showcaps": True,
+                   "boxplot.showfliers": True,
+                   "boxplot.showmeans": False,
+                   "boxplot.vertical": True,
+                   "boxplot.whiskerprops.color": "black",
+                   "boxplot.whiskerprops.linestyle": "-",
+                   "boxplot.whiskerprops.linewidth": 1.0,
+                   "boxplot.whiskers": 1.5,
+                   "contour.corner_mask": True,
+                   "contour.negative_linestyle": "dashed",
+                   "datapath": "/home/barn/miniconda3/envs/my/lib/python3.7/site-packages/matplotlib/mpl-data",
+                   "date.autoformatter.day": "%Y-%m-%d",
+                   "date.autoformatter.hour": "%m-%d %H",
+                   "date.autoformatter.microsecond": "%M:%S.%f",
+                   "date.autoformatter.minute": "%d %H:%M",
+                   "date.autoformatter.month": "%Y-%m",
+                   "date.autoformatter.second": "%H:%M:%S",
+                   "date.autoformatter.year": "%Y",
+                   "docstring.hardcopy": False,
+                   "errorbar.capsize": 0.0,
+                   "examples.directory": "",
+                   "figure.autolayout": False,
+                   "figure.constrained_layout.h_pad": 0.04167,
+                   "figure.constrained_layout.hspace": 0.02,
+                   "figure.constrained_layout.use": False,
+                   "figure.constrained_layout.w_pad": 0.04167,
+                   "figure.constrained_layout.wspace": 0.02,
+                   "figure.dpi": 72.0,
+                   "figure.edgecolor": (1, 1, 1, 0),
+                   "figure.facecolor": (1, 1, 1, 0),
+                   "figure.figsize": [6.0, 4.0],
+                   "figure.frameon": True,
+                   "figure.max_open_warning": 20,
+                   "figure.subplot.bottom": 0.125,
+                   "figure.subplot.hspace": 0.2,
+                   "figure.subplot.left": 0.125,
+                   "figure.subplot.right": 0.9,
+                   "figure.subplot.top": 0.88,
+                   "figure.subplot.wspace": 0.2,
+                   "figure.titlesize": "large",
+                   "figure.titleweight": "normal",
+                   "font.cursive": ["Apple Chancery",
+                                    "Textile",
+                                    "Zapf Chancery",
+                                    "Sand",
+                                    "Script MT",
+                                    "Felipa",
+                                    "cursive"],
+                   "font.family": ["sans-serif"],
+                   "font.fantasy": ["Comic Sans MS",
+                                    "Chicago",
+                                    "Charcoal",
+                                    "Impact",
+                                    "Western",
+                                    "Humor Sans",
+                                    "xkcd",
+                                    "fantasy"],
+                   "font.monospace": ["DejaVu Sans Mono",
+                                      "Bitstream Vera Sans Mono",
+                                      "Computer Modern Typewriter",
+                                      "Andale Mono",
+                                      "Nimbus Mono L",
+                                      "Courier New",
+                                      "Courier",
+                                      "Fixed",
+                                      "Terminal",
+                                      "monospace"],
+                   "font.sans-serif": ["DejaVu Sans",
+                                       "Bitstream Vera Sans",
+                                       "Computer Modern Sans Serif",
+                                       "Lucida Grande",
+                                       "Verdana",
+                                       "Geneva",
+                                       "Lucid",
+                                       "Arial",
+                                       "Helvetica",
+                                       "Avant Garde",
+                                       "sans-serif"],
+                   "font.serif": ["DejaVu Serif",
+                                  "Bitstream Vera Serif",
+                                  "Computer Modern Roman",
+                                  "New Century Schoolbook",
+                                  "Century Schoolbook L",
+                                  "Utopia",
+                                  "ITC Bookman",
+                                  "Bookman",
+                                  "Nimbus Roman No9 L",
+                                  "Times New Roman",
+                                  "Times",
+                                  "Palatino",
+                                  "Charter",
+                                  "serif"],
+                   "font.size": 10.0,
+                   "font.stretch": "normal",
+                   "font.style": "normal",
+                   "font.variant": "normal",
+                   "font.weight": "normal",
+                   "grid.alpha": 1.0,
+                   "grid.color": "#b0b0b0",
+                   "grid.linestyle": "-",
+                   "grid.linewidth": 0.8,
+                   "hatch.color": "black",
+                   "hatch.linewidth": 1.0,
+                   "hist.bins": 10,
+                   "image.aspect": "equal",
+                   "image.cmap": "viridis",
+                   "image.composite_image": True,
+                   "image.interpolation": "nearest",
+                   "image.lut": 256,
+                   "image.origin": "upper",
+                   "image.resample": True,
+                   "interactive": True,
+                   "keymap.all_axes": ["a"],
+                   "keymap.back": ["left", "c", "backspace"],
+                   "keymap.copy": ["ctrl+c", "cmd+c"],
+                   "keymap.forward": ["right", "v"],
+                   "keymap.fullscreen": ["f", "ctrl+f"],
+                   "keymap.grid": ["g"],
+                   "keymap.grid_minor": ["G"],
+                   "keymap.help": ["f1"],
+                   "keymap.home": ["h", "r", "home"],
+                   "keymap.pan": ["p"],
+                   "keymap.quit": ["ctrl+w", "cmd+w", "q"],
+                   "keymap.quit_all": ["W", "cmd+W", "Q"],
+                   "keymap.save": ["s", "ctrl+s"],
+                   "keymap.xscale": ["k", "L"],
+                   "keymap.yscale": ["l"],
+                   "keymap.zoom": ["o"],
+                   "legend.borderaxespad": 0.5,
+                   "legend.borderpad": 0.4,
+                   "legend.columnspacing": 2.0,
+                   "legend.edgecolor": "0.8",
+                   "legend.facecolor": "inherit",
+                   "legend.fancybox": True,
+                   "legend.fontsize": "medium",
+                   "legend.framealpha": 0.8,
+                   "legend.frameon": True,
+                   "legend.handleheight": 0.7,
+                   "legend.handlelength": 2.0,
+                   "legend.handletextpad": 0.8,
+                   "legend.labelspacing": 0.5,
+                   "legend.loc": "best",
+                   "legend.markerscale": 1.0,
+                   "legend.numpoints": 1,
+                   "legend.scatterpoints": 1,
+                   "legend.shadow": False,
+                   "legend.title_fontsize": None,
+                   "lines.antialiased": True,
+                   "lines.color": "C0",
+                   "lines.dash_capstyle": "butt",
+                   "lines.dash_joinstyle": "round",
+                   "lines.dashdot_pattern": [6.4, 1.6, 1.0, 1.6],
+                   "lines.dashed_pattern": [3.7, 1.6],
+                   "lines.dotted_pattern": [1.0, 1.65],
+                   "lines.linestyle": "-",
+                   "lines.linewidth": 1.5,
+                   "lines.marker": "None",
+                   "lines.markeredgecolor": "auto",
+                   "lines.markeredgewidth": 1.0,
+                   "lines.markerfacecolor": "auto",
+                   "lines.markersize": 6.0,
+                   "lines.scale_dashes": True,
+                   "lines.solid_capstyle": "projecting",
+                   "lines.solid_joinstyle": "round",
+                   "markers.fillstyle": "full",
+                   "mathtext.bf": "sans:bold",
+                   "mathtext.cal": "cursive",
+                   "mathtext.default": "it",
+                   "mathtext.fallback_to_cm": True,
+                   "mathtext.fontset": "dejavusans",
+                   "mathtext.it": "sans:italic",
+                   "mathtext.rm": "sans",
+                   "mathtext.sf": "sans",
+                   "mathtext.tt": "monospace",
+                   "patch.antialiased": True,
+                   "patch.edgecolor": "black",
+                   "patch.facecolor": "C0",
+                   "patch.force_edgecolor": False,
+                   "patch.linewidth": 1.0,
+                   "path.effects": [],
+                   "path.simplify": True,
+                   "path.simplify_threshold": 0.1111111111111111,
+                   "path.sketch": None,
+                   "path.snap": True,
+                   "pdf.compression": 6,
+                   "pdf.fonttype": 3,
+                   "pdf.inheritcolor": False,
+                   "pdf.use14corefonts": False,
+                   "pgf.preamble": [],
+                   "pgf.rcfonts": True,
+                   "pgf.texsystem": "xelatex",
+                   "polaraxes.grid": True,
+                   "ps.distiller.res": 6000,
+                   "ps.fonttype": 3,
+                   "ps.papersize": "letter",
+                   "ps.useafm": False,
+                   "ps.usedistiller": False,
+                   "savefig.bbox": None,
+                   "savefig.directory": "~",
+                   "savefig.dpi": "figure",
+                   "savefig.edgecolor": "white",
+                   "savefig.facecolor": "white",
+                   "savefig.format": "png",
+                   "savefig.frameon": True,
+                   "savefig.jpeg_quality": 95,
+                   "savefig.orientation": "portrait",
+                   "savefig.pad_inches": 0.1,
+                   "savefig.transparent": False,
+                   "scatter.marker": "o",
+                   "svg.fonttype": "path",
+                   "svg.hashsalt": None,
+                   "svg.image_inline": True,
+                   "text.antialiased": True,
+                   "text.color": "black",
+                   "text.hinting": "auto",
+                   "text.hinting_factor": 8,
+                   "text.latex.preamble": [],
+                   "text.latex.preview": False,
+                   "text.latex.unicode": True,
+                   "text.usetex": False,
+                   "timezone": "UTC",
+                   "tk.window_focus": False,
+                   "toolbar": "toolbar2",
+                   "verbose.fileo": "sys.stdout",
+                   "verbose.level": "silent",
+                   "webagg.address": "127.0.0.1",
+                   "webagg.open_in_browser": True,
+                   "webagg.port": 8988,
+                   "webagg.port_retries": 50,
+                   "xtick.alignment": "center",
+                   "xtick.bottom": True,
+                   "xtick.color": "black",
+                   "xtick.direction": "out",
+                   "xtick.labelbottom": True,
+                   "xtick.labelsize": "medium",
+                   "xtick.labeltop": False,
+                   "xtick.major.bottom": True,
+                   "xtick.major.pad": 3.5,
+                   "xtick.major.size": 3.5,
+                   "xtick.major.top": True,
+                   "xtick.major.width": 0.8,
+                   "xtick.minor.bottom": True,
+                   "xtick.minor.pad": 3.4,
+                   "xtick.minor.size": 2.0,
+                   "xtick.minor.top": True,
+                   "xtick.minor.visible": False,
+                   "xtick.minor.width": 0.6,
+                   "xtick.top": False,
+                   "ytick.alignment": "center_baseline",
+                   "ytick.color": "black",
+                   "ytick.direction": "out",
+                   "ytick.labelleft": True,
+                   "ytick.labelright": False,
+                   "ytick.labelsize": "medium",
+                   "ytick.left": True,
+                   "ytick.major.left": True,
+                   "ytick.major.pad": 3.5,
+                   "ytick.major.right": True,
+                   "ytick.major.size": 3.5,
+                   "ytick.major.width": 0.8,
+                   "ytick.minor.left": True,
+                   "ytick.minor.pad": 3.4,
+                   "ytick.minor.right": True,
+                   "ytick.minor.size": 2.0,
+                   "ytick.minor.visible": False,
+                   "ytick.minor.width": 0.6,
+                   "ytick.right": False}))

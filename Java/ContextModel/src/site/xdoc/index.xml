@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://cyber888.com/xsd/xdocs.xsd">
+  <properties>
+    <title>Project Documentation</title>
+    <author email="grzegorz.lehmann@dai-labor.de">lehmann</author>
+  </properties>
+  <body>
+    <section name="Project Documentation"> 
+      <p>This section provides some documentation for developers who use this module.</p>
+      <p>Quick links:</p>
+      <ul>
+		<li><a href="cobertura/index.html">Cobertura Report</a> with test-coverage</li>
+		<li><a href="checkstyle.html">Checkstyle Report</a> with code style checks</li>
+		<li><a href="findbugs.html">Findbugs Report</a> with potential bugs</li>
+		<li><a href="apidocs/index.html">JavaDoc</a> with API documentation</li>
+		<li><a href="xref/index.html">XRef</a> with source code cross-reference</li>
+      </ul>
+      <p>Summary of all generated reports can be found </p><a href="project-reports.html">here</a>
+      
+      <p>Metamodel Overview</p>
+      <a href="images/Context.png">
+        <img width="600" src="images/Context.png" />
+      </a>
+    </section>
+  </body>
+</document>

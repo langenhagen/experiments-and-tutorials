@@ -1,0 +1,1062 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Context"
+    nsURI="http://www.dai-labor.de/~masp/Context-1.3.ecore" nsPrefix="Context">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="The Context package enables the definition of runtime context models. The root element of a context model is the Environment."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Environment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The Environment element is the root element of the context model. It described the context as the combination of places, users and devices."/>
+    </eAnnotations>
+    <eOperations name="addUser">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="users"/>
+      </eAnnotations>
+      <eParameters name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="surname" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="birthdate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeUser">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="users"/>
+      </eAnnotations>
+      <eParameters name="user" eType="#//User"/>
+    </eOperations>
+    <eOperations name="addServiceContainer">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="serviceContainers"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Method is used to add ServiceContainers to the Environment. If the ServiceContainer has no id the id argument must not be null."/>
+      </eAnnotations>
+      <eParameters name="container" lowerBound="1" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//ServiceContainer"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeServiceContainer">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="serviceContainers"/>
+      </eAnnotations>
+      <eParameters name="container" lowerBound="1" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//ServiceContainer"/>
+    </eOperations>
+    <eOperations name="getPlaceInfos" upperBound="-1" eType="#//PlaceInfo">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eOperations name="addRoom">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="places"/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="roomType" eType="#//RoomType"/>
+      <eParameters name="floor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="addOutdoors">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="places"/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="floor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="removePlace">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="places"/>
+      </eAnnotations>
+      <eParameters name="place" eType="#//Place"/>
+    </eOperations>
+    <eOperations name="addDevice">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="devices"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The id must be set only if the id of the device is &lt;code>null&lt;/code>."/>
+      </eAnnotations>
+      <eParameters name="device" lowerBound="1" eType="#//Device"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeDevice">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="devices"/>
+      </eAnnotations>
+      <eParameters name="device" lowerBound="1" eType="#//Device"/>
+    </eOperations>
+    <eOperations name="addProvider">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="providers"/>
+      </eAnnotations>
+      <eParameters name="provider" lowerBound="1" eType="#//ContextProvider"/>
+    </eOperations>
+    <eOperations name="removeProvider">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="providers"/>
+      </eAnnotations>
+      <eParameters name="provider" lowerBound="1" eType="#//ContextProvider"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="places" upperBound="-1"
+        eType="#//Place" containment="true" eOpposite="#//Place/environment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Places in the environment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providers" upperBound="-1"
+        eType="#//ContextProvider" containment="true" eOpposite="#//ContextProvider/environment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="devices" upperBound="-1"
+        eType="#//Device" containment="true" eOpposite="#//Device/environment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Devices in the environment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+        eType="#//User" containment="true" eOpposite="#//User/environment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Users in the environment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assistants" upperBound="-1"
+        eType="#//Assistant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialAssistant" eType="#//HomeOSAssistant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceContainers" upperBound="-1"
+        eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//ServiceContainer"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="meters" upperBound="-1"
+        eType="#//Meter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="discoverers" upperBound="-1"
+        eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//ServiceDiscovererProxy"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Service discovery proxies are used to discover new actors and sensors available in the environment. Each proxy must be connected to a service container in which it will place the discovered services."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activities" upperBound="-1"
+        eType="#//Activity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tools" upperBound="-1"
+        eType="#//Tool" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="informative name of this environment"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="informative description of this environment"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="EnvironmentElement represents an entity present in the environment."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InteractionResource" abstract="true"
+      eSuperTypes="#//ElementWithPosition">
+    <eOperations name="getContextRating" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eParameters name="user" eType="#//User"/>
+    </eOperations>
+    <eOperations name="getAllChannels" upperBound="-1">
+      <eGenericType eClassifier="#//Channel">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="setInteractionStatusWithTimeStamp">
+      <eParameters name="status" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="user" eType="#//User" eOpposite="#//User/resources"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="device" lowerBound="1"
+        eType="#//Device" eOpposite="#//Device/resources"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="available" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" transient="true"
+        defaultValueLiteral="false" derived="true">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modality" lowerBound="1"
+        eType="#//Modality" defaultValueLiteral="Graphic"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mobile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="personal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interactionStatus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interactionStatusTimeStamp"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//ElementWithPosition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="User elements represent users in the environment. Each user has a position, is in a place and has a set of properties, e.g. birth date."/>
+    </eAnnotations>
+    <eOperations name="getUsableResources" upperBound="-1" eType="#//InteractionResource"/>
+    <eOperations name="addCurrentAssistant">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="currentAssistants,pastAssistants"/>
+      </eAnnotations>
+      <eParameters name="assistant" lowerBound="1" eType="#//Assistant"/>
+    </eOperations>
+    <eOperations name="removeCurrentAssistant">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="currentAssistants,pastAssistants"/>
+      </eAnnotations>
+      <eParameters name="assistant" lowerBound="1" eType="#//Assistant"/>
+    </eOperations>
+    <eOperations name="setNewBirthDate">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="birthDate"/>
+      </eAnnotations>
+      <eParameters name="newBirthDate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getBirthDateObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eOperations name="isAdult" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eOperations name="setLeftHanded">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="leftHanded"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setRightHanded">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="leftHanded"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="installAssistant">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="installedAssistants"/>
+      </eAnnotations>
+      <eParameters name="assistantId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="uninstallAssistant">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="installedAssistants"/>
+      </eAnnotations>
+      <eParameters name="assistantId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setNewPasswordHash">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="passwordHash"/>
+      </eAnnotations>
+      <eParameters name="passwordHash" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="birthdate of the user"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="surname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="surname of the user"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leftHanded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="true if the user is left-handed, false otherwise"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//InteractionResource" eOpposite="#//InteractionResource/user"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineOfVision" lowerBound="1"
+        eType="#//Vector" containment="true">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="irExperience" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments>
+            <eUpperBound eClassifier="#//InteractionResource"/>
+          </eTypeArguments>
+        </eTypeArguments>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="followMe" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//Environment"
+        eOpposite="#//Environment/users"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentAssistants" upperBound="-1"
+        eType="#//Assistant" eOpposite="#//Assistant/currentUsers">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pastAssistants" upperBound="-1"
+        eType="#//Assistant" eOpposite="#//Assistant/pastUsers">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installedAssistants" upperBound="-1"
+        eType="#//Assistant">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="passwordHash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assistant" abstract="true" eSuperTypes="#//EnvironmentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activities" upperBound="-1"
+        eType="#//Activity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentUsers" upperBound="-1"
+        eType="#//User" eOpposite="#//User/currentAssistants">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pastUsers" upperBound="-1"
+        eType="#//User" eOpposite="#//User/pastAssistants">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//AssistantConnection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="domain" eType="#//Domain"
+        defaultValueLiteral="Other"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a short task that is (or must be) executed by a user"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedWith" upperBound="-1"
+        eType="#//Tool"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" upperBound="-1"
+        eType="#//ConfigurationProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HomeOSAssistant" eSuperTypes="#//Assistant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ThirdPartyAssistant" eSuperTypes="#//Assistant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalizationTag" eSuperTypes="#//ElementWithPosition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="LocalizationTag represents a physical tag, which can be attached to environment elements and enables the localization of this element in the environment."/>
+    </eAnnotations>
+    <eOperations name="register">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eOperations name="unregister">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="detected" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="register" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" lowerBound="1"
+        eType="#//LocalisationProviderProxy" eOpposite="#//LocalisationProviderProxy/tags"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="#//ElementWithPosition"
+        eOpposite="#//ElementWithPosition/tags"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementWithPosition" abstract="true"
+      eSuperTypes="#//EnvironmentElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ElementWithPosition represents environment entities with a position and a place."/>
+    </eAnnotations>
+    <eOperations name="setPosition">
+      <eAnnotations source="Situation"/>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="z" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="getEnvironment" eType="#//Environment"/>
+    <eOperations name="addTag">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="tags"/>
+      </eAnnotations>
+      <eParameters name="tag" lowerBound="1" eType="#//LocalizationTag"/>
+    </eOperations>
+    <eOperations name="removeTag">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="tags"/>
+      </eAnnotations>
+      <eParameters name="tag" lowerBound="1" eType="#//LocalizationTag"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//LocalizationTag"
+        eOpposite="#//LocalizationTag/element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//Vector"
+        containment="true">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positionTimeStamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="place" eType="#//Place"
+        eOpposite="#//Place/elements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Place" abstract="true" eSuperTypes="#//EnvironmentElement">
+    <eOperations name="contains" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="position" eType="#//Vector"/>
+    </eOperations>
+    <eOperations name="getInteractionResources" upperBound="-1" eType="#//InteractionResource"/>
+    <eOperations name="getUsers" upperBound="-1" eType="#//User"/>
+    <eOperations name="addArea" eType="#//Area">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="areas"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds a Area to the Place. The source and span are created by the given parameters."/>
+      </eAnnotations>
+      <eParameters name="originX" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="originY" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="originZ" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanX" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanY" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanZ" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="removeArea">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="areas"/>
+      </eAnnotations>
+      <eParameters name="area" lowerBound="1" eType="#//Area"/>
+    </eOperations>
+    <eOperations name="addElement">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="elements"/>
+      </eAnnotations>
+      <eParameters name="element" lowerBound="1" eType="#//ElementWithPosition"/>
+    </eOperations>
+    <eOperations name="removeElement">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="elements"/>
+      </eAnnotations>
+      <eParameters name="element" lowerBound="1" eType="#//ElementWithPosition"/>
+    </eOperations>
+    <eOperations name="addDoor" eType="#//Door">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="doors"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds a Door to the Place. The source and span are created by the given parameters."/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="positionX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="positionY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="positionZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="addWindow" eType="#//Window">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="windows"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds a Window to the Place. The source and span are created by the given parameters."/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="positionX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="positionY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="positionZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="removeDoor">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="doors"/>
+      </eAnnotations>
+      <eParameters name="door" eType="#//Door"/>
+    </eOperations>
+    <eOperations name="removeWindow">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="windows"/>
+      </eAnnotations>
+      <eParameters name="window" eType="#//Window"/>
+    </eOperations>
+    <eOperations name="setNewFloor">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="floor"/>
+      </eAnnotations>
+      <eParameters name="newFloor" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getTemperatureAverage" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="areas" lowerBound="1" upperBound="-1"
+        eType="#//Area" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//ElementWithPosition" eOpposite="#//ElementWithPosition/place"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//Environment"
+        eOpposite="#//Environment/places"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doors" upperBound="-1"
+        eType="#//Door" containment="true" eOpposite="#//Door/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="windows" upperBound="-1"
+        eType="#//Window" containment="true" eOpposite="#//Window/source"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Room" eSuperTypes="#//Place">
+    <eOperations name="setRoomType">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="type"/>
+      </eAnnotations>
+      <eParameters name="newRoomType" lowerBound="1" eType="#//RoomType"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//RoomType"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Outdoors" eSuperTypes="#//Place"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Door" eSuperTypes="#//ElementWithPosition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="open" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//BooleanProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Place" eOpposite="#//Place/doors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Place"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="span" lowerBound="1" eType="#//Vector"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Window" eSuperTypes="#//ElementWithPosition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="open" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//BooleanProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Place" eOpposite="#//Place/windows"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Place"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="span" lowerBound="1" eType="#//Vector"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RoomType">
+    <eLiterals name="Kitchen"/>
+    <eLiterals name="Bath" value="1"/>
+    <eLiterals name="Bedroom" value="2"/>
+    <eLiterals name="LivingRoom" value="3" literal="Living Room"/>
+    <eLiterals name="FitnessRoom" value="4" literal="Fitness Room"/>
+    <eLiterals name="Office" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContextProvider" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//Environment"
+        eOpposite="#//Environment/providers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalisationProviderProxy" eSuperTypes="#//ContextProvider">
+    <eAnnotations source="Proxy">
+      <details key="proxyReference" value="api"/>
+      <details key="proxyClassName" value="apiClass"/>
+      <details key="proxySetter" value="setApiInstance"/>
+      <details key="proxyConfiguration" value="configuration"/>
+      <details key="callbacks" value="newPosition,tagGone"/>
+    </eAnnotations>
+    <eOperations name="register" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Situation"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPosition" unique="false" eType="#//Vector">
+      <eAnnotations source="Situation"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="unregister" unique="false">
+      <eAnnotations source="Situation"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="newPosition">
+      <eAnnotations source="Situation"/>
+      <eParameters name="tagID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="z" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="tagGone">
+      <eAnnotations source="Situation"/>
+      <eParameters name="tagID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setApiInstance">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="api"/>
+      </eAnnotations>
+      <eParameters name="apiInstance" lowerBound="1" eType="#//LocalisationProvider"/>
+    </eOperations>
+    <eOperations name="addTag">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="tags"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Method is used to add LocalizationTags to the LocalisationProviderProxy. If the LocalizationTag has no id the id argument must not be null."/>
+      </eAnnotations>
+      <eParameters name="tag" lowerBound="1" eType="#//LocalizationTag"/>
+      <eParameters name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeTag">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="tags"/>
+      </eAnnotations>
+      <eParameters name="tag" lowerBound="1" eType="#//LocalizationTag"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="apiClass" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="api" eType="#//LocalisationProvider"
+        transient="true">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//LocalizationTag"
+        containment="true" eOpposite="#//LocalizationTag/provider"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" upperBound="-1"
+        eType="#//ConfigurationProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mouse" eSuperTypes="#//HapticalInteractionResources">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="motionSensor" eType="#//PointingInputChannel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buttons" eType="#//MessageInputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Keyboard" eSuperTypes="#//HapticalInteractionResources">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keys" eType="#//MessageInputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Display" eSuperTypes="#//OutputInteractionResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xPixels" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yPixels" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="direction" eType="#//Vector"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="screen" eType="#//GraphicalOutputChannel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputInteractionResource" abstract="true"
+      eSuperTypes="#//InteractionResource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputInteractionResource" abstract="true"
+      eSuperTypes="#//InteractionResource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GestureIR" eSuperTypes="#//HapticalInteractionResources">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gestureRecognition" eType="#//MessageInputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Touchpad" eSuperTypes="#//HapticalInteractionResources"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Touchscreen" eSuperTypes="#//Display #//Touchpad">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="touchSurface" eType="#//PointingInputChannel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gestureRecognition" eType="#//MessageInputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//ElementWithPosition">
+    <eOperations name="addInteractionResource">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="resources"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The id must be set only if the id of the interactionResource is &lt;code>null&lt;/code>."/>
+      </eAnnotations>
+      <eParameters name="interactionResource" lowerBound="1" eType="#//InteractionResource"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeInteractionResource">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="resources"/>
+      </eAnnotations>
+      <eParameters name="interactionResource" lowerBound="1" eType="#//InteractionResource"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//InteractionResource" containment="true" eOpposite="#//InteractionResource/device"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mobile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//Environment"
+        eOpposite="#//Environment/devices"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manufacturer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalDevice" abstract="true" eSuperTypes="#//Device">
+    <eOperations name="turnOn" eExceptions="ecore:EDataType http://www.dai-labor.de/~masp/Properties.ecore#//ActorServiceCallException">
+      <eAnnotations source="Situation"/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Attempts to set the value 'true' to the 'on' property of this device. The ActorServiceCallException is thrown if the 'on' property is not set, its actor is not set or the actor throws an exception."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="turnOff" eExceptions="ecore:EDataType http://www.dai-labor.de/~masp/Properties.ecore#//ActorServiceCallException">
+      <eAnnotations source="Situation"/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Attempts to set the value 'false' to the 'on' property of this device. The ActorServiceCallException is thrown if the 'on' property is not set, its actor is not set or the actor throws an exception."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOnValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eOperations name="addSubDevice">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="subDevice"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The id must be set only if the id of the subDevice is &lt;code>null&lt;/code>."/>
+      </eAnnotations>
+      <eParameters name="subDevice" lowerBound="1" eType="#//PhysicalDevice"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeSubDevice">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="subDevice"/>
+      </eAnnotations>
+      <eParameters name="subDevice" lowerBound="1" eType="#//PhysicalDevice"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="on" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//BooleanProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerUsage" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subDevice" upperBound="-1"
+        eType="#//PhysicalDevice" containment="true" eOpposite="#//PhysicalDevice/parentDevice"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentDevice" eType="#//PhysicalDevice"
+        eOpposite="#//PhysicalDevice/subDevice"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalDeviceWithProgram" abstract="true"
+      eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="program" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//TextProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="secondsRemaining" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Lamp" eSuperTypes="#//PhysicalDevice">
+    <eOperations name="setNewLampeType">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="lampType"/>
+      </eAnnotations>
+      <eParameters name="lampType" lowerBound="1" eType="#//LampType"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimmingLevel" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lampType" eType="#//LampType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Notebook" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Hood" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PC" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fan" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="speed" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoteControl" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TV" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentProgram" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Oven" eSuperTypes="#//PhysicalDeviceWithProgram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temperature" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dishwasher" eSuperTypes="#//PhysicalDeviceWithProgram"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WashingMachine" eSuperTypes="#//PhysicalDeviceWithProgram"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Blind" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="level" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Hob" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="heatLevel" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cooker" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CookTop" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fridge" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temperature" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//IntegerProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mixer" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Radio" eSuperTypes="#//PhysicalDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Socket" eSuperTypes="#//PhysicalDevice">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A power socket device, which should only be used if the connected physical device is unknown."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Heater" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temperatureDemand" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temperatureCurrent" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valvePosition" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Meter" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="readings" upperBound="-1"
+        eType="#//MeterReading" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WaterStorageTank" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temperatureSensor" eType="#//TemperatureSensor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HeatingRod" eSuperTypes="#//PhysicalDevice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumPowerWatts" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeterReading">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A MeterReading describes a reading of meter data of a specific type, described by the attributes of the MeterReading."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subject" eType="#//ReadingSubject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurand" eType="#//ReadingMeasurand"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurementMethod" eType="#//ReadingMeasurementMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rate" eType="#//ReadingRate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="identifier of this reading, must be unique at least within the Meter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReadingSubject">
+    <eLiterals name="abstractObject" literal="abstract Object"/>
+    <eLiterals name="Electricity" value="1"/>
+    <eLiterals name="HeatCostAllocation" value="4" literal="Heat Cost Allocation"/>
+    <eLiterals name="Chillness" value="5" literal="Chillness"/>
+    <eLiterals name="Heat" value="6"/>
+    <eLiterals name="Gas" value="7"/>
+    <eLiterals name="WaterCold" value="8" literal="Water (cold)"/>
+    <eLiterals name="WaterHot" value="9" literal="Water (hot)"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReadingMeasurand">
+    <eLiterals name="Consumption" value="15"/>
+    <eLiterals name="ActivePower" value="1" literal="Active Power"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReadingMeasurementMethod">
+    <eLiterals name="InstantaneousValue" value="7" literal="Instantaneous Value"/>
+    <eLiterals name="MeterReading" value="8" literal="Meter Reading"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReadingRate">
+    <eLiterals name="Total"/>
+    <eLiterals name="Rate1" value="1" literal="Rate 1"/>
+    <eLiterals name="Rate2" value="2" literal="Rate 2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalSensorDevice" abstract="true"
+      eSuperTypes="#//Device">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//DoubleProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LuminanceSensor" eSuperTypes="#//PhysicalSensorDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TemperatureSensor" eSuperTypes="#//PhysicalSensorDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Channel" abstract="true" eSuperTypes="#//EnvironmentElement">
+    <eAnnotations source="Proxy">
+      <details key="proxyReference" value="api"/>
+      <details key="proxyClassName" value="apiClass"/>
+      <details key="proxyConfiguration" value="configuration"/>
+      <details key="proxySetter" value="setApiInstance"/>
+      <details key="callbacks" value="setNewAvailable,interactionRequested,interactionFinished"/>
+    </eAnnotations>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//ConcreteInteractor"/>
+    </eTypeParameters>
+    <eTypeParameters name="A">
+      <eBounds eClassifier="#//ChannelAPI"/>
+    </eTypeParameters>
+    <eOperations name="setNewDistributionState" lowerBound="1">
+      <eParameters name="newDistributionState" lowerBound="1" eType="#//DistributionState"/>
+    </eOperations>
+    <eOperations name="add" lowerBound="1">
+      <eParameters name="element" lowerBound="1">
+        <eGenericType eTypeParameter="#//Channel/C"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="remove" lowerBound="1">
+      <eParameters name="elementID" lowerBound="1">
+        <eGenericType eTypeParameter="#//Channel/C"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="setNewAvailable">
+      <eAnnotations source="Situation"/>
+      <eParameters name="newAvailable" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="setApiInstance">
+      <eAnnotations source="Situation">
+        <details key="modifies" value="api"/>
+      </eAnnotations>
+      <eParameters name="newAPI" lowerBound="1">
+        <eGenericType eTypeParameter="#//Channel/A"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getInteractionResource" eType="#//InteractionResource"/>
+    <eOperations name="interactionRequested">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eOperations name="interactionFinished">
+      <eAnnotations source="Situation"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="distributionState" lowerBound="1"
+        eType="#//DistributionState">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1">
+      <eAnnotations source="Situation"/>
+      <eGenericType eTypeParameter="#//Channel/C"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="api" transient="true">
+      <eAnnotations source="Situation"/>
+      <eGenericType eTypeParameter="#//Channel/A"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" upperBound="-1"
+        eType="#//ConfigurationProperty" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="available" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Situation"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="apiClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageInputChannel">
+    <eGenericSuperTypes eClassifier="#//Channel">
+      <eTypeArguments eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//MessageInput"/>
+      <eTypeArguments eClassifier="#//MessageInputChannelAPI"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//OneDimensional"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageOutputChannel">
+    <eGenericSuperTypes eClassifier="#//Channel">
+      <eTypeArguments eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//MessageOutput"/>
+      <eTypeArguments eClassifier="#//MessageOutputChannelAPI"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//OneDimensional"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PointingInputChannel">
+    <eGenericSuperTypes eClassifier="#//Channel">
+      <eTypeArguments eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//Pointing"/>
+      <eTypeArguments eClassifier="#//PointingInputChannelAPI"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//TwoDimensional"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphicalOutputChannel">
+    <eGenericSuperTypes eClassifier="#//Channel">
+      <eTypeArguments eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//GraphicalOutput"/>
+      <eTypeArguments eClassifier="#//GraphicalOutputChannelAPI"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass http://www.dai-labor.de/~lehmann/UI.ecore#//TwoDimensional"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DistributionState">
+    <eLiterals name="CALCULATING"/>
+    <eLiterals name="DONE" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loudspeaker" eSuperTypes="#//OutputInteractionResource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="voice" eType="#//MessageOutputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Microphone" eSuperTypes="#//InputInteractionResource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="voiceRecognition" eType="#//MessageInputChannel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Vector">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="3D vector"/>
+    </eAnnotations>
+    <eOperations name="distance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="Definition"/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="calculates the distance to a point described by another vector"/>
+      </eAnnotations>
+      <eParameters name="vector" eType="#//Vector"/>
+    </eOperations>
+    <eOperations name="setCoordinates">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="x,y,z"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="updates the cooridnates of this vector"/>
+      </eAnnotations>
+      <eParameters name="newX" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="newY" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="newZ" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="copy" lowerBound="1" eType="#//Vector">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="copies this vector"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="-1.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="X coordinate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="-1.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Y coordinate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="-1.0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Z coordinate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Area">
+    <eOperations name="setNewOrigin">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="origin"/>
+      </eAnnotations>
+      <eParameters name="originX" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="originY" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="originZ" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="setNewSpan">
+      <eAnnotations source="Definition">
+        <details key="modifies" value="span"/>
+      </eAnnotations>
+      <eParameters name="spanX" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanY" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eParameters name="spanZ" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="contains" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="position" eType="#//Vector"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" lowerBound="1"
+        eType="#//Vector" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="span" lowerBound="1" eType="#//Vector"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Modality">
+    <eLiterals name="Vocal"/>
+    <eLiterals name="Graphic" value="1"/>
+    <eLiterals name="Haptic" value="2"/>
+    <eLiterals name="Audio" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HapticalInteractionResources" abstract="true"
+      eSuperTypes="#//InputInteractionResource"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ChannelAPI" instanceClassName="org.sercho.masp.models.channel.api.ChannelAPI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="MessageInputChannelAPI" instanceClassName="org.sercho.masp.models.channel.api.MessageInputChannelAPI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="PointingInputChannelAPI" instanceClassName="org.sercho.masp.models.channel.api.PointingInputChannelAPI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="MessageOutputChannelAPI" instanceClassName="org.sercho.masp.models.channel.api.MessageOutputChannelAPI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="GraphicalOutputChannelAPI" instanceClassName="org.sercho.masp.models.channel.api.GraphicalOutputChannelAPI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="LocalisationProvider" instanceClassName="org.sercho.masp.context.providers.location.LocalisationProvider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssistantConnection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedAssistant" lowerBound="1"
+        eType="#//Assistant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="PlaceInfo" instanceClassName="org.sercho.masp.models.Context.PlaceInfo"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Domain">
+    <eLiterals name="Other"/>
+    <eLiterals name="Living" value="1" literal="Living"/>
+    <eLiterals name="Comfort" value="2"/>
+    <eLiterals name="Energy" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LampType">
+    <eLiterals name="Unspecified" literal="Unspecified"/>
+    <eLiterals name="CeilingLamp" value="1" literal="CeilingLamp"/>
+    <eLiterals name="FloorLamp" value="2" literal="FloorLamp"/>
+    <eLiterals name="TableLamp" value="3" literal="TableLamp"/>
+    <eLiterals name="WallLamp" value="4" literal="WallLamp"/>
+    <eLiterals name="HangingLamp" value="5" literal="HangingLamp"/>
+    <eLiterals name="DeviceLamp" value="6" literal="DeviceLamp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tool">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A tool that supports the progress of an Activity"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeviceTool" eSuperTypes="#//Tool">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A special device tool that requires device-funtions (Property) to support an Activity"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controls" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass http://www.dai-labor.de/~masp/Properties.ecore#//Property">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliesTo" lowerBound="1"
+        eType="#//PhysicalDevice"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Need" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A need states the requirement of an execution of a special Activity"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fulfilledBy" upperBound="-1"
+        eType="#//Activity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//ConfigurationProperty"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

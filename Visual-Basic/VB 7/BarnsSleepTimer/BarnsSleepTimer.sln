@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "BarnsSleepTimer", "BarnsSleepTimer\BarnsSleepTimer.vbproj", "{BDF753C5-0BB5-4B51-94BE-7E79568FF129}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{BDF753C5-0BB5-4B51-94BE-7E79568FF129}.Debug.ActiveCfg = Debug|.NET
+		{BDF753C5-0BB5-4B51-94BE-7E79568FF129}.Debug.Build.0 = Debug|.NET
+		{BDF753C5-0BB5-4B51-94BE-7E79568FF129}.Release.ActiveCfg = Release|.NET
+		{BDF753C5-0BB5-4B51-94BE-7E79568FF129}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

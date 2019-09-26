@@ -1,0 +1,399 @@
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+	<properties>
+		<title>Changes</title>
+		<author email="grzegorz.lehmann@dai-labor.de">Grzegorz Lehmann</author>
+	</properties>
+	<body>
+        <release version="1.0" date="2008-05-15" description="MASP Milestone 7">
+            <action dev="lehmann" type="add">First release</action>
+        </release>
+        <release version="1.1.8" date="2010-03-15" description="Room types">
+            <action dev="lehmann" type="add">Added RoomType enumerations and a type attribute to Room.</action>
+        </release>
+        <release version="1.1.10" date="2010-03-25" description="Visualizer Update">
+            <action dev="lehmann" type="fix">ContextModelVisualizer correctly handles the lists of Users and Devices that are now contained in the Environment.</action>
+        </release>
+        <release version="1.1.11" date="2010-04-20" description="Visualizer Fixes">
+            <action dev="lehmann" type="fix">VisualizerManager enables to start the visualization of context for an existing Environment object.</action>
+            <action dev="lehmann" type="fix">Dramatically improved the rendering performance.</action>
+            <action dev="antonio" type="update">Reworked the menus of the context visualizer.</action>
+        </release>
+        <release version="1.1.12" date="2010-04-26" description="Further Visualizer Fixes">
+            <action dev="antonio" type="fix">More improvements in rendering performance.</action>
+            <action dev="antonio" type="add">Added pop-up menus for mouse-over.</action>
+            <action dev="antonio" type="update">Improved rendering of element IDs</action>
+        </release>
+        <release version="1.1.13" date="2010-05-22" description="Visualizer support for LocalizationTags">
+            <action dev="antonio" type="add">ContextModelVisualizer supports LocalizationTags, including movement and path recording.</action>
+        </release>
+        <release version="1.1.14" date="2010-06-07" description="Visualizer fixes">
+            <action dev="lehmann" type="fix">Reworked ContextModelVisualizer synchronization between the model observers and the paint method to fix concurrency bugs (dead-locks)</action>
+        </release>
+        <release version="1.1.15" date="2010-07-29" description="SHSCyberLink range">
+            <action dev="lehmann" type="update">Set SHSCyberLink range [1.3.3,1.3.99].</action>
+        </release>
+        <release version="1.2" date="2010-11-12" description="Rooms, Places and Outdoors">
+            <action dev="sgarn" type="add">Added Places as super type of Rooms and added Outdoors as a special Place.</action>
+            <action dev="sgarn" type="add">Added Doors between Places.</action>
+        </release>
+        <release version="1.2.1" date="2010-11-15" description="Tweaks of Doors">
+            <action dev="sgarn" type="add">Door is an ElementWithPosition and has a span Vector defining its size and direction.</action>
+        </release>
+        <release version="1.2.2" date="2010-12-06" description="Controller Framework merge">
+            <action dev="sgarn" type="add">Added PhysicalDevices into the metamodel.</action>
+            <action dev="sgarn" type="add">Added ControllerFramework code for PhysicalDevices.</action>
+            <action dev="sgarn" type="add">Places have a temperature DoubleProperty.</action>
+        </release>
+        <release version="1.2.3" date="2010-12-09" description="Visualizer tweaks">
+            <action dev="schulz" type="add">Sensor/actor configuration menu in visualizer.</action>
+            <action dev="lehmann" type="fix">Updated EMF XPath version to avoid icu version conflict</action>
+        </release>
+        <release version="1.2.4" date="2010-12-10" description="Meter reading properties">
+            <action dev="lehmann" type="add">Added meter reading properties.</action>
+            <action dev="lehmann" type="fix">Set EMF XPath version range.</action>
+        </release>
+        <release version="1.2.5" date="2010-12-10" description="Meter reading properties containment">
+            <action dev="prochnow" type="fix">Set the containment of the meter readings to true</action>
+        </release>
+        <release version="1.2.6" date="2010-12-15" description="Contextmodel utility methods">
+            <action dev="prochnow" type="add">Added utility methods for easier information retrieval</action>
+        </release>
+        <release version="1.2.7" date="2010-12-21" description="PhysicalDevice.isOn">
+            <action dev="lehmann" type="update">Renamed PhysicalDevice.isOn to getOnValue</action>
+        </release>
+        <release version="1.2.8" date="2011-01-03" description="DWR Update">
+            <action dev="schwartze" type="update">Updated DWR to version 3.0RC1</action>
+        </release>
+        <release version="1.2.9" date="2010-01-03" description="PhysicalDevice.on/off rename">
+            <action dev="lehmann" type="update">Renamed PhysicalDevice.on() to turnOn and off() to turnOff to avoid problems with the diagram editor.</action>
+        </release>
+        <release version="1.2.10" date="2010-01-04" description="Contextmodel utility methods">
+            <action dev="prochnow" type="update">Added utility methods for easier information retrieval</action>
+        </release>
+        <release version="1.2.11" date="2011-01-25" description="New Device: Washmachine">
+            <action dev="prochnow" type="add">Added a new device: Washingmachine</action>
+        </release>
+        <release version="1.2.12" date="2011-01-25" description="DPT9021PowerConsumptionSensorWrapper">
+            <action dev="lehmann" type="add">Added DPT9021PowerConsumptionSensorWrapper, a special sensor for DPT9021 data of the EIB bridge. This sensor automatically converts the mA values into Watt (assuming 230V).</action>
+        </release>
+        <release version="1.2.13" date="2011-01-25" description="Installed Assistants">
+            <action dev="lehmann" type="add">Added User.installedAssistants list holding the Assistants installed for the user. Operations installAssistant(String assistantId) and uninstallAssistant(String assistantId) enable to add/remove assistants from this list.</action>
+        </release>
+        <release version="1.2.14" date="2011-01-28" description="DPT9021PowerConsumptionSensorWrapper tweaks">
+            <action dev="lehmann" type="update">Minor tweaks of DPT9021PowerConsumptionSensorWrapper.</action>
+        </release>
+         <release version="1.2.16" date="2011-01-28" description="Added connection between Assistants">
+            <action dev="prochnow" type="add">Added connection between assistants to model user notification</action>
+        </release>
+         <release version="1.2.17" date="2011-02-16" description="Added new Riedel API">
+            <action dev="heller" type="add">Added actors and sensors for the Riedel ventilation.</action>
+        </release>
+         <release version="1.2.18" date="2011-02-17" description="Environment.getPlaceInfos">
+            <action dev="lehmann" type="add">Added Environment.getPlaceInfos() to retrieve immutable infos about places.</action>
+            <action dev="schulz" type="fix">Added the visualization of sub-ServiceContainers to the context visualizer and added notification handling of PhysicalDevices.</action>
+            <action dev="schulz" type="update">Added WashingMachine images in Context visualizer. Rooms are not filtered, if ID equals one of filtered Devices.</action>
+        </release>
+         <release version="1.2.19" date="2011-02-18" description="MPicoSys works with shortTable">
+            <action dev="lehmann" type="update">Deprecated ControllerFrameworkInitializer.</action>
+            <action dev="garn" type="update">MPicoSys uses shortTable to determine router id</action>
+        </release>
+        <release version="1.2.20" date="2011-02-18" description="Phidgets and MPicoSys Tweaks">
+            <action dev="garn" type="update">New ConfigurationProperties for RFIDPhidgets</action>
+            <action dev="garn" type="update">MPico ignores fingerprint if ConfigurationProperties are missing</action>
+        </release>
+        <release version="1.2.21" date="??" description="???">
+        </release>
+        <release version="1.2.22" date="2011-02-23" description="Assistants categorization">
+            <action dev="lehmann" type="add">Added Domain enumeration to enable the categorization of assistants.</action>
+        </release>
+        <release version="1.2.23" date="2011-02-25" description="digitalSTROM dss11">
+            <action dev="lehmann" type="add">Implemented actors and sensors for the digitalSTROM dss11 API (CeBIT 2011).</action>
+        </release>
+        <release version="1.2.24" date="2011-02-25" description="Fixed problem with MPicoSys">
+            <action dev="garn" type="update">Fixed problem with Hex-CardIds and internal interger-Ids</action>
+        </release>
+        <release version="1.2.25" date="2011-02-26" description="Riedel">
+            <action dev="lehmann" type="update">Reduced sysouts in Riedel temperature sensor.</action>
+            <action dev="lehmann" type="update">Miele hood power usage sensor reports the consumption of the lamp if no ventilation is detected.</action>
+            <action dev="lehmann" type="fix">Enhanced the dss11 actors and sensors with nasty workarounds for Java's paranoid SSL certificate handling.</action>
+        </release>
+        <release version="1.2.26" date="2011-02-27" description="CeBIT Tweaks">
+            <action dev="lehmann" type="update">Added timeout between Miele gateway polls in case of exceptions. Otherwise the requests are called immediatelly again, which is fatal for example if the machine has no ip and the request throws an exception instantly.</action>
+            <action dev="lehmann" type="update">Improved logging for digitalSTROM.</action>
+            <action dev="lehmann" type="fix">Fixed concurrency problems with the TumbleDryerSerialConnector.</action>
+            <action dev="roscher" type="fix">Fixed conversion of MpicoSys identifiers from shortTable.xml.</action>
+        </release>
+        <release version="1.2.27" date="2011-02-28" description="Vector tweaks">
+            <action dev="lehmann" type="update">Added Vector.copy to create new vectors faster (without synchronization).</action>
+            <action dev="lehmann" type="update">Reworked setCoordinates(x, y, z) to acquire the write lock only once and not for each setter.</action>
+            <action dev="lehmann" type="update">Moved notifications outside of the write-locked blocks of the setters.</action>
+        </release>
+        <release version="1.2.28" date="2011-03-08" description="Minor tweaks">
+            <action dev="lehmann" type="update">DSS11DevicePowerStatusActor.set(..) is executed asynchronously.</action>
+            <action dev="garn" type="update">Fixed RFIDLocProvider - avoid multiple concierge calls</action>
+        </release>
+        <release version="1.2.29" date="2011-03-09" description="ControlPointSingleton tweaks">
+            <action dev="lehmann" type="update">Added PhysicalDevice Socket, representing a power socket. It should only be used if the connected physical device is unknown.</action>
+            <action dev="lehmann" type="update">Moved ControlPointSingleton to SHSCyberlink and cleaned up its behavior - the control point is closed if there are no observers.</action>
+            <action dev="schulz" type="update">Menu is now tabbed.</action>
+            <action dev="schulz" type="update">Discovery of UPnP services, browsing throughout its results an assignment of one service to a Sensor or Actor of a Device.</action>        
+        </release>
+        <release version="1.2.30" date="2011-03-09" description="Windows">
+            <action dev="lehmann" type="update">Added Window type and Place.windows field, similar to Door.</action>        
+        </release>
+        <release version="1.2.31" date="2011-03-11" description="No changes">    
+        </release>
+        <release version="1.2.32" date="2011-03-09" description="Fixed error within RFIDLocProvider">
+            <action dev="garn" type="update">There was a mistake regarding the readerId</action>        
+        </release>
+        <release version="1.2.33" date="2011-03-29" description="Context editor and EIB tweaks">
+			<action dev="schulz" type="update">Added explanation for the UPnP discovery frame.</action>
+			<action dev="schulz" type="update">Improved repositioning of elements: they did not jump anymore.</action>
+			<action dev="schulz" type="add">Moving and resizing of Places and its Areas. ElementsWithPosition will be moved also.</action>
+            <action dev="lehmann" type="update">DPT9021PowerConsumptionSensorWrapper supports electric current values with a "mA" postfix.</action>
+        </release>
+        <release version="1.2.34" date="2011-04-05" description="Moving Doors with Places">
+        	<action dev="schulz" type="add">Added moving of doors when moving Places.</action>
+        	<action dev="schulz" type="add">Avoided folding of Areas while resizing it.</action>
+        	<action dev="schulz" type="add">Adding Doors on Places to Place.elements for moving them with Places.</action>
+        	<action dev="schulz" type="fix">Fixed missing selection area if span has silly value.</action>
+        </release>
+        <release version="1.2.35" date="2011-04-15" description="ContextEditor and EIB DPT handling">
+            <action dev="schulz" type="add">Added moving of containing elements if only one area of a place is moved.</action>
+            <action dev="schulz" type="fix">Avoided detaching of elements from other Areas while moving an Area.</action>
+            <action dev="schulz" type="update">Reworekd DPT9021PowerConsumptionSensorWrapper into more generic DPTSensorWrapper which supports all known DPTs.</action>
+        </release>
+        <release version="1.2.36" date="2011-04-18" description="Scaling of EIB values.">
+            <action dev="schulz" type="update">Modified handling of arriving EIB values. (No implicit conversion from mA to W.)</action>
+        </release>
+        <release version="1.2.37" date="2011-04-18" description="Relase without log4j">
+        </release>
+        <release version="1.2.38" date="2011-04-21" description="boolean values at DPTSensorWrapper">
+        	<action dev="schulz" type="update">Implemented support for boolean values at DPTSensorWrapper.</action>
+        </release>
+        <release version="1.2.39" date="2011-05-25" description="PhysicalDeviceWithProgram">
+            <action dev="schulz" type="add">Added support for percentage values at DPTSensorWrapper.</action>
+            <action dev="lehmann" type="add">Added Environment.electricityMeterElectricPowerReading.</action>
+            <action dev="lehmann" type="add">Added abstract PhysicalDeviceWithProgram, which has a "program" TextProperty and "secondsRemaining" IntegerProperty. Oven, Dishwasher and WashingMachine are PhysicalDeviceWithProgram.</action>
+        </release>
+        <release version="1.2.40" date="2011-05-25" description="Device extensions">
+            <action dev="lehmann" type="fix">PhysicalDeviceWithProgram.secondsRemaining and Environment.electricityMeterElectricPowerReading are containment references now.</action>
+            <action dev="lehmann" type="add">Added Device.modelName and Device.manufacturer.</action>
+        </release>
+        <release version="1.2.41" date="2011-06-17" description="BSH fix">
+            <action dev="heller" type="fix">disabled simultaneous connections to BSH-gateway</action>
+        </release>
+        <release version="1.2.42" date="2011-07-12" description="Properties update">
+            <action dev="schulz" type="fix">Fixed missing sub-Service-Containers on the context menu of the context visualizer.</action>
+            <action dev="schulz" type="fix">Corrected sorting of Services in the context visualizer.</action>
+            <action dev="schulz" type="update">Using AbstractSensor- and AbstractActorWrapper from PropertiesModel.</action>
+        </release>
+        <release version="1.2.43" date="2011-07-20" description="OSGi-Bundle and MeterReadings">
+            <action dev="lehmann" type="add">added Meter and MeterReading classes to represent smart meters</action>
+            <action dev="heller" type="add">implemented Servlet for MeterRead-interface</action>
+            <action dev="heller" type="update">OSGi-Bundle conforms "Java Me, CDC, Foundation Profile"</action>
+        </release>
+        <release version="1.2.44" date="2011-07-25" description="Ivistar blind level control">
+        	<action dev="schulz" type="update">Unified Ivistar Sensors and Actors.</action>
+        	<action dev="schulz" type="add">Added BlindLevel Actor and Sensor for Ivistar.</action>
+        </release>
+        <release version="1.2.45" date="2011-07-25" description="Release without log4j.xml">
+        </release>
+        <release version="1.2.46" date="2011-08-11" description="ContextVisualizer development, smart meter update and spring version update">
+        	<action dev="schulz" type="add">Added editing of the id via context menu.</action>
+        	<action dev="schulz" type="add">Added ContextMenuUtil to provide context menus.</action>
+        	<action dev="schulz" type="add">Added visualization for Areas, Doors and Windows on the Environment-Tree.</action>
+        	<action dev="schulz" type="add">Added functionality to add/remove Rooms and Outdoors to/from the Environment.</action>        
+        	<action dev="schulz" type="add">Added functionality to add/remove Areas, Doors and Windows to/from Places.</action>
+        	<action dev="schulz" type="add">Added definition modification elements to Environment: addRoom, addOutdoors and removePlace.</action>
+        	<action dev="schulz" type="add">Added definition modification elements to Place: addDoor, addWindow, removeDoor, removeWindow.</action>
+        	<action dev="heller" type="add">Added 15-minutes interval requests from smart meter to MeterDataServlet.</action>
+        	<action dev="roscher" type="updates">Changed version of spring dependency to 2.5.6.</action>
+        </release>
+        <release version="1.2.47" date="2011-08-30" description="Added PhysicalSensorDevices, InterfaceKitSensor and definition modification elements">
+        	<action dev="schulz" type="fix">Fixed handling of Services, ServiceContainers and ConfigurationPropertys at the environment-tree.</action>
+        	<action dev="schulz" type="add">Added renderging of Windows.</action>
+        	<action dev="schulz" type="remove">Removed nodes from environment-tree for elements of type: Device, Area, Vector, Property, Door, Window</action>
+        	<action dev="schulz" type="add">Use of the ExecutableElementDialog from MetaEditor to execute actions on ContextModel.</action>
+        	<action dev="schulz" type="add">Cascaded context menu if some elements overlap each other.</action>
+        	<action dev="schulz" type="add">Added definition modification elements to Environment: addDevice and removeDevice.</action>
+        	<action dev="schulz" type="add">Added definition modification elements to Device: addInteractionResource and removeInteractionResource.</action>
+        	<action dev="schulz" type="add">Added definition modification elements to PhysicalDevice: addSubDevice and removeSubDevice.</action>
+        	<action dev="schulz" type="update">Added id parameter to addDevice and addServiceContainer of Environment.</action>
+        	<action dev="schulz" type="update">DragPoints are only displayed if mouse pointer is over (or next to) the specific area.</action>
+        	<action dev="schulz" type="add">ExecutableElements with no parameters are executed directly (without further user interaction) from context-menu.</action>
+        	<action dev="schulz" type="add">Added menu-elements for discovery of UPnP services to ServiceContainer-context-menu.</action>
+        	<action dev="sgarn" type="add">Added PhysicalSensorDevices</action>
+        	<action dev="sgarn" type="add">Implemented PhidgetInterfaceKit-Sensor</action>
+        	<action dev="schulz" type="add">Added cleaning of ServiceContainers to EnvironmentImpl.</action>
+        	<action dev="sgarn" type="fix">Closing PhidgetRFIDReader and InterfaceKitSensor properly because they block themselves</action>
+        	<action dev="sgarn" type="remove">Removed unnecessary error listener in PhidgetRFIDReader</action>
+        	<action dev="sgarn" type="add">Timeout for RFIDReader and InterfacKit added</action>
+        </release>
+        <release version="1.2.48" date="2011-08-31" description="MASP-APIs">
+            <action dev="lehmann" type="update" date="2011-08-31">Replaced MASPAPI dependency with MASP-APIs.</action>
+        </release>
+        <release version="1.2.49" date="2011-09-02" description="EnvironmentUtility merge">
+            <action dev="lehmann" type="update" date="2011-09-02">Merged both EnvironmentUtility classes and cleaned up the code.</action>
+        </release>
+        <release version="1.2.50" date="2011-??-??" description="??">
+            <action dev="schulz" type="update">Use of the specific elements (Object) instead of their IDs to differentiate them at the visualization.</action>
+            <action dev="schulz" type="fix">Fixed pointing on areas, only the x and y coordinates are taken into account.</action>
+            <action dev="schulz" type="add">Added editing of origin and span to context menu of areas, to edit the z coordinate.</action>
+        </release>
+        <release version="1.3.1" date="2011-09-08" description="Towards OSGi">
+            <action dev="lehmann" type="remove">Moved SingletonTimer to MASP-APIs.</action>
+            <action dev="lehmann" type="update">Removed Environment.*reading properties which are replaced with the Meter class.</action>
+            <action dev="lehmann" type="update">Removed Place.temperature which is now represented by SensorDevices.</action>
+            <action dev="lehmann" type="update">Unified EnvironmentUtility.</action>
+            <action dev="lehmann" type="remove">Moved all SensorService and ActorService implementation to separate modules so it is easier to assembly a ContextModel OSGi bundle. The sensor/actor modules for each of the connected technologies are separate OSGi bundles, deployable depending on the requirements of the platform.</action>
+        </release>
+        <release version="1.3.3" date="2011-09-08" description="Reduced dependecies">
+            <action dev="lehmann" type="remove">Removed several unused packages, e.g. ar, persistence, facepos.</action>
+            <action dev="lehmann" type="remove">Moved all technology-specific classes to their respective driver modules and thus drastically reduced the number of dependencies.</action>
+        </release>
+        <release version="1.3.5" date="2011-09-12" description="User.password">
+            <action dev="schulz" type="fix">Fixed contains method of AreaImpl, now negative spans are handled correct.</action>
+            <action dev="schulz" type="add">Added password to User, including definition modification element to set it.</action>
+        </release>
+        <release version="1.3.6" date="2011-09-16" description="User.passwordHash">
+            <action dev="schulz" type="update">Renamed User.password to passwordHash.</action>
+        </release>
+        <release version="1.3.7" date="2011-09-22" description="Place.floor and ServiceDiscoveryFrame">
+        	<action dev="schulz" type="add">Added test class for Area.</action>
+        	<action dev="schulz" type="fix">Fixed order of operations on EnvironmentImpl.addServiceContainer.</action>
+        	<action dev="schulz" type="update">Modified access on gui.Images to static.</action>
+        	<action dev="schulz" type="update">Extracted environment tree to EnvironmentTreePanel (including all Node classes).</action>
+        	<action dev="schulz" type="fix">Fixed creation of ServiceContainers.</action>
+        	<action dev="schulz" type="add">Added ServiceDiscoveryFrame to add Services by the ServiceDiscovererManager.</action>
+        	<action dev="schulz" type="add">Added optional Place.floor attribute.</action>
+        </release>
+        <release version="1.3.8" date="2011-09-29" description="DanglingElementsPanel">
+        	<action dev="schulz" type="add">Visualization of floors.</action>
+        	<action dev="schulz" type="fix">Fixed missing visualization at embedded mode.</action>
+        	<action dev="schulz" type="add">Added DanglingElementsPanel to visualizer for dangling elements (elements without place).</action>
+        	<action dev="schulz" type="add">Added drag-and-drop of elements from DanglingElementsPanel to add them to any place.</action>
+        	<action dev="schulz" type="add">Added Inlet-wrapper for Doors and Windows to prepare uniform handling.</action>
+        	<action dev="schulz" type="add">Added DefinitionModificationElement Place.setNewFloor.</action>
+        </release>
+        <release version="1.3.9" date="2011-10-04" description="OSGi dependency fix">
+            <action dev="heller" type="fix">set scope of OSGi-dependency to provided</action>
+        </release>
+        <release version="1.3.10" date="2011-10-07" description="UI fixes">
+        	<action dev="schulz" type="update">Renamed EnvironmentUtility.normalizePlace to fixPlace and added handling of Windows.</action>
+        	<action dev="schulz" type="fix">Fixed handling of elements when dropped at area.</action>
+        	<action dev="schulz" type="add">Added testRemoveDevice to EnvironmentTest.</action>
+        	<action dev="schulz" type="fix">Fixed concurrent access at EnvironmentImpl.removeDevice.</action>
+        	<action dev="schulz" type="add">Added ScrollBar to DanglingElementsPanel.</action>
+        	<action dev="schulz" type="fix">Fixed assignment of elements to places.</action>
+        	<action dev="schulz" type="update">Set position of elements not until it is dropped.</action>
+        </release>
+        <release version="1.3.11" date="2011-10-07" description="Dependency hotfix">
+            <action dev="lehmann" type="fix">Replaced OSGi dependencies with OSGiUtil [1.0.2,1.0.9].</action>
+            <action dev="lehmann" type="update">Minor tweaks of the EnvironmentActivator.</action>
+        </release>
+        <release version="1.3.12" date="2011-10-13" description="UI fixes">
+        	<action dev="schulz" type="add">Added set and removal of relation between LocalizationTag and ElementWithPosition or LocalisationProviderProxy.</action>
+        	<action dev="schulz" type="fix">Fixed rendering position of Pop-Ups and LocalizationTags.</action>
+        	<action dev="schulz" type="add">Added missing update of dangling elements if area is resized.</action>
+        </release>
+        <release version="1.3.13" date="2011-11-09" description="UI fixes and improvements">
+        	<action dev="schulz" type="fix">Fixed rendering position of Doors and Windows.</action>
+        	<action dev="schulz" type="update">Reworked paint methods of elements.</action>
+        	<action dev="schulz" type="add">Added DefinitionModificationElement LocalisationProviderProxy.addTag to add tags to providers.</action>
+        	<action dev="schulz" type="add">Added functionality to add/remove tags to/from providers.</action>
+        	<action dev="schulz" type="update">Use elements itself for filtering instead of its ids.</action>
+        	<action dev="schulz" type="update">Reworked (simplified) paintEnvironment at Visualizer.</action>
+        	<action dev="schulz" type="add">Elements are added at clicked location for the pop-up.</action>
+        	<action dev="schulz" type="add">Avoided rescaling of visualizer if an area is dragged.</action>
+        </release>
+		<release version="1.3.14" date="2011-11-09" description="Stackoverflow fix">
+			<action dev="schulz" type="fix">Fixed endless recursion while comparing tree nodes.</action>
+        </release>
+        <release version="1.3.15" date="2011-11-17" description="ModelAPI-Services">
+            <action dev="schulz" type="fix">Fixed missing removal of LocalizationTags from LocalisationProviderProxy when removing them from Environment.</action>
+            <action dev="schulz" type="fix">Fixed missing addProvider at context-menu to add LocalisationProviderProxys to the Environment.</action>
+            <action dev="schulz" type="update">Moved methods to check ids of Services from action listeners to EnvironmentUtility.</action>
+            <action dev="schulz" type="add">Added check for unique ids while adding elements to Environment.</action>
+            <action dev="schulz" type="fix">Used Maps from visualizer instead of lists from Environment to avoid deadlocks.</action>
+            <action dev="lehmann" type="add">added ModelAPI-Services</action>
+        </release>
+        <release version="1.3.16" date="2011-11-17" description="dependency fix">
+            <action dev="heller" type="fix">fixed dependency-problem..again</action>
+        </release>
+        <release version="1.3.17" date="2011-12-02" description="LampType">
+        	<action dev="schulz" type="add">Added LampType and Lamp.setNewLampeType.</action>
+        </release>
+        <release version="1.3.18" date="2011-12-03" description="LampType.Unspecified">
+        	<action dev="schulz" type="fix">Fixed LampType literal naming.</action>
+        </release>
+        <release version="1.3.19" date="2011-12-06" description="NPE fix">
+        	<action dev="schulz" type="fix">Fixed NullPointerException during startup in some cases.</action>
+        </release>
+        <release version="1.3.20" date="2011-12-20" description="Added WaterTank and HeatingRod">
+        	<action dev="pfeffer" type="add">Added WaterStorageTank.</action>
+        	<action dev="pfeffer" type="add">Added HeatingRod.</action>
+        </release>
+        <release version="1.3.21" date="2011-12-21" description="Switched to GettersSetters 1.1.1">
+            <action dev="sgarn" type="fix">Switched to GettersSetters 1.1.1.</action>
+        </release>
+        <release version="1.3.22" date="2011-12-27" description="ServiceDiscovererProxies">
+            <action dev="lehmann" type="add">Added Environment.discoverers reference to ServiceDiscovererProxy elements to enable the discovery of actors and services of an environment.</action>
+        </release>
+        <release version="1.3.23" date="2012-01-03" description="Activities">
+            <action dev="falko" type="add">Migrated ActivityModel into the ContextModel</action>
+        </release>
+        <release version="1.3.24" date="2012-01-06" description="Activities">
+            <action dev="falko" type="update">Added reference for DeviceTool to PhysicalDevice</action>
+        </release>
+        <release version="1.3.25" date="2012-01-13" description="Annotation fixes">
+            <action dev="lehmann" type="fix">Fixed wrong models@runtime annotations.</action>
+            <action dev="lehmann" type="add">Added Place.getTemperatureAverage as a helper for temperature checks.</action>
+        </release>
+        <release version="1.3.26" date="2012-01-26" description="Model-API services">
+            <action dev="lehmann" type="fix">JSONModelAPISensor queries initial property value upon start.</action>
+            <action dev="lehmann" type="add">Added JSONModelAPIServiceConverter for easy re-directing of context models to a Model-API. The converter can perform a total model conversion and replace all sensors and actors with JSON Model-API sensors and actors pointing to a given Model-API.</action>
+            <action dev="lehmann" type="update">DummyValueRegistryJPanel shows variables in alphabetical order.</action>
+        </release>
+        <release version="1.3.27" date="2012-01-31" description="Message amount fixes">
+           	<action dev="schulz" type="fix">Fidex missing user popup to inform abount done environemnt fixes.</action>
+        </release>
+        <release version="1.3.28" date="2012-02-02" description="JSON service availability fix">
+            <action dev="lehmann" type="fix">JSONModelAPIActor and -Sensor report availability correctly, which fixes problem with actor method execution.</action>
+        </release>
+        <release version="1.3.29" date="2012-02-08" description="JSONModelAPIServiceConverter fixes">
+            <action dev="lehmann" type="add">Added MeterReading.identifier to identify the readings, at least within the meter. This is needed to generate queries to the meter readings in the JSONModelAPIServiceConverter.</action>
+            <action dev="lehmann" type="fix">JSONModelAPIServiceConverter can convert models with meter readings correctly.</action>
+            <action dev="lehmann" type="update">Added and tweaked logging of JSONModelAPIServiceConverter.</action>
+        </release>
+        <release version="1.3.29" date="2012-02-08" description="JSONModelAPIServiceConverter fixes">
+            <action dev="lehmann" type="add">Added MeterReading.identifier to identify the readings, at least within the meter. This is needed to generate queries to the meter readings in the JSONModelAPIServiceConverter.</action>
+            <action dev="lehmann" type="fix">JSONModelAPIServiceConverter can convert models with meter readings correctly.</action>
+            <action dev="lehmann" type="update">Added and tweaked logging of JSONModelAPIServiceConverter.</action>
+        </release>
+        <release version="1.3.31" date="2012-02-09" description="MetaEditor update">
+            <action dev="lehmann" type="update">Updated dependency version range for MetaEditor. This actually brings in some API changes which will make older MASPConcept modules not-compatible. Yet the change does not justify the effort of moving to a next big version 1.4.</action>
+        </release>
+        <release version="1.3.32" date="2012-02-22" description="Model-API sensor fix">
+            <action dev="lehmann" type="fix">Fixed JSONModelAPISensor so it works with newest Model-API client, which is more type safe.</action>
+            <action dev="lehmann" type="add">Added ContextModelVisualizerComponent MegaModel component, which starts the context model visualization GUI for each context model passed to it.</action>
+            <action dev="lehmann" type="add">Added DummyValueRegistryGUIComponent MegaModel component, which starts the dummy registry GUI.</action>
+        </release>
+        <release version="1.3.33" date="2012-02-29" description="CeBIT tweaks">
+            <action dev="lehmann" type="fix" date="2012-02-29">DummyValueRegistryGUIComponent skips start GUI if running in headless environment with no graphics support.</action>
+            <action dev="lehmann" type="fix" date="2012-02-29">ContextModelVisualizerComponent skips start GUI if running in headless environment with no graphics support.</action>
+            <action dev="lehmann" type="add" date="2012-02-29">Added Environment.name and Environment.description as informative attributes describing the environment.</action>
+            <action dev="lehmann" type="update" date="2012-02-29">DummyValueRegistryJPanel indicates newly changed values with green color for five seconds.</action>
+        </release>
+        <release version="1.3.34" date="2012-03-05" description="CeBIT 2012 v2">
+            <action dev="lehmann" type="add" date="2012-03-05">Added DummyVariableSynchronizationComponent which synchronizes any Property with a dummy registry variable.</action>
+        </release>
+        <release version="1.3.35" date="2012-05-18" description="MASP-APIs 1.1">
+            <action dev="schulz" type="fix">Fixed resizing of dangling elements panel.</action>
+            <action dev="schulz" type="fix">Fixed update of floor-tabs when adding a place.</action>
+            <action dev="lehmann" type="update">Switching to MASP-APIs-1.1.</action>
+        </release>
+	</body>
+</document>

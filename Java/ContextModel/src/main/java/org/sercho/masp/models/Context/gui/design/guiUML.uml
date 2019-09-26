@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Package xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_fnB6kUuiEd-QQ8_qJpZzmg" name="guiUML">
+  <elementImport xmi:id="_fsm-IEuiEd-QQ8_qJpZzmg">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+  </elementImport>
+  <elementImport xmi:id="_ftUIwEuiEd-QQ8_qJpZzmg">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+  </elementImport>
+  <elementImport xmi:id="_ftUIwUuiEd-QQ8_qJpZzmg">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+  </elementImport>
+  <elementImport xmi:id="_ftUIwkuiEd-QQ8_qJpZzmg">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_7t6QQEujEd-QQ8_qJpZzmg" name="manager"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_9ReUwEujEd-QQ8_qJpZzmg" name="Class"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_AzEzQEukEd-QQ8_qJpZzmg" memberEnd="_AzHPgEukEd-QQ8_qJpZzmg _AzJrwUukEd-QQ8_qJpZzmg">
+    <ownedEnd xmi:id="_AzHPgEukEd-QQ8_qJpZzmg" name="src" type="_7t6QQEujEd-QQ8_qJpZzmg" association="_AzEzQEukEd-QQ8_qJpZzmg">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AzJrwEukEd-QQ8_qJpZzmg" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AzJEsEukEd-QQ8_qJpZzmg" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_AzJrwUukEd-QQ8_qJpZzmg" name="dst" type="_9ReUwEujEd-QQ8_qJpZzmg" association="_AzEzQEukEd-QQ8_qJpZzmg">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AzKS0UukEd-QQ8_qJpZzmg" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AzKS0EukEd-QQ8_qJpZzmg" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Package>

@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kombi(virtualBaseClass)", "Kombi(virtualBaseClass)\Kombi(virtualBaseClass).vcproj", "{0CD2026F-C0D5-46DA-87C0-4B5131C7F205}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CD2026F-C0D5-46DA-87C0-4B5131C7F205}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0CD2026F-C0D5-46DA-87C0-4B5131C7F205}.Debug|Win32.Build.0 = Debug|Win32
+		{0CD2026F-C0D5-46DA-87C0-4B5131C7F205}.Release|Win32.ActiveCfg = Release|Win32
+		{0CD2026F-C0D5-46DA-87C0-4B5131C7F205}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

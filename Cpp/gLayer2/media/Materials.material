@@ -1,0 +1,33 @@
+fragment_program ps_merge_textures cg
+{
+	source MergeTextures.cg
+	entry_point ps_merge_textures_alpha
+	profiles ps_2_0 arbfp1
+
+	default_params
+	{
+		param_named mix float 1.0
+	}
+}
+
+
+material omega/material/merge_textures
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_write off
+
+			fragment_program_ref ps_merge_textures
+			{}
+
+			texture_unit FirstTexture
+			{}
+
+			texture_unit SecondTexture
+			{}
+		}
+	}
+}

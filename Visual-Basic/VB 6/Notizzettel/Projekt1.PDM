@@ -1,0 +1,177 @@
+[Root]
+Most Recent Package=Standardm‰ﬂiges Setup-Paket 2
+
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Files Found]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Files Released]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Missing Dependency Information]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Out-of-Date Dependency Information]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Files Added]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Files Removed]
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Files In Project]
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=Yes
+C:\WINDOWS\SYSTEM\MSVBVM60.DLL=Yes
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=Yes
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=Yes
+C:\WINDOWS\SYSTEM\ASYCFILT.DLL=Yes
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\SYSTEM\VB6DE.DLL=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Install Locations]
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=$(AppPath)
+C:\WINDOWS\SYSTEM\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\VB6DE.DLL=$(WinSysPath)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Configure Shared Files]
+Applicable=Yes
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=Yes
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Distribution]
+Type=single
+Size=720 KB
+Title=Andis Notizzettel V.1.1
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Package]
+PackageFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket
+ProjectFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel
+ServerSideCab=
+File1=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\setup.exe
+File2=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\Setup.Lst
+File3=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\Projekt1.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|IconGroups]
+Group0=Andis Notizzettel
+PrivateGroup0=Falsch
+Parent0=$(Programs)
+
+[Package|Standardm‰ﬂiges Setup-Paket 1|Andis Notizzettel]
+Icon1=Projekt1.EXE
+Title1=Andis Notizzettel
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Files Found]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Files Released]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Missing Dependency Information]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Out-of-Date Dependency Information]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Files Added]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Files Removed]
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Files In Project]
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=Yes
+C:\WINDOWS\SYSTEM\MSVBVM60.DLL=Yes
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=Yes
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=Yes
+C:\WINDOWS\SYSTEM\ASYCFILT.DLL=Yes
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\SYSTEM\VB6DE.DLL=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=Yes
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Configure Registry Files]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Configure Remote Servers]
+Applicable=No
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Install Locations]
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=$(AppPath)
+C:\WINDOWS\SYSTEM\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\VB6DE.DLL=$(WinSysPath)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Programme\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Configure Shared Files]
+Applicable=Yes
+C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Projekt1.exe=Yes
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Distribution]
+Type=single
+Size=720 KB
+Title=Andis Notizzettel V.1.2
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Package]
+PackageFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket
+ProjectFolder=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel
+ServerSideCab=
+File1=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\setup.exe
+File2=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\Setup.Lst
+File3=C:\WINDOWS\Profiles\Andreas jr\Desktop\Andi\Privatszeug\Programmierungen\Notizzettel\Paket\Projekt1.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|IconGroups]
+Group0=Andis Notizzettel
+PrivateGroup0=Falsch
+Parent0=$(Programs)
+
+[Package|Standardm‰ﬂiges Setup-Paket 2|Andis Notizzettel]
+Icon1=Projekt1.EXE
+Title1=Andis Notizzettel
+StartIn1=$(AppPath)
+Key1=Icon1

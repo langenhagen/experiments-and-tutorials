@@ -1,0 +1,62 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+
+    <servlet>
+        <servlet-name>dwr-invoker</servlet-name>
+        <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+        <init-param>
+            <param-name>activeReverseAjaxEnabled</param-name>
+            <param-value>true</param-value>
+        </init-param> 
+        <init-param>
+            <param-name>logLevel</param-name>
+            <param-value>DEBUG</param-value>
+        </init-param>
+        <init-param>
+            <param-name>pollAndCometEnabled</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>debug</param-name>
+        	<param-value>true</param-value>
+        </init-param>
+        <init-param>
+	        <param-name>classes</param-name>
+		    <param-value>
+		      org.sercho.masp.models.Context.html.HTMLGraphicalOutputChannel
+		    </param-value>
+	    </init-param>
+	    <init-param>
+	    	<param-name>crossDomainSessionSecurity</param-name>
+	    	<param-value>false</param-value>
+	    </init-param>
+        <load-on-startup>1</load-on-startup>  
+    </servlet>
+    <servlet>
+        <servlet-name>masp</servlet-name>
+        <servlet-class>org.sercho.masp.models.Context.html.AjaxOutputServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>   
+    </servlet>
+    <servlet>
+        <servlet-name>http-proxy</servlet-name>
+        <servlet-class>org.sercho.masp.models.Context.http.Proxy</servlet-class>
+    </servlet>
+    
+
+
+    <servlet-mapping>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>http-proxy</servlet-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>masp</servlet-name>
+        <url-pattern>/masp/*</url-pattern>
+    </servlet-mapping>
+</web-app>

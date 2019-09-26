@@ -1,0 +1,14 @@
+# Die Files. Das Einzige, was eigentlich wirklich angepasst werden muss.
+Scene.hpp -nocpp
+Dumb.h
+
+
+# So Standard Setup Kram. Muss man eigentlich nur selten ändern.
+# Die Reihenfolge der ganzen Statements ist egal.
+author: barn
+namespace: OwnApp
+HPath:	C:\test
+CppPath: c:\test
+HppTemplate: CppFileGen\Template.hpp
+HTemplate: CppFileGen\Template.h
+CppTemplate: CppFileGen\Template.cpp

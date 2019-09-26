@@ -1,0 +1,37 @@
+<!-- ------------------------------------- 
+@author: langenhagen
+@versoin 160102
+-------------------------------------- --> 
+
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+    <head>
+        
+        <title>YOUR THREE JS SCENE TITLE</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/> 
+        
+        <link rel="stylesheet" type="text/css" href="./css/style.css" /> 
+          
+    </head>
+    
+    <body onload="ENGINE.initAndStartWebGLApp()">
+                
+        <canvas id="gl"></canvas>
+        
+    </body>
+    
+    
+    <script src="https://cdn.jsdelivr.net/threejs/0.0.0-r73/three.min.js"></script>
+    <script>!window.THREE && document.write('<script src=\".\/js\/three-r73.min.js\"><\/script>')</script>
+    
+    <script src="./js/Detector.js"></script>
+
+    <script src="./js/Utils.js"></script>
+    <script src="./js/Engine.js"></script>
+    
+    <!-- your scene scripts here -->
+    
+    
+    <script src="./js/SceneManager.js"></script>
+
+</html>

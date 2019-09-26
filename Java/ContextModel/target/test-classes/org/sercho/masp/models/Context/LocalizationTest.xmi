@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Context:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Context="http://www.dai-labor.de/~masp/Context-1.3.ecore">
+  <places xsi:type="Context:Room" id="Kitchen" name="Kitchen">
+    <areas>
+      <origin x="0.0" y="0.0" z="0.0"/>
+      <span x="50.0" y="50.0" z="50.0"/>
+    </areas>
+    <doors id="Kitchen - Living Room Door" name="" target="//@places.1">
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="Living Room" name="Living Room">
+    <areas>
+      <origin x="51.0" y="0.0" z="0.0"/>
+      <span x="50.0" y="50.0" z="50.0"/>
+    </areas>
+    <doors id="Living Room - Kitchen Door " name="" target="//@places.0">
+      <span/>
+    </doors>
+  </places>
+  <providers xsi:type="Context:LocalisationProviderProxy" apiClass="org.sercho.masp.models.Context.LocalizationTest$TestLocalisationProvider">
+    <tags id="tag123" name="Small Tag" register="true" element="//@users.0"/>
+    <configuration key="TestTag" value="tag123"/>
+  </providers>
+  <users id="Dirk" name="Dirk" tags="//@providers.0/@tags.0">
+    <position/>
+    <lineOfVision/>
+  </users>
+</Context:Environment>

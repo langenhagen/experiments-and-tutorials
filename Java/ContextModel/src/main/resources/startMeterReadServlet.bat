@@ -1,0 +1,1 @@
+java -Djava.ext.dirs=lib org.sercho.masp.models.Context.EMH.MeterReadServletStarter %*

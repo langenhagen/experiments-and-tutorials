@@ -1,0 +1,15 @@
+Datum: 15.06.2011
+Durchgeführt von Grzegorz Lehmann
+Hardware:
+   Phidget RFID P/N 1023 (angeschlossen über USB direkt an einen PC)
+   RFID Karte im Kreditkartenformat
+Software/Firmware: Phidget-x64_2.1.6.20091214
+
+Zur Erkennung der Karten wurde die mitgelieferte Phidget Control Panel Software
+verwendet.
+
+Karte und Reader wurden in unterschiedlichen Winkeln und Orientierungen zu
+einander gesetzt.
+
+Bilder zeigen die maximale Entfernung zwischen der Karte und dem Reader bei der
+die Karte von der Firmware erkannt wird.

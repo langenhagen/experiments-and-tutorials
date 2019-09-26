@@ -1,0 +1,13 @@
+# Die Files.
+
+
+# So Standard setup Kram. Muss man eigentlich nur selten ändern.
+# Die Reihenfolge der ganzen Statements ist egal.
+
+author: <author>
+namespace: <namespace>
+HPath:	<hpath>
+CppPath: <cpppath>
+HTemplate: Template.h
+HppTemplate: Template.hpp
+CppTemplate: Template.cpp

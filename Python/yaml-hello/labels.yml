@@ -1,0 +1,78 @@
+# Contains my transaction category labels. The category labels are stored in a tree structure
+# to reflect their hierarchy.
+# Any label may have a field "regex" that can help automatically identifying posts
+# that belong to it.
+
+"Income":
+  "Cash Deposit":
+  "Government Benefit":
+  "Elterngeld":
+  "Kindergeld":
+  "Insurance Indemnification":
+  "Interest":
+  "Internal Transfer":
+  "Pocket Money":
+    "Money from Parents":
+    "Money from Salomé":
+  "Refund":
+    "Rent Pay Back":
+  "Rental Income":
+    "Sublet Andi S.":
+    "Sublet Iara":
+  "Salary":
+    "Salary CeleraOne":
+    "Salary Here":
+  "Tax Refund":
+  "Capital Gain":
+  "Venture Capital Returns":
+
+"Expense":
+  "Cash Withdrawal":
+  "Clothing":
+  "Cosmetics":
+  "Eating Out":
+    "Delivery":
+      regex: "foodora|deliveroo|pizza.de|lieferheld"
+    "Restaurant":
+    "Snack & Coffee":
+  "Entertainment":
+    "Devices":
+    "Games":
+    "Movies":
+    "Music":
+  "Fees":
+  "Groceries":
+  "Health":
+  "Hobbies":
+  "Household":
+    "Additional Rent Payment":
+    "Commodities":
+    "Electricity":
+    "Internet":
+    "Rent":
+  "Insurance":
+    "Health Insurance":
+    "Householder's Insurance Policy":
+  "Leo":
+    "Leo Clothing":
+    "Leo Commodities":
+    "Leo Savings":
+  "Mobile Communications":
+  "Salome":
+  "Savings":
+    "Venture Capital Investments":
+  "Sports":
+    "Gym Club Membership":
+    "Kickboxing":
+    "Taekwondo":
+  "Transportation":
+    "Bike":
+    "Car Rental":
+    "Public Transport":
+    "Travel":
+      "Air Travel":
+      "Train Travel":
+    "Vehicle Sharing":
+      "Car Sharing":
+      "Mini Scooter Sharing":
+      "Scooter Sharing":

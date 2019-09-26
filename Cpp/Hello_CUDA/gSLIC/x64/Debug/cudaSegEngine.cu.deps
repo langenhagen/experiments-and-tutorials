@@ -1,0 +1,266 @@
+H:\CUDA 6.0\Toolkit\include\cuda_runtime.h
+h:\cuda 6.0\toolkit\include\host_config.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\sal.h
+h:\microsoft visual studio 10.0\vc\include\codeanalysis\sourceannotations.h
+H:\Microsoft Visual Studio 10.0\VC\include\vadefs.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+H:\Microsoft Visual Studio 10.0\VC\include\limits.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\stddef.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\channel_descriptor.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\cuda_runtime_api.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\cuda_device_runtime_api.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\cuda_runtime_api.h
+h:\cuda 6.0\toolkit\include\driver_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\vector_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\common_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+H:\Microsoft Visual Studio 10.0\VC\include\string.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\time.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\wtime.inl
+H:\Microsoft Visual Studio 10.0\VC\include\time.inl
+h:\cuda 6.0\toolkit\include\math_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+H:\Microsoft Visual Studio 10.0\VC\include\math.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\stdlib.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\cmath
+H:\Microsoft Visual Studio 10.0\VC\include\yvals.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\use_ansi.h
+H:\Microsoft Visual Studio 10.0\VC\include\math.h
+H:\Microsoft Visual Studio 10.0\VC\include\cstdlib
+h:\cuda 6.0\toolkit\include\cuda_surface_types.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\channel_descriptor.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\cuda_texture_types.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\channel_descriptor.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\device_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_11_atomic_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_12_atomic_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_13_double_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_20_atomic_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_32_atomic_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_35_atomic_functions.h
+h:\cuda 6.0\toolkit\include\sm_32_atomic_functions.h
+h:\cuda 6.0\toolkit\include\sm_20_intrinsics.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_30_intrinsics.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_32_intrinsics.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\sm_35_intrinsics.h
+h:\cuda 6.0\toolkit\include\sm_32_intrinsics.h
+h:\cuda 6.0\toolkit\include\surface_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\cuda_surface_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\vector_functions.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\texture_fetch_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\cuda_texture_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_functions.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\texture_indirect_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\vector_functions.h
+h:\cuda 6.0\toolkit\include\surface_indirect_functions.h
+h:\cuda 6.0\toolkit\include\builtin_types.h
+h:\cuda 6.0\toolkit\include\device_types.h
+h:\cuda 6.0\toolkit\include\driver_types.h
+h:\cuda 6.0\toolkit\include\surface_types.h
+h:\cuda 6.0\toolkit\include\texture_types.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+h:\cuda 6.0\toolkit\include\host_defines.h
+h:\cuda 6.0\toolkit\include\vector_functions.h
+h:\cuda 6.0\toolkit\include\device_launch_parameters.h
+h:\cuda 6.0\toolkit\include\vector_types.h
+g:\cpp\hello_cuda\gslic\cudaSegEngine.h
+H:\CUDA 6.0\Toolkit\include\cuda.h
+H:\CUDA 6.0\Toolkit\include\cuda_runtime.h
+H:\CUDA 6.0\Toolkit\include\device_launch_parameters.h
+g:\cpp\hello_cuda\gslic\cudaDefines.h
+g:\cpp\hello_cuda\gslic\cudaUtil.h
+H:\Microsoft Visual Studio 10.0\VC\include\stdio.h
+H:\Microsoft Visual Studio 10.0\VC\include\crtdefs.h
+H:\Microsoft Visual Studio 10.0\VC\include\swprintf.inl
+H:\Microsoft Visual Studio 10.0\VC\include\math.h
+H:\CUDA 6.0\Toolkit\include\cuda.h
+H:\CUDA 6.0\Toolkit\include\cuda_runtime.h
+H:\CUDA 6.0\Toolkit\include\device_launch_parameters.h
+g:\cpp\hello_cuda\gslic\cudaDefines.h
+g:\cpp\hello_cuda\gslic\cudaImgTrans.h
+H:\CUDA 6.0\Toolkit\include\cuda.h
+H:\CUDA 6.0\Toolkit\include\cuda_runtime.h
+H:\CUDA 6.0\Toolkit\include\device_launch_parameters.h
+g:\cpp\hello_cuda\gslic\cudaDefines.h
+g:\cpp\hello_cuda\gslic\cudaSegSLIC.h
+H:\CUDA 6.0\Toolkit\include\cuda.h
+H:\CUDA 6.0\Toolkit\include\cuda_runtime.h
+H:\CUDA 6.0\Toolkit\include\device_launch_parameters.h
+g:\cpp\hello_cuda\gslic\cudaDefines.h
+H:\Microsoft Visual Studio 10.0\VC\include\math.h

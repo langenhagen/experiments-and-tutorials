@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:Properties="http://www.dai-labor.de/~masp/Properties.ecore" xmlns:description="Description" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:proxy="Proxy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" description:Value="The Properties metamodel enables the definition of properties connected to sensor and actor proxy elements. The sensors determine the value of the associated properties. The actors make it possible to set a new value to a property. The properties can be used in other models to connect their elements with external sensors (SensorWrapper) and actors (ActorWrapper)." ecore:nsPrefix="Properties" ecore:package="de.dailab.masp.models.Properties" targetNamespace="http://www.dai-labor.de/~masp/Properties.ecore">
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="ServiceContainer" type="Properties:ServiceContainer"/>
+  <xsd:element ecore:ignore="true" name="Service" type="Properties:Service"/>
+  <xsd:element ecore:ignore="true" name="ConfigurationProperty" type="Properties:ConfigurationProperty"/>
+  <xsd:element ecore:ignore="true" name="Sensor" type="Properties:Sensor"/>
+  <xsd:element ecore:ignore="true" name="Actor" type="Properties:Actor"/>
+  <xsd:element ecore:ignore="true" name="Property" type="Properties:Property"/>
+  <xsd:element ecore:ignore="true" name="NumberProperty" type="Properties:NumberProperty"/>
+  <xsd:element ecore:ignore="true" name="IntegerProperty" type="Properties:IntegerProperty"/>
+  <xsd:element ecore:ignore="true" name="DoubleProperty" type="Properties:DoubleProperty"/>
+  <xsd:element ecore:ignore="true" name="BooleanProperty" type="Properties:BooleanProperty"/>
+  <xsd:element ecore:ignore="true" name="TextProperty" type="Properties:TextProperty"/>
+  <xsd:complexType description:Value="ServiceContainer contains children Services." name="ServiceContainer">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="addService">
+          <annotation source="Definition">
+            <detail key="modifies">services</detail>
+          </annotation>
+          <annotation source="Description">
+            <detail key="Value">Adds a service to this container.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="service" type="Properties:Service"/>
+        </operation>
+        <operation name="removeService">
+          <annotation source="Definition">
+            <detail key="modifies">services</detail>
+          </annotation>
+          <annotation source="Description">
+            <detail key="Value">Removes a service from this container.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="service" type="Properties:Service"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Service">
+        <xsd:sequence>
+          <xsd:element description:Value="Services held in this container." ecore:opposite="container" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="services" type="Properties:Service"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" description:Value="Service is the superclass of Sensors, Actors and ServiceContainers. Each service has an identifier and configuration properties." name="Service">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="addConfigurationProperty">
+          <annotation source="Definition">
+            <detail key="modifies">configuration</detail>
+          </annotation>
+          <annotation source="Description">
+            <detail key="Value">Adds (or sets its value if it already exists) a configuration entry.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+          <parameter lowerBound="1" name="value" type="ecore:EString"/>
+        </operation>
+        <operation name="removeConfigurationProperty">
+          <annotation source="Definition">
+            <detail key="modifies">configuration</detail>
+          </annotation>
+          <annotation source="Description">
+            <detail key="Value">Removes a configuration entry.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="key" type="ecore:EString"/>
+        </operation>
+        <operation name="setNewAvailable">
+          <annotation source="Situation">
+            <detail key="modifies">available</detail>
+          </annotation>
+          <annotation source="Description">
+            <detail key="Value">Updates the available value.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newAvailable" type="ecore:EBoolean"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element description:Value="Configuration of this service, used in Sensors and Actors to configure the associated external processes. The properties configured here are passed to the Sensor- and ActorWrappers of the Sensors, respectively Actors." ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="configuration" type="Properties:ConfigurationProperty"/>
+    </xsd:sequence>
+    <xsd:attribute description:Value="Identifier of this Service." name="id" type="ecore:EString"/>
+    <xsd:attribute description:Value="Determines whether this service is available." ecore:unsettable="false" name="available" type="ecore:EBoolean"/>
+    <xsd:attribute description:Value="The container of this service." ecore:opposite="services" ecore:reference="Properties:ServiceContainer" name="container" type="xsd:anyURI"/>
+  </xsd:complexType>
+  <xsd:complexType name="ConfigurationProperty">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setNewValue">
+          <annotation source="Situation">
+            <detail key="modifies">value</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newValue" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute name="value" type="ecore:EString"/>
+    <xsd:attribute name="key" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType name="Sensor" proxy:callbacks="setNewValue,setNewAvailable" proxy:proxyClassName="sensorWrapperClassName" proxy:proxyConfiguration="configuration" proxy:proxyReference="sensorWrapper" proxy:proxySetter="setSensorWrapperProxy">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setSensorWrapperProxy">
+          <annotation source="Situation">
+            <detail key="modifies">sensorWrapper</detail>
+          </annotation>
+          <parameter lowerBound="1" name="proxy" type="Properties:SensorWrapper"/>
+        </operation>
+        <operation name="setNewSensorWrapperClassName">
+          <annotation source="Definition">
+            <detail key="modifies">sensorWrapperClassName</detail>
+          </annotation>
+          <parameter lowerBound="1" name="className" type="ecore:EString"/>
+        </operation>
+        <operation name="setNewValue">
+          <annotation source="Situation">
+            <detail key="modifies">value</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newValue" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Service">
+        <xsd:attribute name="value" type="ecore:EString"/>
+        <xsd:attribute ecore:opposite="sensor" ecore:reference="Properties:Property{?}" name="properties">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:transient="true" name="sensorWrapper" type="Properties:SensorWrapper"/>
+        <xsd:attribute name="sensorWrapperClassName" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType ecore:instanceClass="de.dailab.masp.models.Properties.SensorWrapper" name="SensorWrapper">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:complexType name="Actor" proxy:callbacks="setNewAvailable" proxy:proxyClassName="actorWrapperClassName" proxy:proxyConfiguration="configuration" proxy:proxyReference="actorWrapper" proxy:proxySetter="setActorWrapperProxy">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation exceptions="Properties:ActorServiceCallException" name="set">
+          <parameter lowerBound="1" name="newValue" type="ecore:EString"/>
+        </operation>
+        <operation name="setActorWrapperProxy">
+          <annotation source="Situation">
+            <detail key="modifies">actorWrapper</detail>
+          </annotation>
+          <parameter lowerBound="1" name="proxy" type="Properties:ActorWrapper"/>
+        </operation>
+        <operation name="setNewActorWrapperClassName">
+          <annotation source="Definition">
+            <detail key="modifies">actorWrapperClassName</detail>
+          </annotation>
+          <parameter lowerBound="1" name="className" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Service">
+        <xsd:attribute ecore:opposite="actor" ecore:reference="Properties:Property{?}" name="properties">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:transient="true" name="actorWrapper" type="Properties:ActorWrapper"/>
+        <xsd:attribute name="actorWrapperClassName" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType ecore:instanceClass="de.dailab.masp.models.Properties.ActorWrapper" name="ActorWrapper">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="de.dailab.masp.models.Properties.ActorServiceCallException" name="ActorServiceCallException">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" name="Property">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter name="PropertyType"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="updateAvailable">
+          <annotation source="Situation">
+            <detail key="modifies">available</detail>
+          </annotation>
+        </operation>
+        <operation name="valueUpdated">
+          <annotation source="Situation">
+            <detail key="modifies">value</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newValue" type="ecore:EString"/>
+        </operation>
+        <operation name="setNewSensor">
+          <annotation source="Definition">
+            <detail key="modifies">sensor</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newSensor" type="Properties:Sensor"/>
+        </operation>
+        <operation name="setNewActor">
+          <annotation source="Definition">
+            <detail key="modifies">actor</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newActor" type="Properties:Actor"/>
+        </operation>
+        <operation exceptions="Properties:ActorServiceCallException" name="requestValueUpdate">
+          <annotation source="Situation"/>
+          <parameter lowerBound="1" name="newValue" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:attribute ecore:opposite="properties" ecore:reference="Properties:Actor" name="actor" type="xsd:anyURI"/>
+    <xsd:attribute ecore:opposite="properties" ecore:reference="Properties:Sensor" name="sensor" type="xsd:anyURI"/>
+    <xsd:attribute ecore:type="PropertyType" name="value" type="ecore:EJavaObject"/>
+    <xsd:attribute default="true" ecore:unsettable="false" name="available" type="ecore:EBoolean"/>
+  </xsd:complexType>
+  <xsd:simpleType ecore:instanceClass="java.lang.Number" name="Number">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" ecore:extends="Properties:Property{N}" name="NumberProperty">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter bounds="Properties:Number" name="N"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setNewMinimum">
+          <annotation source="Definition">
+            <detail key="modifies">minimum</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newMinimum" type="ecore:EDoubleObject"/>
+        </operation>
+        <operation name="setNewMaximum">
+          <annotation source="Definition">
+            <detail key="modifies">maximum</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newMaximum" type="ecore:EDoubleObject"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Property">
+        <xsd:attribute name="minimum" type="ecore:EDoubleObject"/>
+        <xsd:attribute name="maximum" type="ecore:EDoubleObject"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Properties:NumberProperty{ecore:EIntegerObject}" name="IntegerProperty">
+    <xsd:complexContent>
+      <xsd:extension base="Properties:NumberProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Properties:NumberProperty{ecore:EDoubleObject}" name="DoubleProperty">
+    <xsd:complexContent>
+      <xsd:extension base="Properties:NumberProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Properties:Property{ecore:EBooleanObject}" name="BooleanProperty">
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Property"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Properties:Property{ecore:EString}" name="TextProperty">
+    <xsd:complexContent>
+      <xsd:extension base="Properties:Property"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,38 @@
+﻿<Window x:Class="HelloWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HelloWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="929.157" Width="649.879">
+    <Grid>
+        <Button x:Name="button" Content="WASLOS" HorizontalAlignment="Left" Height="32" Margin="10,280,0,0" VerticalAlignment="Top" Width="121" Click="button_Click"/>
+        <CheckBox x:Name="checkBox" Content="CheckBox" HorizontalAlignment="Left" Height="56" Margin="28,30,0,0" VerticalAlignment="Top" Width="87"/>
+        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="166,44,0,0" VerticalAlignment="Top"/>
+        <StackPanel HorizontalAlignment="Left" Height="106" Margin="284,151,0,0" VerticalAlignment="Top" Width="171"/>
+        <ContentControl Content="ContentCotrol" HorizontalAlignment="Left" Height="74" Margin="10,169,0,0" VerticalAlignment="Top" Width="126"/>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Height="45" Margin="217,267,0,0" VerticalAlignment="Top" Width="131" SelectionChanged="comboBox_SelectionChanged">
+            <ComboBoxItem Content="miao&#xD;&#xA;si&#xD;&#xA;" HorizontalAlignment="Left" Width="129.6"/>
+            <ComboBoxItem Content="ComboBoxItem" HorizontalAlignment="Left" Width="129.6"/>
+        </ComboBox>
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="65" Margin="414,257,0,0" VerticalAlignment="Top" Width="104">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Calendar HorizontalAlignment="Left" Height="197" Margin="404,23,-8.8,0" VerticalAlignment="Top" Width="248" RenderTransformOrigin="0.5,0.5">
+            <Calendar.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="26.215"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Calendar.RenderTransform>
+        </Calendar>
+
+    </Grid>
+</Window>

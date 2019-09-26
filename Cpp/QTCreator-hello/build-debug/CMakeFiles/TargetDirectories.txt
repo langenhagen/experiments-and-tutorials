@@ -1,0 +1,3 @@
+/Users/langenha/code/playground_qtc/build-debug/CMakeFiles/rebuild_cache.dir
+/Users/langenha/code/playground_qtc/build-debug/CMakeFiles/edit_cache.dir
+/Users/langenha/code/playground_qtc/build-debug/CMakeFiles/playground_qtc.dir

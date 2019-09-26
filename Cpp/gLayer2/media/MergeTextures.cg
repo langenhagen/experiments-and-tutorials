@@ -1,0 +1,42 @@
+sampler2D texture0 : register(s0);
+sampler2D texture1 : register(s1);
+
+///////////////////////////////////////////////////////////////////////////////
+// merges the textures in a classical manner.
+// the input value mix controls the fade between the two textures
+float4 ps_merge_textures(	float2 coord : TEXCOORD0,
+							uniform float mix)
+							: COLOR
+{
+	float4 color = tex2D(texture0, coord)*mix + tex2D(texture1, coord)*(1-mix);
+
+	return color;
+}
+///////////////////////////////////////////////////////////////////////////////
+// merges two textures by using just the maximum r, g & b
+// value of the two images
+float4 ps_merge_textures_max(	float2 coord : TEXCOORD0)
+								: COLOR
+{
+	float4 color0 = tex2D(texture0, coord);
+	float4 color1 = tex2D(texture1, coord);
+
+	return float4 ( max( color0.x, color1.x) , max( color0.y, color1.y), max( color0.z, color1.z), 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// merges the textures in a classical manner.
+//
+float4 ps_merge_textures_alpha(	float2 coord : TEXCOORD0,
+                                uniform float mix)
+                                : COLOR
+{
+	float4 color0 = tex2D(texture0, coord);
+	float4 color1 = tex2D(texture1, coord);
+
+	float4 alpha_mixed_color = (1-color1.a) * color0 + (color1.a) * color1;
+
+    float4 out_color         = (1-mix) * color0 + mix * alpha_mixed_color;
+
+	return out_color;
+}

@@ -1,0 +1,28 @@
+plugins {
+    id 'com.jfrog.artifactory' version '4.4.0'
+}
+
+group 'andreas.my'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name 'Local proxy of external Maven repositories'
+        url 'https://artifactory.in.here.com/artifactory/maven_remote_repos'
+    }
+    maven {
+        url 'https://artifactory.in.here.com/artifactory/android-release-virtual'
+    }
+}
+
+dependencies {
+    compile 'com.android.tools.build:manifest-merger:25.3.3'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

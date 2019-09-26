@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RayMarching03</title>
+		<style>
+			body {
+                margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<script src="js/three.min.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+            uniform vec2 resolution;
+
+			void main()	{
+                gl_Position = vec4( position, 1.0 );
+			}
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+            #define PI 3.1415926535898
+            #define PI_2 1.57079632679
+
+            uniform float time;
+            uniform vec2 resolution;
+            uniform vec4 mouse;
+            const int max_iterations = 24;
+            const float step_scale = 0.9;
+            const float eps = 0.01;
+
+            // object distance functions
+
+            float dSphere(vec3 p, vec3 center_pos, float radius) {
+                return length(p-center_pos) - radius;
+            }
+
+            float dSinusoidWaves(in vec3 p){
+                return sin(p.y*32.+time);
+            }
+
+            // scene distance function and other standard functions
+
+            // reminder: simple for volumetric objects:
+            // union: min(a,b)
+            // cut: max(a,b)
+            // minus: max(a,-b)
+
+            float scene(vec3 p) {
+                vec3 sphere_pos = vec3(0.0, 0.0, 0.0);
+                vec3 tiling = vec3(2.0, 1.0, 2.0);
+                p = mod(p, tiling) - 0.5 * tiling;
+
+                float additive_noise = dSinusoidWaves(p) * 0.03;
+
+                return dSphere(p, sphere_pos, .5) + additive_noise;
+            }
+
+            vec3 getNormal(in vec3 p) {
+
+                // 6-tap normalization. Probably the most accurate, but a bit of a cycle waster.
+                /*
+                return normalize( vec3(
+                    scene(vec3(p.x+eps,p.y,p.z))-scene(vec3(p.x-eps,p.y,p.z)),
+                    scene(vec3(p.x,p.y+eps,p.z))-scene(vec3(p.x,p.y-eps,p.z)),
+                    scene(vec3(p.x,p.y,p.z+eps))-scene(vec3(p.x,p.y,p.z-eps))
+                ));
+                /**/
+                // If speed is an issue, here's a slightly-less-accurate, 4-tap version. If fact, visually speaking, it's virtually the same, so on a
+                // lot of occasions, this is the one I'll use. However, if speed is really an issue, you could take away the "normalization" step, then
+                // divide by "eps," but I'll usually avoid doing that.
+                /*
+                float ref = scene(p);
+                return normalize(vec3(
+                    scene(vec3(p.x+eps,p.y,p.z))-ref,
+                    scene(vec3(p.x,p.y+eps,p.z))-ref,
+                    scene(vec3(p.x,p.y,p.z+eps))-ref
+                ));
+                /**/
+
+                // The tetrahedral version, which does involve fewer calculations, but doesn't seem as accurate on some surfaces... I could be wrong,
+                // but that's the impression I get.
+
+                vec2 e = vec2(-0.5*eps,0.5*eps);
+                return normalize(e.yxx*scene(p+e.yxx)+e.xxy*scene(p+e.xxy)+e.xyx*scene(p+e.xyx)+e.yyy*scene(p+e.yyy));
+                /**/
+            }
+
+            float rayMarching(vec3 origin, vec3 dir, float start, float end) {
+                float dist_to_scene = 1e4;
+                float ray_length = start;
+                for ( int i = 0; i < max_iterations; ++i) {
+                    dist_to_scene = scene( origin + dir * ray_length );
+                    if ( dist_to_scene < eps) {
+                        break;
+                    }
+
+                    ray_length += dist_to_scene * step_scale;
+                    if(ray_length > end) {
+                        break;
+                    }
+                }
+
+                if ( dist_to_scene > eps ) {
+                    ray_length = end;
+                } else {
+                    ray_length += dist_to_scene;
+                }
+                return ray_length;
+            }
+
+
+            void main() {
+
+                float aspect_ratio = float(resolution.x)/float(resolution.y);
+                float u = (gl_FragCoord.x * 2.0 / resolution.x - 1.0) * aspect_ratio;
+                float v = (gl_FragCoord.y * 2.0 / resolution.y - 1.0);
+
+                vec3 look_at = vec3(0.,0.,0.);
+                vec3 cam_pos = vec3(cos(time*.1),sin(time*.1)*.6, sin(time*.1));
+                //vec3 cam_pos = vec3(0., 0., -1.);
+                float FOV = 1.2;
+
+                // Camera setup.
+                vec3 forward = normalize(look_at-cam_pos);
+                vec3 right   = normalize(vec3(forward.z, 0., -forward.x ));
+                vec3 up      = normalize( cross(forward, right));
+
+                vec3 ro = cam_pos; // // ro - Ray origin. Every ray starts from this point . often simply cam_pos.
+                vec3 rd = normalize(forward + FOV*u*right + FOV*v*up); // rd - Ray direction. This is our one-unit-long direction ray.
+
+                vec4 bg_color = vec4(.0,.0,.0,.0);
+
+                const float clip_near = 0.9;
+                const float clip_far = 12.0;
+                float dist_to_scene = rayMarching(ro, rd, clip_near, clip_far );
+                if ( dist_to_scene >= clip_far ) {
+                    gl_FragColor = bg_color;
+                    return;
+                }
+
+                vec3 surf_pos = ro + rd*dist_to_scene; // surf_pos - Surface position
+                vec3 surf_normal = getNormal(surf_pos);
+
+                vec3 light_pos = vec3(0.0,0.0,0.0);
+                vec3 light_dir = light_pos-dist_to_scene;
+                vec3 light_color = vec3(1.,1.,1.);
+                float light_to_point_dist = length(light_dir);
+                light_dir /= light_to_point_dist;
+                float light_attenuation = min(40.0 / (light_to_point_dist*light_to_point_dist), 1.0);
+                vec3 light_reflection_dir = reflect(-light_dir, surf_normal);
+
+                vec3 color = vec3(0.0);
+
+                // The object's color. My favorite color is black, but I don't think that will work.
+                vec3 obj_color = vec3(
+                    abs(tan(surf_pos.y-sin(time*0.3)*abs(sin(time*0.1))))*0.2,
+                    abs(tan(surf_pos.y-sin(time*0.3)*abs(sin(time*0.1))))*0.1,
+                    abs(sin(surf_pos.y+time))
+                    );
+
+                float obj_ambient = .1;
+                float obj_specular_power = 200.0;
+                float obj_diffuse  = max(0.0, dot(surf_normal, light_dir));
+                float obj_specular = max(0.0, dot( light_reflection_dir, normalize(cam_pos-surf_pos)));
+                obj_specular = pow(obj_specular, obj_specular_power);
+
+                color += (obj_color*(obj_diffuse*0.8 + obj_ambient) + obj_specular*.5) * light_color * light_attenuation;
+
+                gl_FragColor = vec4(clamp(color, 0.05, 1.0), 1.0);
+            }
+
+		</script>
+
+		<script>
+			var container;
+			var camera, scene, renderer;
+			var uniforms;
+
+			init();
+			render();
+
+			function init() {
+				container = document.getElementById('container');
+				camera = new THREE.Camera();
+				camera.position.z = 1;
+				scene = new THREE.Scene();
+
+				uniforms = {
+					time:       { type: "f",  value: 1.0 },
+					resolution: { type: "v2", value: new THREE.Vector2() }
+				};
+
+				var material = new THREE.ShaderMaterial({
+					uniforms: uniforms,
+					vertexShader:   document.getElementById( 'vertexShader'  ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShader').textContent
+				});
+
+				scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), material));
+				renderer = new THREE.WebGLRenderer();
+				container.appendChild(renderer.domElement);
+
+				onWindowResize();
+				window.addEventListener('resize', onWindowResize, false);
+			}
+
+			function onWindowResize( event) {
+				uniforms.resolution.value.x = window.innerWidth;
+				uniforms.resolution.value.y = window.innerHeight;
+				renderer.setSize( window.innerWidth, window.innerHeight);
+			}
+
+			function render() {
+                requestAnimationFrame(render);
+				uniforms.time.value += 0.05;
+				renderer.render( scene, camera);
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_Shaders", "Hello_Shaders\Hello_Shaders.vcxproj", "{68648719-F7EA-415C-A684-670893A93624}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_Compositors", "Hello_Compositors\Hello_Compositors.vcxproj", "{B3875BAB-0EA1-48BC-9177-0F54B8149D51}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_Compositors2", "Hello_Compositors2\Hello_Compositors2.vcxproj", "{D6AD8205-997B-4255-8FBE-C694FBD7B9EC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_Overlays", "Hello_Overlays\Hello_Overlays.vcxproj", "{0453CE68-7C8F-4910-B9C3-7829A590DFA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68648719-F7EA-415C-A684-670893A93624}.Debug|Win32.ActiveCfg = Debug|Win32
+		{68648719-F7EA-415C-A684-670893A93624}.Debug|Win32.Build.0 = Debug|Win32
+		{68648719-F7EA-415C-A684-670893A93624}.Release|Win32.ActiveCfg = Release|Win32
+		{68648719-F7EA-415C-A684-670893A93624}.Release|Win32.Build.0 = Release|Win32
+		{B3875BAB-0EA1-48BC-9177-0F54B8149D51}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B3875BAB-0EA1-48BC-9177-0F54B8149D51}.Debug|Win32.Build.0 = Debug|Win32
+		{B3875BAB-0EA1-48BC-9177-0F54B8149D51}.Release|Win32.ActiveCfg = Release|Win32
+		{B3875BAB-0EA1-48BC-9177-0F54B8149D51}.Release|Win32.Build.0 = Release|Win32
+		{D6AD8205-997B-4255-8FBE-C694FBD7B9EC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D6AD8205-997B-4255-8FBE-C694FBD7B9EC}.Debug|Win32.Build.0 = Debug|Win32
+		{D6AD8205-997B-4255-8FBE-C694FBD7B9EC}.Release|Win32.ActiveCfg = Release|Win32
+		{D6AD8205-997B-4255-8FBE-C694FBD7B9EC}.Release|Win32.Build.0 = Release|Win32
+		{0453CE68-7C8F-4910-B9C3-7829A590DFA8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0453CE68-7C8F-4910-B9C3-7829A590DFA8}.Debug|Win32.Build.0 = Debug|Win32
+		{0453CE68-7C8F-4910-B9C3-7829A590DFA8}.Release|Win32.ActiveCfg = Release|Win32
+		{0453CE68-7C8F-4910-B9C3-7829A590DFA8}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

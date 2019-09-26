@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Context:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Context="http://www.dai-labor.de/~masp/Context-1.2.ecore" initialAssistant="//@assistants.9">
+  <places xsi:type="Context:Room" id="KITCHEN" name="Kitchen" elements="//@devices.0/@resources.0 //@devices.0/@resources.1 //@devices.3/@resources.0 //@devices.3/@resources.1 //@users.0 //@users.1">
+    <areas>
+      <origin x="580.0" y="-100.0" z="0.0"/>
+      <span x="330.0" y="810.0" z="220.0"/>
+    </areas>
+  </places>
+  <places xsi:type="Context:Room" id="LIVING_ROOM" name="Living Room" elements="//@devices.2/@resources.1 //@devices.2/@resources.0 //@devices.1/@resources.0 //@devices.1/@resources.1 //@users.2">
+    <areas>
+      <origin x="0.0" y="-100.0" z="0.0"/>
+      <span x="580.0" y="810.0" z="220.0"/>
+    </areas>
+  </places>
+  <places xsi:type="Context:Room" id="WORKROOM" name="Office">
+    <areas>
+      <origin x="-300.0" y="0.0" z="0.0"/>
+      <span x="300.0" y="810.0" z="220.0"/>
+    </areas>
+  </places>
+  <places xsi:type="Context:Room" id="Studio" name="Studio"/>
+  <providers xsi:type="Context:LocalisationProviderProxy" apiClass="org.sercho.masp.context.providers.location.ubisense.UBLocProvider">
+    <tags id="Marco" name="Das Tag von Kurt" element="//@users.2"/>
+    <configuration key="ScaleFactor" value="100"/>
+    <configuration key="Host" value="192.168.1.32"/>
+    <configuration key="Port" value="4443"/>
+  </providers>
+  <devices id="N800" name="N800">
+    <resources xsi:type="Context:Display" id="N800_DISPLAY" name="Mobiles Ger&#xe4;t" place="//@places.0" mobile="true" xPixels="800" yPixels="480" size="6">
+      <position/>
+      <screen id="N800_DISPLAY_GOC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="N800_DISPLAY"/>
+      </screen>
+    </resources>
+    <resources xsi:type="Context:Keyboard" id="N800_KEYBOARD" name="N800_KEYBOARD" place="//@places.0" modality="Haptic" mobile="true">
+      <position/>
+      <keys id="N800_KEYBOARD_MIC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="N800_KEYBOARD"/>
+      </keys>
+    </resources>
+  </devices>
+  <devices id="DELL_30" name="DELL_30">
+    <resources xsi:type="Context:Keyboard" id="DELL_30_KEYBOARD" name="DELL_30_KEYBOARD" place="//@places.1" modality="Haptic">
+      <position x="550.0" y="50.0" z="0.0"/>
+      <keys id="DELL_30_KEYBOARD_MIC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="DELL_30_KEYBOARD"/>
+      </keys>
+    </resources>
+    <resources xsi:type="Context:Display" id="DELL_30_DISPLAY" name="Bildschirm Wohnzimmerecke" place="//@places.1" xPixels="2560" yPixels="1600" size="30">
+      <position x="550.0" y="50.0" z="0.0"/>
+      <screen id="DELL_30_DISPLAY_GOC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="DELL_30_DISPLAY"/>
+      </screen>
+    </resources>
+  </devices>
+  <devices id="SHARP_65" name="SHARP_65">
+    <resources xsi:type="Context:Display" id="SHARP_65_DISPLAY" name="Fernseher Wohnzimmer" place="//@places.1" xPixels="1360" yPixels="768" size="65">
+      <position x="50.0" y="200.0" z="0.0"/>
+      <screen id="SHARP_65_DISPLAY_GOC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="SHARP_65_DISPLAY"/>
+      </screen>
+    </resources>
+    <resources xsi:type="Context:Keyboard" id="SHARP_65_KEYBOARD" name="SHARP_65_KEYBOARD" place="//@places.1" modality="Haptic">
+      <position x="50.0" y="200.0" z="0.0"/>
+      <keys id="SHARP_65_KEYBOARD_MIC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="SHARP_65_KEYBOARD"/>
+      </keys>
+    </resources>
+  </devices>
+  <devices id="KITCHEN" name="KITCHEN">
+    <resources xsi:type="Context:Touchscreen" id="KITCHEN_DISPLAY" name="Touchscreen K&#xfc;che" place="//@places.0" xPixels="1280" yPixels="1024" size="18">
+      <position x="750.0" y="250.0" z="0.0"/>
+      <screen id="KITCHEN_DISPLAY_GOC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="KITCHEN_DISPLAY"/>
+      </screen>
+    </resources>
+    <resources xsi:type="Context:Keyboard" id="KITCHEN_KEYBOARD" name="KITCHEN_KEYBOARD" place="//@places.0" modality="Haptic">
+      <position x="750.0" y="250.0" z="0.0"/>
+      <keys id="KITCHEN_KEYBOARD_MIC" apiClass="org.sercho.masp.models.channel.api.LegacyMASPChannel">
+        <configuration key="clientId" value="KITCHEN_KEYBOARD"/>
+      </keys>
+    </resources>
+  </devices>
+  <users id="Kevin" name="Kevin" place="//@places.0" pastAssistants="//@assistants.9 //@assistants.4 //@assistants.5" birthDate="12.04.1997">
+    <position x="750.0" y="250.0" z="0.0"/>
+    <lineOfVision/>
+  </users>
+  <users id="Melanie" name="Melanie" place="//@places.0" pastAssistants="//@assistants.7 //@assistants.1 //@assistants.3 //@assistants.10" leftHanded="true" birthDate="26.04.1971">
+    <position z="0.0"/>
+    <lineOfVision/>
+  </users>
+  <users id="Kurt" name="Kurt" tags="//@providers.0/@tags.0" place="//@places.1" pastAssistants="//@assistants.7 //@assistants.2 //@assistants.0 //@assistants.5" birthDate="05.06.1955">
+    <position x="50.0" y="200.0" z="0.0"/>
+    <lineOfVision/>
+  </users>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/HosShea.xml" name="Smart Home Energy Assistant" pastUsers="//@users.2" description="SHEA monitors the energy consumption of your devices.">
+    <activities name="Analyze energy consumption" description="Analyze energy consumption of your appliances"/>
+  </assistants>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/vcook/VirtualCook1280.xml" name="4 Star Cooking Assistant" pastUsers="//@users.1" description="The Cooking Assistant helps you finding recipes and guides you through the cooking steps.">
+    <activities name="Cooking" description="Find your favourite recipe and cook it"/>
+  </assistants>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/automatingassistant/model/AutomatingAssistant.xml" name="Automation Assistant" pastUsers="//@users.2" description="Put some automation into your home controls routines. Time to lean back and relax.">
+    <activities name="Save energy" description="Save energy by optimizing your appliance usage"/>
+  </assistants>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/sha/ApplicationStarter.xml" name="Smart Health Assistant" pastUsers="//@users.1" description="The Smart Health Assistant helps you to create your personal, ideal training programme.">
+    <activities name="Work out" description="Improve your fitness with training"/>
+  </assistants>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/spa/ApplicationStarter.xml" name="Smart Personal Assistant" pastUsers="//@users.0" description="Use the SPA to find informations the semantic web."/>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/electriccar/model/ElectricCar.xml" name="Electric Car Assistant" pastUsers="//@users.0 //@users.2" description="This assistant optimizes the car battery recharging according to your preferences."/>
+  <assistants xsi:type="Context:ThirdPartyAssistant" id="org/sercho/masp/demos/iptv/model/IPTV.xml" name="Smart Media Assistant" description="Watch TV with personal recommendations."/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/Lobby.xml" name="Lobby" pastUsers="//@users.2 //@users.1"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/metaui/MetaUI.xml" name="Meta UI"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/menu/model/MenuBar.xml" name="Menu Bar" pastUsers="//@users.0"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/assistantlauncher/model/AssistantLauncher.xml" name="Assistant Launcher" pastUsers="//@users.1"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/messagecenter/model/MessageCenter.xml" name="Message Center"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/demos/hcc/model/HCC.xml" name="Home Control Center"/>
+  <assistants xsi:type="Context:HomeOSAssistant" id="org/sercho/masp/notification/notificationwithfeedback/Notification.xml" name="Notification" description="Notification Assistant shows high priority HomeOS messages"/>
+</Context:Environment>

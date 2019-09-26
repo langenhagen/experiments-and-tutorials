@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ArmeKameraTest
+</name>
+</assembly>
+<members>
+<member name="M:ArmeKameraTest._ArmeKameratest.Program.Main(System.String[])">
+	<summary>
+ Main entry point for the program.
+ </summary>
+	<param name="args">Arguments to pass the software.</param>
+</member>
+</members>
+</doc>

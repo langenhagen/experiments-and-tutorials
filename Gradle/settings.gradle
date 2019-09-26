@@ -1,0 +1,23 @@
+// pluginManagement {
+//  // look at https://docs.gradle.org/current/userguide/plugins.html
+//     repositories {
+//         maven {
+//             url 'https://artifactory.in.here.com/artifactory/maven_remote_repos'
+//         }
+//         maven {
+//             url 'https://artifactory.in.here.com/artifactory/android-release-virtual'
+//         }
+//         maven {
+//             url 'https://artifactory.in.here.com/artifactory/gradle_m2_plugins'
+//         }
+//         maven {
+//             url 'https://artifactory.in.here.com/artifactory/jcenter/'
+//         }
+//     }
+// }
+
+// include ':common'
+// include ':android'
+
+
+rootProject.name ='com.vogella.gradle.first'

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RayMarching - DNA</title>
+		<style>
+			body {
+                margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script src="js/three.min.js"></script>
+		<script id="vertexShader" type="x-shader/x-vertex">
+			void main()	{
+                gl_Position = vec4(position, 1.0);
+			}
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+            #define PI 3.1415926535898
+            #define PI_OVER_2 1.57079632679
+
+            uniform float time;
+            uniform vec2 resolution;
+            uniform vec2 mouse;
+            const int max_iterations = 64;
+            const float step_scale = 0.9;
+            const float eps = 0.00001;
+
+            // object distance functions -----------------------------------------------------------
+            // sdObject - Signed Distance Function Object
+            // udObject - Unsigned Distance Function Object
+
+            float udBox(const vec3 p, const vec3 b){
+                return length(max(abs(p)-b,0.0));
+            }
+
+            float dSphere(const vec3 p, const float radius) {
+                return length(p) - radius;
+            }
+
+            // transformation functions ------------------------------------------------------------
+
+            vec3 opRepete(const vec3 p, const vec3 c) {
+                // returns a new point given point p and a tiling-vector c,
+                // the bigger, the compontents of c, the bigger the tile along
+                // the according dinmension.
+                return mod(p,c)-0.5*c;
+            }
+
+            // TODO not only repete, but also rndmly offset the y's acc. to different repetitions
+            // (pseudo)randomly shift objects in global space according to given tiling
+
+
+            vec3 opTwist(const vec3 p, const float intensity) {
+                float c = cos(intensity*p.y);
+                float s = sin(intensity*p.y);
+                mat2  m = mat2(c,-s,s,c);
+                return vec3(m*p.xz,p.y);
+            }
+
+            vec3 opRotateX(const vec3 p, const float radians) {
+                float sin_rot = sin(radians);
+                float cos_rot = cos(radians);
+                mat3 m = mat3(  1.0,        0.0,        0.0,
+                                0.0,    cos_rot,    sin_rot,
+                                0.0,    -sin_rot,   cos_rot);
+                return m*p;
+            }
+
+            vec3 opRotateY(const vec3 p, const float radians) {
+                float sin_rot = sin(radians);
+                float cos_rot = cos(radians);
+                mat3 m = mat3(  cos_rot,    0.0,    -sin_rot,
+                                0.0,        1.0,    0.0,
+                                sin_rot,    0.0,    cos_rot);
+                return m*p;
+            }
+
+            vec3 opRotateZ(const vec3 p, const float radians) {
+                float sin_rot = cos(radians);
+                float cos_rot = sin(radians);
+                mat3 m = mat3(  cos_rot,    sin_rot,    0.0,
+                                -sin_rot,    cos_rot,    0.0,
+                                0.0,        0.0,        1.0);
+                return m*p;
+            }
+
+            // scene function ----------------------------------------------------------------------
+            // scene distance function and other standard functions
+            // reminder: simple combinations of volumetric objects:
+            // - union: min(a,b)
+            // - cut: max(a,b)
+            // - minus: max(a,-b)
+
+            float scene(const vec3 p) {
+                // Given a point p, calculates the distance to the objects to draw there.
+                vec3 box_dims = vec3(0.3, 0.05, 0.3);
+
+                vec3 q = p;
+                q = opRepete(q, vec3(2.0, 0.12, 3.0));
+                if(mod(p.y+time*1.0, 9.0) < 0.36) {;
+                    q = opRotateY(q, p.y*1.09+time*0.3);
+                }
+
+                return udBox(q, box_dims);
+            }
+
+            vec3 getNormal(const vec3 p) {
+                // 6-tap normalization. Probably the most accurate, but a bit of a cycle waster.
+                /*
+                return normalize( vec3(
+                    scene(vec3(p.x+eps,p.y,p.z))-scene(vec3(p.x-eps,p.y,p.z)),
+                    scene(vec3(p.x,p.y+eps,p.z))-scene(vec3(p.x,p.y-eps,p.z)),
+                    scene(vec3(p.x,p.y,p.z+eps))-scene(vec3(p.x,p.y,p.z-eps))
+                ));
+                /**/
+                // If speed is an issue, here's a slightly-less-accurate, 4-tap version. If fact,
+                // visually speaking, it's virtually the same, so on a lot of occasions,
+                // this is the one I'll use. However, if speed is really an issue, you could
+                // take away the "normalization" step, then divide by "eps," but I'll usually avoid
+                // doing that.
+                /*
+                float ref = scene(p);
+                return normalize(vec3(
+                    scene(vec3(p.x+eps,p.y,p.z))-ref,
+                    scene(vec3(p.x,p.y+eps,p.z))-ref,
+                    scene(vec3(p.x,p.y,p.z+eps))-ref
+                ));
+                /**/
+                // The tetrahedral version, which does involve fewer calculations, but doesn't seem
+                // as accurate on some surfaces. I could be wrong, but that's the impression I get.
+                vec2 e = vec2(-0.5*eps,0.5*eps);
+                return normalize(e.yxx*scene(p+e.yxx)+e.xxy*scene(p+e.xxy)+e.xyx*scene(p+e.xyx)+e.yyy*scene(p+e.yyy));
+                /**/
+            }
+
+            float rayMarching(const vec3 origin, const vec3 dir, const float start, const float end) {
+                float dist_to_scene = 1e4;
+                float ray_length = start;
+                for ( int i = 0; i < max_iterations; ++i) {
+                    dist_to_scene = scene(origin + dir * ray_length);
+                    if ( dist_to_scene < eps) {
+                        break;
+                    }
+
+                    ray_length += dist_to_scene * step_scale;
+                    if(ray_length > end) {
+                        break;
+                    }
+                }
+
+                if (dist_to_scene > eps) {
+                    ray_length = end;
+                } else {
+                    ray_length += dist_to_scene;
+                }
+                return ray_length;
+            }
+
+            void main() {
+                float aspect_ratio = float(resolution.x)/float(resolution.y);
+                float u = (gl_FragCoord.x * 2.0 / resolution.x - 2.0) * aspect_ratio;
+                float v = (gl_FragCoord.y * 2.0 / resolution.y - 2.0);
+
+                vec3 look_at = vec3(
+                    0.0,
+                    0.0,
+                    0.0);
+                vec3 cam_pos = vec3(
+                    0.0,
+                    0.0,
+                    4.0);
+                float FOV = 1.0;
+
+                // Camera setup.
+                vec3 forward = normalize(look_at-cam_pos);
+                vec3 right   = normalize(vec3(forward.z, 0., -forward.x));
+                vec3 up      = normalize(cross(forward, right));
+
+                vec3 ro = cam_pos; // // ro - Ray origin. Every ray starts from this point. Often simply cam_pos.
+                vec3 rd = normalize(forward + FOV*u*right + FOV*v*up); // rd - Ray direction. This is our one-unit-long direction ray.
+
+                // vec4 bg_color = vec4(1.0,1.0,1.0,1.0);
+                vec4 bg_color = vec4(0.0,0.0,.0,1.0);
+
+                const float clip_near = 0.09;
+                const float clip_far = 12.0;
+                float dist_to_scene = rayMarching(ro, rd, clip_near, clip_far);
+                if ( dist_to_scene >= clip_far ) {
+                    gl_FragColor = bg_color;
+                    return;
+                }
+
+                vec3 surf_pos = ro + rd*dist_to_scene;
+                vec3 surf_normal = getNormal(surf_pos);
+
+                vec3 light_pos = vec3(0.0,0.0,0.0);
+                vec3 light_dir = light_pos-dist_to_scene;
+                float light_dist = length(light_dir);
+                light_dir /= light_dist;
+                float light_attenuation = min(40.0 / (light_dist*light_dist), 1.0);
+                vec3 light_reflection_dir = reflect(-light_dir, surf_normal);
+                vec3 light_color = vec3(1.0,1.0,1.0);
+
+                vec3 color = vec3(
+                    0.0,
+                    0.0,
+                    0.0);
+
+                // vec3 obj_color = vec3(
+                //     abs(tan(surf_pos.y+sin(time*0.3)*abs(sin(time*0.3))))*0.2,
+                //     abs(tan(surf_pos.y+sin(time*0.3)*abs(sin(time*0.3))))*0.1,
+                //     abs(sin(surf_pos.y+time))
+                //     );
+
+                vec3 obj_color = vec3(
+                    abs(tan(surf_pos.y*10.35+63.3+13.05+time*0.399))*0.2,
+                    abs(tan(surf_pos.y*10.35+63.3+13.05+time*0.399))*0.1,
+                    abs(sin(surf_pos.y*10.35+63.3+13.05+time*0.399))
+                );
+
+                // vec3 obj_color = getColor();
+
+                // if(mod(p.y+time*1.0, 9.0) < 0.36) {
+                //     q = opRotateY(q, p.y*1.09+time*0.3);
+                // }
+
+                const float obj_ambient = 0.91;
+                const float obj_specular_power = 200.0;
+                float obj_diffuse  = max(0.0, dot(surf_normal, light_dir));
+                float obj_specular = max(0.0, dot(light_reflection_dir, normalize(cam_pos-surf_pos)));
+                obj_specular = pow(obj_specular, obj_specular_power);
+
+                color += (obj_color*(obj_diffuse*0.8 + obj_ambient) + obj_specular*0.5) * light_color * light_attenuation;
+
+                gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
+            }
+		</script>
+
+		<script>
+			var container;
+			var camera, scene, renderer;
+			var uniforms;
+
+			initThreeJsScene();
+            window.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('resize', onWindowResize, false);
+            onWindowResize();
+			render();
+
+			function initThreeJsScene() {
+				container = document.getElementById('container');
+				camera = new THREE.Camera();
+				camera.position.z = 1;
+				scene = new THREE.Scene();
+
+				uniforms = {
+					time:       { type: "f",  value: 1.0 },
+					resolution: { type: "v2", value: new THREE.Vector2() },
+                    mouse:      { type: "v2", value: new THREE.Vector2() }
+				};
+
+				var material = new THREE.ShaderMaterial({
+					uniforms: uniforms,
+					vertexShader:   document.getElementById('vertexShader'  ).textContent,
+					fragmentShader: document.getElementById('fragmentShader').textContent
+				});
+
+				scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+				renderer = new THREE.WebGLRenderer();
+				container.appendChild(renderer.domElement);
+			}
+
+			function onWindowResize( event) {
+				uniforms.resolution.value.x = window.innerWidth;
+				uniforms.resolution.value.y = window.innerHeight;
+				renderer.setSize( window.innerWidth, window.innerHeight);
+			}
+
+            function onMouseMove(event) {
+                uniforms.mouse.value.x = event.pageX/window.innerWidth;
+                uniforms.mouse.value.y = event.pageY/window.innerHeight;
+            }
+
+			function render() {
+                window.requestAnimationFrame(render);
+				uniforms.time.value += 0.05; // TODO provide system time stable variant
+				renderer.render(scene, camera);
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_ProcessHandles_WindowHandles", "Hello_ProcessHandles_WindowHandles\Hello_ProcessHandles_WindowHandles.vcxproj", "{140350FD-73D4-4FE0-BB88-99AB116AA9DE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_Screenshot", "Hello_Screenshot\Hello_Screenshot.vcxproj", "{A19CC555-AA4E-4220-BDD3-FAEE6B3F119E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello_ProcessHandles", "Hello_ProcessHandles\Hello_ProcessHandles.vcxproj", "{17D57986-AF1E-49BC-82A5-061C43CC4D57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{140350FD-73D4-4FE0-BB88-99AB116AA9DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{140350FD-73D4-4FE0-BB88-99AB116AA9DE}.Debug|Win32.Build.0 = Debug|Win32
+		{140350FD-73D4-4FE0-BB88-99AB116AA9DE}.Release|Win32.ActiveCfg = Release|Win32
+		{140350FD-73D4-4FE0-BB88-99AB116AA9DE}.Release|Win32.Build.0 = Release|Win32
+		{A19CC555-AA4E-4220-BDD3-FAEE6B3F119E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A19CC555-AA4E-4220-BDD3-FAEE6B3F119E}.Debug|Win32.Build.0 = Debug|Win32
+		{A19CC555-AA4E-4220-BDD3-FAEE6B3F119E}.Release|Win32.ActiveCfg = Release|Win32
+		{A19CC555-AA4E-4220-BDD3-FAEE6B3F119E}.Release|Win32.Build.0 = Release|Win32
+		{17D57986-AF1E-49BC-82A5-061C43CC4D57}.Debug|Win32.ActiveCfg = Debug|Win32
+		{17D57986-AF1E-49BC-82A5-061C43CC4D57}.Debug|Win32.Build.0 = Debug|Win32
+		{17D57986-AF1E-49BC-82A5-061C43CC4D57}.Release|Win32.ActiveCfg = Release|Win32
+		{17D57986-AF1E-49BC-82A5-061C43CC4D57}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

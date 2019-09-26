@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2009 DAI-Labor.&#xD;&#xA;All rights reserved.&#xD;&#xA;&#xD;&#xA;This program and the accompanying materials are made available under the&#xD;&#xA;terms of the Eclipse Public License v1.0 which accompanies this distribution,&#xD;&#xA;and is available at http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;  Grzegorz Lehmann (DAI-Labor) - Initial API and implementation"
+    modelDirectory="/ContextModel/src/main/java" modelPluginID="ContextModel" modelName="Context"
+    updateClasspath="false" codeFormatting="true" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" suppressGenModelAnnotations="false" copyrightFields="false"
+    runtimeVersion="2.6" language="" usedGenPackages="http://www.dai-labor.de/~lehmann/UI.genmodel#//UI http://www.dai-labor.de/~masp/Properties.genmodel#//Properties">
+  <foreignModel>Context.ecore</foreignModel>
+  <genPackages prefix="Context" basePackage="org.sercho.masp.models" disposableProviderFactory="true"
+      ecorePackage="Context.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//RoomType">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/Kitchen"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/Bath"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/Bedroom"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/LivingRoom"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/FitnessRoom"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//RoomType/Office"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//ReadingSubject">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/abstractObject"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/Electricity"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/HeatCostAllocation"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/Chillness"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/Heat"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/Gas"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/WaterCold"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingSubject/WaterHot"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//ReadingMeasurand">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingMeasurand/Consumption"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingMeasurand/ActivePower"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//ReadingMeasurementMethod">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingMeasurementMethod/InstantaneousValue"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingMeasurementMethod/MeterReading"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//ReadingRate">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingRate/Total"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingRate/Rate1"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//ReadingRate/Rate2"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//DistributionState">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//DistributionState/CALCULATING"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//DistributionState/DONE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//Modality">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Modality/Vocal"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Modality/Graphic"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Modality/Haptic"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Modality/Audio"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//Domain">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Domain/Other"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Domain/Living"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Domain/Comfort"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//Domain/Energy"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Context.ecore#//LampType">
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/Unspecified"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/CeilingLamp"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/FloorLamp"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/TableLamp"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/WallLamp"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/HangingLamp"/>
+      <genEnumLiterals ecoreEnumLiteral="Context.ecore#//LampType/DeviceLamp"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="Context.ecore#//ChannelAPI"/>
+    <genDataTypes ecoreDataType="Context.ecore#//MessageInputChannelAPI"/>
+    <genDataTypes ecoreDataType="Context.ecore#//PointingInputChannelAPI"/>
+    <genDataTypes ecoreDataType="Context.ecore#//MessageOutputChannelAPI"/>
+    <genDataTypes ecoreDataType="Context.ecore#//GraphicalOutputChannelAPI"/>
+    <genDataTypes ecoreDataType="Context.ecore#//LocalisationProvider"/>
+    <genDataTypes ecoreDataType="Context.ecore#//PlaceInfo"/>
+    <genClasses ecoreClass="Context.ecore#//Environment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/places"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/providers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/devices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/users"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/assistants"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/initialAssistant"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/serviceContainers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Environment/meters"/>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addUser">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addUser/id"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addUser/name"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addUser/surname"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addUser/birthdate"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/removeUser">
+        <genParameters ecoreParameter="Context.ecore#//Environment/removeUser/user"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addServiceContainer">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addServiceContainer/container"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addServiceContainer/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/removeServiceContainer">
+        <genParameters ecoreParameter="Context.ecore#//Environment/removeServiceContainer/container"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/getPlaceInfos"/>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addRoom">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addRoom/id"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addRoom/name"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addRoom/roomType"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addRoom/floor"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addOutdoors">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addOutdoors/id"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addOutdoors/name"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addOutdoors/floor"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/removePlace">
+        <genParameters ecoreParameter="Context.ecore#//Environment/removePlace/place"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addDevice">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addDevice/device"/>
+        <genParameters ecoreParameter="Context.ecore#//Environment/addDevice/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/removeDevice">
+        <genParameters ecoreParameter="Context.ecore#//Environment/removeDevice/device"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/addProvider">
+        <genParameters ecoreParameter="Context.ecore#//Environment/addProvider/provider"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Environment/removeProvider">
+        <genParameters ecoreParameter="Context.ecore#//Environment/removeProvider/provider"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//EnvironmentElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//EnvironmentElement/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//EnvironmentElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//InteractionResource">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//InteractionResource/user"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//InteractionResource/device"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/available"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/modality"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/mobile"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/personal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/interactionStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//InteractionResource/interactionStatusTimeStamp"/>
+      <genOperations ecoreOperation="Context.ecore#//InteractionResource/getContextRating">
+        <genParameters ecoreParameter="Context.ecore#//InteractionResource/getContextRating/user"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//InteractionResource/getAllChannels"/>
+      <genOperations ecoreOperation="Context.ecore#//InteractionResource/setInteractionStatusWithTimeStamp">
+        <genParameters ecoreParameter="Context.ecore#//InteractionResource/setInteractionStatusWithTimeStamp/status"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//User">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/birthDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/surname"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/leftHanded"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//User/resources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//User/lineOfVision"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/irExperience"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/followMe"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//User/environment"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//User/currentAssistants"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//User/pastAssistants"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//User/installedAssistants"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//User/passwordHash"/>
+      <genOperations ecoreOperation="Context.ecore#//User/getUsableResources"/>
+      <genOperations ecoreOperation="Context.ecore#//User/addCurrentAssistant">
+        <genParameters ecoreParameter="Context.ecore#//User/addCurrentAssistant/assistant"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//User/removeCurrentAssistant">
+        <genParameters ecoreParameter="Context.ecore#//User/removeCurrentAssistant/assistant"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//User/setNewBirthDate">
+        <genParameters ecoreParameter="Context.ecore#//User/setNewBirthDate/newBirthDate"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//User/getBirthDateObject"/>
+      <genOperations ecoreOperation="Context.ecore#//User/isAdult"/>
+      <genOperations ecoreOperation="Context.ecore#//User/setLeftHanded"/>
+      <genOperations ecoreOperation="Context.ecore#//User/setRightHanded"/>
+      <genOperations ecoreOperation="Context.ecore#//User/installAssistant">
+        <genParameters ecoreParameter="Context.ecore#//User/installAssistant/assistantId"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//User/uninstallAssistant">
+        <genParameters ecoreParameter="Context.ecore#//User/uninstallAssistant/assistantId"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//User/setNewPasswordHash">
+        <genParameters ecoreParameter="Context.ecore#//User/setNewPasswordHash/passwordHash"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//Assistant">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Assistant/activities"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Assistant/currentUsers"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Assistant/pastUsers"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Assistant/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Assistant/connections"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Assistant/domain"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Activity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Activity/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Activity/description"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//HomeOSAssistant"/>
+    <genClasses ecoreClass="Context.ecore#//ThirdPartyAssistant"/>
+    <genClasses ecoreClass="Context.ecore#//LocalizationTag">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//LocalizationTag/detected"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//LocalizationTag/register.1"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//LocalizationTag/provider"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//LocalizationTag/element"/>
+      <genOperations ecoreOperation="Context.ecore#//LocalizationTag/register"/>
+      <genOperations ecoreOperation="Context.ecore#//LocalizationTag/unregister"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//ElementWithPosition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//ElementWithPosition/tags"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//ElementWithPosition/position"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//ElementWithPosition/positionTimeStamp"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//ElementWithPosition/place"/>
+      <genOperations ecoreOperation="Context.ecore#//ElementWithPosition/setPosition">
+        <genParameters ecoreParameter="Context.ecore#//ElementWithPosition/setPosition/x"/>
+        <genParameters ecoreParameter="Context.ecore#//ElementWithPosition/setPosition/y"/>
+        <genParameters ecoreParameter="Context.ecore#//ElementWithPosition/setPosition/z"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//ElementWithPosition/getEnvironment"/>
+      <genOperations ecoreOperation="Context.ecore#//ElementWithPosition/addTag">
+        <genParameters ecoreParameter="Context.ecore#//ElementWithPosition/addTag/tag"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//ElementWithPosition/removeTag">
+        <genParameters ecoreParameter="Context.ecore#//ElementWithPosition/removeTag/tag"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//Place">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Place/areas"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Place/elements"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//Place/environment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Place/doors"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Place/windows"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Place/floor"/>
+      <genOperations ecoreOperation="Context.ecore#//Place/contains">
+        <genParameters ecoreParameter="Context.ecore#//Place/contains/position"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/getInteractionResources"/>
+      <genOperations ecoreOperation="Context.ecore#//Place/getUsers"/>
+      <genOperations ecoreOperation="Context.ecore#//Place/addArea">
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/originX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/originY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/originZ"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/spanX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/spanY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addArea/spanZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/removeArea">
+        <genParameters ecoreParameter="Context.ecore#//Place/removeArea/area"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/addElement">
+        <genParameters ecoreParameter="Context.ecore#//Place/addElement/element"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/removeElement">
+        <genParameters ecoreParameter="Context.ecore#//Place/removeElement/element"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/addDoor">
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/id"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/name"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/positionX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/positionY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/positionZ"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/spanX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/spanY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addDoor/spanZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/addWindow">
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/id"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/name"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/positionX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/positionY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/positionZ"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/spanX"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/spanY"/>
+        <genParameters ecoreParameter="Context.ecore#//Place/addWindow/spanZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/removeDoor">
+        <genParameters ecoreParameter="Context.ecore#//Place/removeDoor/door"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/removeWindow">
+        <genParameters ecoreParameter="Context.ecore#//Place/removeWindow/window"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Place/setNewFloor">
+        <genParameters ecoreParameter="Context.ecore#//Place/setNewFloor/newFloor"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Room">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Room/type"/>
+      <genOperations ecoreOperation="Context.ecore#//Room/setRoomType">
+        <genParameters ecoreParameter="Context.ecore#//Room/setRoomType/newRoomType"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Outdoors"/>
+    <genClasses ecoreClass="Context.ecore#//Door">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Door/open"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//Door/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Door/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Door/span"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Window">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Window/open"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//Window/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Window/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Window/span"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//ContextProvider">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//ContextProvider/environment"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//LocalisationProviderProxy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//LocalisationProviderProxy/apiClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//LocalisationProviderProxy/api"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//LocalisationProviderProxy/tags"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//LocalisationProviderProxy/configuration"/>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/register">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/register/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/getPosition">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/getPosition/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/unregister">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/unregister/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/newPosition">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/newPosition/tagID"/>
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/newPosition/x"/>
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/newPosition/y"/>
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/newPosition/z"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/tagGone">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/tagGone/tagID"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/setApiInstance">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/setApiInstance/apiInstance"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/addTag">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/addTag/tag"/>
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/addTag/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//LocalisationProviderProxy/removeTag">
+        <genParameters ecoreParameter="Context.ecore#//LocalisationProviderProxy/removeTag/tag"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Mouse">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Mouse/motionSensor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Mouse/buttons"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Keyboard">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Keyboard/keys"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Display">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Display/xPixels"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Display/yPixels"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Display/direction"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Display/screen"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Display/size"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//InputInteractionResource"/>
+    <genClasses image="false" ecoreClass="Context.ecore#//OutputInteractionResource"/>
+    <genClasses ecoreClass="Context.ecore#//GestureIR">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//GestureIR/gestureRecognition"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Touchpad"/>
+    <genClasses ecoreClass="Context.ecore#//Touchscreen">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Touchscreen/touchSurface"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Touchscreen/gestureRecognition"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Device">
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//Device/resources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Device/mobile"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//Device/environment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Device/manufacturer"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Device/modelName"/>
+      <genOperations ecoreOperation="Context.ecore#//Device/addInteractionResource">
+        <genParameters ecoreParameter="Context.ecore#//Device/addInteractionResource/interactionResource"/>
+        <genParameters ecoreParameter="Context.ecore#//Device/addInteractionResource/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Device/removeInteractionResource">
+        <genParameters ecoreParameter="Context.ecore#//Device/removeInteractionResource/interactionResource"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//PhysicalDevice">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDevice/on"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDevice/powerUsage"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDevice/subDevice"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDevice/parentDevice"/>
+      <genOperations ecoreOperation="Context.ecore#//PhysicalDevice/turnOn"/>
+      <genOperations ecoreOperation="Context.ecore#//PhysicalDevice/turnOff"/>
+      <genOperations ecoreOperation="Context.ecore#//PhysicalDevice/getOnValue"/>
+      <genOperations ecoreOperation="Context.ecore#//PhysicalDevice/addSubDevice">
+        <genParameters ecoreParameter="Context.ecore#//PhysicalDevice/addSubDevice/subDevice"/>
+        <genParameters ecoreParameter="Context.ecore#//PhysicalDevice/addSubDevice/id"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//PhysicalDevice/removeSubDevice">
+        <genParameters ecoreParameter="Context.ecore#//PhysicalDevice/removeSubDevice/subDevice"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//PhysicalDeviceWithProgram">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDeviceWithProgram/program"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalDeviceWithProgram/secondsRemaining"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Lamp">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Lamp/dimmingLevel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Lamp/lampType"/>
+      <genOperations ecoreOperation="Context.ecore#//Lamp/setNewLampeType">
+        <genParameters ecoreParameter="Context.ecore#//Lamp/setNewLampeType/lampType"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Notebook"/>
+    <genClasses ecoreClass="Context.ecore#//Hood"/>
+    <genClasses ecoreClass="Context.ecore#//PC"/>
+    <genClasses ecoreClass="Context.ecore#//Fan">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Fan/speed"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//RemoteControl"/>
+    <genClasses ecoreClass="Context.ecore#//TV">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//TV/currentProgram"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Oven">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Oven/temperature"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Dishwasher"/>
+    <genClasses ecoreClass="Context.ecore#//WashingMachine"/>
+    <genClasses ecoreClass="Context.ecore#//Blind">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Blind/level"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Hob">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Hob/heatLevel"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Cooker"/>
+    <genClasses ecoreClass="Context.ecore#//CookTop"/>
+    <genClasses ecoreClass="Context.ecore#//Fridge">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Fridge/temperature"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Mixer"/>
+    <genClasses ecoreClass="Context.ecore#//Radio"/>
+    <genClasses ecoreClass="Context.ecore#//Socket"/>
+    <genClasses ecoreClass="Context.ecore#//Heater">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Heater/temperatureDemand"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Heater/temperatureCurrent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Heater/valvePosition"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Meter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Meter/readings"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//WaterStorageTank">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//WaterStorageTank/temperatureSensor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//WaterStorageTank/capacity"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//HeatingRod">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//HeatingRod/maximumPowerWatts"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//MeterReading">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//MeterReading/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//MeterReading/subject"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//MeterReading/measurand"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//MeterReading/measurementMethod"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//MeterReading/rate"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//PhysicalSensorDevice">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//PhysicalSensorDevice/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//LuminanceSensor"/>
+    <genClasses ecoreClass="Context.ecore#//TemperatureSensor"/>
+    <genClasses image="false" ecoreClass="Context.ecore#//Channel">
+      <genTypeParameters ecoreTypeParameter="Context.ecore#//Channel/C"/>
+      <genTypeParameters ecoreTypeParameter="Context.ecore#//Channel/A"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Channel/distributionState"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference Context.ecore#//Channel/elements"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Channel/api"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Channel/configuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Channel/available"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Channel/apiClass"/>
+      <genOperations ecoreOperation="Context.ecore#//Channel/setNewDistributionState">
+        <genParameters ecoreParameter="Context.ecore#//Channel/setNewDistributionState/newDistributionState"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Channel/add">
+        <genParameters ecoreParameter="Context.ecore#//Channel/add/element"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Channel/remove">
+        <genParameters ecoreParameter="Context.ecore#//Channel/remove/elementID"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Channel/setNewAvailable">
+        <genParameters ecoreParameter="Context.ecore#//Channel/setNewAvailable/newAvailable"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Channel/setApiInstance">
+        <genParameters ecoreParameter="Context.ecore#//Channel/setApiInstance/newAPI"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Channel/getInteractionResource"/>
+      <genOperations ecoreOperation="Context.ecore#//Channel/interactionRequested"/>
+      <genOperations ecoreOperation="Context.ecore#//Channel/interactionFinished"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//MessageInputChannel"/>
+    <genClasses image="false" ecoreClass="Context.ecore#//MessageOutputChannel"/>
+    <genClasses image="false" ecoreClass="Context.ecore#//PointingInputChannel"/>
+    <genClasses image="false" ecoreClass="Context.ecore#//GraphicalOutputChannel"/>
+    <genClasses ecoreClass="Context.ecore#//Loudspeaker">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Loudspeaker/voice"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Microphone">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Microphone/voiceRecognition"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Vector">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Vector/x"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Vector/y"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//Vector/z"/>
+      <genOperations ecoreOperation="Context.ecore#//Vector/distance">
+        <genParameters ecoreParameter="Context.ecore#//Vector/distance/vector"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Vector/setCoordinates">
+        <genParameters ecoreParameter="Context.ecore#//Vector/setCoordinates/newX"/>
+        <genParameters ecoreParameter="Context.ecore#//Vector/setCoordinates/newY"/>
+        <genParameters ecoreParameter="Context.ecore#//Vector/setCoordinates/newZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Vector/copy"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//Area">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Area/origin"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Context.ecore#//Area/span"/>
+      <genOperations ecoreOperation="Context.ecore#//Area/setNewOrigin">
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewOrigin/originX"/>
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewOrigin/originY"/>
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewOrigin/originZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Area/setNewSpan">
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewSpan/spanX"/>
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewSpan/spanY"/>
+        <genParameters ecoreParameter="Context.ecore#//Area/setNewSpan/spanZ"/>
+      </genOperations>
+      <genOperations ecoreOperation="Context.ecore#//Area/contains">
+        <genParameters ecoreParameter="Context.ecore#//Area/contains/position"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Context.ecore#//HapticalInteractionResources"/>
+    <genClasses ecoreClass="Context.ecore#//ConfigurationProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//ConfigurationProperty/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//ConfigurationProperty/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Context.ecore#//AssistantConnection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Context.ecore#//AssistantConnection/description"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Context.ecore#//AssistantConnection/connectedAssistant"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

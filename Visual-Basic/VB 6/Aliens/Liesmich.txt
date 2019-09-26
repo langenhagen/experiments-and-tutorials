@@ -1,0 +1,53 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+__________ALIENS_____________________________________________________________
+
+Die Story:___________________________________________________________________
+Die Story ist das übliche "Die Erde wird von Aliens überrannt!"
+gefasel, also nichts besonderes.
+
+
+
+Systemanforderungen:_________________________________________________________
+
+Pentium 166 Mhz Prozessor (oder höher)
+32 MB Hauptspeicher (oder mehr)
+40 MB freier Festplattenspeicher (oder mehr)
+Windows 95, 98, 2000, Me 
+DirectX 8.0 (oder höher)
+Soundkarte empfohlen
+
+Tasten:______________________________________________________________________
+
+Pfeiltasten: Lenken
+Leertaste:   Schießen
+D:           Zusatzwaffe nach hinten verlagern
+A:           Superwaffe
+ESC:         Pause/Beenden
+F5:          Joystick an/aus
+
+_____________________________________________________________________________
+               DAS WÄRS FÜRS ERSTE. ALSO START FREI!
+
+Rainbringer
+   
+ #####
+ ##   ##
+ ##    ##   
+ ######
+ ####
+ ## ##
+ ##  ##  
+ ##   ## ainbringer
+=============================================================================

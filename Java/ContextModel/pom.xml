@@ -1,0 +1,734 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>Models</artifactId>
+		<groupId>org.sercho.masp.models</groupId>
+		<version>1.1</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>ContextModel</artifactId>
+	<name>Context Metamodel for MASP</name>
+	<version>1.4-SNAPSHOT</version>
+	<description>Context metamodel for MASP</description>
+	<url>
+        http://repositories.dai-labor.de/sites/masp/Models/ContextModel/ 
+    </url>
+	<inceptionYear>2007</inceptionYear>
+	<packaging>${packaging.type}</packaging>
+	<properties>
+		<packaging.type>jar</packaging.type>
+	</properties>
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.vm</include>
+					<include>**/*.xmi</include>
+					<include>**/*.xml</include>
+					<include>**/*.png</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.html</include>
+				</includes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/src/test/java</directory>
+				<includes>
+					<include>**/*.xmi</include>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<finalName>ContextModel</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<excludes>
+						<exclude>org/sercho/masp/models/Context/OSGi/DTAGEnvironmentActivator.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<excludeDependencies>*;scope=test</excludeDependencies>
+					<instructions>
+						<Bundle-SymbolicName>${pom.groupId}.${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${pom.name}</Bundle-Name>
+						<Bundle-Description>${pom.description}</Bundle-Description>
+						<Bundle-Vendor>Apache Felix</Bundle-Vendor>
+						<Bundle-Version>${pom.version}</Bundle-Version>
+						<Bundle-Activator>org.sercho.masp.models.Context.OSGi.EnvironmentActivator</Bundle-Activator>
+						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+						<!--Export-Package>org.sercho.masp.context.providers.location;-split-package:=merge-first,org.sercho.masp.context.providers.location.mpico,org.sercho.masp.context.providers.location.ubisense,org.sercho.masp.models.channel.api,org.sercho.masp.models.channel.api.proxy,org.sercho.masp.models.Context;-split-package:=merge-first,org.sercho.masp.models.Context.*</Export-Package -->
+						<Import-Package>*,javax.swing;resolution:=optional,javax.xml.ws;resolution:=optional,javax.swing.border;resolution:=optional,javax.servlet.jsp;resolution:=optional,javax.jws.soap;resolution:=optional,javax.jws;resolution:=optional,org.eclipse.emf.common.util,org.sercho.masp.models,org.eclipse.emf.ecore,org.jdom;resolution:=optional,org.jdom.input;resolution:=optional,org.json;resolution:=optional,org.apache.commons.beanutils;resolution:=optional,javax.servlet;resolution:=optional,javax.servlet.http;resolution:=optional,junit.framework;resolution:=optional,de.dailab.masp.models.MetaMetaModel.ecore;resolution:=optional,de.dailab.masp.models.MetaMetaModel;resolution:=optional</Import-Package>
+						<Embed-Dependency>annotations,commons-jxpath</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+					</instructions>
+				</configuration>
+			</plugin>
+
+			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-release-plugin</artifactId> 
+				<version>2.1</version> <configuration> <goals>deploy</goals> </configuration> 
+				</plugin -->
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>PropertiesModel</artifactId>
+			<version>[1.0,1.0.99]</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>UIModel</artifactId>
+			<version>[1.1,1.1.99]</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>MetaMetaModel</artifactId>
+			<version>[1.0,1.0.99]</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp.utilities</groupId>
+			<artifactId>Communication</artifactId>
+			<version>1.1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp</groupId>
+			<artifactId>MASP-APIs</artifactId>
+			<version>[1.1,1.1.99]</version>
+		</dependency>
+
+		<!-- Meta Editor dependency for the visualizer -->
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>MetaEditor</artifactId>
+			<version>[1.3,1.3.99]</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>ModelUtilities</artifactId>
+			<version>[1.1,1.1.99]</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ca.ecliptical.emf</groupId>
+			<artifactId>xpath</artifactId>
+			<version>[2.0.3,2.0.99]</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Used by ControllerFramework -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp.space</groupId>
+			<artifactId>SimpleSpaceCore</artifactId>
+			<version>[2.6,2.6.99]</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.sercho.masp.utilities</groupId>
+			<artifactId>CSV</artifactId>
+			<version>[1.0-alpha],[1.1-alpha],[1.1-beta]</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sercho.masp.utilities</groupId>
+			<artifactId>TimeStringConverter</artifactId>
+			<version>[1.0-alpha]</version>
+		</dependency>
+
+		<!-- OSGi-Bundle Dependendy -->
+		<dependency>
+			<groupId>org.sercho.masp.models</groupId>
+			<artifactId>OSGiUtil</artifactId>
+			<version>[1.0.2,1.0.99]</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>EMH-Only</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>org/sercho/masp/models/Context/ConfigurationPropertyUtility.java</exclude>
+							</excludes>
+							<includes>
+								<include>org/sercho/masp/models/Context/EMH/*.java</include>
+								<include>org/sercho/masp/models/Context/*.java</include>
+								<include>org/sercho/masp/models/Context/impl/*.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageOutputAdapter.java</include>
+								<include>org/sercho/masp/models/EnvironmentUtility.java</include>
+								<include>org/sercho/masp/models/channel/api/NotSupportedInteractorException.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageInputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingInputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageOutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/TwoDimensionalCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/GraphicalOutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/ChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/OutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/Callback.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/OneDimensionalCallback.java</include>
+							</includes>
+							<testExcludes>
+								<testExclude>*</testExclude>
+							</testExcludes>
+							<testIncludes>
+								<testInclude>org/sercho/masp/models/Context/EMH/*</testInclude>
+							</testIncludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<classesDirctory>${basedir}/target/classes/</classesDirctory>
+							<outputDirectory>${basedir}/target/</outputDirectory>
+							<finalName>${project.build.finalName}_EMH-light</finalName>
+							<includes>
+								<include>**/*.class</include>
+							</includes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/EMH-Only.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/*.class</exclude>
+							</excludes>
+							<includes>
+								<include>org/sercho/masp/models/Context/EMH/EMHExampleTest.class</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+		<profile>
+			<id>no-gui</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>org/sercho/masp/models/Context/gui/**/*.java</exclude>
+								<exclude>org/sercho/masp/models/Context/swing/**/*.java</exclude>
+							</excludes>
+							<testExcludes>
+								<testExclude>org/sercho/masp/models/Context/gui/**/*.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>MeterReadServlet.jar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<includes>
+								<include>org/sercho/masp/models/Context/EMH/MeterReadServlet.java</include>
+								<include>org/sercho/masp/models/Context/EMH/CachedGetListRequest.java</include>
+								<include>org/sercho/masp/models/Context/EMH/ObjectFactory.java</include>
+								<include>org/sercho/masp/models/Context/EMH/MeterReadings.java</include>
+							</includes>
+							<testExcludes>
+								<testExclude>**/*.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<classesDirctory>${basedir}/target/classes/</classesDirctory>
+							<outputDirectory>${basedir}/target/</outputDirectory>
+							<finalName>MeterReadServlet</finalName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- This profile creates an OSGi-Bundle of the ContextModel using a subset 
+			of classes. The functionality of the model is complete but only the service 
+			classes for the SmartMeter by EHM are included. Please note that this bundle 
+			is not intended to run stand-alone in an OSGi-Environment but with support 
+			of some other bundles made by Deutsche Telekom AG (DTAG). This means the 
+			bundle requires some dependencies that are provided by those bundles. This 
+			need may could be satisfied by using other bundles exporting the same classes 
+			as the ones provided by DTAG. -->
+		<profile>
+			<id>EMH-Only_OSGi-Bundle</id>
+			<build>
+				<plugins>
+					<!-- This specifies the list of classes compiled into the actual bundle. 
+						At the moment Meter-related, all core-model classes and some api-classes 
+						are included. Please keep in mind adding classes here may will require adding 
+						additional dependencies in the dependency- and jar-plugin. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>org/sercho/masp/models/Context/EMH/EMHWithOSGiExample.java</exclude>
+								<exclude>org/sercho/masp/models/Context/EMH/MeterReadings.java</exclude>
+								<exclude>org/sercho/masp/models/Context/EMH/MeterReadServlet.java</exclude>
+								<exclude>org/sercho/masp/models/Context/EMH/ObjectFactory.java</exclude>
+								<exclude>org/sercho/masp/models/Context/ConfigurationPropertyUtility.java</exclude>
+							</excludes>
+							<includes>
+								<include>org/sercho/masp/models/Context/EMH/*.java</include>
+								<include>org/sercho/masp/models/Context/dummy/*.java</include>
+								<include>org/sercho/masp/models/Context/*.java</include>
+								<include>org/sercho/masp/models/Context/impl/*.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageOutputAdapter.java</include>
+								<include>org/sercho/masp/models/EnvironmentUtility.java</include>
+								<include>org/sercho/masp/models/channel/api/NotSupportedInteractorException.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageInputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingInputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageOutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/TwoDimensionalCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/GraphicalOutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/MessageCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/ChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/OutputChannelAPI.java</include>
+								<include>org/sercho/masp/models/channel/api/Callback.java</include>
+								<include>org/sercho/masp/models/channel/api/PointingCallback.java</include>
+								<include>org/sercho/masp/models/channel/api/OneDimensionalCallback.java</include>
+								<include>org/sercho/masp/models/Context/OSGi/*</include>
+							</includes>
+							<testExcludes>
+								<testExclude>**</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+					<!-- This plugin was supposed to translate all classes into JVM-1.4 
+						classes. Sadly the plugin failed on this task. As an alterative so cli-version 
+						of retrotranslator can be used. -->
+					<!--plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>retrotranslator-maven-plugin</artifactId> 
+						<version>1.0-alpha-4</version> <executions> <execution> <phase>process-classes</phase> 
+						<goals> <goal>translate</goal> </goals> <configuration> <filesets> <fileset> 
+						<directory>${project.build.outputDirectory}</directory> <includes> <include>**/*.class</include> 
+						</includes> </fileset> </filesets> </configuration> </execution> </executions> 
+						</plugin -->
+					<!-- Unpack all dependencies. Biggest problem here is that all dependencies 
+						are referenced with a fix version. Every new release of a dependency requires 
+						changeing the version-number. This isn't a nice solution but the best I figured 
+						out. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<id>unpack</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.sercho.masp.models</groupId>
+											<artifactId>PropertiesModel</artifactId>
+											<version>1.0.11</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.sercho.masp.models</groupId>
+											<artifactId>UIModel</artifactId>
+											<version>1.1</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.sercho.masp.models</groupId>
+											<artifactId>MetaMetaModel</artifactId>
+											<version>1.0.19</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.sercho.masp</groupId>
+											<artifactId>MASPAPIs</artifactId>
+											<version>1.1</version>
+											<type>jar</type>
+										</artifactItem>
+										<!--artifactItem> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+											<version>1.2.9</version> <type>jar</type> </artifactItem -->
+										<artifactItem>
+											<groupId>de.dtag.labs.osgi</groupId>
+											<artifactId>logging</artifactId>
+											<version>1.0</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.openmuc</groupId>
+											<artifactId>jsml</artifactId>
+											<version>1.0.6.1</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>xmi</artifactId>
+											<version>2.3.0-v200706262000</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>common</artifactId>
+											<version>2.3.0-v200706262000</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>ecore</artifactId>
+											<version>2.3.0-v200706262000</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.sercho.masp.models</groupId>
+											<artifactId>ModelUtilities</artifactId>
+											<version>1.1.8</version>
+											<type>jar</type>
+										</artifactItem>
+										<!--artifactItem> <groupId>commons-logging</groupId> <artifactId>commons-logging</artifactId> 
+											<version>1.1.1</version> <type>jar</type> </artifactItem -->
+										<!--artifactItem> <groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> 
+											<version>2.9.1</version> <type>jar</type> </artifactItem> <artifactItem> 
+											<groupId>xerces</groupId> <artifactId>xmlParserAPIs</artifactId> <version>2.6.2</version> 
+											<type>jar</type> </artifactItem -->
+										<artifactItem>
+											<groupId>net.sf.retrotranslator</groupId>
+											<artifactId>retrotranslator-runtime</artifactId>
+											<version>1.2.9</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>backport-util-concurrent</groupId>
+											<artifactId>backport-util-concurrent</artifactId>
+											<version>3.1</version>
+											<type>jar</type>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Here happends the real magic. THis section creates the jar and 
+						writes the OSGi-attributes into the manifest. Please notice the hardcoded 
+						parts like Export, Version and Import. As I failed to configure the OSGi-maven-plugins 
+						to use only our subset of classes this hardcoded solution must do for now. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<classesDirctory>${basedir}/target/classes/</classesDirctory>
+							<outputDirectory>${basedir}/target/</outputDirectory>
+							<finalName>${project.build.finalName}-OSGi-bundle</finalName>
+							<includes>
+								<include>**/*.class</include>
+								<include>**/*.jar</include>
+								<include>**/ContextModel.xmi</include>
+							</includes>
+							<resources>
+								<includes>
+									<include>**/ContextModel.xmi</include>
+									<include>**/logging.xml</include>
+									<include>**/categories.xml</include>
+								</includes>
+							</resources>
+							<archive>
+								<manifestEntries>
+									<Export-Package>
+										org.eclipse.emf.common.util,org.apache.commons.logging,org.eclipse.emf.common.notify,de.dailab.masp.models.MetaMetaModel;uses:="org.eclipse.emf.common.util,org.sercho.masp.models,org.eclipse.emf.ecore",de.dailab.masp.models.MetaMetaModel.ecore;uses:="org.eclipse.emf.ecore,de.dailab.masp.models.MetaMetaModel,org.eclipse.emf.ecore.util,org.eclipse.emf.common.util,org.sercho.masp.models,org.eclipse.emf.common.notify.impl,org.eclipse.emf.common.notify",de.dailab.masp.models.Properties;uses:="org.eclipse.emf.common.util,de.dailab.masp.models.MetaMetaModel,org.eclipse.emf.ecore",org.sercho.masp.context.providers.location,org.sercho.masp.models.channel.api;uses:="de.dailab.masp.models.MetaMetaModel,org.sercho.masp.models.UI,org.eclipse.emf.ecore,org.apache.commons.logging,org.eclipse.emf.common.util,org.eclipse.emf.common.notify.impl,org.eclipse.emf.common.notify",org.sercho.masp.models.Context.impl,org.sercho.masp.models.Context;uses:="org.apache.commons.logging,de.dailab.masp.models.MetaMetaModel,de.dailab.masp.models.Properties,org.eclipse.emf.ecore,org.eclipse.emf.common.util,org.sercho.masp.models.channel.api,org.sercho.masp.models.UI,org.sercho.masp.context.providers.location",org.sercho.masp.models.Context.EMH;uses:="org.openmuc.jsml.structures,org.openmuc.jsml.tl,org.sercho.masp.models.Context,org.eclipse.emf.ecore,org.eclipse.emf.common.notify,de.dailab.masp.models.Properties,org.sercho.masp.models,de.dailab.masp.models.MetaMetaModel.ecore,org.eclipse.emf.common.util,de.dailab.masp.models.MetaMetaModel,org.osgi.framework",org.sercho.masp.models.Context.OSGi;uses:="org.sercho.masp.models,org.eclipse.emf.ecore,de.dailab.masp.models.MetaMetaModel.ecore,org.eclipse.emf.common.util,de.dailab.masp.models.MetaMetaModel,org.sercho.masp.models.Context,org.osgi.framework",org.sercho.masp.models;uses:="org.apache.commons.logging,org.eclipse.emf.ecore.util,org.eclipse.emf.common.util,org.eclipse.emf.common.notify,org.eclipse.emf.ecore,org.eclipse.emf.common.notify.impl,org.sercho.masp.models.Context,de.dailab.masp.models.Properties,org.sercho.masp.models.UI,org.eclipse.emf.ecore.xmi.impl,org.eclipse.emf.ecore.resource,org.eclipse.emf.ecore.resource.impl",org.sercho.masp.models.UI;uses:="org.eclipse.emf.common.util,org.eclipse.emf.ecore,org.eclipse.emf.common.notify.impl,org.eclipse.emf.common.notify"</Export-Package>
+									<Bundle-ClassPath>.</Bundle-ClassPath>
+									<Bundle-Name>Context Metamodel for MASP</Bundle-Name>
+									<Bundle-Vendor>DAI-Labor</Bundle-Vendor>
+									<Bundle-Version>1.3.0.SNAPSHOT-OSGi</Bundle-Version>
+									<Bundle-Activator>org.sercho.masp.models.Context.OSGi.DTAGEnvironmentActivator</Bundle-Activator>
+									<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+									<Bundle-SymbolicName>org.sercho.masp.models.ContextModel</Bundle-SymbolicName>
+									<Import-Package>org.osgi.service.cm,org.osgi.service.log,org.osgi.util.tracker,org.osgi.framework;version="[1.3,2)",org.xml.sax.helpers,org.xml.sax,org.w3c.dom,org.xml.sax.ext,javax.xml.parsers,javax.xml.namespace,javax.xml.datatype</Import-Package>
+									<Config>xml=/logging.xml;pid=ContextModel.logging.config;name=Logging
+										Configuration</Config>
+									<FactoryConfig>xml=/categories.xml;pid=ContextModel.logging.category;name=Logging
+										Categories</FactoryConfig>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<!--dependency> <groupId>xerces</groupId> <artifactId>xercesImpl</artifactId> 
+					<version>2.9.1</version> </dependency> <dependency> <groupId>xerces</groupId> 
+					<artifactId>xmlParserAPIs</artifactId> <version>2.6.2</version> </dependency -->
+				<dependency>
+					<groupId>net.sf.retrotranslator</groupId>
+					<artifactId>retrotranslator-runtime</artifactId>
+					<version>1.2.9</version>
+				</dependency>
+				<dependency>
+					<groupId>backport-util-concurrent</groupId>
+					<artifactId>backport-util-concurrent</artifactId>
+					<version>3.1</version>
+				</dependency>
+				<dependency>
+					<groupId>de.dtag.labs.osgi</groupId>
+					<artifactId>logging</artifactId>
+					<version>1.0</version>
+				</dependency>
+				<dependency>
+					<groupId>org.eclipse.osgi</groupId>
+					<artifactId>org.eclipse.osgi.util</artifactId>
+					<version>3.6.0.v20100517</version>
+				</dependency>
+				<dependency>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+					<version>1.1.1</version>
+					<exclusions>
+						<exclusion>
+							<groupId>commons-logging</groupId>
+							<artifactId>commons-logging</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<!-- This profile generates a test-bundle for the Environment-bundle. Just 
+			use mvn install to generate it -->
+		<profile>
+			<id>EMH-Only_OSGi-Bundle_Test</id>
+			<build>
+				<plugins>
+					<!-- We only need one file. It contains the activator for the test-bundle. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>*</exclude>
+							</excludes>
+							<includes>
+								<include>org/sercho/masp/models/Context/EMH/EMHWithOSGiExample.java</include>
+							</includes>
+							<testExcludes>
+								<testExclude>**</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+					<!-- Unpack all dependencies. Most of them are unnecessary but well..never 
+						change a running system. Maven will skip the ones not needed. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.2</version>
+						<executions>
+							<execution>
+								<id>unpack</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.sercho.masp.models</groupId>
+                                            <artifactId>PropertiesModel</artifactId>
+                                            <version>1.0.11</version>
+                                            <type>jar</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.sercho.masp.models</groupId>
+                                            <artifactId>UIModel</artifactId>
+                                            <version>1.1</version>
+                                            <type>jar</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.sercho.masp.models</groupId>
+                                            <artifactId>MetaMetaModel</artifactId>
+                                            <version>1.0.19</version>
+                                            <type>jar</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.sercho.masp</groupId>
+                                            <artifactId>MASPAPIs</artifactId>
+                                            <version>1.1</version>
+                                            <type>jar</type>
+                                        </artifactItem>
+										<artifactItem>
+											<groupId>log4j</groupId>
+											<artifactId>log4j</artifactId>
+											<version>1.2.9</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.openmuc</groupId>
+											<artifactId>jsml</artifactId>
+											<version>1.0.6</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>xmi</artifactId>
+											<version>2.5.0.v200906151043</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>common</artifactId>
+											<version>2.5.0.v200906151043</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.eclipse.emf</groupId>
+											<artifactId>ecore</artifactId>
+											<version>2.5.0.v200906151043</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.sercho.masp.models</groupId>
+											<artifactId>ModelUtilities</artifactId>
+                                            <version>1.1.8</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>commons-logging</groupId>
+											<artifactId>commons-logging</artifactId>
+											<version>1.1.1</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>net.sf.retrotranslator</groupId>
+											<artifactId>retrotranslator-runtime</artifactId>
+											<version>1.2.9</version>
+											<type>jar</type>
+										</artifactItem>
+										<artifactItem>
+											<groupId>backport-util-concurrent</groupId>
+											<artifactId>backport-util-concurrent</artifactId>
+											<version>3.1</version>
+											<type>jar</type>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Here the magic happends. This generates the bundle by creating 
+						the jar and writing the OSGi-attributes into the manifest. Again some hot 
+						air is in here especially in the Import-clause. Also many stuff is hardcoded 
+						but it workes fine for the moment and using one of the OSGI-maven-plugins 
+						created a lot of trouble 'cause we're using only a subset of classes. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<classesDirctory>${basedir}/target/classes/</classesDirctory>
+							<outputDirectory>${basedir}/target/</outputDirectory>
+							<finalName>${project.build.finalName}-OSGi-bundle_Test</finalName>
+							<includes>
+								<include>**/org/openmuc/**/*.class</include>
+								<include>**/org/apache/**/*.class</include>
+								<include>**/org/sercho/**/EMHWithOSGiExample*.class</include>
+								<include>**/*.jar</include>
+							</includes>
+							<archive>
+								<manifestEntries>
+									<Bundle-ClassPath>.</Bundle-ClassPath>
+									<Bundle-Name>Context Metamodel for MASP</Bundle-Name>
+									<Bundle-Vendor>DAI-Labor</Bundle-Vendor>
+									<Bundle-Version>1.3.0.SNAPSHOT-OSGi_Test</Bundle-Version>
+									<Bundle-Activator>org.sercho.masp.models.Context.EMH.EMHWithOSGiExample</Bundle-Activator>
+									<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+									<Bundle-SymbolicName>org.sercho.masp.models.ContextModel</Bundle-SymbolicName>
+									<Import-Package>org.eclipse.emf.common.util,org.eclipse.emf.common.notify,de.dailab.masp.models.MetaMetaModel,de.dailab.masp.models.MetaMetaModel.ecore,de.dailab.masp.models.Properties,org.apache.commons.logging,org.sercho.masp.context.providers.location,org.sercho.masp.models.channel.api,org.sercho.masp.models.Context,org.sercho.masp.models.Context.OSGi,org.sercho.masp.models,org.sercho.masp.models.UI,org.sercho.masp.models.Context.impl,org.osgi.framework;version="[1.3,2)",org.xml.sax.helpers,org.xml.sax,org.w3c.dom,org.xml.sax.ext,javax.xml.parsers,javax.xml.namespace,javax.xml.datatype</Import-Package>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>api-doc</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<excludePackageNames>org.sercho.masp.models.Context.*:org.sercho.masp.models.channel.*:org.sercho.masp.context.*</excludePackageNames>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

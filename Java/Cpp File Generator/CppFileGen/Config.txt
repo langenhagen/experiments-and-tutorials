@@ -1,0 +1,13 @@
+# Die Files.
+Quadscene.hpp
+
+
+# So Standard setup Kram. Muss man eigentlich nur selten ändern.
+# Die Reihenfolge der ganzen Statements ist egal.
+author: barn
+namespace: OwnApp
+HPath:	G:\C++\Hello_Ogre\Hello_OwnApp
+CppPath: G:\C++\Hello_Ogre\Hello_OwnApp
+HTemplate: Template.h
+HppTemplate: Template.hpp
+CppTemplate: Template.cpp

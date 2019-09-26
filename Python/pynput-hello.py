@@ -1,0 +1,28 @@
+"""
+Showcase third-party library pynput
+and how to use it as a key logger.
+
+based on:
+https://www.youtube.com/watch?v=TbMKwl11itQ
+"""
+import pynput
+
+KeyboardListener = pynput.keyboard.Listener
+
+
+def on_press(key):
+    """Do some action on keyboard key press."""
+    print(f"Key {key} pressed")
+    if key is pynput.keyboard.Key.enter:
+        print("Key is also enter!")
+
+
+def on_release(key):
+    """Do some action on keyboard key release."""
+    print(f"Key {key} released")
+
+
+with KeyboardListener(on_press=on_press, on_release=on_release) as listener:
+    print("Pre-Join")
+    listener.join()
+    print("Post-Join")  # never reaches here

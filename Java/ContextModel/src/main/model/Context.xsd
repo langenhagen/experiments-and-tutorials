@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:Context="http://www.dai-labor.de/~masp/Context-1.3.ecore" xmlns:Properties="http://www.dai-labor.de/~masp/Properties.ecore" xmlns:UI="http://www.dai-labor.de/~lehmann/UI.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:proxy="Proxy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="Context" ecore:package="org.sercho.masp.models.Context" targetNamespace="http://www.dai-labor.de/~masp/Context-1.3.ecore">
+  <xsd:import namespace="http://www.dai-labor.de/~lehmann/UI.ecore" schemaLocation="UI.xsd"/>
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:import namespace="http://www.dai-labor.de/~masp/Properties.ecore" schemaLocation="Properties.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>The Context package enables the definition of runtime context models. The root element of a context model is the Environment.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:element ecore:ignore="true" name="Environment" type="Context:Environment"/>
+  <xsd:element ecore:ignore="true" name="EnvironmentElement" type="Context:EnvironmentElement"/>
+  <xsd:element ecore:ignore="true" name="InteractionResource" type="Context:InteractionResource"/>
+  <xsd:element ecore:ignore="true" name="User" type="Context:User"/>
+  <xsd:element ecore:ignore="true" name="Assistant" type="Context:Assistant"/>
+  <xsd:element ecore:ignore="true" name="Activity" type="Context:Activity"/>
+  <xsd:element ecore:ignore="true" name="HomeOSAssistant" type="Context:HomeOSAssistant"/>
+  <xsd:element ecore:ignore="true" name="ThirdPartyAssistant" type="Context:ThirdPartyAssistant"/>
+  <xsd:element ecore:ignore="true" name="LocalizationTag" type="Context:LocalizationTag"/>
+  <xsd:element ecore:ignore="true" name="ElementWithPosition" type="Context:ElementWithPosition"/>
+  <xsd:element ecore:ignore="true" name="Place" type="Context:Place"/>
+  <xsd:element ecore:ignore="true" name="Room" type="Context:Room"/>
+  <xsd:element ecore:ignore="true" name="Outdoors" type="Context:Outdoors"/>
+  <xsd:element ecore:ignore="true" name="Door" type="Context:Door"/>
+  <xsd:element ecore:ignore="true" name="Window" type="Context:Window"/>
+  <xsd:element ecore:ignore="true" name="ContextProvider" type="Context:ContextProvider"/>
+  <xsd:element ecore:ignore="true" name="LocalisationProviderProxy" type="Context:LocalisationProviderProxy"/>
+  <xsd:element ecore:ignore="true" name="Mouse" type="Context:Mouse"/>
+  <xsd:element ecore:ignore="true" name="Keyboard" type="Context:Keyboard"/>
+  <xsd:element ecore:ignore="true" name="Display" type="Context:Display"/>
+  <xsd:element ecore:ignore="true" name="InputInteractionResource" type="Context:InputInteractionResource"/>
+  <xsd:element ecore:ignore="true" name="OutputInteractionResource" type="Context:OutputInteractionResource"/>
+  <xsd:element ecore:ignore="true" name="GestureIR" type="Context:GestureIR"/>
+  <xsd:element ecore:ignore="true" name="Touchpad" type="Context:Touchpad"/>
+  <xsd:element ecore:ignore="true" name="Touchscreen" type="Context:Touchscreen"/>
+  <xsd:element ecore:ignore="true" name="Device" type="Context:Device"/>
+  <xsd:element ecore:ignore="true" name="PhysicalDevice" type="Context:PhysicalDevice"/>
+  <xsd:element ecore:ignore="true" name="PhysicalDeviceWithProgram" type="Context:PhysicalDeviceWithProgram"/>
+  <xsd:element ecore:ignore="true" name="Lamp" type="Context:Lamp"/>
+  <xsd:element ecore:ignore="true" name="Notebook" type="Context:Notebook"/>
+  <xsd:element ecore:ignore="true" name="Hood" type="Context:Hood"/>
+  <xsd:element ecore:ignore="true" name="PC" type="Context:PC"/>
+  <xsd:element ecore:ignore="true" name="Fan" type="Context:Fan"/>
+  <xsd:element ecore:ignore="true" name="RemoteControl" type="Context:RemoteControl"/>
+  <xsd:element ecore:ignore="true" name="TV" type="Context:TV"/>
+  <xsd:element ecore:ignore="true" name="Oven" type="Context:Oven"/>
+  <xsd:element ecore:ignore="true" name="Dishwasher" type="Context:Dishwasher"/>
+  <xsd:element ecore:ignore="true" name="WashingMachine" type="Context:WashingMachine"/>
+  <xsd:element ecore:ignore="true" name="Blind" type="Context:Blind"/>
+  <xsd:element ecore:ignore="true" name="Hob" type="Context:Hob"/>
+  <xsd:element ecore:ignore="true" name="Cooker" type="Context:Cooker"/>
+  <xsd:element ecore:ignore="true" name="CookTop" type="Context:CookTop"/>
+  <xsd:element ecore:ignore="true" name="Fridge" type="Context:Fridge"/>
+  <xsd:element ecore:ignore="true" name="Mixer" type="Context:Mixer"/>
+  <xsd:element ecore:ignore="true" name="Radio" type="Context:Radio"/>
+  <xsd:element ecore:ignore="true" name="Socket" type="Context:Socket"/>
+  <xsd:element ecore:ignore="true" name="Heater" type="Context:Heater"/>
+  <xsd:element ecore:ignore="true" name="Meter" type="Context:Meter"/>
+  <xsd:element ecore:ignore="true" name="WaterStorageTank" type="Context:WaterStorageTank"/>
+  <xsd:element ecore:ignore="true" name="HeatingRod" type="Context:HeatingRod"/>
+  <xsd:element ecore:ignore="true" name="MeterReading" type="Context:MeterReading"/>
+  <xsd:element ecore:ignore="true" name="PhysicalSensorDevice" type="Context:PhysicalSensorDevice"/>
+  <xsd:element ecore:ignore="true" name="LuminanceSensor" type="Context:LuminanceSensor"/>
+  <xsd:element ecore:ignore="true" name="TemperatureSensor" type="Context:TemperatureSensor"/>
+  <xsd:element ecore:ignore="true" name="Channel" type="Context:Channel"/>
+  <xsd:element ecore:ignore="true" name="MessageInputChannel" type="Context:MessageInputChannel"/>
+  <xsd:element ecore:ignore="true" name="MessageOutputChannel" type="Context:MessageOutputChannel"/>
+  <xsd:element ecore:ignore="true" name="PointingInputChannel" type="Context:PointingInputChannel"/>
+  <xsd:element ecore:ignore="true" name="GraphicalOutputChannel" type="Context:GraphicalOutputChannel"/>
+  <xsd:element ecore:ignore="true" name="Loudspeaker" type="Context:Loudspeaker"/>
+  <xsd:element ecore:ignore="true" name="Microphone" type="Context:Microphone"/>
+  <xsd:element ecore:ignore="true" name="Vector" type="Context:Vector"/>
+  <xsd:element ecore:ignore="true" name="Area" type="Context:Area"/>
+  <xsd:element ecore:ignore="true" name="HapticalInteractionResources" type="Context:HapticalInteractionResources"/>
+  <xsd:element ecore:ignore="true" name="ConfigurationProperty" type="Context:ConfigurationProperty"/>
+  <xsd:element ecore:ignore="true" name="AssistantConnection" type="Context:AssistantConnection"/>
+  <xsd:element ecore:ignore="true" name="Tool" type="Context:Tool"/>
+  <xsd:element ecore:ignore="true" name="DeviceTool" type="Context:DeviceTool"/>
+  <xsd:element ecore:ignore="true" name="Need" type="Context:Need"/>
+  <xsd:complexType name="Environment">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="addUser">
+          <annotation source="Definition">
+            <detail key="modifies">users</detail>
+          </annotation>
+          <parameter lowerBound="1" name="id" type="ecore:EString"/>
+          <parameter lowerBound="1" name="name" type="ecore:EString"/>
+          <parameter lowerBound="1" name="surname" type="ecore:EString"/>
+          <parameter lowerBound="1" name="birthdate" type="ecore:EString"/>
+        </operation>
+        <operation name="removeUser">
+          <annotation source="Definition">
+            <detail key="modifies">users</detail>
+          </annotation>
+          <parameter name="user" type="Context:User"/>
+        </operation>
+        <operation name="addServiceContainer">
+          <annotation source="Definition">
+            <detail key="modifies">serviceContainers</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Method is used to add ServiceContainers to the Environment. If the ServiceContainer has no id the id argument must not be null.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="container" type="Properties:ServiceContainer"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="removeServiceContainer">
+          <annotation source="Definition">
+            <detail key="modifies">serviceContainers</detail>
+          </annotation>
+          <parameter lowerBound="1" name="container" type="Properties:ServiceContainer"/>
+        </operation>
+        <operation name="getPlaceInfos" type="Context:PlaceInfo" upperBound="-1">
+          <annotation source="Situation"/>
+        </operation>
+        <operation name="addRoom">
+          <annotation source="Definition">
+            <detail key="modifies">places</detail>
+          </annotation>
+          <parameter name="id" type="ecore:EString"/>
+          <parameter name="name" type="ecore:EString"/>
+          <parameter name="roomType" type="Context:RoomType"/>
+          <parameter name="floor" type="ecore:EIntegerObject"/>
+        </operation>
+        <operation name="addOutdoors">
+          <annotation source="Definition">
+            <detail key="modifies">places</detail>
+          </annotation>
+          <parameter name="id" type="ecore:EString"/>
+          <parameter name="name" type="ecore:EString"/>
+          <parameter name="floor" type="ecore:EIntegerObject"/>
+        </operation>
+        <operation name="removePlace">
+          <annotation source="Definition">
+            <detail key="modifies">places</detail>
+          </annotation>
+          <parameter name="place" type="Context:Place"/>
+        </operation>
+        <operation name="addDevice">
+          <annotation source="Definition">
+            <detail key="modifies">devices</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">The id must be set only if the id of the device is &lt;code&gt;null&lt;/code&gt;.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="device" type="Context:Device"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="removeDevice">
+          <annotation source="Definition">
+            <detail key="modifies">devices</detail>
+          </annotation>
+          <parameter lowerBound="1" name="device" type="Context:Device"/>
+        </operation>
+        <operation name="addProvider">
+          <annotation source="Definition">
+            <detail key="modifies">providers</detail>
+          </annotation>
+          <parameter lowerBound="1" name="provider" type="Context:ContextProvider"/>
+        </operation>
+        <operation name="removeProvider">
+          <annotation source="Definition">
+            <detail key="modifies">providers</detail>
+          </annotation>
+          <parameter lowerBound="1" name="provider" type="Context:ContextProvider"/>
+        </operation>
+      </xsd:appinfo>
+      <xsd:documentation>The Environment element is the root element of the context model. It described the context as the combination of places, users and devices.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:opposite="environment" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="places" type="Context:Place">
+        <xsd:annotation>
+          <xsd:documentation>Places in the environment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ecore:opposite="environment" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="providers" type="Context:ContextProvider"/>
+      <xsd:element ecore:opposite="environment" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="devices" type="Context:Device">
+        <xsd:annotation>
+          <xsd:documentation>Devices in the environment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ecore:opposite="environment" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="users" type="Context:User">
+        <xsd:annotation>
+          <xsd:documentation>Users in the environment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="assistants" type="Context:Assistant"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="serviceContainers" type="Properties:ServiceContainer"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="meters" type="Context:Meter"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="discoverers" type="Properties:ServiceDiscovererProxy">
+        <xsd:annotation>
+          <xsd:documentation>Service discovery proxies are used to discover new actors and sensors available in the environment. Each proxy must be connected to a service container in which it will place the discovered services.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="activities" type="Context:Activity"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="tools" type="Context:Tool"/>
+    </xsd:sequence>
+    <xsd:attribute ecore:reference="Context:HomeOSAssistant" name="initialAssistant" type="xsd:anyURI"/>
+    <xsd:attribute name="name" type="ecore:EString">
+      <xsd:annotation>
+        <xsd:documentation>informative name of this environment</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="description" type="ecore:EString">
+      <xsd:annotation>
+        <xsd:documentation>informative description of this environment</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="EnvironmentElement">
+    <xsd:annotation>
+      <xsd:documentation>EnvironmentElement represents an entity present in the environment.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="id" type="ecore:EString" use="required"/>
+    <xsd:attribute name="name" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="InteractionResource">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="getContextRating" type="ecore:EDouble">
+          <parameter name="user" type="Context:User"/>
+        </operation>
+        <operation name="getAllChannels" type="Context:Channel{?, ?}" upperBound="-1"/>
+        <operation name="setInteractionStatusWithTimeStamp">
+          <parameter name="status" type="ecore:EBoolean"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:attribute ecore:opposite="resources" ecore:reference="Context:User" name="user" type="xsd:anyURI"/>
+        <xsd:attribute ecore:opposite="resources" ecore:reference="Context:Device" name="device" type="xsd:anyURI" use="required"/>
+        <xsd:attribute default="false" ecore:derived="true" ecore:lowerBound="1" ecore:transient="true" ecore:unsettable="false" name="available" type="ecore:EBoolean"/>
+        <xsd:attribute ecore:default="Graphic" ecore:unsettable="false" name="modality" type="Context:Modality" use="required"/>
+        <xsd:attribute default="false" ecore:unsettable="false" name="mobile" type="ecore:EBooleanObject"/>
+        <xsd:attribute default="" ecore:unsettable="false" name="personal" type="ecore:EString"/>
+        <xsd:attribute ecore:unsettable="false" name="interactionStatus" type="ecore:EBoolean"/>
+        <xsd:attribute ecore:unsettable="false" name="interactionStatusTimeStamp" type="ecore:ELong"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="User">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="getUsableResources" type="Context:InteractionResource" upperBound="-1"/>
+        <operation name="addCurrentAssistant">
+          <annotation source="Situation">
+            <detail key="modifies">currentAssistants,pastAssistants</detail>
+          </annotation>
+          <parameter lowerBound="1" name="assistant" type="Context:Assistant"/>
+        </operation>
+        <operation name="removeCurrentAssistant">
+          <annotation source="Situation">
+            <detail key="modifies">currentAssistants,pastAssistants</detail>
+          </annotation>
+          <parameter lowerBound="1" name="assistant" type="Context:Assistant"/>
+        </operation>
+        <operation name="setNewBirthDate">
+          <annotation source="Definition">
+            <detail key="modifies">birthDate</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newBirthDate" type="ecore:EString"/>
+        </operation>
+        <operation name="getBirthDateObject" type="ecore:EDate"/>
+        <operation lowerBound="1" name="isAdult" type="ecore:EBoolean">
+          <annotation source="Situation"/>
+        </operation>
+        <operation name="setLeftHanded">
+          <annotation source="Definition">
+            <detail key="modifies">leftHanded</detail>
+          </annotation>
+        </operation>
+        <operation name="setRightHanded">
+          <annotation source="Definition">
+            <detail key="modifies">leftHanded</detail>
+          </annotation>
+        </operation>
+        <operation name="installAssistant">
+          <annotation source="Situation">
+            <detail key="modifies">installedAssistants</detail>
+          </annotation>
+          <parameter lowerBound="1" name="assistantId" type="ecore:EString"/>
+        </operation>
+        <operation name="uninstallAssistant">
+          <annotation source="Situation">
+            <detail key="modifies">installedAssistants</detail>
+          </annotation>
+          <parameter lowerBound="1" name="assistantId" type="ecore:EString"/>
+        </operation>
+        <operation name="setNewPasswordHash">
+          <annotation source="Definition">
+            <detail key="modifies">passwordHash</detail>
+          </annotation>
+          <parameter lowerBound="1" name="passwordHash" type="ecore:EString"/>
+        </operation>
+      </xsd:appinfo>
+      <xsd:documentation>User elements represent users in the environment. Each user has a position, is in a place and has a set of properties, e.g. birth date.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" name="lineOfVision" type="Context:Vector"/>
+        </xsd:sequence>
+        <xsd:attribute name="birthDate" type="ecore:EString">
+          <xsd:annotation>
+            <xsd:documentation>birthdate of the user</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="surname" type="ecore:EString">
+          <xsd:annotation>
+            <xsd:documentation>surname of the user</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute ecore:unsettable="false" name="leftHanded" type="ecore:EBoolean">
+          <xsd:annotation>
+            <xsd:documentation>true if the user is left-handed, false otherwise</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute ecore:opposite="user" ecore:reference="Context:InteractionResource" name="resources">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:transient="true" ecore:type="ecore:EMap{ecore:EJavaClass{? extends Context:InteractionResource}, ecore:EString}" name="irExperience" type="ecore:EMap"/>
+        <xsd:attribute ecore:default="false" ecore:unsettable="false" name="followMe" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute ecore:opposite="users" ecore:reference="Context:Environment" name="environment" type="xsd:anyURI"/>
+        <xsd:attribute ecore:opposite="currentUsers" ecore:reference="Context:Assistant" name="currentAssistants">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:opposite="pastUsers" ecore:reference="Context:Assistant" name="pastAssistants">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:reference="Context:Assistant" name="installedAssistants">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="passwordHash" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Assistant">
+    <xsd:complexContent>
+      <xsd:extension base="Context:EnvironmentElement">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="activities" type="Context:Activity"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="connections" type="Context:AssistantConnection"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="currentAssistants" ecore:reference="Context:User" name="currentUsers">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:opposite="pastAssistants" ecore:reference="Context:User" name="pastUsers">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="description" type="ecore:EString"/>
+        <xsd:attribute default="Other" ecore:unsettable="false" name="domain" type="Context:Domain"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Activity">
+    <xsd:annotation>
+      <xsd:documentation>Represents a short task that is (or must be) executed by a user</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="configuration" type="Context:ConfigurationProperty"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute name="description" type="ecore:EString"/>
+    <xsd:attribute ecore:reference="Context:Tool" name="usedWith">
+      <xsd:simpleType>
+        <xsd:list itemType="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="HomeOSAssistant">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Assistant"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ThirdPartyAssistant">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Assistant"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LocalizationTag">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="register">
+          <annotation source="Situation"/>
+        </operation>
+        <operation name="unregister">
+          <annotation source="Situation"/>
+        </operation>
+      </xsd:appinfo>
+      <xsd:documentation>LocalizationTag represents a physical tag, which can be attached to environment elements and enables the localization of this element in the environment.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:attribute ecore:default="false" ecore:unsettable="false" name="detected" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute ecore:unsettable="false" name="register" type="ecore:EBoolean" use="required"/>
+        <xsd:attribute ecore:opposite="tags" ecore:reference="Context:LocalisationProviderProxy" name="provider" type="xsd:anyURI" use="required"/>
+        <xsd:attribute ecore:opposite="tags" ecore:reference="Context:ElementWithPosition" name="element" type="xsd:anyURI"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="ElementWithPosition">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setPosition">
+          <annotation source="Situation"/>
+          <parameter lowerBound="1" name="x" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="y" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="z" type="ecore:EDouble"/>
+        </operation>
+        <operation name="getEnvironment" type="Context:Environment"/>
+        <operation name="addTag">
+          <annotation source="Definition">
+            <detail key="modifies">tags</detail>
+          </annotation>
+          <parameter lowerBound="1" name="tag" type="Context:LocalizationTag"/>
+        </operation>
+        <operation name="removeTag">
+          <annotation source="Definition">
+            <detail key="modifies">tags</detail>
+          </annotation>
+          <parameter lowerBound="1" name="tag" type="Context:LocalizationTag"/>
+        </operation>
+      </xsd:appinfo>
+      <xsd:documentation>ElementWithPosition represents environment entities with a position and a place.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:EnvironmentElement">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="position" type="Context:Vector"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="element" ecore:reference="Context:LocalizationTag" name="tags">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:unsettable="false" name="positionTimeStamp" type="ecore:ELong"/>
+        <xsd:attribute ecore:opposite="elements" ecore:reference="Context:Place" name="place" type="xsd:anyURI"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Place">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="contains" type="ecore:EBoolean">
+          <parameter name="position" type="Context:Vector"/>
+        </operation>
+        <operation name="getInteractionResources" type="Context:InteractionResource" upperBound="-1"/>
+        <operation name="getUsers" type="Context:User" upperBound="-1"/>
+        <operation name="addArea" type="Context:Area">
+          <annotation source="Definition">
+            <detail key="modifies">areas</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Adds a Area to the Place. The source and span are created by the given parameters.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="originX" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="originY" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="originZ" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="spanX" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="spanY" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="spanZ" type="ecore:EDouble"/>
+        </operation>
+        <operation name="removeArea">
+          <annotation source="Definition">
+            <detail key="modifies">areas</detail>
+          </annotation>
+          <parameter lowerBound="1" name="area" type="Context:Area"/>
+        </operation>
+        <operation name="addElement">
+          <annotation source="Definition">
+            <detail key="modifies">elements</detail>
+          </annotation>
+          <parameter lowerBound="1" name="element" type="Context:ElementWithPosition"/>
+        </operation>
+        <operation name="removeElement">
+          <annotation source="Definition">
+            <detail key="modifies">elements</detail>
+          </annotation>
+          <parameter lowerBound="1" name="element" type="Context:ElementWithPosition"/>
+        </operation>
+        <operation name="addDoor" type="Context:Door">
+          <annotation source="Definition">
+            <detail key="modifies">doors</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Adds a Door to the Place. The source and span are created by the given parameters.</detail>
+          </annotation>
+          <parameter name="id" type="ecore:EString"/>
+          <parameter name="name" type="ecore:EString"/>
+          <parameter name="positionX" type="ecore:EDouble"/>
+          <parameter name="positionY" type="ecore:EDouble"/>
+          <parameter name="positionZ" type="ecore:EDouble"/>
+          <parameter name="spanX" type="ecore:EDouble"/>
+          <parameter name="spanY" type="ecore:EDouble"/>
+          <parameter name="spanZ" type="ecore:EDouble"/>
+        </operation>
+        <operation name="addWindow" type="Context:Window">
+          <annotation source="Definition">
+            <detail key="modifies">windows</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Adds a Window to the Place. The source and span are created by the given parameters.</detail>
+          </annotation>
+          <parameter name="id" type="ecore:EString"/>
+          <parameter name="name" type="ecore:EString"/>
+          <parameter name="positionX" type="ecore:EDouble"/>
+          <parameter name="positionY" type="ecore:EDouble"/>
+          <parameter name="positionZ" type="ecore:EDouble"/>
+          <parameter name="spanX" type="ecore:EDouble"/>
+          <parameter name="spanY" type="ecore:EDouble"/>
+          <parameter name="spanZ" type="ecore:EDouble"/>
+        </operation>
+        <operation name="removeDoor">
+          <annotation source="Definition">
+            <detail key="modifies">doors</detail>
+          </annotation>
+          <parameter name="door" type="Context:Door"/>
+        </operation>
+        <operation name="removeWindow">
+          <annotation source="Definition">
+            <detail key="modifies">windows</detail>
+          </annotation>
+          <parameter name="window" type="Context:Window"/>
+        </operation>
+        <operation name="setNewFloor">
+          <annotation source="Definition">
+            <detail key="modifies">floor</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newFloor" type="ecore:EIntegerObject"/>
+        </operation>
+        <operation lowerBound="1" name="getTemperatureAverage" type="ecore:EDoubleObject">
+          <annotation source="Situation"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:EnvironmentElement">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" name="areas" type="Context:Area"/>
+          <xsd:element ecore:opposite="source" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="doors" type="Context:Door"/>
+          <xsd:element ecore:opposite="source" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="windows" type="Context:Window"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="place" ecore:reference="Context:ElementWithPosition" name="elements">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:opposite="places" ecore:reference="Context:Environment" name="environment" type="xsd:anyURI"/>
+        <xsd:attribute name="floor" type="ecore:EIntegerObject"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Room">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setRoomType">
+          <annotation source="Definition">
+            <detail key="modifies">type</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newRoomType" type="Context:RoomType"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:Place">
+        <xsd:attribute default="0" ecore:unsettable="false" name="type" type="Context:RoomType"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Outdoors">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Place"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Door">
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="open" type="Properties:BooleanProperty"/>
+          <xsd:element ecore:resolveProxies="true" name="span" type="Context:Vector"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="doors" ecore:reference="Context:Place" name="source" type="xsd:anyURI" use="required"/>
+        <xsd:attribute ecore:reference="Context:Place" name="target" type="xsd:anyURI" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Window">
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="open" type="Properties:BooleanProperty"/>
+          <xsd:element ecore:resolveProxies="true" name="span" type="Context:Vector"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="windows" ecore:reference="Context:Place" name="source" type="xsd:anyURI" use="required"/>
+        <xsd:attribute ecore:reference="Context:Place" name="target" type="xsd:anyURI" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="RoomType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Kitchen"/>
+      <xsd:enumeration value="Bath"/>
+      <xsd:enumeration value="Bedroom"/>
+      <xsd:enumeration ecore:name="LivingRoom" value="Living Room"/>
+      <xsd:enumeration ecore:name="FitnessRoom" value="Fitness Room"/>
+      <xsd:enumeration value="Office"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" name="ContextProvider">
+    <xsd:attribute ecore:opposite="providers" ecore:reference="Context:Environment" name="environment" type="xsd:anyURI"/>
+  </xsd:complexType>
+  <xsd:complexType name="LocalisationProviderProxy" proxy:callbacks="newPosition,tagGone" proxy:proxyClassName="apiClass" proxy:proxyConfiguration="configuration" proxy:proxyReference="api" proxy:proxySetter="setApiInstance">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="register" type="ecore:EBoolean" unique="false">
+          <annotation source="Situation"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="getPosition" type="Context:Vector" unique="false">
+          <annotation source="Situation"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="unregister" unique="false">
+          <annotation source="Situation"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="newPosition">
+          <annotation source="Situation"/>
+          <parameter lowerBound="1" name="tagID" type="ecore:EString"/>
+          <parameter lowerBound="1" name="x" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="y" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="z" type="ecore:EDouble"/>
+        </operation>
+        <operation name="tagGone">
+          <annotation source="Situation"/>
+          <parameter lowerBound="1" name="tagID" type="ecore:EString"/>
+        </operation>
+        <operation name="setApiInstance">
+          <annotation source="Situation">
+            <detail key="modifies">api</detail>
+          </annotation>
+          <parameter lowerBound="1" name="apiInstance" type="Context:LocalisationProvider"/>
+        </operation>
+        <operation name="addTag">
+          <annotation source="Definition">
+            <detail key="modifies">tags</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Method is used to add LocalizationTags to the LocalisationProviderProxy. If the LocalizationTag has no id the id argument must not be null.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="tag" type="Context:LocalizationTag"/>
+          <parameter lowerBound="1" name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="removeTag">
+          <annotation source="Definition">
+            <detail key="modifies">tags</detail>
+          </annotation>
+          <parameter lowerBound="1" name="tag" type="Context:LocalizationTag"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:ContextProvider">
+        <xsd:sequence>
+          <xsd:element ecore:opposite="provider" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="tags" type="Context:LocalizationTag"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="configuration" type="Context:ConfigurationProperty"/>
+        </xsd:sequence>
+        <xsd:attribute name="apiClass" type="ecore:EString" use="required"/>
+        <xsd:attribute ecore:transient="true" name="api" type="Context:LocalisationProvider"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Mouse">
+    <xsd:complexContent>
+      <xsd:extension base="Context:HapticalInteractionResources">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="motionSensor" type="Context:PointingInputChannel"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="buttons" type="Context:MessageInputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Keyboard">
+    <xsd:complexContent>
+      <xsd:extension base="Context:HapticalInteractionResources">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="keys" type="Context:MessageInputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Display">
+    <xsd:complexContent>
+      <xsd:extension base="Context:OutputInteractionResource">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="direction" type="Context:Vector"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="screen" type="Context:GraphicalOutputChannel"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="xPixels" type="ecore:EInt"/>
+        <xsd:attribute ecore:unsettable="false" name="yPixels" type="ecore:EInt"/>
+        <xsd:attribute ecore:unsettable="false" name="size" type="ecore:EInt"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="InputInteractionResource">
+    <xsd:complexContent>
+      <xsd:extension base="Context:InteractionResource"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="OutputInteractionResource">
+    <xsd:complexContent>
+      <xsd:extension base="Context:InteractionResource"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="GestureIR">
+    <xsd:complexContent>
+      <xsd:extension base="Context:HapticalInteractionResources">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="gestureRecognition" type="Context:MessageInputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Touchpad">
+    <xsd:complexContent>
+      <xsd:extension base="Context:HapticalInteractionResources"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:implements="Context:Touchpad" name="Touchscreen">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Display">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="touchSurface" type="Context:PointingInputChannel"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="gestureRecognition" type="Context:MessageInputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Device">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="addInteractionResource">
+          <annotation source="Definition">
+            <detail key="modifies">resources</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">The id must be set only if the id of the interactionResource is &lt;code&gt;null&lt;/code&gt;.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="interactionResource" type="Context:InteractionResource"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="removeInteractionResource">
+          <annotation source="Definition">
+            <detail key="modifies">resources</detail>
+          </annotation>
+          <parameter lowerBound="1" name="interactionResource" type="Context:InteractionResource"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:ElementWithPosition">
+        <xsd:sequence>
+          <xsd:element ecore:opposite="device" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="resources" type="Context:InteractionResource"/>
+        </xsd:sequence>
+        <xsd:attribute default="false" ecore:unsettable="false" name="mobile" type="ecore:EBoolean"/>
+        <xsd:attribute ecore:opposite="devices" ecore:reference="Context:Environment" name="environment" type="xsd:anyURI"/>
+        <xsd:attribute name="manufacturer" type="ecore:EString"/>
+        <xsd:attribute name="modelName" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="PhysicalDevice">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation exceptions="Properties:ActorServiceCallException" name="turnOn">
+          <annotation source="Situation"/>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Attempts to set the value 'true' to the 'on' property of this device. The ActorServiceCallException is thrown if the 'on' property is not set, its actor is not set or the actor throws an exception.</detail>
+          </annotation>
+        </operation>
+        <operation exceptions="Properties:ActorServiceCallException" name="turnOff">
+          <annotation source="Situation"/>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">Attempts to set the value 'false' to the 'on' property of this device. The ActorServiceCallException is thrown if the 'on' property is not set, its actor is not set or the actor throws an exception.</detail>
+          </annotation>
+        </operation>
+        <operation lowerBound="1" name="getOnValue" type="ecore:EBoolean">
+          <annotation source="Situation"/>
+        </operation>
+        <operation name="addSubDevice">
+          <annotation source="Definition">
+            <detail key="modifies">subDevice</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">The id must be set only if the id of the subDevice is &lt;code&gt;null&lt;/code&gt;.</detail>
+          </annotation>
+          <parameter lowerBound="1" name="subDevice" type="Context:PhysicalDevice"/>
+          <parameter name="id" type="ecore:EString"/>
+        </operation>
+        <operation name="removeSubDevice">
+          <annotation source="Definition">
+            <detail key="modifies">subDevice</detail>
+          </annotation>
+          <parameter lowerBound="1" name="subDevice" type="Context:PhysicalDevice"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:Device">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="on" type="Properties:BooleanProperty"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="powerUsage" type="Properties:DoubleProperty"/>
+          <xsd:element ecore:opposite="parentDevice" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="subDevice" type="Context:PhysicalDevice"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:opposite="subDevice" ecore:reference="Context:PhysicalDevice" name="parentDevice" type="xsd:anyURI"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="PhysicalDeviceWithProgram">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="program" type="Properties:TextProperty"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="secondsRemaining" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Lamp">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setNewLampeType">
+          <annotation source="Definition">
+            <detail key="modifies">lampType</detail>
+          </annotation>
+          <parameter lowerBound="1" name="lampType" type="Context:LampType"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="dimmingLevel" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="lampType" type="Context:LampType"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Notebook">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Hood">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PC">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Fan">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="speed" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="RemoteControl">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="TV">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="currentProgram" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Oven">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDeviceWithProgram">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="temperature" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Dishwasher">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDeviceWithProgram"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="WashingMachine">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDeviceWithProgram"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Blind">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="level" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Hob">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="heatLevel" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Cooker">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="CookTop">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Fridge">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="temperature" type="Properties:IntegerProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Mixer">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Radio">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Socket">
+    <xsd:annotation>
+      <xsd:documentation>A power socket device, which should only be used if the connected physical device is unknown.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Heater">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="temperatureDemand" type="Properties:DoubleProperty"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="temperatureCurrent" type="Properties:DoubleProperty"/>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="valvePosition" type="Properties:DoubleProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Meter">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="readings" type="Context:MeterReading"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="WaterStorageTank">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="temperatureSensor" type="Context:TemperatureSensor"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="capacity" type="ecore:EInt"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="HeatingRod">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalDevice">
+        <xsd:attribute ecore:unsettable="false" name="maximumPowerWatts" type="ecore:EInt" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="MeterReading">
+    <xsd:annotation>
+      <xsd:documentation>A MeterReading describes a reading of meter data of a specific type, described by the attributes of the MeterReading.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" name="value" type="Properties:DoubleProperty"/>
+    </xsd:sequence>
+    <xsd:attribute ecore:unsettable="false" name="subject" type="Context:ReadingSubject"/>
+    <xsd:attribute ecore:unsettable="false" name="measurand" type="Context:ReadingMeasurand"/>
+    <xsd:attribute ecore:unsettable="false" name="measurementMethod" type="Context:ReadingMeasurementMethod"/>
+    <xsd:attribute ecore:unsettable="false" name="rate" type="Context:ReadingRate"/>
+    <xsd:attribute name="identifier" type="ecore:EString">
+      <xsd:annotation>
+        <xsd:documentation>identifier of this reading, must be unique at least within the Meter.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:simpleType name="ReadingSubject">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration ecore:name="abstractObject" value="abstract Object"/>
+      <xsd:enumeration value="Electricity"/>
+      <xsd:enumeration ecore:name="HeatCostAllocation" ecore:value="4" value="Heat Cost Allocation"/>
+      <xsd:enumeration ecore:value="5" value="Chillness"/>
+      <xsd:enumeration ecore:value="6" value="Heat"/>
+      <xsd:enumeration ecore:value="7" value="Gas"/>
+      <xsd:enumeration ecore:name="WaterCold" ecore:value="8" value="Water (cold)"/>
+      <xsd:enumeration ecore:name="WaterHot" ecore:value="9" value="Water (hot)"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReadingMeasurand">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration ecore:value="15" value="Consumption"/>
+      <xsd:enumeration ecore:name="ActivePower" value="Active Power"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReadingMeasurementMethod">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration ecore:name="InstantaneousValue" ecore:value="7" value="Instantaneous Value"/>
+      <xsd:enumeration ecore:name="MeterReading" ecore:value="8" value="Meter Reading"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReadingRate">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Total"/>
+      <xsd:enumeration ecore:name="Rate1" value="Rate 1"/>
+      <xsd:enumeration ecore:name="Rate2" value="Rate 2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" name="PhysicalSensorDevice">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Device">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="value" type="Properties:DoubleProperty"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LuminanceSensor">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalSensorDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="TemperatureSensor">
+    <xsd:complexContent>
+      <xsd:extension base="Context:PhysicalSensorDevice"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Channel" proxy:callbacks="setNewAvailable,interactionRequested,interactionFinished" proxy:proxyClassName="apiClass" proxy:proxyConfiguration="configuration" proxy:proxyReference="api" proxy:proxySetter="setApiInstance">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="typeParameters" source="http://www.eclipse.org/emf/2002/Ecore">
+        <typeParameter bounds="UI:ConcreteInteractor" name="C"/>
+        <typeParameter bounds="Context:ChannelAPI" name="A"/>
+      </xsd:appinfo>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation lowerBound="1" name="setNewDistributionState">
+          <parameter lowerBound="1" name="newDistributionState" type="Context:DistributionState"/>
+        </operation>
+        <operation lowerBound="1" name="add">
+          <parameter lowerBound="1" name="element" type="C"/>
+        </operation>
+        <operation lowerBound="1" name="remove">
+          <parameter lowerBound="1" name="elementID" type="C"/>
+        </operation>
+        <operation name="setNewAvailable">
+          <annotation source="Situation"/>
+          <parameter lowerBound="1" name="newAvailable" type="ecore:EBoolean"/>
+        </operation>
+        <operation name="setApiInstance">
+          <annotation source="Situation">
+            <detail key="modifies">api</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newAPI" type="A"/>
+        </operation>
+        <operation name="getInteractionResource" type="Context:InteractionResource"/>
+        <operation name="interactionRequested">
+          <annotation source="Situation"/>
+        </operation>
+        <operation name="interactionFinished">
+          <annotation source="Situation"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:EnvironmentElement">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="configuration" type="Context:ConfigurationProperty"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="distributionState" type="Context:DistributionState" use="required"/>
+        <xsd:attribute ecore:reference="C" name="elements">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:transient="true" ecore:type="A" name="api" type="Context:ChannelAPI"/>
+        <xsd:attribute ecore:unsettable="false" name="available" type="ecore:EBoolean"/>
+        <xsd:attribute name="apiClass" type="ecore:EString"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Context:Channel{UI:MessageInput, Context:MessageInputChannelAPI}" ecore:implements="UI:OneDimensional" name="MessageInputChannel">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Channel"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Context:Channel{UI:MessageOutput, Context:MessageOutputChannelAPI}" ecore:implements="UI:OneDimensional" name="MessageOutputChannel">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Channel"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Context:Channel{UI:Pointing, Context:PointingInputChannelAPI}" ecore:implements="UI:TwoDimensional" name="PointingInputChannel">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Channel"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType ecore:extends="Context:Channel{UI:GraphicalOutput, Context:GraphicalOutputChannelAPI}" ecore:implements="UI:TwoDimensional" name="GraphicalOutputChannel">
+    <xsd:complexContent>
+      <xsd:extension base="Context:Channel"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="DistributionState">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CALCULATING"/>
+      <xsd:enumeration value="DONE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="Loudspeaker">
+    <xsd:complexContent>
+      <xsd:extension base="Context:OutputInteractionResource">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="voice" type="Context:MessageOutputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Microphone">
+    <xsd:complexContent>
+      <xsd:extension base="Context:InputInteractionResource">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" minOccurs="0" name="voiceRecognition" type="Context:MessageInputChannel"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Vector">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="distance" type="ecore:EDouble">
+          <annotation source="Definition"/>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">calculates the distance to a point described by another vector</detail>
+          </annotation>
+          <parameter name="vector" type="Context:Vector"/>
+        </operation>
+        <operation name="setCoordinates">
+          <annotation source="Definition">
+            <detail key="modifies">x,y,z</detail>
+          </annotation>
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">updates the cooridnates of this vector</detail>
+          </annotation>
+          <parameter lowerBound="1" name="newX" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="newY" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="newZ" type="ecore:EDouble"/>
+        </operation>
+        <operation lowerBound="1" name="copy" type="Context:Vector">
+          <annotation source="http://www.eclipse.org/emf/2002/GenModel">
+            <detail key="documentation">copies this vector</detail>
+          </annotation>
+        </operation>
+      </xsd:appinfo>
+      <xsd:documentation>3D vector</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute default="-1.0" ecore:unsettable="false" name="x" type="ecore:EDouble">
+      <xsd:annotation>
+        <xsd:documentation>X coordinate</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute default="-1.0" ecore:unsettable="false" name="y" type="ecore:EDouble">
+      <xsd:annotation>
+        <xsd:documentation>Y coordinate</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute default="-1.0" ecore:unsettable="false" name="z" type="ecore:EDouble">
+      <xsd:annotation>
+        <xsd:documentation>Z coordinate</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="Area">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="setNewOrigin">
+          <annotation source="Definition">
+            <detail key="modifies">origin</detail>
+          </annotation>
+          <parameter lowerBound="1" name="originX" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="originY" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="originZ" type="ecore:EDouble"/>
+        </operation>
+        <operation name="setNewSpan">
+          <annotation source="Definition">
+            <detail key="modifies">span</detail>
+          </annotation>
+          <parameter lowerBound="1" name="spanX" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="spanY" type="ecore:EDouble"/>
+          <parameter lowerBound="1" name="spanZ" type="ecore:EDouble"/>
+        </operation>
+        <operation name="contains" type="ecore:EBoolean">
+          <parameter name="position" type="Context:Vector"/>
+        </operation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" name="origin" type="Context:Vector"/>
+      <xsd:element ecore:resolveProxies="true" name="span" type="Context:Vector"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="Modality">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Vocal"/>
+      <xsd:enumeration value="Graphic"/>
+      <xsd:enumeration value="Haptic"/>
+      <xsd:enumeration value="Audio"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" name="HapticalInteractionResources">
+    <xsd:complexContent>
+      <xsd:extension base="Context:InputInteractionResource"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.channel.api.ChannelAPI" name="ChannelAPI">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.channel.api.MessageInputChannelAPI" name="MessageInputChannelAPI">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.channel.api.PointingInputChannelAPI" name="PointingInputChannelAPI">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.channel.api.MessageOutputChannelAPI" name="MessageOutputChannelAPI">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.channel.api.GraphicalOutputChannelAPI" name="GraphicalOutputChannelAPI">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.context.providers.location.LocalisationProvider" name="LocalisationProvider">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:complexType name="ConfigurationProperty">
+    <xsd:attribute name="key" type="ecore:EString"/>
+    <xsd:attribute name="value" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType name="AssistantConnection">
+    <xsd:attribute name="description" type="ecore:EString"/>
+    <xsd:attribute ecore:reference="Context:Assistant" name="connectedAssistant" type="xsd:anyURI" use="required"/>
+  </xsd:complexType>
+  <xsd:simpleType ecore:instanceClass="org.sercho.masp.models.Context.PlaceInfo" name="PlaceInfo">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="Domain">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Other"/>
+      <xsd:enumeration value="Living"/>
+      <xsd:enumeration value="Comfort"/>
+      <xsd:enumeration value="Energy"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LampType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Unspecified"/>
+      <xsd:enumeration value="CeilingLamp"/>
+      <xsd:enumeration value="FloorLamp"/>
+      <xsd:enumeration value="TableLamp"/>
+      <xsd:enumeration value="WallLamp"/>
+      <xsd:enumeration value="HangingLamp"/>
+      <xsd:enumeration value="DeviceLamp"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="Tool">
+    <xsd:annotation>
+      <xsd:documentation>A tool that supports the progress of an Activity</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute name="description" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType name="DeviceTool">
+    <xsd:annotation>
+      <xsd:documentation>A special device tool that requires device-funtions (Property) to support an Activity</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="Context:Tool">
+        <xsd:attribute ecore:reference="Properties:Property{?}" name="controls">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute ecore:reference="Context:PhysicalDevice" name="appliesTo" type="xsd:anyURI" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" ecore:interface="true" name="Need">
+    <xsd:annotation>
+      <xsd:documentation>A need states the requirement of an execution of a special Activity</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" minOccurs="0" name="configuration" type="Context:ConfigurationProperty"/>
+    </xsd:sequence>
+    <xsd:attribute ecore:reference="Context:Activity" name="fulfilledBy">
+      <xsd:simpleType>
+        <xsd:list itemType="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute name="description" type="ecore:EString"/>
+  </xsd:complexType>
+</xsd:schema>

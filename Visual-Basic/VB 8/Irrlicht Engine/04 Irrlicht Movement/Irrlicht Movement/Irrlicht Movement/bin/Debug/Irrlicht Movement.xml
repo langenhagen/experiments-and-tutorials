@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+IrrlichtMovement
+</name>
+</assembly>
+<members>
+<member name="M:Irrlicht_Movement._Movement.Program.Main(System.String[])">
+	<summary>
+ Main entry point for the program.
+ </summary>
+	<param name="args">Arguments to pass the software.</param>
+</member>
+</members>
+</doc>

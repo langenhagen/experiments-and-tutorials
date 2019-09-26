@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ListEl(dynDataStructures)", "ListEl(dynDataStructures)\ListEl(dynDataStructures).vcproj", "{E2D29052-19F7-4F48-A13F-EF15AA3D9AC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2D29052-19F7-4F48-A13F-EF15AA3D9AC0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E2D29052-19F7-4F48-A13F-EF15AA3D9AC0}.Debug|Win32.Build.0 = Debug|Win32
+		{E2D29052-19F7-4F48-A13F-EF15AA3D9AC0}.Release|Win32.ActiveCfg = Release|Win32
+		{E2D29052-19F7-4F48-A13F-EF15AA3D9AC0}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Context:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Context="http://www.dai-labor.de/~masp/Context-1.2.ecore" xmlns:Properties="http://www.dai-labor.de/~masp/Properties.ecore">
+  <places xsi:type="Context:Room" id="" name="Kitchen" elements="//@devices.1 //@devices.3">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="KITCHEN DOOR" name="Kitchen Door" target="//@places.1">
+      <position/>
+      <open/>
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="" name="Living Room" elements="//@devices.0">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="LIVING ROOM DOOR" name="Living Room Door" target="//@places.2">
+      <position/>
+      <open/>
+      <span/>
+    </doors>
+  </places>
+  <places xsi:type="Context:Room" id="" name="Office" elements="//@devices.2">
+    <areas>
+      <origin/>
+      <span/>
+    </areas>
+    <doors id="OFFICE DOOR" name="Office Door" target="//@places.1">
+      <span/>
+    </doors>
+  </places>
+  <devices xsi:type="Context:Lamp" id="STANDING LAMP" name="Standing Lamp" place="//@places.1">
+    <position/>
+    <on actor="//@serviceContainers.0/@services.0" sensor="//@serviceContainers.0/@services.1"/>
+    <powerUsage xsi:type="Properties:IntegerProperty" sensor="//@serviceContainers.0/@services.2"/>
+    <dimmingLevel/>
+  </devices>
+  <devices xsi:type="Context:Dishwasher" id="KITCHEN DISHWASHER" name="Kitchen Dishwasher" place="//@places.0">
+    <position/>
+    <on sensor="//@serviceContainers.1/@services.0"/>
+    <powerUsage xsi:type="Properties:IntegerProperty" sensor="//@serviceContainers.1/@services.1"/>
+  </devices>
+  <devices xsi:type="Context:Lamp" id="DESK LAMP" name="Desk Lamp" place="//@places.2">
+    <position/>
+    <on actor="//@serviceContainers.2/@services.0" sensor="//@serviceContainers.2/@services.1"/>
+    <powerUsage xsi:type="Properties:IntegerProperty" sensor="//@serviceContainers.2/@services.2"/>
+  </devices>
+  <devices xsi:type="Context:Lamp" id="CEILING LAMP" name="Ceiling Light" place="//@places.0">
+    <position/>
+    <on actor="//@serviceContainers.3/@services.0" sensor="//@serviceContainers.3/@services.1"/>
+    <powerUsage xsi:type="Properties:IntegerProperty" sensor="//@serviceContainers.3/@services.2"/>
+  </devices>
+  <serviceContainers id="UPnPLamp:1">
+    <services xsi:type="Properties:Actor" id="UPnPLamp:1 Power Status Actor" properties="//@devices.0/@on" actorWrapperClassName="org.sercho.masp.models.Context.upnp.SetterActionActorWrapper">
+      <configuration value="UPnPLamp:1" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="SetTarget" key="ActionName"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:1 Power Status Sensor" properties="//@devices.0/@on" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:1" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="Status" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:1 Power Usage Sensor" properties="//@devices.0/@powerUsage" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:1" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:PowerSensor" key="ServiceID"/>
+      <configuration value="Value" key="StateVariable"/>
+    </services>
+  </serviceContainers>
+  <serviceContainers id="Miele Dishwasher">
+    <services xsi:type="Properties:Sensor" id="Dishwasher Power Status Sensor" properties="//@devices.1/@on" sensorWrapperClassName="org.sercho.masp.models.Context.miele.MieleProgramSensor">
+      <configuration value="localhost" key="Address"/>
+      <configuration value="6" key="UID"/>
+      <configuration value="false" key="DefaultValue"/>
+      <configuration value="true" key="Program_2"/>
+      <configuration value="true" key="Program_3"/>
+      <configuration value="true" key="Program_4"/>
+      <configuration value="true" key="Program_5"/>
+      <configuration value="true" key="Program_9"/>
+      <configuration value="true" key="Program_145"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="Dishwasher Power Usage Sensor" properties="//@devices.1/@powerUsage" sensorWrapperClassName="org.sercho.masp.models.Context.miele.MieleProgramSensor">
+      <configuration value="localhost" key="Address"/>
+      <configuration value="6" key="UID"/>
+      <configuration value="0" key="DefaultValue"/>
+      <configuration value="2" key="Program_2"/>
+      <configuration value="2" key="Program_3"/>
+      <configuration value="2" key="Program_4"/>
+      <configuration value="130" key="Program_5"/>
+      <configuration value="2" key="Program_9"/>
+    </services>
+  </serviceContainers>
+  <serviceContainers id="UPnPLamp:2">
+    <services xsi:type="Properties:Actor" id="UPnPLamp:2 Power Status Actor" properties="//@devices.2/@on" actorWrapperClassName="org.sercho.masp.models.Context.upnp.SetterActionActorWrapper">
+      <configuration value="UPnPLamp:2" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="SetTarget" key="ActionName"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:2 Power Status Sensor" properties="//@devices.2/@on" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:2" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="Status" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:2 Power Usage Sensor" properties="//@devices.2/@powerUsage" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:2" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:PowerSensor" key="ServiceID"/>
+      <configuration value="Value" key="StateVariable"/>
+    </services>
+  </serviceContainers>
+  <serviceContainers id="UPnPLamp:3">
+    <services xsi:type="Properties:Actor" id="UPnPLamp:3 Power Status Actor" properties="//@devices.3/@on" actorWrapperClassName="org.sercho.masp.models.Context.upnp.SetterActionActorWrapper">
+      <configuration value="UPnPLamp:3" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="SetTarget" key="ActionName"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:3 Power Status Sensor" properties="//@devices.3/@on" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:3" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:Switch" key="ServiceID"/>
+      <configuration value="Status" key="StateVariable"/>
+    </services>
+    <services xsi:type="Properties:Sensor" id="UPnPLamp:3 Power Usage Sensor" properties="//@devices.3/@powerUsage" sensorWrapperClassName="org.sercho.masp.models.Context.upnp.StateVariableSensorWrapper">
+      <configuration value="UPnPLamp:3" key="UDN"/>
+      <configuration value="urn:upnp-org:serviceId:PowerSensor" key="ServiceID"/>
+      <configuration value="Value" key="StateVariable"/>
+    </services>
+  </serviceContainers>
+</Context:Environment>

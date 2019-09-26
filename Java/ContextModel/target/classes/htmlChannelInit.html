@@ -1,0 +1,108 @@
+<html>
+	<style>
+		p, div, td, tr, tbody, table {
+			margin: 0px;
+			padding: 0px;
+			spacing: 0px;
+			text-align: center;
+		}
+		img {
+			border-color: White;
+		}
+		table {
+			height: 100%;
+			width: 100%;
+		}
+	</style>
+	
+	<script>
+		function add(elementID, content, x, y, z, width, height) { 
+			var div = document.createElement('div');
+			document.getElementById('_root').appendChild(div);
+			
+			attrib = document.createAttribute('id'); 
+			attrib.nodeValue = elementID;
+			div.setAttributeNode(attrib);
+
+			div.style.position = 'absolute'; 
+			div.style.width = width; 
+			div.style.height = height; 
+			div.style.left = x; 
+			div.style.top = y; 
+			div.style.zIndex = 100-z;
+
+			document.getElementById(elementID).innerHTML = content; 
+		}
+		function addStyle(elementID, content) {
+			var div = document.createElement('style');
+			document.getElementById('_root').parentNode.parentNode.appendChild(div);
+						
+			attrib = document.createAttribute('id'); 
+			attrib.nodeValue = elementID;
+			div.setAttributeNode(attrib);
+	
+			div.appendChild(document.createTextNode(content));
+		} 
+		function update(elementID, content) { 
+			var div = document.getElementById(elementID);
+			div.innerHTML = content;
+		} 
+		function remove(elementID) { 
+			var div = document.getElementById(elementID); 
+			div.parentNode.removeChild(div);  
+		} 
+		function newHeight(elementID, height) { 
+			var div = document.getElementById(elementID); 
+			div.style.height = height;  
+		} 
+		function newWidth(elementID, width) { 
+			var div = document.getElementById(elementID); 
+			div.style.width = width;  
+		} 
+		function newPositionX(elementID, x) { 
+			var div = document.getElementById(elementID); 
+			div.style.left = x;  
+		} 
+		function newPositionY(elementID, y) { 
+			var div = document.getElementById(elementID); 
+			div.style.top = y;  
+		} 
+		function newPositionZ(elementID, z) { 
+			var div = document.getElementById(elementID); 
+			div.style.zIndex = z;  
+		} 
+	</script>
+	<script src='/dwr/util.js'></script>
+	<script>
+		var sessionId = null;
+		function register() {
+			if (sessionId != dwr.engine._scriptSessionId) {
+				sessionId = dwr.engine._scriptSessionId;
+				HTMLGraphicalOutputChannel.registerClient(clientID);
+				// clear page
+				document.getElementById('_root').innerHTML = '';
+			}
+		}
+		function resize() {
+			HTMLGraphicalOutputChannel.setWindowSize(clientID, window.innerWidth, window.innerHeight);
+		}
+		function kill() {
+		    document.location.href = "/clientDisconnected.html";
+		}
+	</script>
+	<script src='/dwr/interface/HTMLGraphicalOutputChannel.js'></script>
+	<script src='/dwr/engine.js'></script>
+	<script>
+		var clientID = '%CLIENT_ID%';
+	
+		dwr.engine.setActiveReverseAjax(true);
+
+		register();
+		window.setInterval('register()', 1000);
+		// nop:
+		window.setInterval('resize()', 10000);
+	</script>
+	<body onresize="resize();">
+		<div id="_root"></div>
+	</body>
+</html>

@@ -1,0 +1,8 @@
+Parsing config file "Config.txt"... 	Done.
+Reading file "res/Template.h"... 	Done.
+Reading file "res/Template.hpp"... 	Done.
+Reading file "res/Template.cpp"... 	Done.
+Scene.hpp exists already and will not be created.
+Dumb.h exists already and will not be created.
+Dumb.cpp exists already and will not be created.
+DONE.

@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Artikel(Methoden)", "Artikel(Methoden)\Artikel(Methoden).vcproj", "{2DAF04EF-D685-4425-A693-520DD7C8F777}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DAF04EF-D685-4425-A693-520DD7C8F777}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2DAF04EF-D685-4425-A693-520DD7C8F777}.Debug|Win32.Build.0 = Debug|Win32
+		{2DAF04EF-D685-4425-A693-520DD7C8F777}.Release|Win32.ActiveCfg = Release|Win32
+		{2DAF04EF-D685-4425-A693-520DD7C8F777}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

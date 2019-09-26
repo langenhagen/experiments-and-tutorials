@@ -1,0 +1,13 @@
+﻿Build started 22.10.2015 09:52:51.
+     1>Project "D:\Dev\Cpp\Hello_Cpp\StructIterableTest\StructIterableTest.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         E:\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+       Link:
+         E:\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dev\Cpp\Hello_Cpp\Debug\StructIterableTest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\Dev\Cpp\Hello_Cpp\Debug\StructIterableTest.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dev\Cpp\Hello_Cpp\Debug\StructIterableTest.lib" /MACHINE:X86 Debug\Main.obj
+         StructIterableTest.vcxproj -> D:\Dev\Cpp\Hello_Cpp\Debug\StructIterableTest.exe
+     1>Done Building Project "D:\Dev\Cpp\Hello_Cpp\StructIterableTest\StructIterableTest.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.23

@@ -1,0 +1,139 @@
+description ="""
+Example project for a Gradle build
+
+Project name: ${project.name}
+
+More detailed information here... """
+
+apply plugin: 'java'
+apply plugin: 'application'
+//apply plugin: 'com.android.application' // for android projects
+// check out: https://plugins.gradle.org/
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// buildscript {
+//     // If your build script needs to use external libraries,
+//     // you can add them to the script’s classpath in the build script itself.
+//     // You do this using the buildscript() method, passing in a closure which declares
+//     // the build script classpath.
+//
+//     repositories {
+//         google()
+//         jcenter()
+//     }
+//     dependencies {
+//         classpath 'com.android.tools.build:gradle:3.0.1'
+//         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.30'
+//     }
+// }
+
+repositories {
+    mavenCentral()
+
+/* also possible to specify custom maven repos
+    maven {
+        url "http://repo.mycompany.com/maven2"
+    }*/
+
+// maven ("http://jcenter.bintray.com/")  // also possible
+
+/* also ivy repos can be set
+    ivy {
+        url "http://repo.mycompany.com/repo"
+    }*/
+
+}
+
+// defaultTasks 'clean', 'compile'         // will be executed if not other tasks are specified
+
+
+dependencies {
+    compile "joda-time:joda-time:2.2"
+    testCompile "junit:junit:4.12"
+
+    println 'I am part of the configuration phase and will always be invoked. Always. Always. Always.'
+
+    // also possible
+    // compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    // testCompile group: 'junit', name: 'junit', version: '4.+'
+    // runtime files('libs/library1.jar', 'libs/library2.jar')
+    // runtime fileTree(dir: 'libs', include: '*.jar')
+    // compile fileTree(dir: "${System.properties['user.home']}/libs/cargo", include: '*.jar')
+}
+
+jar {
+    baseName = 'my-gradle'
+    version =  '0.1.0'
+}
+
+mainClassName = 'hello.HelloWorld'
+
+
+task hello {
+    group 'mygroup'
+    description 'my description'
+
+    doFirst {
+        println 'Hello Gradle'
+        def homePath = System.properties['user.home']
+        println homePath
+    }
+    doLast {
+        println 'Bye bye Gradle'
+    }
+}
+
+task my2ndTask(dependsOn: 'hello') {
+    group 'mygroup'
+    description 'shows how dependsOn can be used'
+    doLast {
+        println "I'm not a default task!"
+    }
+}
+
+task my3rdTask {
+    group 'mygroup'
+    description 'shows how dependsOn can be used externally. I think this is Groovy'
+    doLast {
+        println "I'm not a default task!"
+    }
+}
+my3rdTask.dependsOn my2ndTask
+
+task myTask4 {
+    group 'mygroup'
+    description 'shows how do-last can be chained together to an existing tasks'
+}
+myTask4.doLast { println 'will be executed right after' }
+myTask4.doLast { println 'this one will also be executed right after :)' }
+
+
+task myTask5 {
+    group 'mygroup'
+    description 'shows how projects can be skipped thanks to the onlyIf method'
+    doLast {
+        println 'should be skipped :)'
+    }
+    onlyIf {
+        project.hasProperty('doing my task 5')
+    }
+}
+
+
+task wrapper(type: Wrapper /* note thet type: Wrapper*/) {
+    group 'mygroup'
+    description 'usually `gradle wrapper` downloads the latest gradle version, '
+    'but you can specify the version yourself. One can also define the version on the command line:'
+    '`gradle wrapper --gradle-version 4.4` '
+    gradleVersion = '2.11'
+}
+
+task myCopyTask(type: Copy) {
+    group 'mygroup'
+    description 'A Copy task type can be used to specify a task, which is able to copy files.'
+
+    from 'myCopyTaskSource'
+    into 'myCopyTaskDestination'
+}

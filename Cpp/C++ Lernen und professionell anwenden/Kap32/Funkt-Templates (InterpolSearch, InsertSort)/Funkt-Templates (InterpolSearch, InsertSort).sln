@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Funkt-Templates (InterpolSearch, InsertSort)", "Funkt-Templates (InterpolSearch, InsertSort).vcproj", "{6AD7626F-81F4-4A50-87B7-C45E95F184BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6AD7626F-81F4-4A50-87B7-C45E95F184BA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6AD7626F-81F4-4A50-87B7-C45E95F184BA}.Debug|Win32.Build.0 = Debug|Win32
+		{6AD7626F-81F4-4A50-87B7-C45E95F184BA}.Release|Win32.ActiveCfg = Release|Win32
+		{6AD7626F-81F4-4A50-87B7-C45E95F184BA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,2 @@
+CUDA  Setup hints for setting up with VS2010
+Use the vcxproj of "CUDA_02_MANUAL_SETUP" its pretty clean and prototypical

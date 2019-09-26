@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Identification needed</title>
+    </head>
+    <style>
+        body {
+            background-color: #666666;
+            margin: auto;
+            width: 100%;
+            font-family: Arial;
+            text-align: center;
+            margin-top: 200px;
+        }
+        h1 {
+            color: #999999;
+        }
+        p {
+            color: #DDDDDD;
+        }
+        a {
+            text-decoration: none;
+            text-weight: bold;
+            
+        }
+    </style>
+    <body>
+        <h1>Please identify your client:</h1>
+        <p>You must provide an identification string for your client.</p>
+        <p><input id="clientId"><input type="button" value="identify" onclick="document.location.href='/masp/'+getElementById('clientId').value;"></p>
+    </body>
+</html>

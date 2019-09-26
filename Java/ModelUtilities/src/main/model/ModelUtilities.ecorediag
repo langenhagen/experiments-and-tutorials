@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_pob0YfdUEd-VSOwQiYhl_w" type="EcoreTools" measurementUnit="Pixel">
+  <children xmi:type="notation:Node" xmi:id="_qGgQcPdUEd-VSOwQiYhl_w" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_qGjTwPdUEd-VSOwQiYhl_w" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_qGjTwfdUEd-VSOwQiYhl_w" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_ru_4QPdUEd-VSOwQiYhl_w" type="2001">
+        <element xmi:type="ecore:EAttribute" href="ModelUtilities.ecore#//Entry/key"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_ru_4QfdUEd-VSOwQiYhl_w"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_raqnAPdUEd-VSOwQiYhl_w" type="2001">
+        <element xmi:type="ecore:EAttribute" href="ModelUtilities.ecore#//Entry/value"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_raqnAfdUEd-VSOwQiYhl_w"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_qGjTwvdUEd-VSOwQiYhl_w"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_qGjTw_dUEd-VSOwQiYhl_w"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_qGjTxPdUEd-VSOwQiYhl_w"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_qGkh4PdUEd-VSOwQiYhl_w" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_qGkh4fdUEd-VSOwQiYhl_w"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_qGkh4vdUEd-VSOwQiYhl_w"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_qGkh4_dUEd-VSOwQiYhl_w"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_qGgQcfdUEd-VSOwQiYhl_w" fontColor="4210752" fontName="Segoe UI" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="ModelUtilities.ecore#//Entry"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_qGgQcvdUEd-VSOwQiYhl_w" x="195" y="190"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_pob0YvdUEd-VSOwQiYhl_w"/>
+  <element xmi:type="ecore:EPackage" href="ModelUtilities.ecore#/"/>
+</notation:Diagram>

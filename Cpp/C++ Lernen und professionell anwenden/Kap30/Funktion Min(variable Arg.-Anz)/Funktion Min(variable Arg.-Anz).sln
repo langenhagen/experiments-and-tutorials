@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Funktion Min(variable Arg.-Anz)", "Funktion Min(variable Arg.-Anz).vcproj", "{8D7F296D-210F-4539-AE2F-27009DA63384}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D7F296D-210F-4539-AE2F-27009DA63384}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8D7F296D-210F-4539-AE2F-27009DA63384}.Debug|Win32.Build.0 = Debug|Win32
+		{8D7F296D-210F-4539-AE2F-27009DA63384}.Release|Win32.ActiveCfg = Release|Win32
+		{8D7F296D-210F-4539-AE2F-27009DA63384}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

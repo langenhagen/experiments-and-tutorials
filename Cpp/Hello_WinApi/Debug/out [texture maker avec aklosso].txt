@@ -1,0 +1,421 @@
+** You caught the window! **
+
+hwnd= 001403D2
+atomWindowType= 49909
+dwWindowStatus= 0
+window text=    Texture Maker Enterprise v3.0.3
+window class=   TTMMainForm
+
+child:
+hwnd= 002B0392
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 000402FE
+atomWindowType= 49932
+dwWindowStatus= 0
+window text=    Favoriten
+window class=   TFavorites
+
+child:
+hwnd= 002403CC
+atomWindowType= 49911
+dwWindowStatus= 0
+window text=    Schaltflächen
+window class=   TTBToolWindow
+
+child:
+hwnd= 001D043C
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 000903B4
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 000C072C
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 000402F6
+atomWindowType= 49931
+dwWindowStatus= 0
+window text=    
+window class=   TScrollBar
+
+child:
+hwnd= 001103E0
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 0006034C
+atomWindowType= 49927
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedScroller
+
+child:
+hwnd= 002A03C0
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 0002031A
+atomWindowType= 49936
+dwWindowStatus= 0
+window text=    Umkehren
+window class=   TCheckBox
+
+child:
+hwnd= 000202E0
+atomWindowType= 49936
+dwWindowStatus= 0
+window text=    Zufälliger Versatz
+window class=   TCheckBox
+
+child:
+hwnd= 000202E2
+atomWindowType= 49936
+dwWindowStatus= 0
+window text=    Umkehren
+window class=   TCheckBox
+
+child:
+hwnd= 000202E4
+atomWindowType= 49938
+dwWindowStatus= 0
+window text=    Anpassen
+window class=   TRadioButton
+
+child:
+hwnd= 000202E8
+atomWindowType= 49938
+dwWindowStatus= 0
+window text=    Kacheln
+window class=   TRadioButton
+
+child:
+hwnd= 00020304
+atomWindowType= 49925
+dwWindowStatus= 0
+window text=    
+window class=   TAdvComboBox
+
+child:
+hwnd= 001403B2
+atomWindowType= 49933
+dwWindowStatus= 0
+window text=    100
+window class=   TSpinEdit
+
+child:
+hwnd= 000202DC
+atomWindowType= 49935
+dwWindowStatus= 0
+window text=    
+window class=   TBitBtn
+
+child:
+hwnd= 0014043E
+atomWindowType= 49934
+dwWindowStatus= 0
+window text=    
+window class=   TSpinButton
+
+child:
+hwnd= 000D032E
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 000202DA
+atomWindowType= 49937
+dwWindowStatus= 0
+window text=    sin((y+2/3)*2*Pi)*0.5+0.5
+window class=   TEdit
+
+child:
+hwnd= 00020318
+atomWindowType= 49937
+dwWindowStatus= 0
+window text=    sin((y+1/3)*2*Pi)*0.5+0.5
+window class=   TEdit
+
+child:
+hwnd= 0002030A
+atomWindowType= 49937
+dwWindowStatus= 0
+window text=    sin(y*2*Pi)*0.5+0.5
+window class=   TEdit
+
+child:
+hwnd= 0021069E
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 00020316
+atomWindowType= 49936
+dwWindowStatus= 0
+window text=    Kantenglättung
+window class=   TCheckBox
+
+child:
+hwnd= 000202F0
+atomWindowType= 49933
+dwWindowStatus= 0
+window text=    0
+window class=   TSpinEdit
+
+child:
+hwnd= 000202EC
+atomWindowType= 49935
+dwWindowStatus= 0
+window text=    
+window class=   TBitBtn
+
+child:
+hwnd= 000202EE
+atomWindowType= 49934
+dwWindowStatus= 0
+window text=    
+window class=   TSpinButton
+
+child:
+hwnd= 000202F4
+atomWindowType= 49925
+dwWindowStatus= 0
+window text=    
+window class=   TAdvComboBox
+
+child:
+hwnd= 000502FC
+atomWindowType= 49936
+dwWindowStatus= 0
+window text=    Boolesche Maske
+window class=   TCheckBox
+
+child:
+hwnd= 000E03D0
+atomWindowType= 49933
+dwWindowStatus= 0
+window text=    0
+window class=   TSpinEdit
+
+child:
+hwnd= 000803AC
+atomWindowType= 49935
+dwWindowStatus= 0
+window text=    
+window class=   TBitBtn
+
+child:
+hwnd= 000F0528
+atomWindowType= 49934
+dwWindowStatus= 0
+window text=    
+window class=   TSpinButton
+
+child:
+hwnd= 00370328
+atomWindowType= 49911
+dwWindowStatus= 0
+window text=    Funktionen
+window class=   TTBToolWindow
+
+child:
+hwnd= 000B06E8
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 000F0332
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 000E0334
+atomWindowType= 49925
+dwWindowStatus= 0
+window text=    
+window class=   TAdvComboBox
+
+child:
+hwnd= 000E0436
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 00070314
+atomWindowType= 49931
+dwWindowStatus= 0
+window text=    
+window class=   TScrollBar
+
+child:
+hwnd= 00160330
+atomWindowType= 49901
+dwWindowStatus= 0
+window text=    
+window class=   TPanel
+
+child:
+hwnd= 001502FA
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 000B0368
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 001206F4
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    SnapIns
+window class=   TTBToolbar
+
+child:
+hwnd= 00060366
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    Texturauswahl
+window class=   TTBToolbar
+
+child:
+hwnd= 001503A4
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 000A036C
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    Menü
+window class=   TTBToolbar
+
+child:
+hwnd= 002A03EC
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    Werkzeuge
+window class=   TTBToolbar
+
+child:
+hwnd= 001103EE
+atomWindowType= 49902
+dwWindowStatus= 0
+window text=    
+window class=   TAdvancedPanel
+
+child:
+hwnd= 002D032C
+atomWindowType= 49926
+dwWindowStatus= 0
+window text=    
+window class=   TMemo
+
+child:
+hwnd= 001D03CE
+atomWindowType= 49929
+dwWindowStatus= 0
+window text=    
+window class=   TStatusBar
+
+child:
+hwnd= 003603F4
+atomWindowType= 49181
+dwWindowStatus= 0
+window text=    
+window class=   MDIClient
+
+child:
+hwnd= 00030BE4
+atomWindowType= 49966
+dwWindowStatus= 0
+window text=    aklosso* [512x512, 100%]
+window class=   TTextureForm
+
+child:
+hwnd= 00030B50
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 00130648
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    Fortschritt
+window class=   TTBToolbar
+
+child:
+hwnd= 00030B66
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 00030B84
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 00030BD6
+atomWindowType= 49910
+dwWindowStatus= 0
+window text=    
+window class=   TTBDock
+
+child:
+hwnd= 00030B92
+atomWindowType= 49930
+dwWindowStatus= 0
+window text=    aklosso
+window class=   TTBToolbar
+
+child:
+hwnd= 00030BE0
+atomWindowType= 49929
+dwWindowStatus= 0
+window text=    
+window class=   TStatusBar
+

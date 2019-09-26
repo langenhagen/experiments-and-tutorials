@@ -1,0 +1,13 @@
+material matPlane
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture SteinRot1.bmp
+			}
+		}
+	}
+}
