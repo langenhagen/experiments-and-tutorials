@@ -12,13 +12,17 @@
 #   rm mytestfile.txt
 
 function clean_up {
-    rm mytestfile.txt foo
+    rm -f mytestfile.txt foo
 }
 trap clean_up EXIT
 clean_up
 
-while inotifywait -e modify .; do  # modify reacts to creation and changes, not to rm and mv
-  ls
+while true; do  # modify reacts to creation and changes, not to rm and mv
+    inotify_output="$(inotifywait -e modify . 2>/dev/null)"  # 2>/dev/null shadows output a la "Setting up watches. Watches established."
+
+    printf "\ninotify_output:\n"
+    printf -- "$inotify_output\n"
+    grep --color 'mytestfile' <<< "$inotify_output"
 done
 
 printf 'Done'
