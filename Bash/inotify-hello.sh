@@ -1,9 +1,8 @@
 #!/bin/bash
 #
-# Showcase the usage of inotify.
+# Showcase the usage of inotify on files.
 #
-# Write something into the file mytestfile.txt (e.g. from another terminal) in the meantime
-#
+# Write something into the file mytestfile.txt (e.g. from another terminal) in the meantime.
 # E.g., execute, one after another:
 #   printf "Hello!" > mytestfile.txt
 #   printf "Hello!" > mytestfile.txt
@@ -35,5 +34,7 @@ inotifywait -e close_write mytestfile.txt && printf '>> Close write mytestfile.t
 while inotifywait -e close_write mytestfile.txt; do
     printf '>> Close write mytestfile.txt 3\n'
 done
+
+# TODO test with dirs
 
 printf 'Done'
