@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Showcase traceback functionality without Exceptions being involved.
 

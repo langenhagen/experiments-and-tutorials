@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Showcase third-party library pynput
 and how to use it as a key logger.

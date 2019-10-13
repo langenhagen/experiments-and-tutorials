@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Detect key presses in Python:
 

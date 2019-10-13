@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import urllib.request
 
 url = 'http://www.google.com'

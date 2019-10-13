@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Showcase the usage of argparse.FileTyes."""
 import argparse
 
