@@ -4,6 +4,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+
+
+#---------------------------------------------------------------------------------------------------
+# Create a simple dataframe with datetimeindex
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+date_today = datetime.now()
+days = pd.date_range(date_today, date_today + timedelta(7), freq='D')
+
+np.random.seed(seed=1111)
+data = np.random.randint(1, high=100, size=len(days))
+df = pd.DataFrame({'test': days, 'col2': data})
+df = df.set_index('test')
+print(df)
+
+
+#---------------------------------------------------------------------------------------------------
 df = pd.DataFrame({"A": 1.,
                    "B": pd.Timestamp("20130102"),
                    "C": pd.Series(1, index=list(range(4)), dtype="float32"),
