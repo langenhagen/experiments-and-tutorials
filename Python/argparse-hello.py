@@ -8,7 +8,7 @@ See: https://pymotw.com/3/argparse/index.html
 import argparse
 import pathlib
 
-parser = argparse.ArgumentParser(description='Short sample app')
+parser = argparse.ArgumentParser(description="Short sample app")
 
 parser.add_argument(
     '-a',
