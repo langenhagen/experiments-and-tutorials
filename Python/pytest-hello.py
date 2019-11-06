@@ -1,10 +1,12 @@
-# Hello world with Pytest:
-#
-# Run like
-# $ pytest pytest-hello.py
-#
-# found here:
-# https://www.oreilly.com/library/view/python-testing-with/9781680502848/f_0046.xhtml
+#!/usr/bin/env python3
+"""Hello world with Pytest:
+
+Run like
+$ pytest pytest-hello.py
+
+found here:
+https://www.oreilly.com/library/view/python-testing-with/9781680502848/f_0046.xhtml
+"""
 import pytest
 
 
