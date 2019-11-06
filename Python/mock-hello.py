@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Showcase simple mocking in python.
+
+In Python 3 there is unittest.mock. In Python 2, get the same library via:
+pip install mock
+
+Run this file like:
+$ python mock-hello.py
+$ pytest -s mock-hello.py  # suppress capturing/hiding ouput
+"""
+import json
+import unittest.mock
+
+import pytest
+
+print("--- 1 The Mock object ---")
+mock = unittest.mock.Mock(name="My optional name")
+print(f"mock.name= {mock.name}")  # does not resolve to the mock's name but to a new mock!
+# Mocks return mocks; mock is a mock, so is mock.foo, and mock.bar()
+print(f"mock.foo= {mock.foo}")
+print(f"mock.bar()= {mock.bar()}")
+print(f"mock.soo('some string', 42)= {mock.soo('some string', 42)}")
+
+print("--- 2 Mocking assertions ---")
+#mock.foo.assert_called_once()  # breaks mock.foo([...]) was never called
+mock.bar.assert_called_once()
+mock.soo('some string', 42)
+mock.soo.assert_called_with('some string', 42)
+# soo.assert_called_once_with('some string', 42)  # breaks: called 2 times
+
+print("--- 3 Getting Usage Information ---")
+print(mock.call_args)  # None
+print(mock.call_args_list)  # []
+print(mock.method_calls)  # [call.bar(), call.soo('some string', 42), call.soo('some string', 42)]
+
+
+print("--- 4 Mock Return Values ---")
+mock.foo.return_value = 42
+print(f"mock.foo()= {mock.foo()}")
+print(f"mock.foo('somearg')= {mock.foo('somearg')}")
+
+print("---5 Mock Side Effects ---")
+
+
+def test_mock_sideeffect():
+    mock.doo.side_effect = ValueError
+    with pytest.raises(ValueError):
+        mock.doo()
+
+
+# Also:
+def my_side_effect_fun(myarg):
+    print(f"> Hello from my_side_effect_fun({myarg})")
+
+
+mock.bar.side_effect = my_side_effect_fun
+mock.bar("See some sideeffects!")
+
+
+# Also also with iterables
+def my_other_side_effect_fun(myarg):
+    print(f"> Hello from my_other_side_effect_fun({myarg})")
+
+
+# This doesn't work on my machine but should
+# mock.bar.side_effect = [my_other_side_effect_fun, my_side_effect_fun]
+# mock.bar("See some iterable sideeffects 1")
+# mock.bar("See some iterable sideeffects 2")
+# #mock.bar("See some iterable sideeffects 3") # breaks; out of side_effects
+
+mock.bar.side_effect = None
+mock.bar("See some iterable sideeffects 3")  # works
+
+print("--- 4 @patch Decorator ---")
+# use a patch decorator when you mock something that lies outside the file
+# mock where you use it, not where it is defined!
+@unittest.mock.patch("json.loads")  # point to where it is used, not where it is defined
+def test_with_patch(mock_loads):
+    mock_loads.return_value = "My mocked return value"
+    res = json.loads({"this": "works"})
+    print(f"json.loads({{'this': 'works'}})= {res}")
+    assert res == "My mocked return value"
+
+# fixures
