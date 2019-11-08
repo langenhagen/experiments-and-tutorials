@@ -47,6 +47,7 @@ print("---5 Mock Side Effects ---")
 
 def test_mock_sideeffect():
     """Showcase example of  how to use side effects in tests."""
+    mock = unittest.mock.Mock()
     mock.doo.side_effect = ValueError
     with pytest.raises(ValueError):
         mock.doo()
@@ -89,7 +90,7 @@ def test_with_patch(mock_loads):  # param mock_loads comes from the decorator
     assert res == "My mocked return value"
 
 @unittest.mock.patch("json.dumps")
-@unittest.mock.patch("json.loads")
+@unittest.mock.patch("json.loads", return_value="My mocked return value")  # also possible
 def test_with_two_patches(mock_loads, mock_dumps):  # upper/outer patch-decorator related params come later
     """Test showcasing @patch decorator."""
     mock_dumps.return_value = '{"a": "123"}'
@@ -97,7 +98,6 @@ def test_with_two_patches(mock_loads, mock_dumps):  # upper/outer patch-decorato
     print(f"json.dumps(\"soeinquatsch\")= {res}")
     assert res == '{"a": "123"}'
 
-    mock_loads.return_value = "My mocked return value"
     res = json.loads({"this": "works"})
     print(f"json.loads({{'this': 'works'}})= {res}")
     assert res == "My mocked return value"
@@ -199,6 +199,6 @@ print("--- 8 patch() and autospec ---")
 with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
     mock_json_loads("arg")
     try:
-        mock_json.foo("shouldbreak")
+        mock_json_loads.foo("shouldbreak")
     except AttributeError:
-        print("Calling json.foo('shouldbreak') caused an AttributeError")
+        print("Calling json.loads.foo('shouldbreak') caused an AttributeError")
