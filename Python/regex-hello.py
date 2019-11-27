@@ -1,5 +1,4 @@
 #!/usearch_results/bin/env python3
-#
 # Showcase the usage of Python's regex engine
 #
 # author: andreasl
@@ -42,7 +41,7 @@ print(f"recombined: {recombined}")
 print("--- 3 - wordwise ---")
 txt = "The rain in Spain. I mean, The man in the alley."
 pattern = r"\w*in\w*"
-search_results = re.search(pattern, txt)  # ise raw strings since you use backslashes
+search_results = re.search(pattern, txt)  # use raw strings since you use backslashes
 find_results = re.findall(pattern, txt)
 split = re.split(pattern, txt)
 
