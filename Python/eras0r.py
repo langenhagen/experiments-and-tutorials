@@ -1,5 +1,4 @@
-"""
-Deletes all given file types, folders with given names
+"""Delete all given file types, folders with given names
 In the subtree. Can also filter parts of the subtree
 that shall not be affected.
 """
@@ -11,12 +10,11 @@ import os, os.path
 import re
 import shutil
 
-'''
-USAGE:
+"""USAGE:
 eras0r.py [-r <root-dir>] [-i <subdir to be ignored> ] [...] [<filetype-glob/foldername>] [...]
 EXAMPLE:
 eras0r.py -r "C:\Crunch it\" -i .\_Lib -i .\Liepham *.tlog ipch *.pdb
-'''
+"""
 
 def main(argv):
 
@@ -79,7 +77,7 @@ def main(argv):
                 print( error)
 
 
-    print( "Done.")
+    print("Done.")
 
 
 if __name__ == "__main__":

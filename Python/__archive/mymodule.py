@@ -13,9 +13,9 @@ pbs = sdl.ProfileBoundStores()
 
 
 class TestProfileManagerListener(sdl.ProfileManagerListener):
-    ''' Incomplete but sufficient implementation of a ProfileManagerListener
-        Please set the event listeners if you are about to use them.
-    '''
+    """ Incomplete but sufficient implementation of a ProfileManagerListener
+    Please set the event listeners if you are about to use them.
+    """
 
     profile_created_event = None
     profile_activated_event = None
@@ -49,8 +49,8 @@ class TestProfileManagerListener(sdl.ProfileManagerListener):
 # --------------------------------------------------------------------------------------------------
 
 class TestProfileBoundStoresInitializerListener(sdl.ProfileBoundStoresInitializerListener):
-    ''' Please set the profile_bound_stores_ready_event member in order to receive callbacks.
-    '''
+    """ Please set the profile_bound_stores_ready_event member in order to receive callbacks.
+    """
 
     profile_bound_stores_instance = None
     profile_bound_stores_ready_event = None
@@ -79,8 +79,8 @@ from subprocess import check_call, CalledProcessError
 class dafoo:
 
     def kill_process(name):
-        ''' kills the process with the given name
-        '''
+        """ kills the process with the given name
+        """
         for process in psutil.process_iter():
             if process.name() == name:
                 log('Process "' + name + '" found. Terminating it.')
@@ -92,8 +92,8 @@ class dafoo:
 
 
     def delete_files(files):
-        ''' deletes the files with the given names
-        '''
+        """ deletes the files with the given names
+        """
         for file in files:
             os.remove(file)
             # check deletion worked?
@@ -103,9 +103,9 @@ class dafoo:
 
 
     def revoke_write_permissions(files):
-        ''' removes the write permissions for the files
+        """ removes the write permissions for the files
             with the given names
-        '''
+        """
         for file in files:
             # TODO revoke read access
             # TODO check read access has been revoked
@@ -115,9 +115,9 @@ class dafoo:
 
 
     def grant_write_permissions(files):
-        ''' grants write permissions for the files
+        """ grants write permissions for the files
             with the given names
-        '''
+        """
         # TODO maybe not necessary
 
         for file in files:
@@ -129,6 +129,6 @@ class dafoo:
 
 
     def log(msg):
-        ''' simple logging mechanism
-        '''
+        """ simple logging mechanism
+        """
         print msg

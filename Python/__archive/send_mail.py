@@ -1,6 +1,4 @@
-
-''' Simple mail sending program
-'''
+""" Simple mail sending program."""
 print 'Sending mail to the Devil...'
 
 import datetime

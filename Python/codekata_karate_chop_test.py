@@ -24,19 +24,19 @@ class EmptyArray(unittest.TestCase):
 
 
     def test_karate_chop_1(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_1(n, self.test_arr)
             self.assertEqual( idx, result)
 
     def test_karate_chop_2(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_2(n, self.test_arr)
             self.assertEqual( idx, result)
 
     def test_karate_chop_3(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_3(n, self.test_arr)
             self.assertEqual( idx, result)
@@ -65,21 +65,21 @@ class KnownValues(unittest.TestCase):
 
 
     def test_karate_chop_1(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_1(n, self.test_arr)
             self.assertEqual( idx, result)
 
 
     def test_karate_chop_2(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_2(n, self.test_arr)
             self.assertEqual( idx, result)
 
 
     def test_karate_chop_3(self):
-        '''TODO'''
+        """TODO"""
         for n, idx in self.known_values:
             result = codekata_karate_chop.binary_search_3(n, self.test_arr)
             self.assertEqual( idx, result)

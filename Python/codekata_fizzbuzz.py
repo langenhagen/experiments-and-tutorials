@@ -1,4 +1,4 @@
-'''Implement the fizzbuzz code kata.'''
+"""Implement the fizzbuzz code kata."""
 
 for i in range(1,100):
     if i % 3 == 0 and i % 5 == 0:

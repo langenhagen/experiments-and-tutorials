@@ -1,7 +1,7 @@
 """Implement the karate chop code kata."""
 
 def binary_search_1(n, arr):
-    """Performs a binary search in order to find the integer n in the sorted array arr.
+    """Perform a binary search in order to find the integer n in the sorted array arr.
 
     Keyword arguments:
     n -- integer to be found
@@ -40,14 +40,14 @@ def binary_search_1(n, arr):
 
 
 def binary_search_2(n, arr, init_index=0):
-    '''Performs a binary search in order to find the integer n in the sorted array arr.
+    """Perform a binary search in order to find the integer n in the sorted array arr.
 
     Keyword arguments:
     n -- integer to be found
     arr -- a sorted array of integers
     init_index -- an initial offset used for recursive calls. Let it be 0.
     Returns: integer
-    '''
+    """
 
     if len(arr) == 0:
         return -1
@@ -79,14 +79,14 @@ def binary_search_2(n, arr, init_index=0):
 
 
 def binary_search_3(n, arr):
-    '''Performs a binary search in order to find the integer n in the sorted array arr.
+    """Perform a binary search in order to find the integer n in the sorted array arr.
 
     Keyword arguments:
     n -- integer to be found
     arr -- a sorted array of integers
 
     Returns: integer
-    '''
+    """
 
     lower_index = 0
     upper_index = range = len(arr)

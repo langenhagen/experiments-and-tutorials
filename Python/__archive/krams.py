@@ -1,7 +1,7 @@
 def call_process( name, args):
-    '''Call subprocess.check_call(name, args) and then checks if it was killed
-       by the operating system - which is what we want :)
-    '''
+    """Call subprocess.check_call(name, args) and then checks if it was killed
+    by the operating system - which is what we want :)
+    """
     try:
         subprocess.check_call([name, args])
     except subprocess.CalledProcessError as e:
@@ -13,7 +13,7 @@ def call_process( name, args):
 
 
 def kill_process(name):
-    '''Kill the process with the given name.'''
+    """Kill the process with the given name."""
     for process in psutil.process_iter():
         if process.name() == name:
             log('Process "' + name + '" found. Terminating it.')

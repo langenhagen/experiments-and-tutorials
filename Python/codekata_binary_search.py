@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-'''Implement a binary search code kata.'''
+"""Implement a binary search code kata."""
 import random
 
 
 def binary_search(list, wantedNumber ):
-    """This is the function's docstring"""
+    """This is the function's docstring."""
 
     idx = len(list) // 2
     stepsize = idx

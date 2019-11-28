@@ -16,7 +16,7 @@ import traceback
 
 
 def get_exif(image_path):
-    ''' retrieves the exif data from the given image '''
+    """Retrieve the exif data from the given image."""
     exif = {}
     i = Image.open(image_path)
     info = i._getexif()
@@ -32,7 +32,7 @@ def get_exif(image_path):
 
 
 def append_exif_data_to_csv(cvs_file, image_paths):
-    ''' appends the exif data to the cvs file with the given path'''
+    """Append the exif data to the cvs file with the given path."""
 
     for image_path in image_paths:
         exif = get_exif(image_path)
