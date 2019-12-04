@@ -1,5 +1,5 @@
-"""
-Showcase the package 'inspect'
+#!/usr/bin/env python3
+"""Showcase the package 'inspect'
 and how it can be used in conjunction with exec()
 to redefine source code at run time.
 

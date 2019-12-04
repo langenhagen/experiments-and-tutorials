@@ -1,5 +1,5 @@
-"""
-Showcase the package 'inspect'
+#!/usr/bin/env python3
+"""Showcase the package 'inspect'
 
 author: andreasl
 version: 19-07-02
