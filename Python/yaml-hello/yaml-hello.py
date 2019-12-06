@@ -1,5 +1,5 @@
-"""
-Showcase simple usage of the nonstandard package pyyaml.
+#!/usr/bin/env python3
+"""Showcase simple usage of the nonstandard package pyyaml.
 
 Get it viaÖ pip install pyyaml
 """

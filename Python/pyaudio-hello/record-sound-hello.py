@@ -1,5 +1,5 @@
-"""
-Record sound via pyyaudio.
+#!/usr/bin/env python3
+"""Record sound via pyyaudio.
 Simple, blocking andpredefined duration.
 """
 import wave
