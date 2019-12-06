@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Detect key presses in Python:
+"""Detect key presses in Python:
 
 Found here: https://www.jonwitts.co.uk/archives/896
 """

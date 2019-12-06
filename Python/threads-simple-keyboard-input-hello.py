@@ -1,6 +1,5 @@
-"""
-Showcase simple keyboard input.
-"""
+#!/usr/bin/env python3
+"""Showcase simple keyboard input."""
 import threading
 import time
 import logging
