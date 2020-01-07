@@ -1,0 +1,17 @@
+@startuml
+
+class DsiService  < dsi::tmc::ServiceProvicerDSITmc >
+class IncidentProviderListener
+
+class TmcService --|> 
+
+' DsiService
+' TmcService 
+
+' interface StoreImplInterface <|--  StructuredSearchStore
+' interface StoreImplInterface <|-- SearchStringStore
+
+' NvcSearchStore *-- StructuredSearchStore
+' TextSearchStore *-- SearchStringStore
+
+@enduml

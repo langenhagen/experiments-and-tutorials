@@ -1,0 +1,100 @@
+@startuml
+
+class AMSDataCarloBackend {
+    - locationPolicy: id<AMSLocationPolicyProtocol>
+    --
+    --
+    Uses deduplication policy from given configuration,
+    or if NIL, creates a policy from the AMSStrategyFactory
+}
+
+
+class AMSDataCarloBackendConfiguration {
+ - _policy : id<AMSPlaceMatchingPolicyProtocol>
+ --
+ + init: ...
+ --
+}
+AMSDataCarloBackendConfiguration *-- AMSPlaceMatchingPolicyProtocol
+AMSDataCarloBackend -> AMSDataCarloBackendConfiguration
+
+interface AMSPlaceMatchingPolicyProtocol {
+    --
+    + isPlace: AMSDataPlace* matchingOtherPlace: AMSDataPlace* : BOOL
+    + isPlace: AMSDataPlace* mergeabbleOtherPlace: AMSDataPlace* : BOOL
+    + mergePlace AMSDataPlace* otherPlace: AMSDataPlace : void
+    --
+    Provides interface for different matching/merging Strategies.
+    Implement this for new strategies.
+}
+
+class AMSStrategyFactory {
+    --
+    + placeMatchingPolicy: id<AMSPlaceMatchingPolicyProtocol>
+    --
+    Returns a matching policy by OEM type ( VANILLA / OLYMPIA )
+}
+AMSStrategyFactory <- AMSDataCarloBackend
+
+package carlo {
+
+    abstract ObjectsMatchingPolicyBase<T>
+
+    class ObjectsMatchingPolicy< Location > {
+        + match(...)
+        + is_mergeable(...)
+        + merge(...)
+    }
+    ObjectsMatchingPolicyBase <|-- ObjectsMatchingPolicy
+}
+
+
+package internal_amsdk {
+    class CustomMatchingPolicy {
+        - ptr to AMSPlaceMatchingPolicyProtocol as delegate
+        --
+        + CustomMatchingPolicy( id<AMSPlaceMatchingPolicyProtocol> delegate )
+        --
+    }
+    CustomMatchingPolicy *--- AMSPlaceMatchingPolicyProtocol
+    ObjectsMatchingPolicy <|-- CustomMatchingPolicy
+}
+
+
+interface AMSLocationPolicyProtocol {
+    --
+    + applyLocationMatchingPolicytoOptions: carlo::StoreSyncOptions& : void
+    + applyLocationMatchingPolicytoConfiguration: carlo::CustomConfiguration& : void
+    --
+    Classes implementing this interface plug the MatchingPolicies
+    into the given StoreSyncOptions or carlo::CustomConfiguration.
+}
+AMSDataCarloBackend *--- AMSLocationPolicyProtocol
+
+
+class AMSPlaceMatchingPolicyWithExternalId
+
+class AMSPlaceMatchingPolicyDefault
+AMSPlaceMatchingPolicyProtocol <|-- AMSPlaceMatchingPolicyDefault
+
+
+class AMSLocationPolicyConfigurable {
+    - m_policy : shared_ptr<CustomMatchingPolicy>
+    __
+    + initWithPlaceMatchingPolicy: id<AMSPlaceMatchingPolicyProtocol> : instancetype
+    --
+    Glues CustomMergingPolicy and AMSPlaceMatchingPolicyProtocol into Objective C layer
+}
+AMSLocationPolicyProtocol <|-- AMSLocationPolicyConfigurable
+AMSLocationPolicyConfigurable --> AMSPlaceMatchingPolicyProtocol
+AMSLocationPolicyConfigurable *-- CustomMatchingPolicy
+
+class AMSPlaceMatchingPolicyWithExternalId {
+__
+__
+Olympia conformant policy
+
+}
+AMSPlaceMatchingPolicyProtocol <|-- AMSPlaceMatchingPolicyWithExternalId
+
+@enduml

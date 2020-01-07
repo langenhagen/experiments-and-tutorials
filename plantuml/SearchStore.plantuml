@@ -1,0 +1,11 @@
+@startuml
+
+interface StoreImplInterface <|--  StructuredSearchStore
+interface StoreImplInterface <|-- SearchStringStore
+
+NvcSearchStore *-- StructuredSearchStore
+TextSearchStore *-- SearchStringStore
+
+note "Seems the NvcSearchStore is the only one that references Locations" as N1
+
+@enduml

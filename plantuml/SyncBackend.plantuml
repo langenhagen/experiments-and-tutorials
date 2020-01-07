@@ -1,0 +1,24 @@
+@startuml
+
+class SyncBackend {
+    --
+    --
+    std::shared_ptr< carlo::internal::SyncBackendImpl > m_impl
+}
+
+class SyncBackendImpl {
+}
+SyncBackend *-- SyncBackendImpl
+
+
+class ScbeSyncBackendImpl {
+    Uses SyncBackendImpl's implementation (just) for cancel()
+}
+SyncBackendImpl <|-- ScbeSyncBackendImpl
+ScbeSyncBackendImpl --> SyncBackendImpl
+
+
+class ScbeSyncBackendFactory {
+}
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+
+package com.here.automotive.sdk.mobile.config {
+
+    package repository.scbe.sync {
+        class PlaceSyncAdapter #yellow {
+
+        }
+
+        class Matcher<PlaceEntity> {
+            + {abstract} matcher( PlaceEntity, PlaceEntity) : boolean
+        }
+        PlaceSyncAdapter *-- Matcher
+
+        class Merger<PlaceEntity> {
+            + merge( PlaceEntity, PlaceEntity)
+        }
+        PlaceSyncAdapter *-- Merger
+    
+    }
+
+
+
+    interface PlaceMatchingPolicy #yellow {
+        + areSamePlace( Place, Place ) : boolean
+    }
+
+    package internal.utils {
+
+        class InternalComparators #yellow {
+            - {static} placeMatchingPolicy : PlaceMatchingPolicy (GeoLocationAndNameMatchingPolicy as default) 
+            __
+            + {static} areSamePlace(PlaceEntity, PlaceEntity ) : boolean   // uses the PlaceMatchingPolicy
+            + {static} areSameGeoLocations(GeoLocation, GeoLocation) : boolean
+            + {static} areSameByName( String, String) : boolean
+            + {static} areSameByExternalData( Place, Place ) : boolean      // ignores Law of Demeter
+            + {static} areSameByMMIInternalData( Place, Place) : boolean    // ignores Law of Demeter
+        }
+        InternalComparators *-- PlaceMatchingPolicy
+    }
+
+    class ExternalIdAndDataMatchingPolicy #yellow {
+        __
+        __
+        Matches by customTitle, externalIds, GeoLocation and Name,
+        ExternalData, MMIInternalData
+    }
+    PlaceMatchingPolicy <|-- ExternalIdAndDataMatchingPolicy
+    InternalComparators <-- ExternalIdAndDataMatchingPolicy
+
+    class GeoLocationAndNameMatchingPolicy #yellow {
+
+    }
+    PlaceMatchingPolicy <|-- GeoLocationAndNameMatchingPolicy
+
+}
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+
+    class RouteTypes {
+        FASTEST
+        SHORTEST
+        BALANCED
+    }
+
+    class RouteOptions {
+    }
+
+    class Type {
+        FASTEST
+        SHORTEST
+        BALANCED
+    }
+    RouteOptions +-- Type
+
+    note "Looks redundant" as N1
+
+@enduml

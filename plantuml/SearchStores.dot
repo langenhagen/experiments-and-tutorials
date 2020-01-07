@@ -1,0 +1,18 @@
+digraph G {
+
+  StoreImplInterface -> StructuredSearchStore
+  StoreImplInterface -> SearchStringStore
+
+  SearchStringStore
+  TextSearchStore
+
+  // compositions follow here
+
+  edge [color=red];
+  NvcSearchStore [ style=filled, fillcolor = red]
+  TextSearchStore [style=filled, fillcolor = red]
+
+   NvcSearchStore -> StructuredSearchStore
+  TextSearchStore -> SearchStringStore
+  edge [color=black];
+}

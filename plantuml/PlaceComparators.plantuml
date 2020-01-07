@@ -1,0 +1,14 @@
+@startuml
+
+abstract DirectionalComparator<T>
+
+DirectionalComparator <|--  PlaceNameComparator
+DirectionalComparator <|--  PlaceFrequencyComparator
+DirectionalComparator <|--  PlaceLastUsedComparator
+
+class Place
+
+class PlaceEntity
+
+
+@enduml

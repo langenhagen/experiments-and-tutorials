@@ -1,0 +1,137 @@
+@startuml
+
+package com.here.automotive.sdk.mobile {
+
+    package internal {
+
+        package utils {
+            class InternalComparators #yellow {
+                __
+                + {static} areSamePlace(PlaceEntity, PlaceEntity ) : boolean   // uses the PlaceMatchingPolicy
+                + {static} areSameGeoLocations(GeoLocation, GeoLocation) : boolean
+                + {static} areSameByName( String, String) : boolean
+                + {static} areSameByExternalData( Place, Place ) : boolean      // ignores Law of Demeter
+                + {static} areSameByMMIInternalData( Place, Place) : boolean    // ignores Law of Demeter
+                --
+                May be used by our Matching- and Merging-policies.
+            }
+        }
+
+        package repository.scbe.sync {
+
+
+            class PlaceSyncAdapter #yellow {
+            }
+            
+            abstract Matcher< T extends SyncableEntry> #yellow {
+                + {abstract} matches(T,T) : boolean
+            }
+
+            class  _anonymousMatcher<PlaceEntity> {
+                ** Uses an injected PlaceMatchingPolicy **
+            }
+            Matcher <|-- _anonymousMatcher
+            PlaceSyncAdapter +- _anonymousMatcher
+            note bottom of _anonymousMatcher : placeMatchingPolicy.match(firstPlace, secondPlace);
+
+            interface Merger<T> #yellow {
+                merge( T,T ) : void
+                __
+                ** merge() could //return// T to make things more obvious and still also change its references **
+            }
+            
+            class _anonymousMerger<PlaceEntity> {
+                ** Uses an injected PlaceMergingPolicy **
+            }
+            Merger <|-- _anonymousMerger
+            _anonymousMerger -+ PlaceSyncAdapter
+            note bottom of _anonymousMerger
+                if( placeMergingPolicy.isMergeable(firstPlace, secondPlace)) {
+                    placeMergingPolicy.merge(firstPlace, secondPlace);
+                }
+            end note
+        }
+    }
+
+
+    package config {
+
+        interface PlaceMatchingPolicy #yellow {
+            __
+            + areSamePlace( Place, Place ) : boolean
+            __
+            ** Former areSamePlace should be renamed to match() as on iOS / HCVD. **
+            ** Naming it match() is also not as misleading. **
+        }
+        InternalComparators --> PlaceMatchingPolicy
+        InternalComparators --> PlaceMergingPolicy
+
+        class ExternalIdAndDataMatchingPolicy #yellow {
+            __
+            __
+            Conforms to Olympia deduplication rules.
+        }
+        PlaceMatchingPolicy <|-- ExternalIdAndDataMatchingPolicy
+
+        class GeoLocationAndNameMatchingPolicy #yellow {
+        }
+        PlaceMatchingPolicy <|-- GeoLocationAndNameMatchingPolicy
+        PlaceSyncAdapter *--- PlaceMatchingPolicy
+
+        interface PlaceMergingPolicy {
+            __
+            + isMergeable( final Place, final Place) : boolean
+            + merge(Place, final Place) : void
+            __
+            merge() merges second Place into first given place
+        }
+        PlaceSyncAdapter *--- PlaceMergingPolicy
+
+        class DefaultPlaceMergingPolicy {
+            --
+            + isMergeable() : always returns true
+            + merge() : does not change the objects
+        }
+        PlaceMergingPolicy <|-- DefaultPlaceMergingPolicy
+
+        class ExternalIdAndDataMergingPolicy {
+            --
+            --
+            Conforms to Olympia deduplication rules
+            Uses the code that was before in PlaceSyncAdapter.
+        }
+        PlaceMergingPolicy <|-- ExternalIdAndDataMergingPolicy
+
+    }
+
+    class AutomotiveSdk {
+        - {static} settings : Settings
+    }
+
+    class Settings {
+        - placeMatchingPolicy PlaceMatchingpolicy
+        - placeMergingPolicy : PlaceMergingPolicy
+        __
+        + getPlaceMatchingPolicy() : PlaceMatchingPolicy
+        + getPlaceMergingPolicy() : PlaceMergingPolicy
+        __
+        Is globally available.
+    }
+    AutomotiveSdk +-down- Settings
+    Settings *---- PlaceMatchingPolicy
+    Settings *---- PlaceMergingPolicy
+
+    class Builder {
+        --
+        + setPlaceMergingPolicy( PlaceMergingPolicy )
+        + setPlaceMatchingPolicy( PlaceMmatchingPolicy )
+        --
+        Builds the settings.
+    }
+    AutomotiveSdk +-down- Builder
+    Builder -[hidden]left- Settings
+    Builder *- Settings
+}
+
+
+@enduml
