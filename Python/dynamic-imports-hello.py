@@ -4,10 +4,11 @@ import importlib
 import sys
 
 
-print (f'len(sys.argv) = {len(sys.argv)}')
-print (f'sys.argv = {sys.argv}')
+print(f'len(sys.argv) = {len(sys.argv)}')
+print(f'sys.argv = {sys.argv}')
 
 module_path = sys.argv[1]
+print(f"Given Module path: {module_path}")
 
 # Import module via module path specificaion, path.to.my.module
 # my_module = importlib.import_module(module_path)
@@ -18,10 +19,16 @@ module_spec = importlib.util.spec_from_file_location("my.module.name", module_pa
 my_module = importlib.util.module_from_spec(module_spec)
 module_spec.loader.exec_module(my_module)
 
+print("***Module loaded***")
+
+print()
+print(f"dir({my_module})")
 print(dir(my_module))
 
-print('***Module loaded***')
+print()
+print(f"{my_module}.__doc__")
+print(my_module.__doc__)
 
 # should work via: python hello-dynamic-imports.py treemaps-hello/treemap.py
-r = my_module.Rectangle(1,2,3,4)
-print(r)
+# r = my_module.Rectangle(1,2,3,4)
+# print(r)
