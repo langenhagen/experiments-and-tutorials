@@ -8,7 +8,7 @@ import synthesizer
 
 player = synthesizer.Player(rate=44100)
 player.open_stream()
-synthesizer = synthesizer.Synthesizer(
+synth = synthesizer.Synthesizer(
     osc1_waveform=synthesizer.Waveform.sine,
     osc1_volume=1.0,
     use_osc2=False)
@@ -18,7 +18,7 @@ def on_move(x, y):
     """Play a note."""
     freq_Hz = x + y + 1.0
     duration_s = 30.0 / freq_Hz
-    wave = synthesizer.generate_constant_wave(freq_Hz, duration_s)
+    wave = synth.generate_constant_wave(freq_Hz, duration_s)
     player.play_wave(wave)
 
 
