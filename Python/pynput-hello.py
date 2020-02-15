@@ -2,7 +2,8 @@
 """Showcase third-party library pynput
 and how to use it as a key logger.
 
-based on:
+See:
+https://pythonhosted.org/pynput/keyboard.html#monitoring-the-keyboard
 https://www.youtube.com/watch?v=TbMKwl11itQ
 """
 import pynput
@@ -20,9 +21,12 @@ def on_press(key):
 def on_release(key):
     """Do some action on keyboard key release."""
     print(f"Key {key} released")
+    if key == pynput.Key.esc:
+        # Stop listener
+        return False
 
 
 with KeyboardListener(on_press=on_press, on_release=on_release) as listener:
     print("Pre-Join")
     listener.join()
-    print("Post-Join")  # never reaches here
+    print("Post-Join")
