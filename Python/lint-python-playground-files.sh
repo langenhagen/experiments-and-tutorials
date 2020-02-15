@@ -5,6 +5,8 @@
 #
 # author: andreasl
 
+file_pattern="${1:-*.py}"
+
 flake8_error_codes_array=(
     # 'E128'  # continuation line under-indented for visual indent
     # 'E501'  # line too long (87 > 79 characters)
@@ -12,7 +14,7 @@ flake8_error_codes_array=(
     # 'W504'  # line break after binary operator
 )
 flake8_error_codes="$(printf '%s,' "${flake8_error_codes_array[@]}")"
-flake8 --ignore="$flake8_error_codes" ./*.py
+flake8 --ignore="$flake8_error_codes" ${file_pattern}
 flake8_exit_code="$?"
 
 pylint_error_codes_array=(
@@ -27,7 +29,7 @@ pylint_error_codes_array=(
 
 )
 pylint_error_codes="$(printf '%s,' "${pylint_error_codes_array[@]}")"
-pylint3 --disable="$pylint_error_codes" --msg-template='{msg_id} {path}:{line}: {msg}' ./*.py
+pylint3 --disable="$pylint_error_codes" --msg-template='{msg_id} {path}:{line}: {msg}' ${file_pattern}
 pylint3_exit_code="$?"
 
 ((exit_code = flake8_exit_code + pylint3_exit_code))
