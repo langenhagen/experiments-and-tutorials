@@ -90,8 +90,8 @@ static void init_x() {
     XSetStandardProperties(
         display,
         window,
-        "My Window",
-        "HI!",
+        "My nice Window" /* window title, will be missing due to missing window decorations*/,
+        "HI!" /*don't know what this is*/,
         None,
         nullptr,
         0,
@@ -118,10 +118,6 @@ static void init_x() {
         (unsigned char*)&value,
         1);
 
-    /* this routine determines which types of input are allowed in
-       the input.  see the appropriate section for details...*/
-    XSelectInput(display, window, ExposureMask|ButtonPressMask|KeyPressMask);
-
     /* create the Graphics Context */
     gc = XCreateGC(display, window, 0, 0);
 
@@ -129,7 +125,7 @@ static void init_x() {
     /* here is another routine to set the foreground and background
        colors _currently_ in use in the window.*/
     // XSetBackground(display, gc, white);
-    XSetForeground(display, gc, black);
+    XSetForeground(display, gc, white);
 
     setup_font();
 
@@ -145,7 +141,7 @@ static void close_x() {
     XCloseDisplay(display);
 }
 
-static void redraw(const char* text) {
+static void redraw() {
     // std::cout << "redrawing " << ++n_redraws << std::endl;
     XClearWindow(display, window);
     XDrawString(
@@ -159,14 +155,7 @@ static void redraw(const char* text) {
 }
 
 int main(int argc, const char* argv[]) {
-    text_buffer[0] = '\0';
-
     init_x();
-
-    unsigned long white = WhitePixel(display, screen);
-    unsigned long black = BlackPixel(display, screen);
-    XSetBackground(display, gc, white);  // dunno but necessary
-    XSetForeground(display, gc, white);  // dunno but necessary
 
     /* listen to given event types*/
     XSelectInput(
@@ -178,44 +167,41 @@ int main(int argc, const char* argv[]) {
 
     XEvent event;  /* the XEvent declaration */
     const int input_buffer_size = 32;
-    char input_buffer[input_buffer_size];  /* a char buffer for KeyPress Events, the size is arbitrary */
+    char input_buffer[input_buffer_size];  /* buffer for KeyPress Events; size is arbitrary */
 
     while(true) {
         /* get the next event and stuff it into our event variable.
-           Note: only events we set the mask for are detected!
-        */
+           Note: only events we set the mask for are detected!*/
         XNextEvent(display, &event);
         if (event.type == Expose && event.xexpose.count == 0) {
             /* the window was exposed redraw it!
                see: https://tronche.com/gui/x/xlib/events/exposure/expose.html*/
-            redraw(text_buffer);
+            redraw();
         }
-        else if (event.type == KeyPress) {
+        else if(event.type == KeyPress) {
             // std::cout << event.xkey.keycode;
             if( event.xkey.keycode == 9 /*esc*/) {
                 break;
             }
-            else if( event.xkey.keycode == 22 /*delete*/) {
+            else if(event.xkey.keycode == 22 /*delete*/) {
                 text_cursor_pos = std::max(--text_cursor_pos, 0);
-                text_buffer[text_cursor_pos] = '\0';
             }
             else if(XLookupString(
-                    &event.xkey /*event struct*/,
-                    input_buffer /*output buffer*/,
-                    input_buffer_size /*buffer length*/,
-                    nullptr /*output keysym or nullptr*/,
-                    nullptr /*status_in_out or nullptr*/) > 0) {
+                &event.xkey /*event struct*/,
+                input_buffer /*input buffer*/,
+                input_buffer_size /*buffer length*/,
+                nullptr /*output keysym or nullptr*/,
+                nullptr /*status_in_out or nullptr*/) > 0) {
                 /* normal text input*/
 
                 /* use XLookupString() to convert the KeyPress data into regular text.
                    see: https://tronche.com/gui/x/xlib/utilities/XLookupString.html*/
                 text_buffer[text_cursor_pos] = input_buffer[0];
                 ++text_cursor_pos;
-                text_buffer[text_cursor_pos] = '\0';
             }
-            redraw(text_buffer);
+            redraw();
         }
-        else if (event.type == ButtonPress) {
+        else if(event.type == ButtonPress) {
             /* tell where the mouse Button was pressed*/
             sprintf(
                 text_buffer,
@@ -223,7 +209,7 @@ int main(int argc, const char* argv[]) {
                 event.xbutton.x,
                 event.xbutton.y);
             text_cursor_pos = strlen(text_buffer);
-            redraw(text_buffer);
+            redraw();
         }
     }
     close_x();

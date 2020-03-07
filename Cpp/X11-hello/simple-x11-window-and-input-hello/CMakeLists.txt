@@ -16,7 +16,7 @@ target_include_directories("${target}"
         "${FREETTYPE2_INCLUDE_DIR}"
         "include")
 
-# Xft can be omitted when not used
+# Xft can be omitted when not used (#include <X11/Xft/Xft.h>)
 target_link_libraries("${target}"
     "${X11_LIBRARIES}"
     "Xft")
