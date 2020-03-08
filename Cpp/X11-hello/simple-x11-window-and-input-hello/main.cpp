@@ -1,8 +1,6 @@
 /* Render an undecorated window that waits for keyboard input.
 Close the program with ESC.
 
-The Xft Approach for Text Rendering is incomplete.
-
 author: andreasl
 
 based on: http://mech.math.msu.su/~nap/2/GWindow/xintro.html
@@ -27,14 +25,12 @@ based on: http://mech.math.msu.su/~nap/2/GWindow/xintro.html
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 #include <X11/Xatom.h>
-// #include <X11/Xft/Xft.h>
 
 Display *display;
 int screen;
 Window window;
 GC gc;
 XFontStruct *font; /* classic approach*/
-// XftFont *xfont; /*Xft approach*/
 
 int n_redraws = 0;
 const int text_buffer_size = 255;
@@ -52,13 +48,6 @@ static void setup_font() {
         font = XLoadQueryFont(display, "fixed");
     }
     XSetFont(display, gc, font->fid);
-
-    // what dmenu does; I have issues with loading transitive dependencies
-    // const char *font_name = "monospace:size=10";
-    // xfont = XftFontOpenName(display, screen, font_name);
-    // if(!xfont) {
-    //     std::cerr << "unable to load font " << font_name << " using default font \"fixed\"\n";
-    // }
 }
 
 static void init_x() {
