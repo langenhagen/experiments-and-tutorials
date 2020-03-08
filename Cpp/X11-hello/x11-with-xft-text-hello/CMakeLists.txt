@@ -19,5 +19,3 @@ target_include_directories("${target}"
 target_link_libraries("${target}"
     "${X11_LIBRARIES}"
     "Xft")
-
-
