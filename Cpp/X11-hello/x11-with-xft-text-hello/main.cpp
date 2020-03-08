@@ -1,6 +1,11 @@
 /* Render an X11 window that waits for keyboard input and has nice Xft fonts
 Close the program with ESC.
 
+Handling and drawing fonts with Xft feel easier, seem more reliable and the results look better.
+
+- based on my prior learnings
+- see: https://www.leadwerks.com/community/blogs/entry/1764-rendering-text-on-linux-with-xft/
+
 author: andreasl
 */
 #include <algorithm>
@@ -15,13 +20,18 @@ author: andreasl
 #include <X11/Xft/Xft.h>
 
 struct App {
+     /*x11 essentials*/
     Display *display;
     int screen;
     Window window;
     GC gc;
-    XftFont *xfont; /*Xft approach*/
-    int n_redraws = 0;
 
+     /*Xft approach*/
+    XftDraw *xft_drawable;
+    XftFont* font;
+
+    /*application stuff*/
+    int n_redraws = 0;
     static const int text_buffer_size = 255;
     char text_buffer[text_buffer_size];
     int text_cursor_pos = 0;
@@ -71,31 +81,64 @@ static void close_x(App *app) {
     XCloseDisplay(app->display);
 }
 
-static void setup_font() {
+static void setup_xft_font(App *app) {
+    app->xft_drawable = XftDrawCreate(
+        app->display,
+        app->window /*drawable*/,
+        DefaultVisual(app->display, 0),
+        DefaultColormap(app->display, 0));
 
-    // what dmenu does; I have issues with loading transitive dependencies
-    // const char *font_name = "monospace:size=10";
-    // xfont = XftFontOpenName(display, screen, font_name);
-    // if(!xfont) {
-    //     std::cerr << "unable to load font " << font_name << " using default font \"fixed\"\n";
-    // }
+    app->font = XftFontOpen(
+        app->display,
+        app->screen,
+        XFT_FAMILY,
+        XftTypeString,
+        "monospace",
+        XFT_SIZE,
+        XftTypeDouble,
+        20.0,
+        nullptr );
+}
+
+static void draw_text(App *app) {
+    XRenderColor x_render_color;
+    x_render_color.red = 65535;
+    x_render_color.green = 65535;
+    x_render_color.blue = 65535;
+    x_render_color.alpha = 65535;
+    XftColor xft_color;
+
+    XftColorAllocValue(
+        app->display,
+        DefaultVisual(app->display, 0) /*visual*/,
+        DefaultColormap(app->display, 0) /*colormap*/,
+        &x_render_color /*color*/,
+        &xft_color /*result*/);
+
+    XftDrawString8(
+        app->xft_drawable /*drawable*/,
+        &xft_color /*color*/,
+        app->font /*font*/,
+        10 /*pos x*/,
+        20 /*pos y*/,
+        (unsigned char*)app->text_buffer,
+        app->text_cursor_pos);
+
+    XftColorFree(
+        app->display,
+        DefaultVisual(app->display, 0),
+        DefaultColormap(app->display, 0),
+        &xft_color);
 }
 
 static void redraw(App *app) {
     // std::cout << "redrawing " << ++n_redraws << std::endl;
+
     XClearWindow(app->display, app->window);
-    XDrawString(
-        app->display,
-        app->window,
-        app->gc,
-        10 /*pos x*/,
-        20 /*pos y*/,
-        app->text_buffer,
-        app->text_cursor_pos);
+    draw_text(app);
 }
 
 static int listen_for_events(App *app) {
-
     XSelectInput(
         app->display,
         app->window,
@@ -132,11 +175,11 @@ static int listen_for_events(App *app) {
             }
         }
     }
-
 }
 
 int main(int argc, const char* argv[]) {
     App *app = init_x();
+    setup_xft_font(app);
     listen_for_events(app);
     close_x(app);
     return 0;
