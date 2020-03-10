@@ -1,17 +1,19 @@
 /* Render an X11 window with some a look and feel that matches the behavior of dmenu by using X11
  XCreateWindow instead of XCreateSimpleWindow.
 
-- based on my prior learnings
+- based on my prior learnings and dmenu source code
 - see: https://tronche.com/gui/x/xlib/window/XCreateWindow.html
 - see: https://tronche.com/gui/x/xlib/window/attributes/
 - see: https://tronche.com/gui/x/xlib/window/attributes/override-redirect.html
 - see: https://www.x.org/releases/current/doc/man/man3/XOpenIM.3.xhtml
+- see: https://tronche.com/gui/x/xlib/event-handling/XSelectInput.html
 
 author: andreasl
 */
 #include <algorithm>
 #include <cstring>
 #include <iostream>
+#include <thread>
 
 /* order of X11 includes allegedlly important*/
 #include <X11/Xlib.h>
@@ -23,10 +25,12 @@ struct App {
      /*x11 essentials*/
     Display *display;
     int screen;
+    Window root_window;
     Window window;
     GC gc;
 
     XSetWindowAttributes set_window_attributes;
+    XIC input_context;
 
      /*Xft stuff*/
     XftDraw *xft_drawable;
@@ -39,21 +43,45 @@ struct App {
     int text_cursor_pos = 0;
 };
 
-static App* init_x() {
+static void grab_keyboard(App *app) {
+    using namespace std::chrono_literals;
+    /* try to grab keyboard. 1000 times.
+       we may have to wait for another process to ungrab*/
+    for (int i = 0; i < 1000; ++i) {
+        int grab_result = XGrabKeyboard(
+            app->display /*display*/,
+            app->root_window /*grab-window*/,
+            True /*owner events*/,
+            GrabModeAsync /*pointer mode*/,
+            GrabModeAsync /*keyboard mode*/,
+            CurrentTime /*time*/);
+
+        if(grab_result == GrabSuccess) {
+            return;
+        }
+        std::this_thread::sleep_for(1ms);
+    }
+    std::cerr << "Could not grab keyboard" << std::endl;
+}
+
+static App* setup_x() {
     App *app = new App();
     app->display = XOpenDisplay(nullptr);
     app->screen = DefaultScreen(app->display);
+    app->root_window = RootWindow(app->display, app->screen);
+
+    grab_keyboard(app);
 
     unsigned long black = BlackPixel(app->display, app->screen);
     unsigned long white = WhitePixel(app->display, app->screen);
 
-    app->set_window_attributes.override_redirect = True; /*disables input method*/
-    app->set_window_attributes.background_pixel = black;
+    app->set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
+    app->set_window_attributes.background_pixel = 0x0000FF;  /*rgb values*/
     app->set_window_attributes.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask;
 
     app->window = XCreateWindow(
         app->display /*display*/,
-        DefaultRootWindow(app->display) /*parent*/,
+        app->root_window /*parent*/,
         100 /*pos x*/,
         100 /*pos y*/,
         400 /*width*/,
@@ -75,7 +103,7 @@ static App* init_x() {
         std::cerr << "XOpenIM failed: could not open input device" << std::endl;
     }
 
-    XIC input_context = XCreateIC(
+    app->input_context = XCreateIC(
         input_method /*input method*/,
         XNInputStyle,
         XIMPreeditNothing | XIMStatusNothing,
@@ -161,33 +189,25 @@ static void draw_text(App *app) {
 }
 
 static void redraw(App *app) {
-    // std::cout << "redrawing " << ++n_redraws << std::endl;
     XClearWindow(app->display, app->window);
     draw_text(app);
 }
 
-static int listen_for_events(App *app) {
-    XSelectInput(
-        app->display,
-        app->window,
-        ExposureMask
-        | KeyPressMask
-        | VisibilityChangeMask);
-
+static int run(App *app) {
     const int input_buffer_size = 32;
     char input_buffer[input_buffer_size];
 
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        std::cout << "!";
+        // if (XFilterEvent(&event, app->window))
+        //     continue;
         switch(event.type) {
         case Expose:
             if(event.xexpose.count == 0) {
                 redraw(app);
-                break;
             }
+            break;
         case KeyPress:
-            std::cout << "!";
             if(event.xkey.keycode == 9 /*esc*/) {
                 return 0;
             }
@@ -216,9 +236,9 @@ static int listen_for_events(App *app) {
 }
 
 int main(int argc, const char* argv[]) {
-    App *app = init_x();
+    App *app = setup_x();
     setup_xft_font(app);
-    listen_for_events(app);
+    run(app);
     close_x(app);
     return 0;
 }
