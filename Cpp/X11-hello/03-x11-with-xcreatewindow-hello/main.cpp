@@ -5,8 +5,8 @@
 - see: https://tronche.com/gui/x/xlib/window/XCreateWindow.html
 - see: https://tronche.com/gui/x/xlib/window/attributes/
 - see: https://tronche.com/gui/x/xlib/window/attributes/override-redirect.html
-- see: https://www.x.org/releases/current/doc/man/man3/XOpenIM.3.xhtml
 - see: https://tronche.com/gui/x/xlib/event-handling/XSelectInput.html
+- see maybe: https://www.x.org/releases/current/doc/man/man3/XOpenIM.3.xhtml
 
 author: andreasl
 */
@@ -28,9 +28,6 @@ struct App {
     Window root_window;
     Window window;
     GC gc;
-
-    XSetWindowAttributes set_window_attributes;
-    XIC input_context;
 
      /*Xft stuff*/
     XftDraw *xft_drawable;
@@ -75,9 +72,11 @@ static App* setup_x() {
     unsigned long black = BlackPixel(app->display, app->screen);
     unsigned long white = WhitePixel(app->display, app->screen);
 
-    app->set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
-    app->set_window_attributes.background_pixel = 0x0000FF;  /*rgb values*/
-    app->set_window_attributes.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask;
+
+    XSetWindowAttributes set_window_attributes;
+    set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
+    set_window_attributes.background_pixel = 0x0000FF;  /*rgb values*/
+    set_window_attributes.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask;
 
     app->window = XCreateWindow(
         app->display /*display*/,
@@ -91,27 +90,7 @@ static App* setup_x() {
         CopyFromParent /*class*/,
         CopyFromParent /*visual*/,
         CWOverrideRedirect | CWBackPixel | CWEventMask /*valuemask; bitmask*/,
-        &app->set_window_attributes /*attributes; values matching the valuemask*/);
-
-    /* input methods */
-    XIM input_method = XOpenIM(
-        app->display /*display*/,
-        nullptr /*db*/,
-        nullptr /*res_name*/,
-        nullptr /*res_class*/);
-    if(input_method == nullptr) {
-        std::cerr << "XOpenIM failed: could not open input device" << std::endl;
-    }
-
-    app->input_context = XCreateIC(
-        input_method /*input method*/,
-        XNInputStyle,
-        XIMPreeditNothing | XIMStatusNothing,
-        XNClientWindow,
-        app->window,
-        XNFocusWindow,
-        app->window,
-        nullptr);
+        &set_window_attributes /*attributes; values matching the valuemask*/);
 
     XSetStandardProperties(
         app->display,
