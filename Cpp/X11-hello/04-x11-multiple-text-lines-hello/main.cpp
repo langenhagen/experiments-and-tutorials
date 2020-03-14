@@ -2,6 +2,11 @@
 
 - based on my prior learnings
 
+- use the command line tool `xev` to find out x11 key codes
+
+- see: https://tronche.com/gui/x/xlib/window/XResizeWindow.html
+- see: http://hackage.haskell.org/package/X11-xft-0.3.1/docs/Graphics-X11-Xrender.html
+
 author: andreasl
 */
 #include <algorithm>
@@ -28,6 +33,8 @@ struct App {
     XftFont* font;
 
     /*application stuff*/
+    unsigned int width = 1;
+    unsigned int height = 20;
     int n_redraws = 0;
     static const int text_buffer_size = 255;
     char text_buffer[text_buffer_size];
@@ -76,8 +83,8 @@ static App* setup_x() {
         app->root_window /*parent*/,
         100 /*pos x*/,
         100 /*pos y*/,
-        1 /*width; minimal 1px*/,
-        1 /*height; minimal 1ox*/,
+        app->width /*width; minimal 1px*/,
+        app->height /*height; minimal 1px*/,
         0 /*border width*/,
         CopyFromParent /*depth*/,
         CopyFromParent /*class*/,
@@ -129,7 +136,32 @@ static void setup_xft_font(App *app) {
         nullptr );
 }
 
+static XGlyphInfo get_text_dimensions(App *app) {
+    XGlyphInfo glyph_info;
+    XftTextExtents8(
+        app->display/*Display*/,
+        app->font /*xftfont*/,
+        (XftChar8 *)app->text_buffer /*string*/,
+        app->text_cursor_pos /*int len*/,
+        &glyph_info /*out glyph info*/);
+
+    return glyph_info;
+}
+
 static void draw_text(App *app) {
+    XGlyphInfo glyph_info = get_text_dimensions(app);
+    const unsigned int info_width = glyph_info.width;
+    const unsigned int info_height = glyph_info.height;
+
+    const unsigned int width = std::max(info_width, 1u);
+    const unsigned int height = std::max(info_height, 1u);
+
+    XResizeWindow(
+        app->display /*display*/,
+        app->window /*window*/,
+        width /*width*/,
+        height /*height*/);
+
     XRenderColor x_render_color;
     x_render_color.red = 65535;
     x_render_color.green = 65535;
@@ -148,7 +180,7 @@ static void draw_text(App *app) {
         app->xft_drawable /*drawable*/,
         &xft_color /*color*/,
         app->font /*font*/,
-        10 /*pos x*/,
+        0 /*pos x*/,
         20 /*pos y*/,
         (unsigned char*)app->text_buffer,
         app->text_cursor_pos);
