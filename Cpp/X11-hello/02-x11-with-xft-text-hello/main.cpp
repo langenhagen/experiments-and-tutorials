@@ -30,7 +30,6 @@ struct App {
     XftFont* font;
 
     /*application stuff*/
-    int n_redraws = 0;
     static const int text_buffer_size = 255;
     char text_buffer[text_buffer_size];
     int text_cursor_pos = 0;
@@ -131,8 +130,6 @@ static void draw_text(App *app) {
 }
 
 static void redraw(App *app) {
-    // std::cout << "redrawing " << ++n_redraws << std::endl;
-
     XClearWindow(app->display, app->window);
     draw_text(app);
 }

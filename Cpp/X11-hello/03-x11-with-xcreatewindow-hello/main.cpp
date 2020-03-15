@@ -34,7 +34,6 @@ struct App {
     XftFont* font;
 
     /*application stuff*/
-    int n_redraws = 0;
     static const int text_buffer_size = 255;
     char text_buffer[text_buffer_size];
     int text_cursor_pos = 0;
@@ -71,7 +70,6 @@ static App* setup_x() {
 
     unsigned long black = BlackPixel(app->display, app->screen);
     unsigned long white = WhitePixel(app->display, app->screen);
-
 
     XSetWindowAttributes set_window_attributes;
     set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
