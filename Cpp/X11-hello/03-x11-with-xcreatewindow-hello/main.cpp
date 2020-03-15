@@ -156,7 +156,7 @@ static void draw_text(App *app) {
         &xft_color /*color*/,
         app->font /*font*/,
         10 /*pos x*/,
-        20 /*pos y*/,
+        app->font->ascent /*pos y*/,
         (unsigned char*)app->text_buffer,
         app->text_cursor_pos);
 
