@@ -20,7 +20,7 @@ based on: http://mech.math.msu.su/~nap/2/GWindow/xintro.html
 #include <cstring>
 #include <iostream>
 
-/* order of X11 includes allegedlly important*/
+/* order of X11 includes allegedly important*/
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>

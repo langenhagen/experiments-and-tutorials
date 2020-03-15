@@ -15,7 +15,7 @@ author: andreasl
 #include <iostream>
 #include <thread>
 
-/* order of X11 includes allegedlly important*/
+/* order of X11 includes allegedly important*/
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
