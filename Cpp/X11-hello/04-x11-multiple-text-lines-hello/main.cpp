@@ -33,6 +33,7 @@ struct App {
     XftFont* font;
 
     /*application stuff*/
+    unsigned int line_height;
     unsigned int width = 1;
     unsigned int height = 20;
     int n_redraws = 0;
@@ -134,9 +135,11 @@ static void setup_xft_font(App *app) {
         XftTypeDouble,
         20.0,
         nullptr );
+
+    app->line_height = app->font->ascent + app->font->descent;
 }
 
-static XGlyphInfo get_text_dimensions(App *app) {
+static void resize_window(App *app) {
     XGlyphInfo glyph_info;
     XftTextExtents8(
         app->display/*Display*/,
@@ -145,23 +148,19 @@ static XGlyphInfo get_text_dimensions(App *app) {
         app->text_cursor_pos /*int len*/,
         &glyph_info /*out glyph info*/);
 
-    return glyph_info;
-}
+    const unsigned int window_width = glyph_info.width;
 
-static void draw_text(App *app) {
-    XGlyphInfo glyph_info = get_text_dimensions(app);
-    const unsigned int info_width = glyph_info.width;
-    const unsigned int info_height = glyph_info.height;
-
-    const unsigned int width = std::max(info_width, 1u);
-    const unsigned int height = std::max(info_height, 1u);
+    app->width = std::max(window_width, 1u);
+    app->height = std::max(app->line_height, 1u);
 
     XResizeWindow(
         app->display /*display*/,
         app->window /*window*/,
-        width /*width*/,
-        height /*height*/);
+        app->width /*width*/,
+        app->height /*height*/);
+}
 
+static void draw_text(App *app) {
     XRenderColor x_render_color;
     x_render_color.red = 65535;
     x_render_color.green = 65535;
@@ -194,6 +193,7 @@ static void draw_text(App *app) {
 
 static void redraw(App *app) {
     XClearWindow(app->display, app->window);
+    resize_window(app);
     draw_text(app);
 }
 
