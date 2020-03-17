@@ -112,7 +112,7 @@ static App* setup_x() {
 
     app->gc = XCreateGC(app->display, app->window, 0, 0);
 
-    unsigned long white = WhitePixel(app->display, app->screen);
+    const unsigned long white = WhitePixel(app->display, app->screen);
     XSetForeground(app->display, app->gc, white);
     XClearWindow(app->display, app->window);
     XMapRaised(app->display, app->window);
