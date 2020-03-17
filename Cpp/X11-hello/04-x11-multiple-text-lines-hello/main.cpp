@@ -43,8 +43,6 @@ struct App {
     unsigned int width = 1;
     unsigned int line_height;
     std::vector<Line> lines;
-    unsigned int text_cursor_row = 0;
-    unsigned int text_cursor_col = 0;
     bool is_ctrl_pressed = false;
     unsigned long window_background_color = 0x000000;
 };
@@ -149,7 +147,7 @@ static void setup_xft_font(App *app) {
 
 static void adjust_window_width(App *app) {
     unsigned int window_width = 1;
-    for(auto line : app->lines) {
+    for(const auto line : app->lines) {
         XGlyphInfo glyph_info;
         XftTextExtents8(
             app->display/*Display*/,
