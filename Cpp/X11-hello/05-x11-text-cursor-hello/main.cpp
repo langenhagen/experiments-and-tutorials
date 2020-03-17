@@ -42,9 +42,8 @@ struct App {
     unsigned int width = 500;
     unsigned int line_height;
     std::vector<Line> lines;
-    unsigned int text_cursor_row = 0;
-    unsigned int text_cursor_col = 0;
-    unsigned long window_background_color = 0x000000;
+    unsigned int cursor_row = 0;
+    unsigned int cursor_col = 0;
 };
 
 static void grab_keyboard(App *app) {
@@ -78,7 +77,7 @@ static App* setup_x() {
 
     XSetWindowAttributes set_window_attributes;
     set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
-    set_window_attributes.background_pixel = app->window_background_color;  /*rgb values*/
+    set_window_attributes.background_pixel = 0x000000; /*rgb values*/
     set_window_attributes.event_mask =
         ExposureMask
         | KeyPressMask
@@ -189,8 +188,12 @@ static void draw_text(App *app) {
         &xft_color);
 }
 
+static Line& current_line(App *app) {
+    return app->lines[app->cursor_row];
+}
+
 static void draw_cursor(App *app) {
-    auto &line = app->lines[app->text_cursor_row];
+    auto &line = current_line(app);
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
         app->display/*Display*/,
@@ -202,12 +205,12 @@ static void draw_cursor(App *app) {
     XftTextExtents8(
         app->display/*Display*/,
         app->font /*xftfont*/,
-        (XftChar8 *)&line.buffer[app->text_cursor_col] /*string*/,
-        line.length - app->text_cursor_col /*int len*/,
+        (XftChar8 *)&line.buffer[app->cursor_col] /*string*/,
+        line.length - app->cursor_col /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = app->line_height * app->text_cursor_row;
+    const int y = app->line_height * app->cursor_row;
     const unsigned long white = WhitePixel(app->display, app->screen);
     XSetForeground(
         app->display /*display*/,
@@ -251,52 +254,51 @@ static int run(App *app) {
                 auto &line = app->lines.back();
                 if(line.length == 0 && app->lines.size() > 1) {
                     app->lines.pop_back();
-                    --app->text_cursor_row;
-                    app->text_cursor_col = app->lines.back().length - 1;
+                    --app->cursor_row;
+                    app->cursor_col = current_line(app).length;
                     redraw(app);
                 } else if(line.length > 0) {
                     --line.length;
-                    --app->text_cursor_col;
+                    --app->cursor_col;
                     redraw(app);
                 }
             } else if(key_code == 36 /*enter*/) {
                 app->lines.push_back(Line());
-                ++app->text_cursor_row;
-                app->text_cursor_col = 0;
+                ++app->cursor_row;
+                app->cursor_col = 0;
                 redraw(app);
             } else if(key_code == 111 /*down arrow key*/) {
-                if(app->text_cursor_row > 0) {
-                    --app->text_cursor_row;
-                    app->text_cursor_col = std::min(
-                        app->text_cursor_col,
-                        app->lines[app->text_cursor_row].length);
+                if(app->cursor_row > 0) {
+                    --app->cursor_row;
+                    app->cursor_col = std::min(
+                        app->cursor_col,
+                        current_line(app).length);
                     redraw(app);
                 }
             } else if(key_code == 116 /*up arrow key*/) {
-                if(app->text_cursor_row < app->lines.size() - 1) {
-                    ++app->text_cursor_row;
-                    app->text_cursor_col = std::min(
-                        app->text_cursor_col,
-                        app->lines[app->text_cursor_row].length);
+                if(app->cursor_row < app->lines.size() - 1) {
+                    ++app->cursor_row;
+                    app->cursor_col = std::min(
+                        app->cursor_col,
+                        current_line(app).length);
                     redraw(app);
                 }
             } else if(key_code == 113 /*left arrow key*/) {
-                if(app->text_cursor_col > 0) {
-                    --app->text_cursor_col;
+                if(app->cursor_col > 0) {
+                    --app->cursor_col;
                     redraw(app);
-                } else if(app->text_cursor_row > 0) {
-                    --app->text_cursor_row;
-                    app->text_cursor_col = app->lines[app->text_cursor_row].length;
+                } else if(app->cursor_row > 0) {
+                    --app->cursor_row;
+                    app->cursor_col = current_line(app).length;
                     redraw(app);
                 }
             } else if(key_code == 114 /*right arrow key*/) {
-                if(app->text_cursor_col < app->lines[app->text_cursor_row].length) {
-                    ++app->text_cursor_col;
+                if(app->cursor_col < current_line(app).length) {
+                    ++app->cursor_col;
                     redraw(app);
-                } else if(app->text_cursor_row < app->lines.size() - 1 ) {
-                    std::cout << "!" << std::endl;
-                    ++app->text_cursor_row;
-                    app->text_cursor_col = 0;
+                } else if(app->cursor_row < app->lines.size() - 1) {
+                    ++app->cursor_row;
+                    app->cursor_col = 0;
                     redraw(app);
                 }
             } else if(XLookupString(
@@ -309,7 +311,7 @@ static int run(App *app) {
                 Line &line = app->lines.back();
                 line.buffer[line.length] = input_buffer[0];
                 ++line.length;
-                ++app->text_cursor_col;
+                ++app->cursor_col;
                 redraw(app);
             }
             break;
