@@ -190,19 +190,24 @@ static void draw_text(App *app) {
 }
 
 static void draw_cursor(App *app) {
-    std::cout << app->text_cursor_row << std::endl;
-    XGlyphInfo glyph_info;
     auto &line = app->lines[app->text_cursor_row];
+    XGlyphInfo glyph_info_all;
     XftTextExtents8(
         app->display/*Display*/,
         app->font /*xftfont*/,
         (XftChar8 *)line.buffer /*string*/,
         line.length /*int len*/,
-        &glyph_info /*out glyph info*/);
+        &glyph_info_all /*out glyph info*/);
+    XGlyphInfo glyph_info_remaining;
+    XftTextExtents8(
+        app->display/*Display*/,
+        app->font /*xftfont*/,
+        (XftChar8 *)&line.buffer[app->text_cursor_col] /*string*/,
+        line.length - app->text_cursor_col /*int len*/,
+        &glyph_info_remaining /*out glyph info*/);
 
-    const int x = glyph_info.width;
+    const int x = glyph_info_all.width - glyph_info_remaining.width;
     const int y = app->line_height * app->text_cursor_row;
-
     const unsigned long white = WhitePixel(app->display, app->screen);
     XSetForeground(
         app->display /*display*/,
@@ -231,8 +236,6 @@ static int run(App *app) {
 
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        // if (XFilterEvent(&event, app->window))
-        //     continue;
         unsigned int key_code = 0;
         switch(event.type) {
         case Expose:
@@ -249,7 +252,7 @@ static int run(App *app) {
                 if(line.length == 0 && app->lines.size() > 1) {
                     app->lines.pop_back();
                     --app->text_cursor_row;
-                    app->text_cursor_col = app->lines.back().length-1;
+                    app->text_cursor_col = app->lines.back().length - 1;
                     redraw(app);
                 } else if(line.length > 0) {
                     --line.length;
@@ -261,6 +264,41 @@ static int run(App *app) {
                 ++app->text_cursor_row;
                 app->text_cursor_col = 0;
                 redraw(app);
+            } else if(key_code == 111 /*down arrow key*/) {
+                if(app->text_cursor_row > 0) {
+                    --app->text_cursor_row;
+                    app->text_cursor_col = std::min(
+                        app->text_cursor_col,
+                        app->lines[app->text_cursor_row].length);
+                    redraw(app);
+                }
+            } else if(key_code == 116 /*up arrow key*/) {
+                if(app->text_cursor_row < app->lines.size() - 1) {
+                    ++app->text_cursor_row;
+                    app->text_cursor_col = std::min(
+                        app->text_cursor_col,
+                        app->lines[app->text_cursor_row].length);
+                    redraw(app);
+                }
+            } else if(key_code == 113 /*left arrow key*/) {
+                if(app->text_cursor_col > 0) {
+                    --app->text_cursor_col;
+                    redraw(app);
+                } else if(app->text_cursor_row > 0) {
+                    --app->text_cursor_row;
+                    app->text_cursor_col = app->lines[app->text_cursor_row].length;
+                    redraw(app);
+                }
+            } else if(key_code == 114 /*right arrow key*/) {
+                if(app->text_cursor_col < app->lines[app->text_cursor_row].length) {
+                    ++app->text_cursor_col;
+                    redraw(app);
+                } else if(app->text_cursor_row < app->lines.size() - 1 ) {
+                    std::cout << "!" << std::endl;
+                    ++app->text_cursor_row;
+                    app->text_cursor_col = 0;
+                    redraw(app);
+                }
             } else if(XLookupString(
                     &event.xkey,
                     input_buffer,
