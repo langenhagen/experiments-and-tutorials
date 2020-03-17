@@ -176,8 +176,6 @@ static int run(App *app) {
 
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        // if (XFilterEvent(&event, app->window))
-        //     continue;
         switch(event.type) {
         case Expose:
             if(event.xexpose.count == 0) {

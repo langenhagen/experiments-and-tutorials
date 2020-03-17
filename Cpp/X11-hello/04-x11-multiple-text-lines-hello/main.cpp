@@ -225,8 +225,6 @@ static int run(App *app) {
 
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        // if (XFilterEvent(&event, app->window))
-        //     continue;
         unsigned int key_code = 0;
         switch(event.type) {
         case Expose:
