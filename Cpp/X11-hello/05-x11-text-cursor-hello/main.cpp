@@ -21,7 +21,7 @@ author: andreasl
 
 struct Line {
     static const unsigned int buffer_size = 255;
-    unsigned int length;
+    int length;
     char buffer[buffer_size];
 };
 
@@ -42,8 +42,8 @@ struct App {
     unsigned int width = 500;
     unsigned int line_height;
     std::vector<Line> lines;
-    unsigned int cursor_row = 0;
-    unsigned int cursor_col = 0;
+    int cursor_row = 0;
+    int cursor_col = 0;
 };
 
 static void grab_keyboard(App *app) {
@@ -188,7 +188,7 @@ static void draw_text(App *app) {
         &xft_color);
 }
 
-static Line& current_line(App *app) {
+static inline Line& current_line(App *app) {
     return app->lines[app->cursor_row];
 }
 
@@ -225,6 +225,62 @@ static void draw_cursor(App *app) {
         y,
         3 /*width*/,
         app->line_height /*height*/);
+}
+
+static void move_cursor(App *app, int increment) {
+    /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
+    while(true) {
+        if(app->cursor_col + increment < 0) {
+            /*left up*/
+            if( app->cursor_row == 0) {
+                /*to front*/
+                app->cursor_row = 0;
+                app->cursor_col = 0;
+                return;
+            } else {
+                increment += app->cursor_col + 1;
+                app->cursor_row -= 1;
+                app->cursor_col = app->lines[app->cursor_row].length;
+            }
+        } else if(app->cursor_col + increment > app->lines[app->cursor_row].length) {
+            /*right down*/
+            if(app->cursor_row == app->lines.size() - 1 ) {
+                /*past last position*/
+                app->cursor_row = app->lines.size() - 1;
+                app->cursor_col = app->lines[app->cursor_row].length;
+                return;
+            } else {
+                increment -= app->lines[app->cursor_row].length - app->cursor_col + 1;
+                app->cursor_row += 1;
+                app->cursor_col = 0;
+            }
+        } else {
+            /*in same line*/
+            app->cursor_col += increment;
+            return;
+        }
+    }
+}
+
+static void move_cursor_vertically(App *app, int increment) {
+    /*Move the cursor by increment up/down and consider line lengths and text beginnings & ends.*/
+    if(app->cursor_row + increment < 0) {
+        /*to front*/
+        app->cursor_row = 0;
+        app->cursor_col = 0;
+        return;
+    } else if(app->cursor_row + increment >= app->lines.size()) {
+        /*past last position*/
+        app->cursor_row = app->lines.size() - 1;
+        app->cursor_col = app->lines[app->cursor_row].length;
+        return;
+    } else {
+        /*normal movement*/
+        app->cursor_row += increment;
+        if( app->cursor_col > app->lines[app->cursor_row].length) {
+            app->cursor_col = app->lines[app->cursor_row].length;
+        }
+    }
 }
 
 static void redraw(App *app) {
@@ -267,40 +323,18 @@ static int run(App *app) {
                 ++app->cursor_row;
                 app->cursor_col = 0;
                 redraw(app);
-            } else if(key_code == 111 /*down arrow key*/) {
-                if(app->cursor_row > 0) {
-                    --app->cursor_row;
-                    app->cursor_col = std::min(
-                        app->cursor_col,
-                        current_line(app).length);
-                    redraw(app);
-                }
-            } else if(key_code == 116 /*up arrow key*/) {
-                if(app->cursor_row < app->lines.size() - 1) {
-                    ++app->cursor_row;
-                    app->cursor_col = std::min(
-                        app->cursor_col,
-                        current_line(app).length);
-                    redraw(app);
-                }
+            } else if(key_code == 111 /*up arrow key*/) {
+                move_cursor_vertically(app, -1);
+                redraw(app);
+            } else if(key_code == 116 /*down arrow key*/) {
+                move_cursor_vertically(app, +1);
+                redraw(app);
             } else if(key_code == 113 /*left arrow key*/) {
-                if(app->cursor_col > 0) {
-                    --app->cursor_col;
-                    redraw(app);
-                } else if(app->cursor_row > 0) {
-                    --app->cursor_row;
-                    app->cursor_col = current_line(app).length;
-                    redraw(app);
-                }
+                move_cursor(app, -1);
+                redraw(app);
             } else if(key_code == 114 /*right arrow key*/) {
-                if(app->cursor_col < current_line(app).length) {
-                    ++app->cursor_col;
-                    redraw(app);
-                } else if(app->cursor_row < app->lines.size() - 1) {
-                    ++app->cursor_row;
-                    app->cursor_col = 0;
-                    redraw(app);
-                }
+                move_cursor(app, +1);
+                redraw(app);
             } else if(XLookupString(
                     &event.xkey,
                     input_buffer,
