@@ -48,8 +48,8 @@ struct App {
 
 static void grab_keyboard(App *app) {
     using namespace std::chrono_literals;
-    /* try to grab keyboard 1000 times.
-       we may have to wait for another process to ungrab*/
+    /*try to grab keyboard 1000 times.
+    we may have to wait for another process to ungrab*/
     for(int i = 0; i < 1000; ++i) {
         int grab_result = XGrabKeyboard(
             app->display /*display*/,
@@ -188,12 +188,8 @@ static void draw_text(App *app) {
         &xft_color);
 }
 
-static inline Line& current_line(App *app) {
-    return app->lines[app->cursor_row];
-}
-
 static void draw_cursor(App *app) {
-    auto &line = current_line(app);
+    const auto &line = app->lines[app->cursor_row];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
         app->display/*Display*/,
@@ -216,7 +212,6 @@ static void draw_cursor(App *app) {
         app->display /*display*/,
         app->gc,
         white /*color*/);
-
     XFillRectangle(
         app->display,
         app->window /*drawable*/,
@@ -283,6 +278,41 @@ static void move_cursor_vertically(App *app, int increment) {
     }
 }
 
+static void insert_char(App *app, const char c) {
+    char *buffer = app->lines[app->cursor_row].buffer;
+    const auto col = app->cursor_col;
+
+    std::memmove(buffer + col + 1, buffer + col, std::strlen(buffer) - col);
+    std::memcpy(buffer + col, &c, 1);
+
+    ++app->lines[app->cursor_row].length;
+}
+
+static void insert_newline(App *app) {
+TODO
+                // } else if(key_code == 36 /*enter*/) {
+                // app->lines.push_back(Line());
+                // ++app->cursor_row;
+                // app->cursor_col = 0;
+                // redraw(app);
+}
+
+static void delete_text(App *app, int n_characters) {
+TODO
+                // auto &line = app->lines.back();
+                // if(line.length == 0 && app->lines.size() > 1) {
+                //     app->lines.pop_back();
+                //     --app->cursor_row;
+                //     app->cursor_col = app->lines[app->cursor_row].length;
+                //     redraw(app);
+                // } else if(line.length > 0) {
+                //     --line.length;
+                //     --app->cursor_col;
+                //     redraw(app);
+                // }
+
+}
+
 static void redraw(App *app) {
     XClearWindow(app->display, app->window);
     draw_text(app);
@@ -290,12 +320,12 @@ static void redraw(App *app) {
 }
 
 static int run(App *app) {
-    const int input_buffer_size = 32;
+    const int input_buffer_size = 8;
     char input_buffer[input_buffer_size];
 
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        unsigned int key_code = 0;
+        unsigned int key_code;
         switch(event.type) {
         case Expose:
             if(event.xexpose.count == 0) {
@@ -311,7 +341,7 @@ static int run(App *app) {
                 if(line.length == 0 && app->lines.size() > 1) {
                     app->lines.pop_back();
                     --app->cursor_row;
-                    app->cursor_col = current_line(app).length;
+                    app->cursor_col = app->lines[app->cursor_row].length;
                     redraw(app);
                 } else if(line.length > 0) {
                     --line.length;
@@ -342,9 +372,7 @@ static int run(App *app) {
                     nullptr,
                     nullptr) > 0) {
                 /* normal text input*/
-                Line &line = app->lines.back();
-                line.buffer[line.length] = input_buffer[0];
-                ++line.length;
+                insert_char(app, input_buffer[0]);
                 ++app->cursor_col;
                 redraw(app);
             }
