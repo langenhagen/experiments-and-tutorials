@@ -279,38 +279,75 @@ static void move_cursor_vertically(App *app, int increment) {
 }
 
 static void insert_char(App *app, const char c) {
+    /*insert a character into the text at the current cursor's position.*/
     char *buffer = app->lines[app->cursor_row].buffer;
     const auto col = app->cursor_col;
 
     std::memmove(buffer + col + 1, buffer + col, std::strlen(buffer) - col);
     std::memcpy(buffer + col, &c, 1);
 
+    ++app->cursor_col;
     ++app->lines[app->cursor_row].length;
 }
 
-static void insert_newline(App *app) {
-TODO
-                // } else if(key_code == 36 /*enter*/) {
-                // app->lines.push_back(Line());
-                // ++app->cursor_row;
-                // app->cursor_col = 0;
-                // redraw(app);
+    static void insert_newline(App *app) {
+    // } else if(key_code == 36 /*enter*/) {
+    // app->lines.push_back(Line());
+    // ++app->cursor_row;
+    // app->cursor_col = 0;
+    // redraw(app);
 }
 
-static void delete_text(App *app, int n_characters) {
-TODO
-                // auto &line = app->lines.back();
-                // if(line.length == 0 && app->lines.size() > 1) {
-                //     app->lines.pop_back();
-                //     --app->cursor_row;
-                //     app->cursor_col = app->lines[app->cursor_row].length;
-                //     redraw(app);
-                // } else if(line.length > 0) {
-                //     --line.length;
-                //     --app->cursor_col;
-                //     redraw(app);
-                // }
+static void delete_chars(App *app, int n_chars) {
+    /*Delete the given number characters from the text at the cursor's position.*/
+    while(true) {
+        if(app->cursor_col + n_chars < 0) {
+            /*left up*/
+            if( app->cursor_row == 0) {
+                /*to front*/
+                // TODO del
+                // app->cursor_row = 0;
+                // app->cursor_col = 0;
+                return;
+            } else {
+                // TODO del
+                // n_chars += app->cursor_col + 1;
+                // app->cursor_row -= 1;
+                // app->cursor_col = app->lines[app->cursor_row].length;
+            }
+        } else if(app->cursor_col + n_chars > app->lines[app->cursor_row].length) {
+            /*right down*/
+            if(app->cursor_row == app->lines.size() - 1 ) {
+                /*past last position*/
+                // TODO del
+                // not move cursor
+                // app->cursor_row = app->lines.size() - 1;
+                // app->cursor_col = app->lines[app->cursor_row].length;
+                return;
+            } else {
+                // TODO del
+                // not move cursor
+                // n_chars -= app->lines[app->cursor_row].length - app->cursor_col + 1;
+                // app->cursor_row += 1;
+                // app->cursor_col = 0;
+            }
+        } else {
+            /*in same line*/
+            Line &line = app->lines[app->cursor_row];
+            auto col = app->cursor_col;
+            char *pos = line.buffer + col;
 
+            if (n_chars < 0) {
+                std::memmove(pos + n_chars, pos, line.length - col);
+                app->cursor_col += n_chars;
+                line.length += n_chars;
+            } else {
+                std::memmove(pos, pos + n_chars, line.length - col + n_chars);
+                line.length -= n_chars;
+            }
+            return;
+        }
+    }
 }
 
 static void redraw(App *app) {
@@ -336,18 +373,12 @@ static int run(App *app) {
             key_code = event.xkey.keycode;
             if(key_code == 9 /*esc*/) {
                 return 0;
-            } else if(key_code == 22 /*delete*/) {
-                auto &line = app->lines.back();
-                if(line.length == 0 && app->lines.size() > 1) {
-                    app->lines.pop_back();
-                    --app->cursor_row;
-                    app->cursor_col = app->lines[app->cursor_row].length;
-                    redraw(app);
-                } else if(line.length > 0) {
-                    --line.length;
-                    --app->cursor_col;
-                    redraw(app);
-                }
+            } else if(key_code == 22 /*backspace*/) {
+                delete_chars(app, -1);
+                redraw(app);
+            } else if(key_code == 119 /*delete*/) {
+                delete_chars(app, +1);
+                redraw(app);
             } else if(key_code == 36 /*enter*/) {
                 app->lines.push_back(Line());
                 ++app->cursor_row;
@@ -373,7 +404,6 @@ static int run(App *app) {
                     nullptr) > 0) {
                 /* normal text input*/
                 insert_char(app, input_buffer[0]);
-                ++app->cursor_col;
                 redraw(app);
             }
             break;
