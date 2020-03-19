@@ -1,5 +1,5 @@
 /* Render an X11 window for multiple lines of text input
-   and have a text cursor that you can control via arrow keys.
+and have a text cursor that you can control via arrow keys.
 
 Apparently, x11 provides own cursors https://tronche.com/gui/x/xlib/pixmap-and-cursor/cursor.html
 but they seem inferior. I use a simple filled rectangle
@@ -21,7 +21,7 @@ author: andreasl
 
 struct Line {
     static const unsigned int buffer_size = 255;
-    int length;
+    int length = 0;
     char buffer[buffer_size];
 };
 
@@ -225,33 +225,35 @@ static void draw_cursor(App *app) {
 static void move_cursor(App *app, int increment) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
     while(true) {
-        if(app->cursor_col + increment < 0) {
+        auto &row = app->cursor_row;
+        auto &col = app->cursor_col;
+        if(col + increment < 0) {
             /*left up*/
-            if( app->cursor_row == 0) {
+            if( row == 0) {
                 /*to front*/
-                app->cursor_row = 0;
-                app->cursor_col = 0;
+                row = 0;
+                col = 0;
                 return;
             } else {
-                increment += app->cursor_col + 1;
-                app->cursor_row -= 1;
-                app->cursor_col = app->lines[app->cursor_row].length;
+                increment += col + 1;
+                row -= 1;
+                col = app->lines[row].length;
             }
-        } else if(app->cursor_col + increment > app->lines[app->cursor_row].length) {
+        } else if(col + increment > app->lines[row].length) {
             /*right down*/
-            if(app->cursor_row == app->lines.size() - 1 ) {
+            if(row == app->lines.size() - 1) {
                 /*past last position*/
-                app->cursor_row = app->lines.size() - 1;
-                app->cursor_col = app->lines[app->cursor_row].length;
+                row = app->lines.size() - 1;
+                col = app->lines[row].length;
                 return;
             } else {
-                increment -= app->lines[app->cursor_row].length - app->cursor_col + 1;
-                app->cursor_row += 1;
-                app->cursor_col = 0;
+                increment -= app->lines[row].length - col + 1;
+                row += 1;
+                col = 0;
             }
         } else {
             /*in same line*/
-            app->cursor_col += increment;
+            col += increment;
             return;
         }
     }
@@ -259,21 +261,23 @@ static void move_cursor(App *app, int increment) {
 
 static void move_cursor_vertically(App *app, int increment) {
     /*Move the cursor by increment up/down and consider line lengths and text beginnings & ends.*/
-    if(app->cursor_row + increment < 0) {
+    auto &row = app->cursor_row;
+    auto &col = app->cursor_col;
+    if(row + increment < 0) {
         /*to front*/
-        app->cursor_row = 0;
-        app->cursor_col = 0;
+        row = 0;
+        col = 0;
         return;
-    } else if(app->cursor_row + increment >= app->lines.size()) {
+    } else if(row + increment >= app->lines.size()) {
         /*past last position*/
-        app->cursor_row = app->lines.size() - 1;
-        app->cursor_col = app->lines[app->cursor_row].length;
+        row = app->lines.size() - 1;
+        col = app->lines[row].length;
         return;
     } else {
         /*normal movement*/
-        app->cursor_row += increment;
-        if( app->cursor_col > app->lines[app->cursor_row].length) {
-            app->cursor_col = app->lines[app->cursor_row].length;
+        row += increment;
+        if( col > app->lines[row].length) {
+            col = app->lines[row].length;
         }
     }
 }
@@ -290,56 +294,45 @@ static void insert_char(App *app, const char c) {
     ++app->lines[app->cursor_row].length;
 }
 
-    static void insert_newline(App *app) {
-    // } else if(key_code == 36 /*enter*/) {
-    // app->lines.push_back(Line());
-    // ++app->cursor_row;
-    // app->cursor_col = 0;
-    // redraw(app);
-}
-
 static void delete_chars(App *app, int n_chars) {
     /*Delete the given number characters from the text at the cursor's position.*/
     while(true) {
-        if(app->cursor_col + n_chars < 0) {
+        auto &row = app->cursor_row;
+        auto &col = app->cursor_col;
+        auto &lines = app->lines;
+        Line &line = lines[row];
+        char *pos = line.buffer + col;
+
+        if(col + n_chars < 0) {
             /*left up*/
-            if( app->cursor_row == 0) {
-                /*to front*/
-                // TODO del
-                // app->cursor_row = 0;
-                // app->cursor_col = 0;
-                return;
+            if(row == 0) {
+                n_chars = -col;
             } else {
-                // TODO del
-                // n_chars += app->cursor_col + 1;
-                // app->cursor_row -= 1;
-                // app->cursor_col = app->lines[app->cursor_row].length;
+                auto &line_above = lines[row - 1];
+                const auto new_col = line_above.length;
+                std::memcpy(line_above.buffer + line_above.length, pos, line.length - col);
+                line_above.length += line.length - col;
+                lines.erase(lines.begin() + row);
+                n_chars += col + 1;
+                --row;
+                col = new_col;
             }
-        } else if(app->cursor_col + n_chars > app->lines[app->cursor_row].length) {
+        } else if(col + n_chars > line.length) {
             /*right down*/
-            if(app->cursor_row == app->lines.size() - 1 ) {
-                /*past last position*/
-                // TODO del
-                // not move cursor
-                // app->cursor_row = app->lines.size() - 1;
-                // app->cursor_col = app->lines[app->cursor_row].length;
-                return;
+            if(row == lines.size() - 1) {
+                n_chars = line.length - col;
             } else {
-                // TODO del
-                // not move cursor
-                // n_chars -= app->lines[app->cursor_row].length - app->cursor_col + 1;
-                // app->cursor_row += 1;
-                // app->cursor_col = 0;
+                n_chars -= line.length - col + 1;
+                auto &line_below = lines[row + 1];
+                std::memcpy(pos, line_below.buffer, line_below.length);
+                line.length = col + line_below.length;
+                lines.erase(lines.begin() + row + 1);
             }
         } else {
             /*in same line*/
-            Line &line = app->lines[app->cursor_row];
-            auto col = app->cursor_col;
-            char *pos = line.buffer + col;
-
             if (n_chars < 0) {
                 std::memmove(pos + n_chars, pos, line.length - col);
-                app->cursor_col += n_chars;
+                col += n_chars;
                 line.length += n_chars;
             } else {
                 std::memmove(pos, pos + n_chars, line.length - col + n_chars);
@@ -350,19 +343,67 @@ static void delete_chars(App *app, int n_chars) {
     }
 }
 
+static void insert_newline(App *app) {
+    auto &row = app->cursor_row;
+    auto &col = app->cursor_col;
+    auto &lines = app->lines;
+    auto new_line_it = lines.emplace(lines.begin() + row + 1);
+    auto &line = lines[row];
+    char *pos = line.buffer + col;
+
+    new_line_it->length = line.length - col;
+    line.length -= new_line_it->length;
+    std::memcpy(new_line_it->buffer, pos, new_line_it->length);
+    ++row;
+    col = 0;
+}
+
 static void redraw(App *app) {
     XClearWindow(app->display, app->window);
     draw_text(app);
     draw_cursor(app);
 }
 
-static int run(App *app) {
+static int handle_key_event(App *app, XEvent &event) {
+    const unsigned int key_code = event.xkey.keycode;
     const int input_buffer_size = 8;
     char input_buffer[input_buffer_size];
 
+    if(key_code == 9 /*esc*/) {
+        return 1;
+    } else if(key_code == 22 /*backspace*/) {
+        delete_chars(app, -1);
+    } else if(key_code == 119 /*delete*/) {
+        delete_chars(app, +1);
+    } else if(key_code == 36 /*enter*/) {
+        insert_newline(app);
+    } else if(key_code == 111 /*up arrow key*/) {
+        move_cursor_vertically(app, -1);
+    } else if(key_code == 116 /*down arrow key*/) {
+        move_cursor_vertically(app, +1);
+    } else if(key_code == 113 /*left arrow key*/) {
+        move_cursor(app, -1);
+    } else if(key_code == 114 /*right arrow key*/) {
+        move_cursor(app, +1);
+        redraw(app);
+    } else if(XLookupString(
+            &event.xkey,
+            input_buffer,
+            input_buffer_size,
+            nullptr,
+            nullptr) > 0) {
+        /* normal text input*/
+        insert_char(app, input_buffer[0]);
+    } else {
+        return 0;
+    }
+    redraw(app);
+    return 0;
+}
+
+static int run(App *app) {
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
-        unsigned int key_code;
         switch(event.type) {
         case Expose:
             if(event.xexpose.count == 0) {
@@ -370,41 +411,8 @@ static int run(App *app) {
             }
             break;
         case KeyPress:
-            key_code = event.xkey.keycode;
-            if(key_code == 9 /*esc*/) {
+            if(handle_key_event(app, event)) {
                 return 0;
-            } else if(key_code == 22 /*backspace*/) {
-                delete_chars(app, -1);
-                redraw(app);
-            } else if(key_code == 119 /*delete*/) {
-                delete_chars(app, +1);
-                redraw(app);
-            } else if(key_code == 36 /*enter*/) {
-                app->lines.push_back(Line());
-                ++app->cursor_row;
-                app->cursor_col = 0;
-                redraw(app);
-            } else if(key_code == 111 /*up arrow key*/) {
-                move_cursor_vertically(app, -1);
-                redraw(app);
-            } else if(key_code == 116 /*down arrow key*/) {
-                move_cursor_vertically(app, +1);
-                redraw(app);
-            } else if(key_code == 113 /*left arrow key*/) {
-                move_cursor(app, -1);
-                redraw(app);
-            } else if(key_code == 114 /*right arrow key*/) {
-                move_cursor(app, +1);
-                redraw(app);
-            } else if(XLookupString(
-                    &event.xkey,
-                    input_buffer,
-                    input_buffer_size,
-                    nullptr,
-                    nullptr) > 0) {
-                /* normal text input*/
-                insert_char(app, input_buffer[0]);
-                redraw(app);
             }
             break;
         case VisibilityNotify:
@@ -419,7 +427,7 @@ static int run(App *app) {
 int main(int argc, const char* argv[]) {
     App *app = setup_x();
     setup_xft_font(app);
-    app->lines.push_back(Line());
+    app->lines.emplace_back();
     set_window_height(app);
     run(app);
     close_x(app);
