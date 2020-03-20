@@ -79,7 +79,8 @@ static App* setup_x() {
     XSetWindowAttributes set_window_attributes;
     set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
     set_window_attributes.background_pixel = app->window_background_color;  /*rgb values*/
-    set_window_attributes.event_mask = ExposureMask
+    set_window_attributes.event_mask =
+        ExposureMask
         | KeyPressMask
         | KeyReleaseMask
         | VisibilityChangeMask;
@@ -247,7 +248,7 @@ static int run(App *app) {
                     adjust_window_width(app);
                     redraw(app);
                 }
-            } else if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl + right*/) {
+            } else if(key_code == 37 /*ctrl left*/ || key_code == 105 /*ctrl + right*/) {
                 app->is_ctrl_pressed = true;
             } else if(key_code == 36 /*enter*/) {
                 if(app->is_ctrl_pressed) {
