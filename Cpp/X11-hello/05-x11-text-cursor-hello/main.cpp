@@ -44,6 +44,7 @@ struct App {
     std::vector<Line> lines;
     int cursor_row = 0;
     int cursor_col = 0;
+    bool is_ctrl_pressed = false;
 };
 
 static void grab_keyboard(App *app) {
@@ -264,7 +265,7 @@ static void move_cursor(App *app, int increment) {
 }
 
 static void move_cursor_vertically(App *app, int increment) {
-    /*Move the cursor by increment up/down and consider line lengths and text beginnings & ends.*/
+    /*Move the cursor by increment up/down and consider line lengths and text beginning & end.*/
     auto &row = app->cursor_row;
     auto &col = app->cursor_col;
     if(row + increment < 0) {
@@ -282,6 +283,33 @@ static void move_cursor_vertically(App *app, int increment) {
         row += increment;
         if( col > app->lines[row].length) {
             col = app->lines[row].length;
+        }
+    }
+}
+
+static void move_cursor_by_word(App *app, int n_words) {
+    /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
+    while(n_words != 0) {
+        const auto &line = app->lines[app->cursor_row];
+        const auto &buffer = line.buffer;
+        const auto col = app->cursor_col;
+        if(n_words < 0) {
+            /*go back*/
+            int i = col - 1;
+            while(i > 0 && !(buffer[i - 1] == ' ' && buffer[i] != ' ')) {
+                --i;
+            }
+            move_cursor(app, i - col);
+            ++n_words;
+        }
+        else {
+            /*go forward*/
+            int i = col + 1;
+            while(i < line.length && !(buffer[i - 1] != ' ' && buffer[i] == ' ')) {
+                ++i;
+            }
+            move_cursor(app, i - col);
+            --n_words;
         }
     }
 }
@@ -368,19 +396,26 @@ static void redraw(App *app) {
     draw_cursor(app);
 }
 
-static int handle_key_event(App *app, XEvent &event) {
+static int handle_key_press_event(App *app, XEvent &event) {
     const unsigned int key_code = event.xkey.keycode;
     const int input_buffer_size = 8;
     char input_buffer[input_buffer_size];
 
     if(key_code == 9 /*esc*/) {
         return 1;
+    } else if(key_code == 37 /*ctrl left*/ || key_code == 105 /*ctrl + right*/) {
+        app->is_ctrl_pressed = true;
+        return 0;
     } else if(key_code == 22 /*backspace*/) {
         delete_chars(app, -1);
     } else if(key_code == 119 /*delete*/) {
         delete_chars(app, +1);
     } else if(key_code == 36 /*enter*/) {
         insert_newline(app);
+    } else if(app->is_ctrl_pressed && key_code == 113 /*ctrl + left*/) {
+        move_cursor_by_word(app, -1);
+    } else if(app->is_ctrl_pressed && key_code == 114 /*ctrl + right*/) {
+        move_cursor_by_word(app, +1);
     } else if(key_code == 111 /*up arrow key*/) {
         move_cursor_vertically(app, -1);
     } else if(key_code == 116 /*down arrow key*/) {
@@ -389,7 +424,10 @@ static int handle_key_event(App *app, XEvent &event) {
         move_cursor(app, -1);
     } else if(key_code == 114 /*right arrow key*/) {
         move_cursor(app, +1);
-        redraw(app);
+    } else if(key_code == 110 /*home key*/) {
+        app->cursor_col = 0;
+    } else if(key_code == 115 /*end key*/) {
+        app->cursor_col = app->lines[app->cursor_row].length;
     } else if(XLookupString(
             &event.xkey,
             input_buffer,
@@ -405,6 +443,14 @@ static int handle_key_event(App *app, XEvent &event) {
     return 0;
 }
 
+static int handle_key_release_event(App *app, XEvent event) {
+    const unsigned int key_code = event.xkey.keycode;
+    if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl + right*/) {
+        app->is_ctrl_pressed = false;
+    }
+    return 0;
+}
+
 static int run(App *app) {
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
@@ -415,7 +461,12 @@ static int run(App *app) {
             }
             break;
         case KeyPress:
-            if(handle_key_event(app, event)) {
+            if(handle_key_press_event(app, event)) {
+                return 0;
+            }
+            break;
+        case KeyRelease:
+            if(handle_key_release_event(app, event)) {
                 return 0;
             }
             break;
