@@ -13,6 +13,7 @@ author: andreasl
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <utility>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -25,29 +26,38 @@ struct Line {
     char buffer[buffer_size];
 };
 
+struct TextCoord {
+    int row;
+    int col;
+};
+
 struct App {
      /*x11 essentials*/
-    Display *display;
+    Display* display;
     int screen;
     Window root_window;
     Window window;
     GC gc;
 
     /*Xft stuff*/
-    XftDraw *xft_drawable;
+    XftDraw* xft_drawable;
     XftFont* font;
 
     /*application stuff*/
     unsigned int height = 300;
     unsigned int width = 500;
+
     unsigned int line_height;
     std::vector<Line> lines;
-    int cursor_row = 0;
-    int cursor_col = 0;
+
+    TextCoord cursor = {0, 0};
+    TextCoord selection_start = {-1, -1};
+
     bool is_ctrl_pressed = false;
+    bool is_shift_pressed = false;
 };
 
-static void grab_keyboard(App *app) {
+static void grab_keyboard(App* app) {
     using namespace std::chrono_literals;
     /*try to grab keyboard 1000 times.
     we may have to wait for another process to ungrab*/
@@ -69,7 +79,7 @@ static void grab_keyboard(App *app) {
 }
 
 static App* setup_x() {
-    App *app = new App();
+    App* app = new App();
     app->display = XOpenDisplay(nullptr);
     app->screen = DefaultScreen(app->display);
     app->root_window = RootWindow(app->display, app->screen);
@@ -123,13 +133,13 @@ static App* setup_x() {
     return app;
 };
 
-static void close_x(App *app) {
+static void close_x(App* app) {
     XFreeGC(app->display, app->gc);
     XDestroyWindow(app->display, app->window);
     XCloseDisplay(app->display);
 }
 
-static void setup_xft_font(App *app) {
+static void setup_xft_font(App* app) {
     app->xft_drawable = XftDrawCreate(
         app->display,
         app->window /*drawable*/,
@@ -150,7 +160,7 @@ static void setup_xft_font(App *app) {
     app->line_height = app->font->ascent + app->font->descent;
 }
 
-static void set_window_height(App *app) {
+static void set_window_height(App* app) {
     app->height = app->line_height * 10;
 
     XResizeWindow(
@@ -160,14 +170,42 @@ static void set_window_height(App *app) {
         app->height /*height*/);
 }
 
-static void draw_text(App *app) {
+static void start_selection(App* app) {
+    if(app->selection_start.row == -1) {
+        app->selection_start.row = app->cursor.row;
+        app->selection_start.col = app->cursor.col;
+    }
+}
+
+static void invalidate_selection(App* app) {
+    if(app->selection_start.row != -1) {
+        app->selection_start.row = -1;
+        app->selection_start.col = -1;
+    }
+}
+
+static std::pair<TextCoord&, TextCoord&> get_selection(App* app) {
+    auto& cursor = app->cursor;
+    auto& selection_start = app->selection_start;
+    if(cursor.row < selection_start.row) {
+        return std::pair<TextCoord&, TextCoord&>(cursor, selection_start);
+    } else if(cursor.row > selection_start.row) {
+        return std::pair<TextCoord&, TextCoord&>(selection_start, cursor);
+    }
+    if(cursor.col < selection_start.col) {
+        return std::pair<TextCoord&, TextCoord&>(cursor, selection_start);
+    }
+    return std::pair<TextCoord&, TextCoord&>(selection_start, cursor);
+}
+
+static void draw_text(App* app) {
     XRenderColor x_render_color;
     x_render_color.red = 65535;
     x_render_color.green = 65535;
     x_render_color.blue = 65535;
     x_render_color.alpha = 65535;
-    XftColor xft_color;
 
+    XftColor xft_color;
     XftColorAllocValue(
         app->display,
         DefaultVisual(app->display, 0) /*visual*/,
@@ -193,30 +231,30 @@ static void draw_text(App *app) {
         &xft_color);
 }
 
-static void draw_cursor(App *app) {
-    const auto &line = app->lines[app->cursor_row];
+static void draw_cursor(App* app) {
+    const auto& line = app->lines[app->cursor.row];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
-        app->display/*Display*/,
+        app->display /*Display*/,
         app->font /*xftfont*/,
-        (XftChar8 *)line.buffer /*string*/,
+        (XftChar8*)line.buffer /*string*/,
         line.length /*int len*/,
         &glyph_info_all /*out glyph info*/);
     XGlyphInfo glyph_info_remaining;
     XftTextExtents8(
-        app->display/*Display*/,
+        app->display /*Display*/,
         app->font /*xftfont*/,
-        (XftChar8 *)&line.buffer[app->cursor_col] /*string*/,
-        line.length - app->cursor_col /*int len*/,
+        (XftChar8*)&line.buffer[app->cursor.col] /*string*/,
+        line.length - app->cursor.col /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = app->line_height * app->cursor_row;
-    const unsigned long white = WhitePixel(app->display, app->screen);
+    const int y = app->line_height * app->cursor.row;
+
     XSetForeground(
         app->display /*display*/,
         app->gc,
-        white /*color*/);
+        0xffffff /*color*/);
     XFillRectangle(
         app->display,
         app->window /*drawable*/,
@@ -227,11 +265,69 @@ static void draw_cursor(App *app) {
         app->line_height /*height*/);
 }
 
-static void move_cursor(App *app, int increment) {
+static void draw_selection(App* app) {
+    if(app->selection_start.row == -1) {
+        return;
+    }
+    const auto selection = get_selection(app);
+
+    for(int i = selection.first.row; i <= selection.second.row; ++i) {
+        const auto& line = app->lines[i];
+        int x = 0;
+
+        XGlyphInfo glyph_info_all;
+        XftTextExtents8(
+            app->display,
+            app->font,
+            (XftChar8*)line.buffer,
+            line.length,
+            &glyph_info_all);
+
+        int width = glyph_info_all.width;
+        if(i == selection.first.row) {
+            XGlyphInfo glyph_info_selection;
+            XftTextExtents8(
+                app->display,
+                app->font,
+                (XftChar8*)&line.buffer[selection.first.col],
+                line.length - selection.first.col,
+                &glyph_info_selection);
+
+            x = glyph_info_all.width - glyph_info_selection.width;
+            width = glyph_info_selection.width;
+        }
+
+        if(i == selection.second.row) {
+            XGlyphInfo glyph_info_remaining;
+            XftTextExtents8(
+                app->display,
+                app->font,
+                (XftChar8*)&line.buffer[selection.second.col],
+                line.length - selection.second.col,
+                &glyph_info_remaining);
+             width -= glyph_info_remaining.width;
+        }
+
+        XSetForeground(app->display, app->gc, 0x444477);
+        XFillRectangle(
+            app->display,
+            app->window,
+            app->gc,
+            x,
+            app->line_height * i /*y*/,
+            width,
+            app->line_height);
+    }
+}
+
+static void move_cursor(App* app, int increment) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
+    if(!app->is_shift_pressed) {
+        invalidate_selection(app);
+    }
     while(true) {
-        auto &row = app->cursor_row;
-        auto &col = app->cursor_col;
+        auto& row = app->cursor.row;
+        auto& col = app->cursor.col;
         if(col + increment < 0) {
             /*left up*/
             if( row == 0) {
@@ -264,10 +360,13 @@ static void move_cursor(App *app, int increment) {
     }
 }
 
-static void move_cursor_vertically(App *app, int increment) {
+static void move_cursor_vertically(App* app, int increment) {
     /*Move the cursor by increment up/down and consider line lengths and text beginning & end.*/
-    auto &row = app->cursor_row;
-    auto &col = app->cursor_col;
+    if(!app->is_shift_pressed) {
+        invalidate_selection(app);
+    }
+    auto& row = app->cursor.row;
+    auto& col = app->cursor.col;
     if(row + increment < 0) {
         /*to front*/
         row = 0;
@@ -287,12 +386,15 @@ static void move_cursor_vertically(App *app, int increment) {
     }
 }
 
-static void move_cursor_by_word(App *app, int n_words) {
+static void move_cursor_by_word(App* app, int n_words) {
     /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
+    if(!app->is_shift_pressed) {
+        invalidate_selection(app);
+    }
     while(n_words != 0) {
-        const auto &line = app->lines[app->cursor_row];
-        const auto &buffer = line.buffer;
-        const auto col = app->cursor_col;
+        const auto& line = app->lines[app->cursor.row];
+        const auto& buffer = line.buffer;
+        const auto col = app->cursor.col;
         if(n_words < 0) {
             /*go back*/
             int i = col - 1;
@@ -314,33 +416,35 @@ static void move_cursor_by_word(App *app, int n_words) {
     }
 }
 
-static void insert_char(App *app, const char c) {
+static void insert_char(App* app, const char c) {
     /*insert a character into the text at the current cursor's position.*/
-    char *buffer = app->lines[app->cursor_row].buffer;
-    const auto col = app->cursor_col;
+    invalidate_selection(app);
+
+    char* buffer = app->lines[app->cursor.row].buffer;
+    const auto col = app->cursor.col;
 
     std::memmove(buffer + col + 1, buffer + col, std::strlen(buffer) - col);
     std::memcpy(buffer + col, &c, 1);
 
-    ++app->cursor_col;
-    ++app->lines[app->cursor_row].length;
+    ++app->cursor.col;
+    ++app->lines[app->cursor.row].length;
 }
 
-static void delete_chars(App *app, int n_chars) {
+static void delete_chars(App* app, int n_chars) {
     /*Delete the given number characters from the text at the cursor's position.*/
     while(true) {
-        auto &row = app->cursor_row;
-        auto &col = app->cursor_col;
-        auto &lines = app->lines;
-        Line &line = lines[row];
-        char *pos = line.buffer + col;
+        auto& row = app->cursor.row;
+        auto& col = app->cursor.col;
+        auto& lines = app->lines;
+        Line& line = lines[row];
+        char* pos = line.buffer + col;
 
         if(col + n_chars < 0) {
             /*left up*/
             if(row == 0) {
                 n_chars = -col;
             } else {
-                auto &line_above = lines[row - 1];
+                auto& line_above = lines[row - 1];
                 const auto new_col = line_above.length;
                 std::memcpy(line_above.buffer + line_above.length, pos, line.length - col);
                 line_above.length += line.length - col;
@@ -355,7 +459,7 @@ static void delete_chars(App *app, int n_chars) {
                 n_chars = line.length - col;
             } else {
                 n_chars -= line.length - col + 1;
-                auto &line_below = lines[row + 1];
+                auto& line_below = lines[row + 1];
                 std::memcpy(pos, line_below.buffer, line_below.length);
                 line.length = col + line_below.length;
                 lines.erase(lines.begin() + row + 1);
@@ -375,13 +479,13 @@ static void delete_chars(App *app, int n_chars) {
     }
 }
 
-static void insert_newline(App *app) {
-    auto &row = app->cursor_row;
-    auto &col = app->cursor_col;
-    auto &lines = app->lines;
+static void insert_newline(App* app) {
+    auto& row = app->cursor.row;
+    auto& col = app->cursor.col;
+    auto& lines = app->lines;
     auto new_line_it = lines.emplace(lines.begin() + row + 1);
-    auto &line = lines[row];
-    char *pos = line.buffer + col;
+    auto& line = lines[row];
+    char* pos = line.buffer + col;
 
     new_line_it->length = line.length - col;
     line.length -= new_line_it->length;
@@ -390,44 +494,48 @@ static void insert_newline(App *app) {
     col = 0;
 }
 
-static void redraw(App *app) {
+static void redraw(App* app) {
     XClearWindow(app->display, app->window);
+    draw_selection(app);
     draw_text(app);
     draw_cursor(app);
 }
 
-static int handle_key_press_event(App *app, XEvent &event) {
+static int handle_key_press_event(App* app, XEvent& event) {
     const unsigned int key_code = event.xkey.keycode;
     const int input_buffer_size = 8;
     char input_buffer[input_buffer_size];
 
     if(key_code == 9 /*esc*/) {
         return 1;
-    } else if(key_code == 37 /*ctrl left*/ || key_code == 105 /*ctrl + right*/) {
+    } else if(key_code == 37 /*ctrl left*/ || key_code == 105 /*ctrl right*/) {
         app->is_ctrl_pressed = true;
         return 0;
+    } else if(key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
+        app->is_shift_pressed = true;
+        start_selection(app);
+        return 0;
     } else if(key_code == 22 /*backspace*/) {
+        // TODO delete selection
         delete_chars(app, -1);
     } else if(key_code == 119 /*delete*/) {
+        // TODO delete selection
         delete_chars(app, +1);
     } else if(key_code == 36 /*enter*/) {
+        // TODO delete selection
         insert_newline(app);
-    } else if(app->is_ctrl_pressed && key_code == 113 /*ctrl + left*/) {
-        move_cursor_by_word(app, -1);
-    } else if(app->is_ctrl_pressed && key_code == 114 /*ctrl + right*/) {
-        move_cursor_by_word(app, +1);
     } else if(key_code == 111 /*up arrow key*/) {
         move_cursor_vertically(app, -1);
     } else if(key_code == 116 /*down arrow key*/) {
         move_cursor_vertically(app, +1);
     } else if(key_code == 113 /*left arrow key*/) {
-        move_cursor(app, -1);
+        app->is_ctrl_pressed ? move_cursor_by_word(app, -1) : move_cursor(app, -1);
     } else if(key_code == 114 /*right arrow key*/) {
-        move_cursor(app, +1);
+        app->is_ctrl_pressed ? move_cursor_by_word(app, +1) : move_cursor(app, +1);
     } else if(key_code == 110 /*home key*/) {
-        app->cursor_col = 0;
+        app->cursor.col = 0;
     } else if(key_code == 115 /*end key*/) {
-        app->cursor_col = app->lines[app->cursor_row].length;
+        app->cursor.col = app->lines[app->cursor.row].length;
     } else if(XLookupString(
             &event.xkey,
             input_buffer,
@@ -435,6 +543,7 @@ static int handle_key_press_event(App *app, XEvent &event) {
             nullptr,
             nullptr) > 0) {
         /* normal text input*/
+        // TODO delete selection
         insert_char(app, input_buffer[0]);
     } else {
         return 0;
@@ -443,15 +552,17 @@ static int handle_key_press_event(App *app, XEvent &event) {
     return 0;
 }
 
-static int handle_key_release_event(App *app, XEvent event) {
+static int handle_key_release_event(App* app, XEvent event) {
     const unsigned int key_code = event.xkey.keycode;
     if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl + right*/) {
         app->is_ctrl_pressed = false;
+    } else if(key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
+        app->is_shift_pressed = false;
     }
     return 0;
 }
 
-static int run(App *app) {
+static int run(App* app) {
     XEvent event;
     while(!XNextEvent(app->display, &event)) {
         switch(event.type) {
@@ -480,7 +591,7 @@ static int run(App *app) {
 }
 
 int main(int argc, const char* argv[]) {
-    App *app = setup_x();
+    App* app = setup_x();
     setup_xft_font(app);
     app->lines.emplace_back();
     set_window_height(app);
