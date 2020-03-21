@@ -96,8 +96,6 @@ static App* setup_x() {
         | VisibilityChangeMask;
 
     Screen* screen DefaultScreenOfDisplay(app->display);
-    screen->width;
-    screen->height;
 
     app->window = XCreateWindow(
         app->display /*display*/,
