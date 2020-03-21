@@ -57,7 +57,7 @@ struct App {
     bool is_shift_pressed = false;
 };
 
-static void grab_keyboard(App* app) {
+static int grab_keyboard(App* app) {
     using namespace std::chrono_literals;
     /*try to grab keyboard 1000 times.
     we may have to wait for another process to ungrab*/
@@ -71,11 +71,12 @@ static void grab_keyboard(App* app) {
             CurrentTime /*time*/);
 
         if(grab_result == GrabSuccess) {
-            return;
+            return 0;
         }
         std::this_thread::sleep_for(1ms);
     }
     std::cerr << "Could not grab keyboard" << std::endl;
+    return 1;
 }
 
 static App* setup_x() {
