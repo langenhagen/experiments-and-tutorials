@@ -84,11 +84,15 @@ static App* setup_x() {
         | KeyReleaseMask
         | VisibilityChangeMask;
 
+    Screen* screen DefaultScreenOfDisplay(app->display);
+    screen->width;
+    screen->height;
+
     app->window = XCreateWindow(
         app->display /*display*/,
         app->root_window /*parent*/,
-        100 /*pos x*/,
-        100 /*pos y*/,
+        (screen->width - app->width) / 2 /*pos x*/,
+        (screen->height - app->height) / 3 /*pos y*/,
         app->width /*width; minimal 1px*/,
         app->height /*height; minimal 1px*/,
         0 /*border width*/,
