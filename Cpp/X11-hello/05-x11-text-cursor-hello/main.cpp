@@ -197,6 +197,46 @@ static std::pair<TextCoord&, TextCoord&> get_selection(App* app) {
     return std::pair<TextCoord&, TextCoord&>(selection_start, cursor);
 }
 
+static const char* get_selected_text(App *app) {
+    if(app->selection_start.row == -1) {
+        return "";
+    }
+    const auto selection = get_selection(app);
+
+    int str_length = selection.second.col - selection.first.col + 1;
+    for(int i = selection.first.row; i < selection.second.row; ++i) {
+        str_length += app->lines[i].length + 1;
+    }
+    char* str = new char[str_length];
+    if(selection.first.row == selection.second.row) {
+        std::memcpy(
+            str,
+            &app->lines[selection.first.row].buffer[selection.first.col],
+            str_length - 1);
+    } else {
+        int offset = 0;
+        for(int i = selection.first.row; i <= selection.second.row; ++i) {
+            const auto& line = app->lines[i];
+            int col = 0;
+            int length = line.length;
+            if(i == selection.first.row) {
+                col = selection.first.col;
+                length -= selection.first.col;
+            }
+            if(i == selection.second.row) {
+                length = selection.second.col;
+            }
+            std::memcpy(&str[offset], &line.buffer[col], length);
+            offset +=length;
+            if(i != selection.second.row) {
+                str[offset++] = '\n';
+            }
+        }
+    }
+    str[str_length - 1] = '\0';
+    return str;
+}
+
 static void draw_text(App* app) {
     XRenderColor x_render_color;
     x_render_color.red = 65535;
@@ -269,7 +309,6 @@ static void draw_selection(App* app) {
         return;
     }
     const auto selection = get_selection(app);
-
     for(int i = selection.first.row; i <= selection.second.row; ++i) {
         const auto& line = app->lines[i];
         int x = 0;
@@ -514,6 +553,8 @@ static int handle_key_press_event(App* app, XEvent& event) {
         app->is_shift_pressed = true;
         start_selection(app);
         return 0;
+    } else if(app->is_ctrl_pressed && key_code == 54 /*ctrl + c*/) {
+        std::cout << get_selected_text(app) << std::endl;
     } else if(key_code == 22 /*backspace*/) {
         // TODO delete selection
         delete_chars(app, -1);
