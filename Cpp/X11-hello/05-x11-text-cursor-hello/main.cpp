@@ -1,7 +1,8 @@
 /* Render an X11 win for multiple lines of text input
-and have a text cur that you can control via arrow keys.
+and have a text cursor that you can control via (ctrl +) arrow keys, and home/end
+as well as a selection via pressing shift.
 
-Apparently, x11 provides own cursors https://tronche.com/gui/x/xlib/pixmap-and-cur/cur.html
+Apparently, x11 provides own cursors https://tronche.com/gui/x/xlib/pixmap-and-cursor/cursor.html
 but they seem inferior. I use a simple filled rectangle
 
 - based on my prior learnings and the source code of dmenu.
@@ -21,9 +22,9 @@ author: andreasl
 #include <X11/Xft/Xft.h>
 
 struct Line {
-    static const unsigned int buffer_size = 255;
+    static const unsigned int buf_size = 255;
     int len = 0;
-    char buf[buffer_size];
+    char buf[buf_size];
 };
 
 struct TextCoord {
@@ -50,8 +51,8 @@ struct App {
     unsigned int line_height;
     std::vector<Line> lines;
 
-    TextCoord cur = {0, 0};
-    TextCoord sel_start = {-1, -1};
+    TextCoord cursor = {0, 0};
+    TextCoord selection_start = {-1, -1};
 
     bool is_ctrl_pressed = false;
     bool is_shift_pressed = false;
@@ -161,7 +162,6 @@ static void setup_xft_font(App* app) {
 
 static void set_window_height(App* app) {
     app->height = app->line_height * 10;
-
     XResizeWindow(
         app->display /*display*/,
         app->win /*win*/,
@@ -170,22 +170,22 @@ static void set_window_height(App* app) {
 }
 
 static void start_selection(App* app) {
-    if(app->sel_start.row == -1) {
-        app->sel_start.row = app->cur.row;
-        app->sel_start.col = app->cur.col;
+    if(app->selection_start.row == -1) {
+        app->selection_start.row = app->cursor.row;
+        app->selection_start.col = app->cursor.col;
     }
 }
 
 static void invalidate_selection(App* app) {
-    if(app->sel_start.row != -1) {
-        app->sel_start.row = -1;
-        app->sel_start.col = -1;
+    if(app->selection_start.row != -1) {
+        app->selection_start.row = -1;
+        app->selection_start.col = -1;
     }
 }
 
-static std::pair<TextCoord&, TextCoord&> get_selection(App* app) {
-    auto& cur = app->cur;
-    auto& sel_start = app->sel_start;
+static std::pair<TextCoord&, TextCoord&> get_selection_bounds(App* app) {
+    auto& cur = app->cursor;
+    auto& sel_start = app->selection_start;
     if(cur.row < sel_start.row) {
         return std::pair<TextCoord&, TextCoord&>(cur, sel_start);
     } else if(cur.row > sel_start.row) {
@@ -197,11 +197,11 @@ static std::pair<TextCoord&, TextCoord&> get_selection(App* app) {
     return std::pair<TextCoord&, TextCoord&>(sel_start, cur);
 }
 
-static const char* get_selected_text(App *app) {
-    if(app->sel_start.row == -1) {
+static const char* get_selected_chars(App *app) {
+    if(app->selection_start.row == -1) {
         return "";
     }
-    const auto sel = get_selection(app);
+    const auto sel = get_selection_bounds(app);
 
     int str_len = sel.second.col - sel.first.col + 1;
     for(int i = sel.first.row; i < sel.second.row; ++i) {
@@ -238,11 +238,7 @@ static const char* get_selected_text(App *app) {
 }
 
 static void draw_text(App* app) {
-    XRenderColor x_color;
-    x_color.red = 65535;
-    x_color.green = 65535;
-    x_color.blue = 65535;
-    x_color.alpha = 65535;
+    XRenderColor x_color = {65535 /*red*/, 65535 /*green*/, 65535 /*blue*/, 65535 /*alpha*/};
 
     XftColor xft_color;
     XftColorAllocValue(
@@ -271,7 +267,7 @@ static void draw_text(App* app) {
 }
 
 static void draw_cursor(App* app) {
-    const auto& line = app->lines[app->cur.row];
+    const auto& line = app->lines[app->cursor.row];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
         app->display /*Display*/,
@@ -283,12 +279,12 @@ static void draw_cursor(App* app) {
     XftTextExtents8(
         app->display /*Display*/,
         app->font /*xftfont*/,
-        (XftChar8*)&line.buf[app->cur.col] /*string*/,
-        line.len - app->cur.col /*int len*/,
+        (XftChar8*)&line.buf[app->cursor.col] /*string*/,
+        line.len - app->cursor.col /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = app->line_height * app->cur.row;
+    const int y = app->line_height * app->cursor.row;
 
     XSetForeground(
         app->display /*display*/,
@@ -305,10 +301,10 @@ static void draw_cursor(App* app) {
 }
 
 static void draw_selection(App* app) {
-    if(app->sel_start.row == -1) {
+    if(app->selection_start.row == -1) {
         return;
     }
-    const auto sel = get_selection(app);
+    const auto sel = get_selection_bounds(app);
     for(int i = sel.first.row; i <= sel.second.row; ++i) {
         const auto& line = app->lines[i];
         int x = 0;
@@ -346,7 +342,7 @@ static void draw_selection(App* app) {
              width -= glyph_info_remaining.width;
         }
 
-        XSetForeground(app->display, app->gc, 0x444477);
+        XSetForeground(app->display, app->gc, 0x444477 /*color*/);
         XFillRectangle(
             app->display,
             app->win,
@@ -359,13 +355,13 @@ static void draw_selection(App* app) {
 }
 
 static void move_cursor(App* app, int inc) {
-    /*Move the cur by inc to the left/right and consider line- and text- starts & ends.*/
+    /*Move the cursor by inc to the left/right and consider line- and text- starts & ends.*/
     if(!app->is_shift_pressed) {
         invalidate_selection(app);
     }
     while(true) {
-        auto& row = app->cur.row;
-        auto& col = app->cur.col;
+        auto& row = app->cursor.row;
+        auto& col = app->cursor.col;
         if(col + inc < 0) {
             /*left up*/
             if( row == 0) {
@@ -399,12 +395,12 @@ static void move_cursor(App* app, int inc) {
 }
 
 static void move_cursor_vertically(App* app, int inc) {
-    /*Move the cur by inc up/down and consider line lengths and text beginning & end.*/
+    /*Move the cursor by inc up/down and consider line lengths and text beginning & end.*/
     if(!app->is_shift_pressed) {
         invalidate_selection(app);
     }
-    auto& row = app->cur.row;
-    auto& col = app->cur.col;
+    auto& row = app->cursor.row;
+    auto& col = app->cursor.col;
     if(row + inc < 0) {
         /*to front*/
         row = 0;
@@ -425,14 +421,14 @@ static void move_cursor_vertically(App* app, int inc) {
 }
 
 static void move_cursor_by_word(App* app, int n_words) {
-    /*Move the cur by n_words and consider line-lengths and text- starts & end.*/
+    /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
     if(!app->is_shift_pressed) {
         invalidate_selection(app);
     }
     while(n_words != 0) {
-        const auto& line = app->lines[app->cur.row];
+        const auto& line = app->lines[app->cursor.row];
         const auto& buf = line.buf;
-        const auto col = app->cur.col;
+        const auto col = app->cursor.col;
         if(n_words < 0) {
             /*go back*/
             int i = col - 1;
@@ -455,24 +451,24 @@ static void move_cursor_by_word(App* app, int n_words) {
 }
 
 static void insert_char(App* app, const char c) {
-    /*insert a character into the text at the current cur's position.*/
+    /*insert a character into the text at the current cursor's position.*/
     invalidate_selection(app);
 
-    char* buf = app->lines[app->cur.row].buf;
-    const auto col = app->cur.col;
+    char* buf = app->lines[app->cursor.row].buf;
+    const auto col = app->cursor.col;
 
     std::memmove(buf + col + 1, buf + col, std::strlen(buf) - col);
     std::memcpy(buf + col, &c, 1);
 
-    ++app->cur.col;
-    ++app->lines[app->cur.row].len;
+    ++app->cursor.col;
+    ++app->lines[app->cursor.row].len;
 }
 
 static void delete_chars(App* app, int n_chars) {
-    /*Delete the given number characters from the text at the cur's position.*/
+    /*Delete the given number characters from the text at the cursor's position.*/
     while(true) {
-        auto& row = app->cur.row;
-        auto& col = app->cur.col;
+        auto& row = app->cursor.row;
+        auto& col = app->cursor.col;
         auto& lines = app->lines;
         Line& line = lines[row];
         char* pos = line.buf + col;
@@ -518,8 +514,8 @@ static void delete_chars(App* app, int n_chars) {
 }
 
 static void insert_newline(App* app) {
-    auto& row = app->cur.row;
-    auto& col = app->cur.col;
+    auto& row = app->cursor.row;
+    auto& col = app->cursor.col;
     auto& lines = app->lines;
     auto new_line_it = lines.emplace(lines.begin() + row + 1);
     auto& line = lines[row];
@@ -539,10 +535,10 @@ static void redraw(App* app) {
     draw_cursor(app);
 }
 
-static int handle_key_press_event(App* app, XEvent& evt) {
+static int handle_key_press(App* app, XEvent& evt) {
     const unsigned int key_code = evt.xkey.keycode;
-    const int input_buffer_size = 8;
-    char input_buffer[input_buffer_size];
+    const int buf_size = 8;
+    char buf[buf_size];
 
     if(key_code == 9 /*esc*/) {
         return 1;
@@ -554,7 +550,7 @@ static int handle_key_press_event(App* app, XEvent& evt) {
         start_selection(app);
         return 0;
     } else if(app->is_ctrl_pressed && key_code == 54 /*ctrl + c*/) {
-        std::cout << get_selected_text(app) << std::endl;
+        std::cout << get_selected_chars(app) << std::endl;
     } else if(key_code == 22 /*backspace*/) {
         // TODO delete sel
         delete_chars(app, -1);
@@ -573,18 +569,18 @@ static int handle_key_press_event(App* app, XEvent& evt) {
     } else if(key_code == 114 /*right arrow key*/) {
         app->is_ctrl_pressed ? move_cursor_by_word(app, +1) : move_cursor(app, +1);
     } else if(key_code == 110 /*home key*/) {
-        app->cur.col = 0;
+        app->cursor.col = 0;
     } else if(key_code == 115 /*end key*/) {
-        app->cur.col = app->lines[app->cur.row].len;
+        app->cursor.col = app->lines[app->cursor.row].len;
     } else if(XLookupString(
             &evt.xkey,
-            input_buffer,
-            input_buffer_size,
+            buf,
+            buf_size,
             nullptr,
             nullptr) > 0) {
         /* normal text input*/
         // TODO delete sel
-        insert_char(app, input_buffer[0]);
+        insert_char(app, buf[0]);
     } else {
         return 0;
     }
@@ -592,7 +588,7 @@ static int handle_key_press_event(App* app, XEvent& evt) {
     return 0;
 }
 
-static int handle_key_release_event(App* app, XEvent evt) {
+static int handle_key_release(App* app, XEvent evt) {
     const unsigned int key_code = evt.xkey.keycode;
     if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl + right*/) {
         app->is_ctrl_pressed = false;
@@ -612,12 +608,12 @@ static int run(App* app) {
             }
             break;
         case KeyPress:
-            if(handle_key_press_event(app, evt)) {
+            if(handle_key_press(app, evt)) {
                 return 0;
             }
             break;
         case KeyRelease:
-            if(handle_key_release_event(app, evt)) {
+            if(handle_key_release(app, evt)) {
                 return 0;
             }
             break;
