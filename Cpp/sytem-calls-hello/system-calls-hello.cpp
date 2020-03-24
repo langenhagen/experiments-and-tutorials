@@ -6,7 +6,7 @@ note: popen() apparently catches stdout, but not stderr.
 */
 #include <array>
 #include <cstdlib>  // system
-#include <cstdio> // FILE
+#include <cstdio> // FILE, popen
 #include <iostream>
 #include <memory>
 
@@ -15,17 +15,20 @@ int main () {
     int return_value = std::system("uname -n");
     std::cout << "Command has been run with exit code: " << return_value << "\n";
 
-    std::cout << "Running command via unix's popen()...\n";
+    std::cout << "\n\nRunning command via unix's popen()...\n";
     std::array<char, 128> buffer;
     std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("uname -n", "r"), pclose);
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(
+        popen("for i in $(seq 3 9); do echo $i; sleep 1; done;", "r"),
+        pclose /*deleter*/);
     if(!pipe) {
-        throw std::runtime_error("popen() failed!");
+        throw std::runtime_error("Error: call to popen() failed");
     }
     while(std::fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        std::cout << "> " << buffer.data();
         result += buffer.data();
     }
-    std::cout << "Command has been run with output:\n> " << result  << "\n";
+    std::cout << "Command has been run with output:\n" << result  << "\n";
 
     return 0;
 }
