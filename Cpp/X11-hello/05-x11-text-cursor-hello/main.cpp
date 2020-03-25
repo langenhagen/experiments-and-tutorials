@@ -250,6 +250,7 @@ static void draw_text(App* app) {
 
     for(size_t i = 0; i < app->lines.size(); ++i) {
         auto& line = app->lines[i];
+
         XftDrawString8(
             app->xft_drawable /*drawable*/,
             &xft_color /*color*/,
@@ -454,14 +455,49 @@ static void insert_char(App* app, const char c) {
     /*insert a character into the text at the current cursor's position.*/
     invalidate_selection(app);
 
-    char* buf = app->lines[app->cursor.row].buf;
+    auto& line = app->lines[app->cursor.row];
     const auto col = app->cursor.col;
 
-    std::memmove(buf + col + 1, buf + col, std::strlen(buf) - col);
-    std::memcpy(buf + col, &c, 1);
+    std::memmove(line.buf + col + 1, line.buf + col, line.len - col);
+    std::memcpy(line.buf + col, &c, 1);
 
     ++app->cursor.col;
-    ++app->lines[app->cursor.row].len;
+    ++line.len;
+}
+
+static void insert_text(App* app, char* str) {
+    auto& cur = app->cursor;
+    auto& lines = app->lines;
+
+    /*save initial line ending*/
+    Line tmp;
+    tmp.len = lines[cur.row].len - cur.col;
+    std::memcpy(tmp.buf, lines[cur.row].buf + cur.col, tmp.len);
+    lines[cur.row].len = cur.col;
+
+    /*copy lines*/
+    int line_start = 0;
+    int line_end = 0;
+    while(str[line_end] != '\0') {
+        if(str[line_end] == '\n') {
+            std::memcpy(
+                lines[cur.row].buf + lines[cur.row].len,
+                str + line_start,
+                line_end - line_start);
+            lines[cur.row].len += line_end - line_start;
+            ++cur.row;
+            cur.col = 0;
+            lines.emplace(lines.begin() + cur.row);
+            line_start = line_end + 1;
+        }
+        ++line_end;
+    }
+
+    /*last line*/
+    std::memcpy(lines[cur.row].buf + lines[cur.row].len, str + line_start, line_end - line_start);
+    std::memcpy(lines[cur.row].buf + lines[cur.row].len + line_end - line_start, tmp.buf, tmp.len);
+    lines[cur.row].len += line_end - line_start + tmp.len;
+    cur.col = line_end - line_start;
 }
 
 static void delete_chars(App* app, int n_chars) {
@@ -470,7 +506,7 @@ static void delete_chars(App* app, int n_chars) {
         auto& row = app->cursor.row;
         auto& col = app->cursor.col;
         auto& lines = app->lines;
-        Line& line = lines[row];
+        auto& line = lines[row];
         char* pos = line.buf + col;
 
         if(col + n_chars < 0) {
@@ -513,17 +549,21 @@ static void delete_chars(App* app, int n_chars) {
     }
 }
 
+static void delete_text(App *app, const TextCoord& start, const TextCoord& end) {
+    // TODO
+}
+
 static void insert_newline(App* app) {
     auto& row = app->cursor.row;
     auto& col = app->cursor.col;
     auto& lines = app->lines;
-    auto new_line_it = lines.emplace(lines.begin() + row + 1);
+    auto& new_line = *lines.emplace(lines.begin() + row + 1);
     auto& line = lines[row];
     char* pos = line.buf + col;
 
-    new_line_it->len = line.len - col;
-    line.len -= new_line_it->len;
-    std::memcpy(new_line_it->buf, pos, new_line_it->len);
+    new_line.len = line.len - col;
+    line.len -= new_line.len;
+    std::memcpy(new_line.buf, pos, new_line.len);
     ++row;
     col = 0;
 }
@@ -551,6 +591,10 @@ static int handle_key_press(App* app, XEvent& evt) {
         return 0;
     } else if(app->is_ctrl_pressed && key_code == 54 /*ctrl + c*/) {
         std::cout << get_selected_chars(app) << std::endl;
+    } else if(app->is_ctrl_pressed && key_code == 55 /*ctrl + v*/) {
+        // TODO insert text from clipboard
+        char c[255] = ":this is\n\na small \ntest:";
+        insert_text(app, c);
     } else if(key_code == 22 /*backspace*/) {
         // TODO delete sel
         delete_chars(app, -1);
