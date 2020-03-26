@@ -32,6 +32,10 @@ struct TextCoord {
     int col;
 };
 
+inline bool operator==(const TextCoord& lhs, const TextCoord & rhs) {
+    return lhs.row == rhs.row && lhs.col == rhs.col;
+}
+
 struct App {
      /*x11 essentials*/
     Display* display;
@@ -204,7 +208,7 @@ static const char* get_selected_chars(App *app) {
     const auto sel = get_selection_bounds(app);
 
     int str_len = sel.second.col - sel.first.col + 1;
-    for(int i = sel.first.row; i < sel.second.row; ++i) {
+    for(auto i = sel.first.row; i < sel.second.row; ++i) {
         str_len += app->lines[i].len + 1;
     }
     char* str = new char[str_len];
@@ -215,7 +219,7 @@ static const char* get_selected_chars(App *app) {
             str_len - 1);
     } else {
         int off = 0;
-        for(int i = sel.first.row; i <= sel.second.row; ++i) {
+        for(auto i = sel.first.row; i <= sel.second.row; ++i) {
             const auto& line = app->lines[i];
             int col = 0;
             int len = line.len;
@@ -302,11 +306,11 @@ static void draw_cursor(App* app) {
 }
 
 static void draw_selection(App* app) {
-    if(app->selection_start.row == -1) {
+    if(app->selection_start.row == -1 || app->selection_start == app->cursor) {
         return;
     }
     const auto sel = get_selection_bounds(app);
-    for(int i = sel.first.row; i <= sel.second.row; ++i) {
+    for(auto i = sel.first.row; i <= sel.second.row; ++i) {
         const auto& line = app->lines[i];
         int x = 0;
 
@@ -356,7 +360,7 @@ static void draw_selection(App* app) {
 }
 
 static void move_cursor(App* app, int inc) {
-    /*Move the cursor by inc to the left/right and consider line- and text- starts & ends.*/
+    /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
     if(!app->is_shift_pressed) {
         invalidate_selection(app);
     }
@@ -452,7 +456,7 @@ static void move_cursor_by_word(App* app, int n_words) {
 }
 
 static void insert_char(App* app, const char c) {
-    /*insert a character into the text at the current cursor's position.*/
+    /*Insert a character into the text at the current cursor's position.*/
     invalidate_selection(app);
 
     auto& line = app->lines[app->cursor.row];
@@ -466,6 +470,7 @@ static void insert_char(App* app, const char c) {
 }
 
 static void insert_text(App* app, char* str) {
+    /*Insert the given string at the cursor position.*/
     auto& cur = app->cursor;
     auto& lines = app->lines;
 
@@ -551,7 +556,30 @@ static void delete_chars(App* app, int n_chars) {
 }
 
 static void delete_text(App *app, const TextCoord& start, const TextCoord& end) {
-    // TODO
+    /*Delete the text between the given text coordinates.*/
+    auto& lines = app->lines;
+    const auto remaining_len = lines[end.row].len - end.col;
+    std::memmove(
+        lines[start.row].buf + start.col,
+        lines[end.row].buf + end.col,
+        remaining_len);
+    lines[start.row].len = start.col + remaining_len;
+    for(auto i = start.row + 1; i <= end.row; ++i) {
+        lines.erase(lines.begin() + end.row);
+    }
+}
+
+static bool delete_selected_text(App *app) {
+    if(app->selection_start.row == -1 ||  app->selection_start == app->cursor) {
+        invalidate_selection(app);
+        return false;
+    }
+    const auto sel = get_selection_bounds(app);
+    delete_text(app, sel.first, sel.second);
+    app->cursor.row = sel.first.row;
+    app->cursor.col = sel.first.col;
+    invalidate_selection(app);
+    return true;
 }
 
 static void insert_newline(App* app) {
@@ -597,13 +625,15 @@ static int handle_key_press(App* app, XEvent& evt) {
         char c[255] = ":this is\n\na small \ntest:";
         insert_text(app, c);
     } else if(key_code == 22 /*backspace*/) {
-        // TODO delete sel
-        delete_chars(app, -1);
+        if(!delete_selected_text(app)) {
+            delete_chars(app, -1);
+        }
     } else if(key_code == 119 /*delete*/) {
-        // TODO delete sel
-        delete_chars(app, +1);
+        if(!delete_selected_text(app)) {
+            delete_chars(app, +1);
+        }
     } else if(key_code == 36 /*enter*/) {
-        // TODO delete sel
+        delete_selected_text(app);
         insert_newline(app);
     } else if(key_code == 111 /*up arrow key*/) {
         move_cursor_vertically(app, -1);
@@ -624,7 +654,7 @@ static int handle_key_press(App* app, XEvent& evt) {
             nullptr,
             nullptr) > 0) {
         /* normal text input*/
-        // TODO delete sel
+        delete_selected_text(app);
         insert_char(app, buf[0]);
     } else {
         return 0;
