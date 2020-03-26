@@ -10,11 +10,14 @@ but they seem inferior. I use a simple filled rectangle
 author: andreasl
 */
 #include <algorithm>
+#include <cstdio>  // FILE, popen
 #include <cstring>
 #include <iostream>
-#include <vector>
+#include <memory>
+#include <string>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -61,6 +64,21 @@ struct App {
     bool is_ctrl_pressed = false;
     bool is_shift_pressed = false;
 };
+
+static std::string call(const char* cmd) {
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(
+        popen(cmd, "r"),
+        pclose);
+    if(!pipe) {
+        throw std::runtime_error("Error: call to popen() failed");
+    }
+    std::array<char, 128> buf;
+    while(std::fgets(buf.data(), buf.size(), pipe.get()) != nullptr) {
+        result += buf.data();
+    }
+    return result;
+}
 
 static int grab_keyboard(App* app) {
     using namespace std::chrono_literals;
@@ -201,7 +219,7 @@ static std::pair<TextCoord&, TextCoord&> get_selection_bounds(App* app) {
     return std::pair<TextCoord&, TextCoord&>(sel_start, cur);
 }
 
-static const char* get_selected_chars(App *app) {
+static std::string get_selected_text(App *app) {
     if(app->selection_start.row == -1) {
         return "";
     }
@@ -211,7 +229,7 @@ static const char* get_selected_chars(App *app) {
     for(auto i = sel.first.row; i < sel.second.row; ++i) {
         str_len += app->lines[i].len + 1;
     }
-    char* str = new char[str_len];
+    char str[str_len];
     if(sel.first.row == sel.second.row) {
         std::memcpy(
             str,
@@ -238,7 +256,16 @@ static const char* get_selected_chars(App *app) {
         }
     }
     str[str_len - 1] = '\0';
-    return str;
+    return std::string(str);
+}
+
+static std::string get_text_from_clipboard() {
+    return call("xclip -selection clipboard -o");
+}
+
+static void write_selected_text_to_clipboard(App *app) {
+    std::string cmd = "printf -- '" + get_selected_text(app) + "' | xclip -selection clipboard";
+    system(cmd.c_str());
 }
 
 static void draw_text(App* app) {
@@ -469,8 +496,8 @@ static void insert_char(App* app, const char c) {
     ++line.len;
 }
 
-static void insert_text(App* app, char* str) {
-    /*Insert the given string at the cursor position.*/
+static void insert_text(App* app, const char* str) {
+    /*Insert the given string at the cursor position and handle newlines nicely.*/
     auto& cur = app->cursor;
     auto& lines = app->lines;
 
@@ -503,7 +530,7 @@ static void insert_text(App* app, char* str) {
     std::memcpy(line.buf + line.len, str + line_start, line_end - line_start);
     std::memcpy(line.buf + line.len + line_end - line_start, tmp.buf, tmp.len);
     line.len += line_end - line_start + tmp.len;
-    cur.col = line_end - line_start;
+    cur.col = line_end + (line_start == 0 ? cur.col : -line_start);
 }
 
 static void delete_chars(App* app, int n_chars) {
@@ -618,12 +645,16 @@ static int handle_key_press(App* app, XEvent& evt) {
         app->is_shift_pressed = true;
         start_selection(app);
         return 0;
+    } else if(app->is_ctrl_pressed && key_code == 53 /*ctrl + x*/) {
+        write_selected_text_to_clipboard(app);
+        delete_selected_text(app);
     } else if(app->is_ctrl_pressed && key_code == 54 /*ctrl + c*/) {
-        std::cout << get_selected_chars(app) << std::endl;
+        write_selected_text_to_clipboard(app);
+        return 0;
     } else if(app->is_ctrl_pressed && key_code == 55 /*ctrl + v*/) {
-        // TODO insert text from clipboard
-        char c[255] = ":this is\n\na small \ntest:";
-        insert_text(app, c);
+        invalidate_selection(app);
+        auto text = get_text_from_clipboard();
+        insert_text(app, text.c_str());
     } else if(key_code == 22 /*backspace*/) {
         if(!delete_selected_text(app)) {
             delete_chars(app, -1);
