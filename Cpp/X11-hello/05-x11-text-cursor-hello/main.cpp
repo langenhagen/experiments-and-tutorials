@@ -494,9 +494,10 @@ static void insert_text(App* app, char* str) {
     }
 
     /*last line*/
-    std::memcpy(lines[cur.row].buf + lines[cur.row].len, str + line_start, line_end - line_start);
-    std::memcpy(lines[cur.row].buf + lines[cur.row].len + line_end - line_start, tmp.buf, tmp.len);
-    lines[cur.row].len += line_end - line_start + tmp.len;
+    auto& line = lines[cur.row];
+    std::memcpy(line.buf + line.len, str + line_start, line_end - line_start);
+    std::memcpy(line.buf + line.len + line_end - line_start, tmp.buf, tmp.len);
+    line.len += line_end - line_start + tmp.len;
     cur.col = line_end - line_start;
 }
 
