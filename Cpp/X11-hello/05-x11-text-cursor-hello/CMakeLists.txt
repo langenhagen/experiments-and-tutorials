@@ -10,9 +10,14 @@ project("${target}" VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable("${target}" "main.cpp")
 find_package(X11 REQUIRED)
 find_package(Freetype REQUIRED)
+
+set(SOURCES
+    "src/main.cpp"
+    "src/App.cpp")
+
+add_executable("${target}" "${SOURCES}")
 
 target_include_directories("${target}"
     PRIVATE
@@ -20,7 +25,6 @@ target_include_directories("${target}"
         "${FREETYPE_INCLUDE_DIRS}"
         "include")
 
-# Xft can be omitted when not used
 target_link_libraries("${target}"
     "${X11_LIBRARIES}"
     "Xft")
