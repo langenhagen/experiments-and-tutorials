@@ -1,6 +1,5 @@
-"""
-Show that sys.argv can also be retrieved from inside a function.
-"""
+#!/usr/env/bin python3
+"""Show that sys.argv can also be retrieved from inside a function."""
 import sys
 
 
