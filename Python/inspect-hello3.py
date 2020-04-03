@@ -21,7 +21,8 @@ def foo(s: str, i=0):
     print(f"{s} : {i}")
 
 
-class CCCCCCCCCCCCC:
+class SomeClass:
+    """Show that the mechanism can also find methods."""
     def bar(self):
         return 3.14
 
