@@ -9,7 +9,9 @@ version: 19-07-02
 import inspect
 
 def foo(s: str, i=0):
+
     print(f"{s} : {i}")
+
 
 
 foo('hey there', 42)
@@ -19,6 +21,8 @@ print(inspect.signature(foo))
 
 print('---')
 foo_source = inspect.getsource(foo);  # only possible when not called exec on it(), i.e. only once possible
+print(f"foo_source:\n{foo_source}\n[o]")
+
 modified_foo_source = foo_source.replace('{i}', 'cheap trick!');
 exec(modified_foo_source)  # redefine foo()
 foo('hey there', 43)
