@@ -10,17 +10,16 @@ from dataclasses import dataclass
 
 def foo():
     print("Hi!")
-    pass
 
 
 def bar():
     def inner_fun():
         pass
-    pass
+    inner_fun()
 
 
 class MyTestClass:
-    def member_fun():
+    def member_fun(self):
         pass
 
 
@@ -40,6 +39,7 @@ def parse_python_file(filename):
     with open(filename) as file:
         root = ast.parse(file.read())
     return root
+
 
 def get_last_deep_child(ast_node):
     if not hasattr(ast_node, "body"):
@@ -61,15 +61,15 @@ def find_all_functions(ast_root):
 
 def show_function_info(node):
     argnames = [n.arg for n in node.args.args]
-    lineno = node.lineno;
+    lineno = node.lineno
     end_lineno = get_last_deep_child(node).lineno
     print(f"def {node.name}{argnames} @ {lineno}-{end_lineno}")
-    print(f'   """{ast.get_docstring(node)}"""' )
+    print(f'   """{ast.get_docstring(node)}"""')
 
 
 if __name__ == "__main__":
-    fname = sys.argv[1] if len(sys.argv) > 1 else __file__
-    root = parse_python_file(fname)
+    filename = sys.argv[1] if len(sys.argv) > 1 else __file__
+    root = parse_python_file(filename)
 
     # maybe helpful: print all ast nodes
     # for node in root.body:
