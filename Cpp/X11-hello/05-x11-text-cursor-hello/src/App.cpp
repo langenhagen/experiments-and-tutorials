@@ -618,7 +618,7 @@ int App::handle_key_press(XEvent& evt) {
 
 int App::handle_key_release(XEvent& evt) {
     const unsigned int key_code = evt.xkey.keycode;
-    if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl + right*/) {
+    if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
         this->is_ctrl_pressed = false;
     } else if(key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
         this->is_shift_pressed = false;
