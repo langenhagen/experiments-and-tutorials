@@ -2,6 +2,9 @@
 """Check if the functions that exceed a given number of lines in the given file
 have a docstring.
 
+Example usage:
+  python inspect-hello3.py 10 myfile.py
+
 author: andreasl
 """
 import importlib
@@ -19,6 +22,11 @@ def foo(s: str, i=0):
     print("Something")
 
     print(f"{s} : {i}")
+
+    def inner():
+        pass
+
+    inner()
 
 
 class SomeClass:
@@ -56,18 +64,21 @@ def check_for_docstrings(n_function_lines_threshold, symbol):
     for member in members:
         name = member[0]
         obj = member[1]
-        if(inspect.isclass(obj) and name != "__class__"):
-            check_for_docstrings(n_function_lines_threshold, obj)
-        elif(inspect.isfunction(obj)):
-            src = inspect.getsource(obj)
-            sig = inspect.signature(obj)
-            lineno = inspect.getsourcelines(obj)[-1]
-            src_loc = len([s for s in src.splitlines() if s])
-            doc = inspect.getdoc(obj)
-            print(f"> {name}{sig}@{lineno}: loc: {src_loc}\n{doc}\n")
+        # print(f"---{name}  {inspect.isbuiltin(obj)}---")
+        try:
+            if(inspect.isclass(obj) and name != "__class__"):
+                check_for_docstrings(n_function_lines_threshold, obj)
+            elif(inspect.isfunction(obj)):
+                src = inspect.getsource(obj)
+                sig = inspect.signature(obj)
+                lineno = inspect.getsourcelines(obj)[-1]
+                loc = len([s for s in src.splitlines() if s])
+                doc = inspect.getdoc(obj)
+                print(f"> {name}{sig}@{lineno}: loc: {loc}\n{doc}\n")
 
-            check_for_docstrings(n_function_lines_threshold, obj)
-
+                check_for_docstrings(n_function_lines_threshold, obj)
+        except OSError:
+            print(f"ERROR {name}")
 
 if __name__ == "__main__":
     n_lines = sys.argv[1]
