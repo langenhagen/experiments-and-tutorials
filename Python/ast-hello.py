@@ -1,0 +1,80 @@
+#!/usr/env/bin python3
+"""Showcase the usage of the Abstract Syntax Tree module ast."""
+import ast
+import sys
+from dataclasses import dataclass
+
+# ------------------------------------------------------------------------------
+# Test structures
+
+
+def foo():
+    print("Hi!")
+    pass
+
+
+def bar():
+    def inner_fun():
+        pass
+    pass
+
+
+class MyTestClass:
+    def member_fun():
+        pass
+
+
+@dataclass
+class MyDataClass:
+    """Just for testing something rather complex."""
+    i: int
+    s: str = 'default string'
+
+
+# ------------------------------------------------------------------------------
+# Business code
+
+
+def parse_python_file(filename):
+    """Return the ast from a given python file."""
+    with open(filename) as file:
+        root = ast.parse(file.read())
+    return root
+
+def get_last_deep_child(ast_node):
+    if not hasattr(ast_node, "body"):
+        return ast_node
+    return get_last_deep_child(ast_node.body[-1])
+
+
+def find_all_functions(ast_root):
+    if not hasattr(ast_root, "body"):
+        return []
+
+    fun_nodes = []
+    for node in ast_root.body:
+        if isinstance(node, ast.FunctionDef):
+            fun_nodes.append(node)
+        fun_nodes.extend(find_all_functions(node))
+    return fun_nodes
+
+
+def show_function_info(node):
+    argnames = [n.arg for n in node.args.args]
+    lineno = node.lineno;
+    end_lineno = get_last_deep_child(node).lineno
+    print(f"def {node.name}{argnames} @ {lineno}-{end_lineno}")
+    print(f'   """{ast.get_docstring(node)}"""' )
+
+
+if __name__ == "__main__":
+    fname = sys.argv[1] if len(sys.argv) > 1 else __file__
+    root = parse_python_file(fname)
+
+    # maybe helpful: print all ast nodes
+    # for node in root.body:
+    #     print(node)
+
+    fun_nodes = find_all_functions(root)
+    for f in fun_nodes:
+        show_function_info(f)
