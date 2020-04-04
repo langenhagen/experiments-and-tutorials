@@ -1,10 +1,10 @@
-    """Hello Dataclasses."""
-    from dataclasses import dataclass
-    from typing import ClassVar
+"""Hello Dataclasses."""
+from dataclasses import dataclass
+from typing import ClassVar
 
 
-    @dataclass
-    class MyClass:
-        i: int
-        s: str = 'default string'
-        class_var: ClassVar[int] = 0
+@dataclass
+class MyClass:
+    i: int
+    s: str = 'default string'
+    class_var: ClassVar[int] = 0
