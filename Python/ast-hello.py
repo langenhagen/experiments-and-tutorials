@@ -13,6 +13,7 @@ def foo():
 
 
 def bar():
+    """"""
     def inner_fun():
         pass
     inner_fun()
@@ -34,7 +35,7 @@ class MyDataClass:
 # Business code
 
 
-def parse_python_file(filename):
+def parse_python_file(filename: str):
     """Return the ast from a given python file."""
     with open(filename) as file:
         root = ast.parse(file.read())
@@ -47,7 +48,7 @@ def get_last_deep_child(ast_node):
     return get_last_deep_child(ast_node.body[-1])
 
 
-def find_all_functions(ast_root):
+def find_all_function_nodes(ast_root):
     if not hasattr(ast_root, "body"):
         return []
 
@@ -55,7 +56,7 @@ def find_all_functions(ast_root):
     for node in ast_root.body:
         if isinstance(node, ast.FunctionDef):
             fun_nodes.append(node)
-        fun_nodes.extend(find_all_functions(node))
+        fun_nodes.extend(find_all_function_nodes(node))
     return fun_nodes
 
 
@@ -67,7 +68,7 @@ def show_function_info(node):
     print(f'   """{ast.get_docstring(node)}"""')
 
 
-if __name__ == "__main__":
+def run():
     filename = sys.argv[1] if len(sys.argv) > 1 else __file__
     root = parse_python_file(filename)
 
@@ -75,6 +76,10 @@ if __name__ == "__main__":
     # for node in root.body:
     #     print(node)
 
-    fun_nodes = find_all_functions(root)
-    for f in fun_nodes:
-        show_function_info(f)
+    fun_nodes = find_all_function_nodes(root)
+    for node in fun_nodes:
+        show_function_info(node)
+
+
+if __name__ == "__main__":
+    run()
