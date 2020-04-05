@@ -30,8 +30,8 @@ struct App {
 
 static void grab_keyboard(App *app) {
     using namespace std::chrono_literals;
-    /* try to grab keyboard. 1000 times.
-       we may have to wait for another process to ungrab*/
+    /* try to grab keyboard 1000 times.
+    we may have to wait for another process to ungrab*/
     for (int i = 0; i < 10000; ++i) {
         int grab_result = XGrabKeyboard(
             app->display /*display*/,
@@ -49,6 +49,28 @@ static void grab_keyboard(App *app) {
     std::cerr << "Could not grab keyboard" << std::endl;
 }
 
+static void grab_pointer(App* app) {
+    using namespace std::chrono_literals;
+    for (int i = 0; i < 10000; ++i) {
+        int grab_result = XGrabPointer(
+            app->display /*display*/,
+            app->root_window /*grab-window*/,
+            True /*owner events*/,
+            0 /*event mask*/,
+            GrabModeAsync /*pointer mode*/,
+            GrabModeAsync /*keyboard mode*/,
+            None /*confine to*/,
+            None /*cursor*/,
+            CurrentTime /*time*/);
+
+        if(grab_result == GrabSuccess) {
+            return;
+        }
+        std::this_thread::sleep_for(1ms);
+    }
+    std::cerr << "Could not grab pointer" << std::endl;
+}
+
 static App* setup_x() {
     App *app = new App();
     app->display = XOpenDisplay(nullptr);
@@ -56,6 +78,7 @@ static App* setup_x() {
     app->root_window = RootWindow(app->display, app->screen);
 
     grab_keyboard(app);
+    grab_pointer(app);
 
     unsigned long black = BlackPixel(app->display, app->screen);
     unsigned long white = WhitePixel(app->display, app->screen);
