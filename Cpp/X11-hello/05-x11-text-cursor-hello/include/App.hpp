@@ -14,7 +14,6 @@ author: andreasl
 
 namespace barn {
 namespace x11 {
-namespace app {
 
 /*A representation for a text line.*/
 struct Line {
@@ -144,6 +143,5 @@ struct App {
     int run();
 };
 
-} // namespace app
 } // namespaces x11
 } // namespace barn

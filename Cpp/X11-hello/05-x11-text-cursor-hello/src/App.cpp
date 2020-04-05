@@ -21,7 +21,6 @@ author: andreasl
 
 namespace barn {
 namespace x11 {
-namespace app {
 
 App::App() {
     this->display = XOpenDisplay(nullptr);
@@ -554,63 +553,80 @@ void App::redraw() {
 }
 
 int App::handle_key_press(XEvent& evt) {
-    const unsigned int key_code = evt.xkey.keycode;
     const int buf_size = 8;
     char buf[buf_size];
 
-    if(key_code == 9 /*esc*/) {
-        return 1;
-    } else if(key_code == 37 /*ctrl left*/ || key_code == 105 /*ctrl right*/) {
-        this->is_ctrl_pressed = true;
-        return 0;
-    } else if(key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
-        this->is_shift_pressed = true;
-        start_selection();
-        return 0;
-    } else if(this->is_ctrl_pressed && key_code == 53 /*ctrl + x*/) {
-        write_selected_text_to_clipboard();
-        delete_selected_text();
-    } else if(this->is_ctrl_pressed && key_code == 54 /*ctrl + c*/) {
-        write_selected_text_to_clipboard();
-        return 0;
-    } else if(this->is_ctrl_pressed && key_code == 55 /*ctrl + v*/) {
-        invalidate_selection();
-        auto text = ::barn::x11::cp::get_text_from_clipboard();
-        insert_text(text.c_str());
-    } else if(key_code == 22 /*backspace*/) {
-        if(!delete_selected_text()) {
-            delete_chars(-1);
-        }
-    } else if(key_code == 119 /*delete*/) {
-        if(!delete_selected_text()) {
-            delete_chars(+1);
-        }
-    } else if(key_code == 36 /*enter*/) {
-        delete_selected_text();
-        insert_newline();
-    } else if(key_code == 111 /*up arrow key*/) {
-        move_cursor_vertically(-1);
-    } else if(key_code == 116 /*down arrow key*/) {
-        move_cursor_vertically(+1);
-    } else if(key_code == 113 /*left arrow key*/) {
-        this->is_ctrl_pressed ? move_cursor_by_word(-1) : move_cursor(-1);
-    } else if(key_code == 114 /*right arrow key*/) {
-        this->is_ctrl_pressed ? move_cursor_by_word(+1) : move_cursor(+1);
-    } else if(key_code == 110 /*home key*/) {
-        this->cursor.x = 0;
-    } else if(key_code == 115 /*end key*/) {
-        this->cursor.x = this->lines[this->cursor.y].len;
-    } else if(XLookupString(
-            &evt.xkey,
-            buf,
-            buf_size,
-            nullptr,
-            nullptr) > 0) {
-        /* normal text input*/
-        delete_selected_text();
-        insert_char(buf[0]);
-    } else {
-        return 0;
+    switch(evt.xkey.keycode) {
+        case 9: /*esc*/
+            return 1;
+        case 37: /*ctrl left*/
+        case 105: /*ctrl right*/
+            this->is_ctrl_pressed = true;
+            return 0;
+        case 50: /*shift left*/
+        case 62: /*shift right*/
+            this->is_shift_pressed = true;
+            start_selection();
+            return 0;
+        case 53: /*ctrl + x*/
+            if(this->is_ctrl_pressed) {
+                write_selected_text_to_clipboard();
+                delete_selected_text();
+            }
+            break;
+        case 54: /*ctrl + c*/
+            if(this->is_ctrl_pressed) {
+                write_selected_text_to_clipboard();
+                return 0;
+            }
+            break;
+        case 55: /*ctrl + v*/
+            if(this->is_ctrl_pressed) {
+                delete_selected_text();
+                auto text = ::barn::x11::cp::get_text_from_clipboard();
+                insert_text(text.c_str());
+            }
+            break;
+        case 22: /*backspace*/
+            if(!delete_selected_text()) {
+                delete_chars(-1);
+            }
+            break;
+        case 119: /*delete*/
+            if(!delete_selected_text()) {
+                delete_chars(+1);
+            }
+            break;
+        case 36: /*enter*/
+            delete_selected_text();
+            insert_newline();
+            break;
+        case 111: /*up arrow key*/
+            move_cursor_vertically(-1);
+            break;
+        case 116: /*down arrow key*/
+            move_cursor_vertically(+1);
+            break;
+        case 113: /*left arrow key*/
+            this->is_ctrl_pressed ? move_cursor_by_word(-1) : move_cursor(-1);
+            break;
+        case 114: /*right arrow key*/
+            this->is_ctrl_pressed ? move_cursor_by_word(+1) : move_cursor(+1);
+            break;
+        case 110: /*home key*/
+            this->cursor.x = 0;
+            break;
+        case 115: /*end key*/
+            this->cursor.x = this->lines[this->cursor.y].len;
+            break;
+        default:
+            if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                /*normal text input*/
+                delete_selected_text();
+                insert_char(buf[0]);
+            } else {
+                return 0;
+            }
     }
     redraw();
     return 0;
@@ -654,6 +670,5 @@ int App::run() {
     }
 }
 
-} // namespace app
 } // x11
 } // barn
