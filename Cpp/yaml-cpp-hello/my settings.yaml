@@ -1,0 +1,8 @@
+# Yaml file for experimental purposes.
+
+editor: vim                # editor to drop you in for modification of bookmarks
+open_browser_command: xdg-open     # command to open a hyperlink
+add_bookmark_sequence:     # control the add bookmarks process; reorder its elements or remove some
+  - ask_for_tags
+  - ask_for_comment
+  - ask_for_rating

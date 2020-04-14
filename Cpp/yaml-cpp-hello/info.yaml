@@ -1,0 +1,11 @@
+# Yaml file for experimental purposes.
+
+name: A Nice Blogpost!
+url: https://andiweb.com/2020/02/28/a-nice-blogpost#even-nicer
+created: 2020-02-29 16:56
+last_access: 2020-02-29 17:02
+tags: [recommend, cmake]
+rating: 5
+comment: |
+  This is a comment to an article.
+  The article was very nice and might help in doing x.
