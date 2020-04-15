@@ -57,9 +57,9 @@ int main(int argc, const char* argv[]) {
     }
     */
 
-    xdo_new(nullptr);
+    // xdo_new(nullptr);
 
-    // std::unique_ptr<xdo_t, decltype(&xdo_free)> my_xdo(xdo_new(nullptr), &xdo_free);
+    std::unique_ptr<xdo_t, decltype(&xdo_free)> my_xdo(xdo_new(nullptr), &xdo_free);
 
 
     std::cout << "\nBye!" << std::endl;

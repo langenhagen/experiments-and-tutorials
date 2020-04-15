@@ -21,13 +21,10 @@ set(sources
 add_executable("${target}"
     "${sources}")
 
-find_package(X11 REQUIRED)
-
 target_include_directories("${target}"
     PRIVATE
         "${X11_INCLUDE_DIR}"
         "${LIBXDO_INCLUDE_PATH}")
 
 target_link_libraries("${target}"
-    "${LIBXDO_LIB}"
-    "${X11_LIBRARIES}")
+    "${LIBXDO_LIBRARIES}")

@@ -5,8 +5,8 @@
 # include(libxdo.cmake)
 #
 # Set variables:
-#   "${LIBXDO_INCLUDE_PATH}
-#   "${LIBXDO_LIB}"
+#   ${LIBXDO_INCLUDE_PATH}
+#   ${LIBXDO_LIBRARIES}
 #
 # author: andreasl
 
@@ -48,7 +48,18 @@ file(
     DESTINATION "${LIBXDO_INCLUDE_PATH}/${EXT_PROJECT_NAME}")
 
 set(lib_filename "libxdo.a")
-set(LIBXDO_LIB "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}/${lib_filename}")
 file(
     COPY        "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}-src/${lib_filename}"
     DESTINATION "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}")
+
+# Add system dependency libraries
+find_package(X11 REQUIRED)
+find_library(XKBCOMMON_LIB
+    NAMES xkbcommon)
+
+set(LIBXDO_LIBRARIES
+    "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}/${lib_filename}"
+    "${X11_LIBRARIES}"
+    "${X11_Xinerama_LIB}"
+    "${X11_XTest_LIB}"
+    "${XKBCOMMON_LIB}")
