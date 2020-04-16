@@ -4,7 +4,7 @@
     - https://github.com/jordansissel/xdotool
         - make libxdo.a
             - requires:
-                - sudo apt install -y libxtst-dev
+                - sudo apt install libxtst-dev
                 - sudo apt install libxkbcommon-dev
                 - see .travis.yml of xdotoo for more dependencies
 
