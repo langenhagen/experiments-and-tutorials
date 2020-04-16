@@ -3,7 +3,6 @@
 
 author: andreasl
 */
-
 #include "App.hpp"
 
 #include "XCopyPaste.hpp"
@@ -583,7 +582,7 @@ int App::handle_key_press(XEvent& evt) {
         case 55: /*ctrl + v*/
             if(this->is_ctrl_pressed) {
                 delete_selected_text();
-                auto text = ::barn::x11::cp::get_text_from_clipboard();
+                const auto text(::barn::x11::cp::get_text_from_clipboard());
                 insert_text(text.c_str());
             }
             break;
