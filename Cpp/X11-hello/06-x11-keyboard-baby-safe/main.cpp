@@ -4,7 +4,6 @@ the same time.
 author: andreasl
 */
 #include <algorithm>
-#include <cstring>
 #include <iostream>
 #include <thread>
 
@@ -12,7 +11,6 @@ author: andreasl
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
-#include <X11/Xft/Xft.h>
 
 struct App {
      /*x11 essentials*/
@@ -80,9 +78,6 @@ static App* setup_x() {
     grab_keyboard(app);
     grab_pointer(app);
 
-    unsigned long black = BlackPixel(app->display, app->screen);
-    unsigned long white = WhitePixel(app->display, app->screen);
-
     XSetWindowAttributes set_window_attributes;
     set_window_attributes.override_redirect = True; /*if True, window manager doesn't mess with the window*/
     set_window_attributes.background_pixel = 0xFF0000;  /*rgb values*/
@@ -114,7 +109,6 @@ static App* setup_x() {
 
     app->gc = XCreateGC(app->display, app->window, 0, 0);
 
-    XSetForeground(app->display, app->gc, white);
     XClearWindow(app->display, app->window);
     XMapRaised(app->display, app->window);
 
@@ -127,10 +121,6 @@ static void close_x(App *app) {
     XCloseDisplay(app->display);
 }
 
-static void draw(App *app) {
-    XClearWindow(app->display, app->window);
-}
-
 static int run(App *app) {
     const int input_buffer_size = 32;
     char input_buffer[input_buffer_size];
@@ -140,7 +130,7 @@ static int run(App *app) {
         switch(event.type) {
         case Expose:
             if(event.xexpose.count == 0) {
-                draw(app);
+                XClearWindow(app->display, app->window);
             }
             break;
         case KeyPress:

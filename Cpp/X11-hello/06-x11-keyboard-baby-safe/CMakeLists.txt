@@ -12,15 +12,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable("${target}" "main.cpp")
 find_package(X11 REQUIRED)
-find_package(Freetype REQUIRED)
 
 target_include_directories("${target}"
     PRIVATE
         "${X11_INCLUDE_PATH}"
-        "${FREETYPE_INCLUDE_DIRS}"
         "include")
 
-# Xft can be omitted when not used
 target_link_libraries("${target}"
-    "${X11_LIBRARIES}"
-    "Xft")
+    "${X11_LIBRARIES}")
