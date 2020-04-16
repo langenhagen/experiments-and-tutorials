@@ -42,7 +42,7 @@ if(result)
 endif()
 
 set(LIBXDO_INCLUDE_PATH "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}/include")
-file(GLOB header_files "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}-src/*")
+file(GLOB header_files "${CMAKE_BINARY_DIR}/${EXT_PROJECT_NAME}-src/*.h")
 file(
     COPY ${header_files}
     DESTINATION "${LIBXDO_INCLUDE_PATH}/${EXT_PROJECT_NAME}")

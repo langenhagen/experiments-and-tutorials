@@ -24,7 +24,8 @@ add_executable("${target}"
 target_include_directories("${target}"
     PRIVATE
         "${X11_INCLUDE_DIR}"
-        "${LIBXDO_INCLUDE_PATH}")
+        "${LIBXDO_INCLUDE_PATH}"
+        "include")
 
 target_link_libraries("${target}"
     "${LIBXDO_LIBRARIES}")
