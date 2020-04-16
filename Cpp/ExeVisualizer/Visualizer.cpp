@@ -13,10 +13,10 @@ void main(int argc, char** argv)
     glutCreateWindow("Visualizer");
 
 	registerCallbacks();
-    
+
 	// initialize OpenGL (see glutcallbacks.c)
     init();
-			
+
 	// start GLUT event loop
     glutMainLoop();
 }

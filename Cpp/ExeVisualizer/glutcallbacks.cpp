@@ -19,7 +19,7 @@ void loadPicture()
 	// init picture with black pixels
 	for( int i = 0; i<anz; i++)
 		picture[i]=-128;
-		
+
 	ifstream inFile( filename, ios::in | ios::binary);
 	if( !inFile )
 	{
@@ -47,7 +47,7 @@ void init(void)
 	for(int i = 0 ; i<anz; i++)
 		cout << picture[i];
 #endif
-	
+
 	glutFullScreen();											// Fullscreen
 
     // light and material
@@ -65,10 +65,10 @@ void init(void)
     glEnable(GL_LIGHT0);
 
 	glShadeModel(GL_SMOOTH);
-    
+
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 	glEnable(GL_COLOR_MATERIAL);
 
 	// enable depth test (z-buffer)
@@ -104,7 +104,7 @@ void display(void)
 	const float minpy = 2 *scale;
 	const int sizex = 3 *scale;
 
-	float px=minpx;	
+	float px=minpx;
 	float py=minpy;
 
 	glPointSize(1.0);

@@ -10,7 +10,7 @@
 #ifndef GLUTCALL_H
 #define GLUTCALL_H
 
-// intialization                                             
+// intialization
 void init(void);
 
 // register callbacks with GLUT
