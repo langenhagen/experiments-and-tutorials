@@ -49,5 +49,5 @@ std::string get_text_from_clipboard() {
 }
 
 } // namespace cp
-} //namespace x11
+} // namespace x11
 } // namespace barn
