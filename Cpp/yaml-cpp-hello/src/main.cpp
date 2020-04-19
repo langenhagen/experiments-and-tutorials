@@ -77,6 +77,8 @@ static void load_yaml_1() {
     for(const auto& prime : primes) {
         std::cout << prime.as<int>() << ", ";
     }
+
+    std::cout << "\nnonexisting: " << primes["nonexisting"].as<std::string>("some default");
     std::cout << std::endl;
 }
 
