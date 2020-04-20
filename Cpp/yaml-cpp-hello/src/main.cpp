@@ -136,6 +136,27 @@ static void load_yaml_3() {
     std::cout << "comment:\n" << node["comment"].as<std::string>() << std::endl;
 }
 
+static void load_missing_yaml_file() {
+    std::cout << "---\nLoading missing yaml file:\n";
+
+    try {
+        const YAML::Node node = YAML::LoadFile("nonexisting.yaml");
+    } catch (const YAML::BadFile&  e) {
+        /*the output of BadFile.what() is of little use*/
+        std::cerr << "Error: We have a bad file: " << e.what() << "\n";
+    }
+}
+
+static void load_broken_yaml_file() {
+    std::cout << "---\nLoading broken yaml file:\n";
+
+    try {
+        const YAML::Node node = YAML::LoadFile("broken.yaml");
+    } catch (const YAML::ParserException& e) {
+        std::cerr << "Error: We have a broken file: \n" << e.what() << "\n";
+    }
+}
+
 static void write_yaml_1() {
     std::cout << "---\nWriting to file #1:\n";
 
@@ -186,6 +207,8 @@ int main(int argc, const char* argv[]) {
     load_yaml_1();
     load_yaml_2();
     load_yaml_3();
+    load_missing_yaml_file();
+    load_broken_yaml_file();
     write_yaml_1();
     write_yaml_2();
 
