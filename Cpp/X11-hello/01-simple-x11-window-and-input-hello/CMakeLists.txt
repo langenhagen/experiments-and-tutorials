@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable("${target}" "main.cpp")
-find_package(X11 REQUIRED)
+find_package(X11 REQUIRED) # install via: sudo apt install libx11-dev
 
 target_include_directories("${target}"
     PRIVATE
