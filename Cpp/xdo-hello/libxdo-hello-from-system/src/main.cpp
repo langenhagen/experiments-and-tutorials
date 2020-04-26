@@ -53,7 +53,7 @@ int main(int argc, const char* argv[]) {
         << "\ntype:        " << type
         << std::endl;
 
-    unsigned char chrome_suffix[17] = " - Google Chrome";
+    constexpr const unsigned char chrome_suffix[17] = " - Google Chrome";
     if(std::memcmp(name + len - 16, chrome_suffix, 16)) {
         std::cerr << "Window \"" << name << "\" is not a Google Chrome window." << std::endl;
         return 1;
@@ -76,7 +76,7 @@ int main(int argc, const char* argv[]) {
         0);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    const auto url(::barn::x11::cp::get_text_from_clipboard());
+    const auto url(std::move(::barn::x11::cp::get_text_from_clipboard()));
 
     std::cout << "\n---\n" << url << "\n---\n";
 
