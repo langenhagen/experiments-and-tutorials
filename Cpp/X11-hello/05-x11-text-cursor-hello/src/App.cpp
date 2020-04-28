@@ -26,7 +26,6 @@ App::App() {
     this->screen = DefaultScreen(this->display);
     this->root_win = RootWindow(this->display, this->screen);
 
-
     XSetWindowAttributes attrs;
     attrs.override_redirect = True; /*if True, window manager doesn't mess with the window*/
     attrs.background_pixel = 0x080808; /*rgb values*/
@@ -193,8 +192,8 @@ void App::draw_text() {
     XftColor xft_color;
     XftColorAllocValue(
         this->display,
-        DefaultVisual(this->display, 0) /*visual*/,
-        DefaultColormap(this->display, 0) /*colormap*/,
+        DefaultVisual(this->display, this->screen) /*visual*/,
+        DefaultColormap(this->display, this->screen) /*colormap*/,
         &x_color /*color*/,
         &xft_color /*result*/);
 
