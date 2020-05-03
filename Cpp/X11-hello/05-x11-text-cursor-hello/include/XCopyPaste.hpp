@@ -11,6 +11,7 @@ author: andreasl
 
 #include <array>
 #include <cstdio>
+#include <cstdlib>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -40,7 +41,7 @@ std::string call_popen(const char* cmd) {
 /*Write the given string to the x window clipboard.*/
 void write_to_clipboard(const std::string& str) {
     const std::string cmd = "printf -- '" + str + "' | xclip -selection clipboard";
-    system(cmd.c_str());
+    std::system(cmd.c_str());
 }
 
 /*Return a string from the x window clipboard.*/
