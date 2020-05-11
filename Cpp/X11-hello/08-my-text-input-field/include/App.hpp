@@ -15,23 +15,61 @@ author: andreasl
 namespace barn {
 namespace x11 {
 
+struct App;
+
 /*A representation for a text line.*/
 struct Line {
-    static const unsigned int buf_size = 255;
-    unsigned int len = 0;
-    char buf[buf_size];
+    static constexpr const unsigned int buf_size = 255;  /*Raw text buffer size.*/
+    char buf[buf_size];  /*Text buffer.*/
+    unsigned int len = 0;  /*Length of the string in the line.*/
 };
 
 /*A representation of text coordinates.*/
 struct TextCoord {
-    int y;  //< row
-    int x;  //< column
+    int y;  /*Row.*/
+    int x;  /*Column.*/
 };
 
-/*Compare two text coordinates for equality.*/
-inline bool operator==(const TextCoord& lhs, const TextCoord& rhs) {
-    return lhs.y == rhs.y && lhs.x == rhs.x;
-}
+bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoords for equality.*/
+
+/*Representation of a text input field widget.*/
+struct TextBox {
+    App& app;  /*Enclosing application.*/
+
+    std::vector<Line> lines;  /*The lines containing the text.*/
+    TextCoord cursor = {0, 0};  /*Cursor position.*/
+    TextCoord selection_start = {-1, -1};  /*Selection boundary.*/
+    bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
+
+    TextBox(App& app);  /*Constructor.*/
+
+    void start_selection();  /*Set the variable selection_start to the current cursor position.*/
+    void invalidate_selection();  /*Set selection-related member variables to invalid values.*/
+    /*Get the TextCoords of beginning and end of the current selection.*/
+    std::pair<const TextCoord&, const TextCoord&> get_selection_bounds() const;
+    std::string get_selected_text() const;  /*Get the currently selected text as a string.*/
+    void write_selected_text_to_clipboard() const;  /*Write the selected text to clipboard.*/
+
+    void draw_text();  /*Draw the text.*/
+    void draw_cursor();  /*Draw the text cursor.*/
+    void draw_selection();  /*Draw the selection rectangles.*/
+    void draw();  /*Draw the widget.*/
+
+    void move_cursor(int inc);  /*Move the cursor by increment forward/backward.*/
+    void move_cursor_vertically(const int inc);  /*Move the cursor by inc up/down*/
+    void move_cursor_by_word(int n_words);  /*Move the cursor by n words.*/
+
+    void insert_char(const char c);  /*Insert given character at the current cursor position.*/
+    void insert_text(const char* str);  /*Insert given string at the current cursor position*/
+    void insert_newline();  /*Insert a newline.*/
+    void delete_chars(int n_chars);  /*Delete given number characters at the cursor position.*/
+    /*Delete the text between given TextCoords.*/
+    void delete_text(const TextCoord& start, const TextCoord& end);
+    bool delete_selected_text();  /*Delete the text within the current selection.*/
+
+    int handle_key_press(XEvent& evt);  /*Handle key press events.*/
+    int handle_key_release(XEvent& evt);  /*Handle key release events.*/
+};
 
 /*Simple x11 window application for for text I/O.*/
 struct App {
@@ -51,9 +89,7 @@ struct App {
     unsigned int width = 500;
     unsigned int line_height;
 
-    std::vector<Line> lines;
-    TextCoord cursor = {0, 0};
-    TextCoord selection_start = {-1, -1};
+    TextBox text_box;
 
     bool is_ctrl_pressed = false;
     bool is_shift_pressed = false;
@@ -68,76 +104,14 @@ struct App {
 
     /*methods*/
 
+    /*Redraw the application.*/
+    void redraw();
+
     /*Attempt to grab the keyboard.*/
     int grab_keyboard();
 
     /*Specify and load the xft font.*/
     void setup_xft_font();
-
-    /*Set the variable selection_start to the current cursor position.*/
-    void start_selection();
-
-    /*Set the selection member variables to invalid values.*/
-    void invalidate_selection();
-
-    /*Retrieve the Text coordinates of beginning and end of the current selection.*/
-    std::pair<const TextCoord&, const TextCoord&> get_selection_bounds() const;
-
-    /*Retrieve the currently selected text with newlines handled nicely.*/
-    std::string get_selected_text() const;
-
-    /*Write the selectd text to clipboard with newlines handled nicely.*/
-    void write_selected_text_to_clipboard() const;
-
-    /*Draw the text.*/
-    void draw_text();
-
-    /*Draw the text cursor.*/
-    void draw_cursor();
-
-    /* Draw the selection rectangles.*/
-    void draw_selection();
-
-    /*Move the cursor by increment to the left/right
-    and consider line- and text- starts & ends.*/
-    void move_cursor(int inc);
-
-    /*Move the cursor by inc up/down and consider
-    line lengths and text beginning & end.*/
-    void move_cursor_vertically(const int inc);
-
-    /*Move the cursor by n_words and consider
-    line-lengths and text- starts & end.*/
-    void move_cursor_by_word(int n_words);
-
-    /*Insert the given character at the cursor position.*/
-    void insert_char(const char c);
-
-    /*Insert the given string at the cursor position
-    and handle newlines nicely.*/
-    void insert_text(const char* str);
-
-    /*Delete the given number characters from the text
-    at the cursor position.*/
-    void delete_chars(int n_chars);
-
-    /*Delete the text between the given text coodrinates.*/
-    void delete_text(const TextCoord& start, const TextCoord& end);
-
-    /*Delete the text within the current selection.*/
-    bool delete_selected_text();
-
-    /*Insert a newline.*/
-    void insert_newline();
-
-    /*Clear the view and redraw the app's elements.*/
-    void redraw();
-
-    /*Handle key press events.*/
-    int handle_key_press(XEvent& evt);
-
-    /*Handle key release events.*/
-    int handle_key_release(XEvent& evt);
 
     /*Run the application loop and exit with an error code.*/
     int run();

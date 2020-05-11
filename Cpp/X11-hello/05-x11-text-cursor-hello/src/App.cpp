@@ -570,12 +570,28 @@ int App::handle_key_press(XEvent& evt) {
             if(this->is_ctrl_pressed) {
                 write_selected_text_to_clipboard();
                 delete_selected_text();
+            } else {
+                /*normal text input*/
+                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                    delete_selected_text();
+                    insert_char(buf[0]);
+                } else {
+                    return 0;
+                }
             }
             break;
         case 54: /*ctrl + c*/
             if(this->is_ctrl_pressed) {
                 write_selected_text_to_clipboard();
                 return 0;
+            } else {
+                /*normal text input*/
+                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                    delete_selected_text();
+                    insert_char(buf[0]);
+                } else {
+                    return 0;
+                }
             }
             break;
         case 55: /*ctrl + v*/
@@ -583,6 +599,14 @@ int App::handle_key_press(XEvent& evt) {
                 delete_selected_text();
                 const auto text(::barn::x11::cp::get_text_from_clipboard());
                 insert_text(text.c_str());
+            } else {
+                /*normal text input*/
+                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                    delete_selected_text();
+                    insert_char(buf[0]);
+                } else {
+                    return 0;
+                }
             }
             break;
         case 22: /*backspace*/
