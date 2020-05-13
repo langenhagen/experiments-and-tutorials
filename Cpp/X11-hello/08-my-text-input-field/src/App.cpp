@@ -564,6 +564,9 @@ void App::redraw() {
 }
 
 int TextBox::handle_key_press(XEvent& evt) {
+    if (!this->has_focus) {
+        return 0;
+    }
     const int buf_size = 8;
     char buf[buf_size];
 
@@ -668,6 +671,9 @@ int TextBox::handle_key_press(XEvent& evt) {
 }
 
 int TextBox::handle_key_release(XEvent& evt) {
+    if (!this->has_focus) {
+        return 0;
+    }
     const unsigned int key_code = evt.xkey.keycode;
     if (key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
         app.is_ctrl_pressed = false;
@@ -678,6 +684,8 @@ int TextBox::handle_key_release(XEvent& evt) {
 }
 
 int App::run() {
+    text_box.has_focus = true;
+
     XEvent evt;
     while (!XNextEvent(this->display, &evt)) {
         switch (evt.type) {
