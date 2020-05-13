@@ -37,6 +37,7 @@ struct TextBox {
     App& app;  /*Enclosing application.*/
 
     std::vector<Line> lines;  /*The lines containing the text.*/
+    size_t max_n_lines = 1;  /*The maximum number of lines that are allowed for input.*/
     TextCoord cursor = {0, 0};  /*Cursor position.*/
     TextCoord selection_start = {-1, -1};  /*Selection boundary.*/
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/

@@ -535,6 +535,9 @@ bool TextBox::delete_selected_text() {
 }
 
 void TextBox::insert_newline() {
+    if (this->max_n_lines == this->lines.size()) {
+        return;
+    }
     auto& row = this->cursor.y;
     auto& col = this->cursor.x;
     auto& lines = this->lines;
