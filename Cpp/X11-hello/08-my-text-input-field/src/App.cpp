@@ -75,7 +75,6 @@ App::App() : text_box(*this) {
 int App::grab_keyboard() {
     /*try to grab keyboard 1000 times.
     We may have to wait for another process to ungrab.*/
-    using namespace std::chrono_literals;
     for (int i = 0; i < 1000; ++i) {
         int grab_result = XGrabKeyboard(
             this->display /*display*/,
@@ -88,7 +87,7 @@ int App::grab_keyboard() {
         if (grab_result == GrabSuccess) {
             return 0;
         }
-        std::this_thread::sleep_for (1ms);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     std::cerr << "Could not grab keyboard" << std::endl;
     return 1;
@@ -139,8 +138,8 @@ void TextBox::invalidate_selection() {
 }
 
 std::pair<const TextCoord&, const TextCoord&> TextBox::get_selection_bounds() const {
-    const auto& cur = this->cursor;
-    const auto& sel_start = this->selection_start;
+    const TextCoord& cur = this->cursor;
+    const TextCoord& sel_start = this->selection_start;
     if (cur.y < sel_start.y || (cur.y == sel_start.y && cur.x < sel_start.x)) {
         return std::pair<const TextCoord&, const TextCoord&>(cur, sel_start);
     }
@@ -157,7 +156,6 @@ std::string TextBox::get_selected_text() const {
     for (auto i = sel.first.y; i < sel.second.y; ++i) {
         str_len += this->lines[i].len + 1;
     }
-
     char str[str_len];
     if (sel.first.y == sel.second.y) {
         std::memcpy(
@@ -228,14 +226,14 @@ void TextBox::draw_cursor() {
     XftTextExtents8(
         app.display /*Display*/,
         app.font /*xftfont*/,
-        (XftChar8*)line.buf /*string*/,
+        reinterpret_cast<const XftChar8*>(line.buf) /*string*/,
         line.len /*int len*/,
         &glyph_info_all /*out glyph info*/);
     XGlyphInfo glyph_info_remaining;
     XftTextExtents8(
         app.display /*Display*/,
         app.font /*xftfont*/,
-        (XftChar8*)&line.buf[this->cursor.x] /*string*/,
+        reinterpret_cast<const XftChar8*>(&line.buf[this->cursor.x]) /*string*/,
         line.len - this->cursor.x /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
@@ -270,7 +268,7 @@ void TextBox::draw_selection() {
         XftTextExtents8(
             app.display,
             app.font,
-            (XftChar8*)line.buf,
+            reinterpret_cast<const XftChar8*>(line.buf),
             line.len,
             &glyph_info_all);
 
@@ -280,7 +278,7 @@ void TextBox::draw_selection() {
             XftTextExtents8(
                 app.display,
                 app.font,
-                (XftChar8*)&line.buf[sel.first.x],
+                reinterpret_cast<const XftChar8*>(&line.buf[sel.first.x]),
                 line.len - sel.first.x,
                 &glyph_info_selection);
 
@@ -293,7 +291,7 @@ void TextBox::draw_selection() {
             XftTextExtents8(
                 app.display,
                 app.font,
-                (XftChar8*)&line.buf[sel.second.x],
+                reinterpret_cast<const XftChar8*>(&line.buf[sel.second.x]),
                 line.len - sel.second.x,
                 &glyph_info_remaining);
              width -= glyph_info_remaining.width;
@@ -321,7 +319,7 @@ void TextBox::move_cursor(int inc) {
         auto& col = this->cursor.x;
         if (col + inc < 0) {
             /*left up*/
-            if ( row == 0) {
+            if (row == 0) {
                 /*to front*/
                 row = 0;
                 col = 0;
@@ -371,7 +369,7 @@ void TextBox::move_cursor_vertically(const int inc) {
     } else {
         /*normal movement*/
         row += inc;
-        if ( col > this->lines[row].len) {
+        if (col > this->lines[row].len) {
             col = this->lines[row].len;
         }
     }
@@ -394,8 +392,7 @@ void TextBox::move_cursor_by_word(int n_words) {
             }
             move_cursor(i - col);
             ++n_words;
-        }
-        else {
+        } else {
             /*go forward*/
             int i = col + 1;
             while (i < line.len && !(buf[i - 1] != ' ' && buf[i] == ' ')) {
@@ -713,5 +710,5 @@ int App::run() {
     }
 }
 
-} // x11
-} // barn
+} // namespace x11
+} // namespace barn
