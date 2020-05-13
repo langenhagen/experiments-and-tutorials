@@ -118,5 +118,5 @@ struct App {
     int run();
 };
 
-} // namespaces x11
+} // namespace x11
 } // namespace barn
