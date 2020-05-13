@@ -76,7 +76,7 @@ int App::grab_keyboard() {
     /*try to grab keyboard 1000 times.
     We may have to wait for another process to ungrab.*/
     using namespace std::chrono_literals;
-    for(int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 1000; ++i) {
         int grab_result = XGrabKeyboard(
             this->display /*display*/,
             this->root_win /*grab-win*/,
@@ -85,10 +85,10 @@ int App::grab_keyboard() {
             GrabModeAsync /*keyboard mode*/,
             CurrentTime /*time*/);
 
-        if(grab_result == GrabSuccess) {
+        if (grab_result == GrabSuccess) {
             return 0;
         }
-        std::this_thread::sleep_for(1ms);
+        std::this_thread::sleep_for (1ms);
     }
     std::cerr << "Could not grab keyboard" << std::endl;
     return 1;
@@ -125,14 +125,14 @@ TextBox::TextBox(App& app) : app(app)
 {}
 
 void TextBox::start_selection() {
-    if(this->selection_start.y == -1) {
+    if (this->selection_start.y == -1) {
         this->selection_start.y = this->cursor.y;
         this->selection_start.x = this->cursor.x;
     }
 }
 
 void TextBox::invalidate_selection() {
-    if(this->selection_start.y != -1) {
+    if (this->selection_start.y != -1) {
         this->selection_start.y = -1;
         this->selection_start.x = -1;
     }
@@ -141,45 +141,45 @@ void TextBox::invalidate_selection() {
 std::pair<const TextCoord&, const TextCoord&> TextBox::get_selection_bounds() const {
     const auto& cur = this->cursor;
     const auto& sel_start = this->selection_start;
-    if(cur.y < sel_start.y || (cur.y == sel_start.y && cur.x < sel_start.x)) {
+    if (cur.y < sel_start.y || (cur.y == sel_start.y && cur.x < sel_start.x)) {
         return std::pair<const TextCoord&, const TextCoord&>(cur, sel_start);
     }
     return std::pair<const TextCoord&, const TextCoord&>(sel_start, cur);
 }
 
 std::string TextBox::get_selected_text() const {
-    if(this->selection_start.y == -1) {
+    if (this->selection_start.y == -1) {
         return "";
     }
     const auto sel = get_selection_bounds();
 
     int str_len = sel.second.x - sel.first.x + 1;
-    for(auto i = sel.first.y; i < sel.second.y; ++i) {
+    for (auto i = sel.first.y; i < sel.second.y; ++i) {
         str_len += this->lines[i].len + 1;
     }
 
     char str[str_len];
-    if(sel.first.y == sel.second.y) {
+    if (sel.first.y == sel.second.y) {
         std::memcpy(
             str,
             &this->lines[sel.first.y].buf[sel.first.x],
             str_len - 1);
     } else {
         int off = 0;
-        for(auto i = sel.first.y; i <= sel.second.y; ++i) {
+        for (auto i = sel.first.y; i <= sel.second.y; ++i) {
             const auto& line = this->lines[i];
             int col = 0;
             int len = line.len;
-            if(i == sel.first.y) {
+            if (i == sel.first.y) {
                 col = sel.first.x;
                 len -= sel.first.x;
             }
-            if(i == sel.second.y) {
+            if (i == sel.second.y) {
                 len = sel.second.x;
             }
             std::memcpy(&str[off], &line.buf[col], len);
             off +=len;
-            if(i != sel.second.y) {
+            if (i != sel.second.y) {
                 str[off++] = '\n';
             }
         }
@@ -203,7 +203,7 @@ void TextBox::draw_text() {
         &x_color /*color*/,
         &xft_color /*result*/);
 
-    for(size_t i = 0; i < this->lines.size(); ++i) {
+    for (size_t i = 0; i < this->lines.size(); ++i) {
         auto& line = this->lines[i];
 
         XftDrawString8(
@@ -257,12 +257,12 @@ void TextBox::draw_cursor() {
 }
 
 void TextBox::draw_selection() {
-    if(this->selection_start.y == -1 || this->selection_start == this->cursor) {
+    if (this->selection_start.y == -1 || this->selection_start == this->cursor) {
         return;
     }
 
     const auto sel = get_selection_bounds();
-    for(auto i = sel.first.y; i <= sel.second.y; ++i) {
+    for (auto i = sel.first.y; i <= sel.second.y; ++i) {
         const auto& line = this->lines[i];
         int x = 0;
 
@@ -275,7 +275,7 @@ void TextBox::draw_selection() {
             &glyph_info_all);
 
         int width = glyph_info_all.width;
-        if(i == sel.first.y) {
+        if (i == sel.first.y) {
             XGlyphInfo glyph_info_selection;
             XftTextExtents8(
                 app.display,
@@ -288,7 +288,7 @@ void TextBox::draw_selection() {
             width = glyph_info_selection.width;
         }
 
-        if(i == sel.second.y) {
+        if (i == sel.second.y) {
             XGlyphInfo glyph_info_remaining;
             XftTextExtents8(
                 app.display,
@@ -313,15 +313,15 @@ void TextBox::draw_selection() {
 
 void TextBox::move_cursor(int inc) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
-    if(!app.is_shift_pressed) {
+    if (!app.is_shift_pressed) {
         invalidate_selection();
     }
-    while(true) {
+    while (true) {
         auto& row = this->cursor.y;
         auto& col = this->cursor.x;
-        if(col + inc < 0) {
+        if (col + inc < 0) {
             /*left up*/
-            if( row == 0) {
+            if ( row == 0) {
                 /*to front*/
                 row = 0;
                 col = 0;
@@ -331,9 +331,9 @@ void TextBox::move_cursor(int inc) {
                 row -= 1;
                 col = this->lines[row].len;
             }
-        } else if(col + inc > this->lines[row].len) {
+        } else if (col + inc > this->lines[row].len) {
             /*right down*/
-            if(row == this->lines.size() - 1) {
+            if (row == this->lines.size() - 1) {
                 /*past last position*/
                 row = this->lines.size() - 1;
                 col = this->lines[row].len;
@@ -353,17 +353,17 @@ void TextBox::move_cursor(int inc) {
 
 void TextBox::move_cursor_vertically(const int inc) {
     /*Move the cursor by inc up/down and consider line lengths and text beginning & end.*/
-    if(!app.is_shift_pressed) {
+    if (!app.is_shift_pressed) {
         invalidate_selection();
     }
     auto& row = this->cursor.y;
     auto& col = this->cursor.x;
-    if(row + inc < 0) {
+    if (row + inc < 0) {
         /*to front*/
         row = 0;
         col = 0;
         return;
-    } else if(row + inc >= this->lines.size()) {
+    } else if (row + inc >= this->lines.size()) {
         /*past last position*/
         row = this->lines.size() - 1;
         col = this->lines[row].len;
@@ -371,7 +371,7 @@ void TextBox::move_cursor_vertically(const int inc) {
     } else {
         /*normal movement*/
         row += inc;
-        if( col > this->lines[row].len) {
+        if ( col > this->lines[row].len) {
             col = this->lines[row].len;
         }
     }
@@ -379,17 +379,17 @@ void TextBox::move_cursor_vertically(const int inc) {
 
 void TextBox::move_cursor_by_word(int n_words) {
     /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
-    if(!app.is_shift_pressed) {
+    if (!app.is_shift_pressed) {
         invalidate_selection();
     }
-    while(n_words != 0) {
+    while (n_words != 0) {
         const auto& line = this->lines[this->cursor.y];
         const auto& buf = line.buf;
         const auto col = this->cursor.x;
-        if(n_words < 0) {
+        if (n_words < 0) {
             /*go back*/
             int i = col - 1;
-            while(i > 0 && !(buf[i - 1] == ' ' && buf[i] != ' ')) {
+            while (i > 0 && !(buf[i - 1] == ' ' && buf[i] != ' ')) {
                 --i;
             }
             move_cursor(i - col);
@@ -398,7 +398,7 @@ void TextBox::move_cursor_by_word(int n_words) {
         else {
             /*go forward*/
             int i = col + 1;
-            while(i < line.len && !(buf[i - 1] != ' ' && buf[i] == ' ')) {
+            while (i < line.len && !(buf[i - 1] != ' ' && buf[i] == ' ')) {
                 ++i;
             }
             move_cursor(i - col);
@@ -435,8 +435,8 @@ void TextBox::insert_text(const char* str) {
     /*copy lines*/
     int line_start = 0;
     int line_end = 0;
-    while(str[line_end] != '\0') {
-        if(str[line_end] == '\n') {
+    while (str[line_end] != '\0') {
+        if (str[line_end] == '\n') {
             std::memcpy(
                 lines[cur.y].buf + lines[cur.y].len,
                 str + line_start,
@@ -460,16 +460,16 @@ void TextBox::insert_text(const char* str) {
 
 void TextBox::delete_chars(int n_chars) {
     /*Delete the given number characters from the text at the cursor's position.*/
-    while(true) {
+    while (true) {
         auto& row = this->cursor.y;
         auto& col = this->cursor.x;
         auto& lines = this->lines;
         auto& line = lines[row];
         char* pos = line.buf + col;
 
-        if(col + n_chars < 0) {
+        if (col + n_chars < 0) {
             /*left up*/
-            if(row == 0) {
+            if (row == 0) {
                 n_chars = -col;
             } else {
                 auto& line_above = lines[row - 1];
@@ -481,9 +481,9 @@ void TextBox::delete_chars(int n_chars) {
                 --row;
                 col = new_col;
             }
-        } else if(col + n_chars > line.len) {
+        } else if (col + n_chars > line.len) {
             /*right down*/
-            if(row == lines.size() - 1) {
+            if (row == lines.size() - 1) {
                 n_chars = line.len - col;
             } else {
                 n_chars -= line.len - col + 1;
@@ -516,13 +516,13 @@ void TextBox::delete_text(const TextCoord& start, const TextCoord& end) {
         lines[end.y].buf + end.x,
         remaining_len);
     lines[start.y].len = start.x + remaining_len;
-    for(auto i = start.y + 1; i <= end.y; ++i) {
+    for (auto i = start.y + 1; i <= end.y; ++i) {
         lines.erase(lines.begin() + end.y);
     }
 }
 
 bool TextBox::delete_selected_text() {
-    if(this->selection_start.y == -1 ||  this->selection_start == this->cursor) {
+    if (this->selection_start.y == -1 ||  this->selection_start == this->cursor) {
         invalidate_selection();
         return false;
     }
@@ -567,7 +567,7 @@ int TextBox::handle_key_press(XEvent& evt) {
     const int buf_size = 8;
     char buf[buf_size];
 
-    switch(evt.xkey.keycode) {
+    switch (evt.xkey.keycode) {
         case 9: /*esc*/
             return 1;
         case 37: /*ctrl left*/
@@ -580,12 +580,12 @@ int TextBox::handle_key_press(XEvent& evt) {
             start_selection();
             return 0;
         case 53: /*ctrl + x*/
-            if(app.is_ctrl_pressed) {
+            if (app.is_ctrl_pressed) {
                 write_selected_text_to_clipboard();
                 delete_selected_text();
             } else {
                 /*normal text input*/
-                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
                     delete_selected_text();
                     insert_char(buf[0]);
                 } else {
@@ -594,12 +594,12 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 54: /*ctrl + c*/
-            if(app.is_ctrl_pressed) {
+            if (app.is_ctrl_pressed) {
                 write_selected_text_to_clipboard();
                 return 0;
             } else {
                 /*normal text input*/
-                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
                     delete_selected_text();
                     insert_char(buf[0]);
                 } else {
@@ -608,13 +608,13 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 55: /*ctrl + v*/
-            if(app.is_ctrl_pressed) {
+            if (app.is_ctrl_pressed) {
                 delete_selected_text();
                 const auto text(::barn::x11::cp::get_text_from_clipboard());
                 insert_text(text.c_str());
             } else {
                 /*normal text input*/
-                if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+                if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
                     delete_selected_text();
                     insert_char(buf[0]);
                 } else {
@@ -623,12 +623,12 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 22: /*backspace*/
-            if(!delete_selected_text()) {
+            if (!delete_selected_text()) {
                 delete_chars(-1);
             }
             break;
         case 119: /*delete*/
-            if(!delete_selected_text()) {
+            if (!delete_selected_text()) {
                 delete_chars(+1);
             }
             break;
@@ -655,7 +655,7 @@ int TextBox::handle_key_press(XEvent& evt) {
             this->cursor.x = this->lines[this->cursor.y].len;
             break;
         default:
-            if(XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
+            if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
                 /*normal text input*/
                 delete_selected_text();
                 insert_char(buf[0]);
@@ -669,9 +669,9 @@ int TextBox::handle_key_press(XEvent& evt) {
 
 int TextBox::handle_key_release(XEvent& evt) {
     const unsigned int key_code = evt.xkey.keycode;
-    if(key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
+    if (key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
         app.is_ctrl_pressed = false;
-    } else if(key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
+    } else if (key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
         app.is_shift_pressed = false;
     }
     return 0;
@@ -679,20 +679,20 @@ int TextBox::handle_key_release(XEvent& evt) {
 
 int App::run() {
     XEvent evt;
-    while(!XNextEvent(this->display, &evt)) {
-        switch(evt.type) {
+    while (!XNextEvent(this->display, &evt)) {
+        switch (evt.type) {
         case Expose:
-            if(evt.xexpose.count == 0) {
+            if (evt.xexpose.count == 0) {
                 redraw();
             }
             break;
         case KeyPress:
-            if(text_box.handle_key_press(evt)) {
+            if (text_box.handle_key_press(evt)) {
                 return 0;
             }
             break;
         case KeyRelease:
-            if(text_box.handle_key_release(evt)) {
+            if (text_box.handle_key_release(evt)) {
                 return 0;
             }
             break;
