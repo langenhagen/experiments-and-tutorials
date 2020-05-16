@@ -19,9 +19,18 @@ struct App;
 
 /*A representation for a text line.*/
 struct Line {
-    static constexpr const unsigned int buf_size = 255;  /*Raw text buffer size.*/
-    char buf[buf_size];  /*Text buffer.*/
+    // static constexpr const size_t buf_size = 256;  /*Raw text buffer size.*/
+    // char buf[buf_size];  /*Text buffer.*/
+    // unsigned int len = 0;  /*Length of the string in the line.*/
+    size_t buf_size;  /*Raw text buffer size.*/
+    char* buf;  /*Text buffer.*/
     unsigned int len = 0;  /*Length of the string in the line.*/
+
+    explicit Line(const size_t buf_size = 256);  /*Constructor.*/
+    explicit Line(const Line& other);  /*Copy constructor.*/
+    Line(Line&& other);  /*Move constructor.*/
+    Line& operator=(Line&&);  /*Move assignment operator.*/
+    ~Line();  /*Destructor.*/
 };
 
 /*A representation of text coordinates.*/
@@ -37,12 +46,15 @@ struct TextBox {
     App& app;  /*Enclosing application.*/
 
     std::vector<Line> lines;  /*The lines containing the text.*/
-    size_t max_n_lines = 1;  /*The maximum number of lines that are allowed for input.*/
+    const size_t width;  /*Widget width in characters.*/
+    const size_t height; /*Widget height in characters.*/
+    const size_t max_n_lines;  /*The maximum number of lines that are allowed for input.*/
     TextCoord cursor = {0, 0};  /*Cursor position.*/
     TextCoord selection_start = {-1, -1};  /*Selection boundary.*/
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
 
-    TextBox(App& app);  /*Constructor.*/
+    /*Constructor.*/
+    TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines = 1);
 
     void start_selection();  /*Set the variable selection_start to the current cursor position.*/
     void invalidate_selection();  /*Set selection-related member variables to invalid values.*/

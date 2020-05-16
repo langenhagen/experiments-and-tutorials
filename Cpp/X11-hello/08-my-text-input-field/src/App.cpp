@@ -20,15 +20,46 @@ author: andreasl
 namespace barn {
 namespace x11 {
 
+Line::Line(const size_t buf_size) : buf_size(buf_size), buf(new char[buf_size])
+{}
+
+Line::Line(const Line& other) : buf_size(other.buf_size), buf(new char[buf_size]), len(other.len) {
+    std::memcpy(this->buf, other.buf, this->buf_size);
+}
+
+Line::Line(Line&& other)
+:
+buf_size(std::move(other.buf_size)),
+buf(new char[buf_size]),
+len(std::move(other.len))
+{
+    std::memcpy(this->buf, other.buf, this->buf_size);
+}
+
+Line& Line::operator=(Line&& other) {
+    this->buf_size = std::move(other.buf_size);
+    delete[] this->buf;
+    this->buf = new char[this->buf_size];
+    std::memcpy(this->buf, other.buf, this->buf_size);
+    this->len = std::move(other.len);
+    return *this;
+}
+
+Line::~Line() {
+    delete[] this->buf;
+}
+
 bool operator==(const TextCoord& lhs, const TextCoord& rhs) {
     return lhs.y == rhs.y && lhs.x == rhs.x;
 }
 
-App::App() : text_box(*this) {
-    this->display = XOpenDisplay(nullptr);
-    this->screen = DefaultScreen(this->display);
-    this->root_win = RootWindow(this->display, this->screen);
-
+App::App()
+:
+display(XOpenDisplay(nullptr)),
+screen(DefaultScreen(display)),
+root_win(RootWindow(display, screen)),
+text_box(*this, 50, 4, 8)
+{
     XSetWindowAttributes attrs;
     attrs.override_redirect = True; /*if True, window manager doesn't mess with the window*/
     attrs.background_pixel = 0x282828; /*rgb values*/
@@ -53,6 +84,8 @@ App::App() : text_box(*this) {
         CWOverrideRedirect | CWBackPixel | CWEventMask /*valuemask; bitmask*/,
         &attrs /*attributes; values matching the valuemask*/);
 
+    this->gc = XCreateGC(this->display, this->win, 0, 0);
+
     XSetStandardProperties(
         this->display,
         this->win,
@@ -65,7 +98,6 @@ App::App() : text_box(*this) {
 
     setup_xft_font();
 
-    this->gc = XCreateGC(this->display, this->win, 0, 0);
     XClearWindow(this->display, this->win);
     XMapRaised(this->display, this->win);
 
@@ -120,7 +152,13 @@ void App::setup_xft_font() {
     this->line_height = this->font->ascent + this->font->descent;
 }
 
-TextBox::TextBox(App& app) : app(app)
+
+TextBox::TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines)
+:
+app(app),
+width(width),
+height(height),
+max_n_lines(max_n_lines)
 {}
 
 void TextBox::start_selection() {
@@ -505,16 +543,14 @@ void TextBox::delete_chars(int n_chars) {
 }
 
 void TextBox::delete_text(const TextCoord& start, const TextCoord& end) {
-    /*Delete the text between the given text coordinates.*/
-    auto& lines = this->lines;
     const auto remaining_len = lines[end.y].len - end.x;
     std::memmove(
-        lines[start.y].buf + start.x,
-        lines[end.y].buf + end.x,
+        this->lines[start.y].buf + start.x,
+        this->lines[end.y].buf + end.x,
         remaining_len);
-    lines[start.y].len = start.x + remaining_len;
+    this->lines[start.y].len = start.x + remaining_len;
     for (auto i = start.y + 1; i <= end.y; ++i) {
-        lines.erase(lines.begin() + end.y);
+        this->lines.erase(this->lines.begin() + end.y);
     }
 }
 
