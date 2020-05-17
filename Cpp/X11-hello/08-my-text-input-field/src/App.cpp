@@ -443,21 +443,18 @@ void TextBox::move_cursor_by_word(int n_words) {
 }
 
 void TextBox::insert_char(const char c) {
-    /*Insert a character into the text at the current cursor's position.*/
     invalidate_selection();
 
+    const auto& x = this->cursor.x;
     auto& line = this->lines[this->cursor.y];
-    const auto col = this->cursor.x;
-
-    std::memmove(line.buf + col + 1, line.buf + col, line.len - col);
-    std::memcpy(line.buf + col, &c, 1);
+    std::memmove(line.buf + x + 1, line.buf + x, line.len - x);
+    line.buf[x] = c;
 
     ++this->cursor.x;
     ++line.len;
 }
 
 void TextBox::insert_text(const char* str) {
-    /*Insert the given string at the cursor position and handle newlines nicely.*/
     auto& cur = this->cursor;
     auto& lines = this->lines;
 
@@ -568,21 +565,18 @@ bool TextBox::delete_selected_text() {
 }
 
 void TextBox::insert_newline() {
-    if (this->max_n_lines == this->lines.size()) {
-        return;
-    }
-    auto& row = this->cursor.y;
-    auto& col = this->cursor.x;
+    auto& y = this->cursor.y;
+    auto& x = this->cursor.x;
     auto& lines = this->lines;
-    auto& new_line = *lines.emplace(lines.begin() + row + 1);
-    auto& line = lines[row];
-    char* pos = line.buf + col;
+    auto& new_line = *lines.emplace(lines.begin() + y + 1);
+    auto& line = lines[y];
+    char* pos = line.buf + x;
 
-    new_line.len = line.len - col;
+    new_line.len = line.len - x;
     line.len -= new_line.len;
     std::memcpy(new_line.buf, pos, new_line.len);
-    ++row;
-    col = 0;
+    ++y;
+    x = 0;
 }
 
 void TextBox::draw() {
