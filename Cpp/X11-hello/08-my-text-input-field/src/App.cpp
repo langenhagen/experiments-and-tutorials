@@ -104,6 +104,12 @@ text_box(*this, 50, 4, 8)
     grab_keyboard();
 }
 
+App::~App() {
+    XFreeGC(this->display, this->gc);
+    XDestroyWindow(this->display, this->win);
+    XCloseDisplay(this->display);
+}
+
 int App::grab_keyboard() {
     /*try to grab keyboard 1000 times.
     We may have to wait for another process to ungrab.*/
@@ -123,12 +129,6 @@ int App::grab_keyboard() {
     }
     std::cerr << "Could not grab keyboard" << std::endl;
     return 1;
-}
-
-App::~App() {
-    XFreeGC(this->display, this->gc);
-    XDestroyWindow(this->display, this->win);
-    XCloseDisplay(this->display);
 }
 
 void App::setup_xft_font() {
