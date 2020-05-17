@@ -19,9 +19,6 @@ struct App;
 
 /*A representation for a text line.*/
 struct Line {
-    // static constexpr const size_t buf_size = 256;  /*Raw text buffer size.*/
-    // char buf[buf_size];  /*Text buffer.*/
-    // unsigned int len = 0;  /*Length of the string in the line.*/
     size_t buf_size;  /*Raw text buffer size.*/
     char* buf;  /*Text buffer.*/
     unsigned int len = 0;  /*Length of the string in the line.*/
@@ -73,7 +70,7 @@ struct TextBox {
     void move_cursor_by_word(int n_words);  /*Move the cursor by n words.*/
 
     void insert_char(const char c);  /*Insert given character at the current cursor position.*/
-    void insert_text(const char* str);  /*Insert given string at the current cursor position*/
+    void insert_text(const char* str);  /*Insert given string at the current cursor position.*/
     void insert_newline();  /*Insert a newline.*/
     void delete_chars(int n_chars);  /*Delete given number characters at the cursor position.*/
     /*Delete the text between given TextCoords.*/
