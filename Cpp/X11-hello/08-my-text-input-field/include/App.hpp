@@ -43,8 +43,8 @@ struct TextBox {
     App& app;  /*Enclosing application.*/
 
     std::vector<Line> lines;  /*The lines containing the text.*/
-    const size_t width;  /*Widget width in characters.*/
-    const size_t height; /*Widget height in characters.*/
+    const size_t width;  /*Widget width in pixels.*/
+    const size_t height; /*Widget height in pixels.*/
     const size_t max_n_lines;  /*The maximum number of lines that are allowed for input.*/
     TextCoord cursor = {0, 0};  /*Cursor position.*/
     TextCoord selection_start = {-1, -1};  /*Selection boundary.*/

@@ -146,7 +146,7 @@ void App::setup_xft_font() {
         "monospace",
         XFT_SIZE,
         XftTypeDouble,
-        20.0,
+        11.0,
         nullptr);
 
     this->line_height = this->font->ascent + this->font->descent;
