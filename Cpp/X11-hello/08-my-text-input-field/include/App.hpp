@@ -51,7 +51,7 @@ struct TextBox {
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
 
     /*Constructor.*/
-    TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines = 1);
+    TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines = 0);
 
     void start_selection();  /*Set the variable selection_start to the current cursor position.*/
     void invalidate_selection();  /*Set selection-related member variables to invalid values.*/
@@ -70,8 +70,8 @@ struct TextBox {
     void move_cursor_by_word(int n_words);  /*Move the cursor by n words.*/
 
     void insert_char(const char c);  /*Insert given character at the current cursor position.*/
-    void insert_text(const char* str);  /*Insert given string at the current cursor position.*/
-    void insert_newline();  /*Insert a newline.*/
+    bool insert_text(const char* str);  /*Insert given string at the current cursor position.*/
+    bool insert_newline();  /*Insert a newline.*/
     void delete_chars(int n_chars);  /*Delete given number characters at the cursor position.*/
     /*Delete the text between given TextCoords.*/
     void delete_text(const TextCoord& start, const TextCoord& end);
