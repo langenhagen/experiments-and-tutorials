@@ -455,6 +455,19 @@ void TextBox::insert_char(const char c) {
 }
 
 bool TextBox::insert_text(const char* str) {
+    /*fail if the number of lines to be inserted exceeds the limits*/
+    {
+        int n_lines = 0;
+        const char* tmp = str;
+        while ((tmp = std::strchr(tmp, '\n')) != nullptr) {
+            ++n_lines;
+            ++tmp;
+        }
+        if (this->lines.size() + n_lines > this->max_n_lines) {
+            return false;
+        }
+    }
+
     auto& cur = this->cursor;
     auto& lines = this->lines;
 
@@ -467,16 +480,8 @@ bool TextBox::insert_text(const char* str) {
     /*copy lines*/
     int line_start = 0;
     int line_end = 0;
-    bool fail_copy = false;
     while (str[line_end] != '\0') {
         if (str[line_end] == '\n') {
-            if (this->lines.size() >= this->max_n_lines) {
-                fail_copy = true;
-                std::cout << "FAIL" << std::endl;
-                break;
-            } else {
-                std::cout << "OK" << std::endl;
-            }
             std::memcpy(
                 lines[cur.y].buf + lines[cur.y].len,
                 str + line_start,
@@ -491,19 +496,12 @@ bool TextBox::insert_text(const char* str) {
     }
 
     /*last line*/
-    // TODO here around
-    if (fail_copy) {
-        return false;
-    }
     auto& line = lines[cur.y];
-    std::memcpy(line.buf + line.len + line_end - line_start, tmp.buf, tmp.len);
-    line.len += tmp.len;
-    cur.x = line_end + (line_start == 0 ? cur.x : -line_start);
-    if (fail_copy) {
-        return false;
-    }
-    std::memcpy(line.buf + line.len - tmp.len, str + line_start, line_end - line_start);
+    std::memcpy(line.buf + line.len, str + line_start, line_end - line_start);
     line.len += line_end - line_start;
+    cur.x = line_end + (line_start == 0 ? cur.x : -line_start);
+    std::memcpy(line.buf + line.len, tmp.buf, tmp.len);
+    line.len += tmp.len;
     return true;
 }
 
