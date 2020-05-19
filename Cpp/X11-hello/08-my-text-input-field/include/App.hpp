@@ -43,6 +43,8 @@ struct TextBox {
     App& app;  /*Enclosing application.*/
 
     std::vector<Line> lines;  /*The lines containing the text.*/
+    const size_t y;  /*Widget y position.*/
+    const size_t x;  /*Widget x position.*/
     const size_t width;  /*Widget width in pixels.*/
     const size_t height; /*Widget height in pixels.*/
     const size_t max_n_lines;  /*The maximum number of lines that are allowed for input.*/
@@ -51,7 +53,13 @@ struct TextBox {
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
 
     /*Constructor.*/
-    TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines = 0);
+    TextBox(
+        App& app,
+        const size_t y,
+        const size_t x,
+        const size_t width,
+        const size_t height,
+        const size_t max_n_lines = 0);
 
     void start_selection();  /*Set the variable selection_start to the current cursor position.*/
     void invalidate_selection();  /*Set selection-related member variables to invalid values.*/
@@ -60,10 +68,11 @@ struct TextBox {
     std::string get_selected_text() const;  /*Get the currently selected text as a string.*/
     void write_selected_text_to_clipboard() const;  /*Write the selected text to clipboard.*/
 
+    void draw();  /*Draw the widget.*/
+    void draw_background();  /*Draw the background and the border.*/
     void draw_text();  /*Draw the text.*/
     void draw_cursor();  /*Draw the text cursor.*/
     void draw_selection();  /*Draw the selection rectangles.*/
-    void draw();  /*Draw the widget.*/
 
     void move_cursor(int inc);  /*Move the cursor by increment forward/backward.*/
     void move_cursor_vertically(const int inc);  /*Move the cursor by inc up/down*/

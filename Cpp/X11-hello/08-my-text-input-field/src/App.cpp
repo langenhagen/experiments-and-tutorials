@@ -58,7 +58,7 @@ App::App()
 display(XOpenDisplay(nullptr)),
 screen(DefaultScreen(display)),
 root_win(RootWindow(display, screen)),
-text_box(*this, 200, 40, 2)
+text_box(*this, 10, 20, 200, 40, 3)
 {
     XSetWindowAttributes attrs;
     attrs.override_redirect = True; /*if True, window manager doesn't mess with the window*/
@@ -153,9 +153,17 @@ void App::setup_xft_font() {
 }
 
 
-TextBox::TextBox(App& app, const size_t width, const size_t height, const size_t max_n_lines)
+TextBox::TextBox(
+    App& app,
+    const size_t y,
+    const size_t x,
+    const size_t width,
+    const size_t height,
+    const size_t max_n_lines)
 :
 app(app),
+y(y),
+x(x),
 width(width),
 height(height),
 max_n_lines(max_n_lines)
@@ -228,6 +236,28 @@ void TextBox::write_selected_text_to_clipboard() const {
     ::barn::x11::cp::write_to_clipboard(get_selected_text());
 }
 
+void TextBox::draw_background() {
+    XSetForeground(this->app.display, this->app.gc, 0x222222);
+    XFillRectangle(
+        this->app.display,
+        this->app.win,
+        this->app.gc,
+        this->x,
+        this->y,
+        this->width - 1,
+        this->height -1);
+
+    XSetForeground(this->app.display, this->app.gc, 0xaaaaaa);
+    XDrawRectangle(
+        this->app.display,
+        this->app.win,
+        this->app.gc,
+        this->x,
+        this->y,
+        this->width - 1,
+        this->height -1 );
+}
+
 void TextBox::draw_text() {
     XRenderColor x_color = {65535 /*red*/, 65535 /*green*/, 65535 /*blue*/, 65535 /*alpha*/};
 
@@ -246,8 +276,8 @@ void TextBox::draw_text() {
             app.xft_drawable /*drawable*/,
             &xft_color /*color*/,
             app.font /*font*/,
-            0 /*pos x*/,
-            app.line_height * i + app.font->ascent /*pos y*/,
+            this->x + 1,
+            app.line_height * i + app.font->ascent + this->y + 1,
             (unsigned char*)line.buf,
             line.len);
     }
@@ -262,34 +292,34 @@ void TextBox::draw_cursor() {
     const auto& line = this->lines[this->cursor.y];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
-        app.display /*Display*/,
-        app.font /*xftfont*/,
+        this->app.display /*Display*/,
+        this->app.font /*xftfont*/,
         reinterpret_cast<const XftChar8*>(line.buf) /*string*/,
         line.len /*int len*/,
         &glyph_info_all /*out glyph info*/);
     XGlyphInfo glyph_info_remaining;
     XftTextExtents8(
-        app.display /*Display*/,
-        app.font /*xftfont*/,
+        this->app.display /*Display*/,
+        this->app.font /*xftfont*/,
         reinterpret_cast<const XftChar8*>(&line.buf[this->cursor.x]) /*string*/,
         line.len - this->cursor.x /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = app.line_height * this->cursor.y;
+    const int y = this->app.line_height * this->cursor.y;
 
     XSetForeground(
-        app.display /*display*/,
-        app.gc,
+        this->app.display /*display*/,
+        this->app.gc,
         0xffffff /*color*/);
     XFillRectangle(
-        app.display,
-        app.win /*drawable*/,
-        app.gc,
-        x,
-        y,
+        this->app.display,
+        this->app.win /*drawable*/,
+        this->app.gc,
+        x + this->x + 1,
+        y + this->y + 1,
         3 /*width*/,
-        app.line_height /*height*/);
+        this->app.line_height /*height*/);
 }
 
 void TextBox::draw_selection() {
@@ -304,8 +334,8 @@ void TextBox::draw_selection() {
 
         XGlyphInfo glyph_info_all;
         XftTextExtents8(
-            app.display,
-            app.font,
+            this->app.display,
+            this->app.font,
             reinterpret_cast<const XftChar8*>(line.buf),
             line.len,
             &glyph_info_all);
@@ -314,8 +344,8 @@ void TextBox::draw_selection() {
         if (i == sel.first.y) {
             XGlyphInfo glyph_info_selection;
             XftTextExtents8(
-                app.display,
-                app.font,
+                this->app.display,
+                this->app.font,
                 reinterpret_cast<const XftChar8*>(&line.buf[sel.first.x]),
                 line.len - sel.first.x,
                 &glyph_info_selection);
@@ -327,29 +357,29 @@ void TextBox::draw_selection() {
         if (i == sel.second.y) {
             XGlyphInfo glyph_info_remaining;
             XftTextExtents8(
-                app.display,
-                app.font,
+                this->app.display,
+                this->app.font,
                 reinterpret_cast<const XftChar8*>(&line.buf[sel.second.x]),
                 line.len - sel.second.x,
                 &glyph_info_remaining);
              width -= glyph_info_remaining.width;
         }
 
-        XSetForeground(app.display, app.gc, 0x444477 /*color*/);
+        XSetForeground(this->app.display, this->app.gc, 0x444477 /*color*/);
         XFillRectangle(
-            app.display,
-            app.win,
-            app.gc,
-            x,
-            app.line_height * i /*y*/,
+            this->app.display,
+            this->app.win,
+            this->app.gc,
+            x + this->x + 1,
+            this->app.line_height * i + this->y + 1,
             width,
-            app.line_height);
+            this->app.line_height);
     }
 }
 
 void TextBox::move_cursor(int inc) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
-    if (!app.is_shift_pressed) {
+    if (!this->app.is_shift_pressed) {
         invalidate_selection();
     }
     while (true) {
@@ -389,7 +419,7 @@ void TextBox::move_cursor(int inc) {
 
 void TextBox::move_cursor_vertically(const int inc) {
     /*Move the cursor by inc up/down and consider line lengths and text beginning & end.*/
-    if (!app.is_shift_pressed) {
+    if (!this->app.is_shift_pressed) {
         invalidate_selection();
     }
     auto& row = this->cursor.y;
@@ -415,7 +445,7 @@ void TextBox::move_cursor_vertically(const int inc) {
 
 void TextBox::move_cursor_by_word(int n_words) {
     /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
-    if (!app.is_shift_pressed) {
+    if (!this->app.is_shift_pressed) {
         invalidate_selection();
     }
     while (n_words != 0) {
@@ -455,8 +485,8 @@ void TextBox::insert_char(const char c) {
 }
 
 bool TextBox::insert_text(const char* str) {
-    /*fail if the number of lines to be inserted exceeds the limits*/
     {
+        /*fail if the number of lines to be inserted exceeds the limits*/
         int n_lines = 0;
         const char* tmp = str;
         while ((tmp = std::strchr(tmp, '\n')) != nullptr) {
@@ -599,9 +629,22 @@ bool TextBox::insert_newline() {
 }
 
 void TextBox::draw() {
+    draw_background();
+
+    XRectangle rect{
+        static_cast<short>(this->x + 1),
+        static_cast<short>(this->y + 1),
+        static_cast<unsigned short>(this->width - 2),
+        static_cast<unsigned short>(this->height - 2)};
+    XSetClipRectangles(this->app.display, this->app.gc, 0, 0, &rect, 1, Unsorted);
+    XftDrawSetClipRectangles(this->app.xft_drawable, 0, 0, &rect, 1);
+
     draw_selection();
     draw_text();
     draw_cursor();
+
+    XSetClipMask(this->app.display, this->app.gc, None);
+    XftDrawSetClip( this->app.xft_drawable, 0 );
 }
 
 void App::redraw() {
