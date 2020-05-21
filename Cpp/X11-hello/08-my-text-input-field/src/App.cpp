@@ -55,9 +55,9 @@ bool operator==(const TextCoord& lhs, const TextCoord& rhs) {
 
 App::App()
 :
-display(XOpenDisplay(nullptr)),
-screen(DefaultScreen(display)),
-root_win(RootWindow(display, screen)),
+dpy(XOpenDisplay(nullptr)),
+screen(DefaultScreen(dpy)),
+_root_win(RootWindow(dpy, screen)),
 text_box(*this, 10, 20, 200, 40, 3)
 {
     XSetWindowAttributes attrs;
@@ -69,14 +69,14 @@ text_box(*this, 10, 20, 200, 40, 3)
         | KeyReleaseMask
         | VisibilityChangeMask;
 
-    const Screen* const screen DefaultScreenOfDisplay(this->display);
+    const Screen* const screen DefaultScreenOfDisplay(this->dpy);
     this->win = XCreateWindow(
-        this->display /*display*/,
-        this->root_win /*parent*/,
-        (screen->width - this->width) / 2 /*pos x*/,
-        (screen->height - this->height) / 3 /*pos y*/,
-        this->width /*width; minimal 1px*/,
-        this->height /*height; minimal 1px*/,
+        this->dpy /*display*/,
+        _root_win /*parent*/,
+        (screen->width - _width) / 2 /*pos x*/,
+        (screen->height - _height) / 3 /*pos y*/,
+        _width /*width; minimal 1px*/,
+        _height /*height; minimal 1px*/,
         0 /*border width*/,
         CopyFromParent /*depth*/,
         CopyFromParent /*class*/,
@@ -84,10 +84,10 @@ text_box(*this, 10, 20, 200, 40, 3)
         CWOverrideRedirect | CWBackPixel | CWEventMask /*valuemask; bitmask*/,
         &attrs /*attributes; values matching the valuemask*/);
 
-    this->gc = XCreateGC(this->display, this->win, 0, 0);
+    this->gc = XCreateGC(this->dpy, this->win, 0, 0);
 
     XSetStandardProperties(
-        this->display,
+        this->dpy,
         this->win,
         "My nice Window",
         "HI!",
@@ -96,27 +96,27 @@ text_box(*this, 10, 20, 200, 40, 3)
         0,
         nullptr);
 
-    setup_xft_font();
+    _setup_xft_font();
 
-    XClearWindow(this->display, this->win);
-    XMapRaised(this->display, this->win);
+    XClearWindow(this->dpy, this->win);
+    XMapRaised(this->dpy, this->win);
 
-    grab_keyboard();
+    _grab_keyboard();
 }
 
 App::~App() {
-    XFreeGC(this->display, this->gc);
-    XDestroyWindow(this->display, this->win);
-    XCloseDisplay(this->display);
+    XFreeGC(this->dpy, this->gc);
+    XDestroyWindow(this->dpy, this->win);
+    XCloseDisplay(this->dpy);
 }
 
-int App::grab_keyboard() {
+int App::_grab_keyboard() {
     /*try to grab keyboard 1000 times.
     We may have to wait for another process to ungrab.*/
     for (int i = 0; i < 1000; ++i) {
         int grab_result = XGrabKeyboard(
-            this->display /*display*/,
-            this->root_win /*grab-win*/,
+            this->dpy /*display*/,
+            _root_win /*grab-win*/,
             True /*owner events*/,
             GrabModeAsync /*pointer mode*/,
             GrabModeAsync /*keyboard mode*/,
@@ -131,15 +131,15 @@ int App::grab_keyboard() {
     return 1;
 }
 
-void App::setup_xft_font() {
+void App::_setup_xft_font() {
     this->xft_drawable = XftDrawCreate(
-        this->display,
+        this->dpy,
         this->win /*drawable*/,
-        DefaultVisual(this->display, 0),
-        DefaultColormap(this->display, 0));
+        DefaultVisual(this->dpy, 0),
+        DefaultColormap(this->dpy, 0));
 
     this->font = XftFontOpen(
-        this->display,
+        this->dpy,
         this->screen,
         XFT_FAMILY,
         XftTypeString,
@@ -161,42 +161,42 @@ TextBox::TextBox(
     const size_t height,
     const size_t max_n_lines)
 :
-app(app),
 y(y),
 x(x),
 width(width),
 height(height),
-max_n_lines(max_n_lines)
+max_n_lines(max_n_lines),
+_app(app)
 {}
 
 void TextBox::start_selection() {
-    if (this->selection_start.y == -1) {
-        this->selection_start.y = this->cursor.y;
-        this->selection_start.x = this->cursor.x;
+    if (_sel_start.y == -1) {
+        _sel_start.y = _cur.y;
+        _sel_start.x = _cur.x;
     }
 }
 
-void TextBox::invalidate_selection() {
-    if (this->selection_start.y != -1) {
-        this->selection_start.y = -1;
-        this->selection_start.x = -1;
+void TextBox::_invalidate_selection() {
+    if (_sel_start.y != -1) {
+        _sel_start.y = -1;
+        _sel_start.x = -1;
     }
 }
 
-std::pair<const TextCoord&, const TextCoord&> TextBox::get_selection_bounds() const {
-    const TextCoord& cur = this->cursor;
-    const TextCoord& sel_start = this->selection_start;
+std::pair<const TextCoord&, const TextCoord&> TextBox::_get_selection_bounds() const {
+    const TextCoord& cur = _cur;
+    const TextCoord& sel_start = _sel_start;
     if (cur.y < sel_start.y || (cur.y == sel_start.y && cur.x < sel_start.x)) {
         return std::pair<const TextCoord&, const TextCoord&>(cur, sel_start);
     }
     return std::pair<const TextCoord&, const TextCoord&>(sel_start, cur);
 }
 
-std::string TextBox::get_selected_text() const {
-    if (this->selection_start.y == -1) {
+std::string TextBox::_get_selected_text() const {
+    if (_sel_start.y == -1) {
         return "";
     }
-    const auto sel = get_selection_bounds();
+    const auto sel = _get_selection_bounds();
 
     int str_len = sel.second.x - sel.first.x + 1;
     for (auto i = sel.first.y; i < sel.second.y; ++i) {
@@ -232,40 +232,40 @@ std::string TextBox::get_selected_text() const {
     return std::string(str);
 }
 
-void TextBox::write_selected_text_to_clipboard() const {
-    ::barn::x11::cp::write_to_clipboard(get_selected_text());
+void TextBox::_write_selected_text_to_clipboard() const {
+    ::barn::x11::cp::write_to_clipboard(_get_selected_text());
 }
 
-void TextBox::draw_background() {
-    XSetForeground(this->app.display, this->app.gc, 0x222222);
+void TextBox::_draw_background() {
+    XSetForeground(_app.dpy, _app.gc, 0x222222);
     XFillRectangle(
-        this->app.display,
-        this->app.win,
-        this->app.gc,
+        _app.dpy,
+        _app.win,
+        _app.gc,
         this->x,
         this->y,
         this->width - 1,
         this->height -1);
 
-    XSetForeground(this->app.display, this->app.gc, 0xaaaaaa);
+    XSetForeground(_app.dpy, _app.gc, 0xaaaaaa);
     XDrawRectangle(
-        this->app.display,
-        this->app.win,
-        this->app.gc,
+        _app.dpy,
+        _app.win,
+        _app.gc,
         this->x,
         this->y,
         this->width - 1,
         this->height -1 );
 }
 
-void TextBox::draw_text() {
+void TextBox::_draw_text() {
     XRenderColor x_color = {65535 /*red*/, 65535 /*green*/, 65535 /*blue*/, 65535 /*alpha*/};
 
     XftColor xft_color;
     XftColorAllocValue(
-        app.display,
-        DefaultVisual(app.display, app.screen) /*visual*/,
-        DefaultColormap(app.display, app.screen) /*colormap*/,
+        _app.dpy,
+        DefaultVisual(_app.dpy, _app.screen) /*visual*/,
+        DefaultColormap(_app.dpy, _app.screen) /*colormap*/,
         &x_color /*color*/,
         &xft_color /*result*/);
 
@@ -273,69 +273,69 @@ void TextBox::draw_text() {
         auto& line = this->lines[i];
 
         XftDrawString8(
-            app.xft_drawable /*drawable*/,
+            _app.xft_drawable /*drawable*/,
             &xft_color /*color*/,
-            app.font /*font*/,
+            _app.font /*font*/,
             this->x + 1,
-            app.line_height * i + app.font->ascent + this->y + 1,
+            _app.line_height * i + _app.font->ascent + this->y + 1,
             (unsigned char*)line.buf,
             line.len);
     }
     XftColorFree(
-        app.display,
-        DefaultVisual(app.display, 0),
-        DefaultColormap(app.display, 0),
+        _app.dpy,
+        DefaultVisual(_app.dpy, 0),
+        DefaultColormap(_app.dpy, 0),
         &xft_color);
 }
 
-void TextBox::draw_cursor() {
-    const auto& line = this->lines[this->cursor.y];
+void TextBox::_draw_cursor() {
+    const auto& line = this->lines[_cur.y];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
-        this->app.display /*Display*/,
-        this->app.font /*xftfont*/,
+        _app.dpy /*Display*/,
+        _app.font /*xftfont*/,
         reinterpret_cast<const XftChar8*>(line.buf) /*string*/,
         line.len /*int len*/,
         &glyph_info_all /*out glyph info*/);
     XGlyphInfo glyph_info_remaining;
     XftTextExtents8(
-        this->app.display /*Display*/,
-        this->app.font /*xftfont*/,
-        reinterpret_cast<const XftChar8*>(&line.buf[this->cursor.x]) /*string*/,
-        line.len - this->cursor.x /*int len*/,
+        _app.dpy /*Display*/,
+        _app.font /*xftfont*/,
+        reinterpret_cast<const XftChar8*>(&line.buf[_cur.x]) /*string*/,
+        line.len - _cur.x /*int len*/,
         &glyph_info_remaining /*out glyph info*/);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = this->app.line_height * this->cursor.y;
+    const int y = _app.line_height * _cur.y;
 
     XSetForeground(
-        this->app.display /*display*/,
-        this->app.gc,
+        _app.dpy /*display*/,
+        _app.gc,
         0xffffff /*color*/);
     XFillRectangle(
-        this->app.display,
-        this->app.win /*drawable*/,
-        this->app.gc,
+        _app.dpy,
+        _app.win /*drawable*/,
+        _app.gc,
         x + this->x + 1,
         y + this->y + 1,
         3 /*width*/,
-        this->app.line_height /*height*/);
+        _app.line_height /*height*/);
 }
 
-void TextBox::draw_selection() {
-    if (this->selection_start.y == -1 || this->selection_start == this->cursor) {
+void TextBox::_draw_selection() {
+    if (_sel_start.y == -1 || _sel_start == _cur) {
         return;
     }
 
-    const auto sel = get_selection_bounds();
+    const auto sel = _get_selection_bounds();
     for (auto i = sel.first.y; i <= sel.second.y; ++i) {
         const auto& line = this->lines[i];
         int x = 0;
 
         XGlyphInfo glyph_info_all;
         XftTextExtents8(
-            this->app.display,
-            this->app.font,
+            _app.dpy,
+            _app.font,
             reinterpret_cast<const XftChar8*>(line.buf),
             line.len,
             &glyph_info_all);
@@ -344,8 +344,8 @@ void TextBox::draw_selection() {
         if (i == sel.first.y) {
             XGlyphInfo glyph_info_selection;
             XftTextExtents8(
-                this->app.display,
-                this->app.font,
+                _app.dpy,
+                _app.font,
                 reinterpret_cast<const XftChar8*>(&line.buf[sel.first.x]),
                 line.len - sel.first.x,
                 &glyph_info_selection);
@@ -357,34 +357,34 @@ void TextBox::draw_selection() {
         if (i == sel.second.y) {
             XGlyphInfo glyph_info_remaining;
             XftTextExtents8(
-                this->app.display,
-                this->app.font,
+                _app.dpy,
+                _app.font,
                 reinterpret_cast<const XftChar8*>(&line.buf[sel.second.x]),
                 line.len - sel.second.x,
                 &glyph_info_remaining);
              width -= glyph_info_remaining.width;
         }
 
-        XSetForeground(this->app.display, this->app.gc, 0x444477 /*color*/);
+        XSetForeground(_app.dpy, _app.gc, 0x444477 /*color*/);
         XFillRectangle(
-            this->app.display,
-            this->app.win,
-            this->app.gc,
+            _app.dpy,
+            _app.win,
+            _app.gc,
             x + this->x + 1,
-            this->app.line_height * i + this->y + 1,
+            _app.line_height * i + this->y + 1,
             width,
-            this->app.line_height);
+            _app.line_height);
     }
 }
 
 void TextBox::move_cursor(int inc) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
-    if (!this->app.is_shift_pressed) {
-        invalidate_selection();
+    if (!_app.is_shift_pressed) {
+        _invalidate_selection();
     }
     while (true) {
-        auto& row = this->cursor.y;
-        auto& col = this->cursor.x;
+        auto& row = _cur.y;
+        auto& col = _cur.x;
         if (col + inc < 0) {
             /*left up*/
             if (row == 0) {
@@ -419,11 +419,11 @@ void TextBox::move_cursor(int inc) {
 
 void TextBox::move_cursor_vertically(const int inc) {
     /*Move the cursor by inc up/down and consider line lengths and text beginning & end.*/
-    if (!this->app.is_shift_pressed) {
-        invalidate_selection();
+    if (!_app.is_shift_pressed) {
+        _invalidate_selection();
     }
-    auto& row = this->cursor.y;
-    auto& col = this->cursor.x;
+    auto& row = _cur.y;
+    auto& col = _cur.x;
     if (row + inc < 0) {
         /*to front*/
         row = 0;
@@ -445,13 +445,13 @@ void TextBox::move_cursor_vertically(const int inc) {
 
 void TextBox::move_cursor_by_word(int n_words) {
     /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
-    if (!this->app.is_shift_pressed) {
-        invalidate_selection();
+    if (!_app.is_shift_pressed) {
+        _invalidate_selection();
     }
     while (n_words != 0) {
-        const auto& line = this->lines[this->cursor.y];
+        const auto& line = this->lines[_cur.y];
         const auto& buf = line.buf;
-        const auto col = this->cursor.x;
+        const auto col = _cur.x;
         if (n_words < 0) {
             /*go back*/
             int i = col - 1;
@@ -473,18 +473,18 @@ void TextBox::move_cursor_by_word(int n_words) {
 }
 
 void TextBox::insert_char(const char c) {
-    invalidate_selection();
+    _invalidate_selection();
 
-    const auto& x = this->cursor.x;
-    auto& line = this->lines[this->cursor.y];
+    const auto& x = _cur.x;
+    auto& line = this->lines[_cur.y];
     std::memmove(line.buf + x + 1, line.buf + x, line.len - x);
     line.buf[x] = c;
 
-    ++this->cursor.x;
+    ++_cur.x;
     ++line.len;
 }
 
-bool TextBox::insert_text(const char* str) {
+bool TextBox::_insert_text(const char* str) {
     {
         /*fail if the number of lines to be inserted exceeds the limits*/
         int n_lines = 0;
@@ -498,7 +498,7 @@ bool TextBox::insert_text(const char* str) {
         }
     }
 
-    auto& cur = this->cursor;
+    auto& cur = _cur;
     auto& lines = this->lines;
 
     /*save initial line ending*/
@@ -538,8 +538,8 @@ bool TextBox::insert_text(const char* str) {
 void TextBox::delete_chars(int n_chars) {
     /*Delete the given number characters from the text at the cursor's position.*/
     while (true) {
-        auto& row = this->cursor.y;
-        auto& col = this->cursor.x;
+        auto& row = _cur.y;
+        auto& col = _cur.x;
         auto& lines = this->lines;
         auto& line = lines[row];
         char* pos = line.buf + col;
@@ -584,7 +584,7 @@ void TextBox::delete_chars(int n_chars) {
     }
 }
 
-void TextBox::delete_text(const TextCoord& start, const TextCoord& end) {
+void TextBox::_delete_text(const TextCoord& start, const TextCoord& end) {
     const auto remaining_len = lines[end.y].len - end.x;
     std::memmove(
         this->lines[start.y].buf + start.x,
@@ -597,24 +597,24 @@ void TextBox::delete_text(const TextCoord& start, const TextCoord& end) {
 }
 
 bool TextBox::delete_selected_text() {
-    if (this->selection_start.y == -1 ||  this->selection_start == this->cursor) {
-        invalidate_selection();
+    if (_sel_start.y == -1 ||  _sel_start == _cur) {
+        _invalidate_selection();
         return false;
     }
-    const auto sel = get_selection_bounds();
-    delete_text(sel.first, sel.second);
-    this->cursor.y = sel.first.y;
-    this->cursor.x = sel.first.x;
-    invalidate_selection();
+    const auto sel = _get_selection_bounds();
+    _delete_text(sel.first, sel.second);
+    _cur.y = sel.first.y;
+    _cur.x = sel.first.x;
+    _invalidate_selection();
     return true;
 }
 
-bool TextBox::insert_newline() {
+bool TextBox::_insert_newline() {
     if (this->lines.size() >= this->max_n_lines) {
         return false;
     }
-    auto& y = this->cursor.y;
-    auto& x = this->cursor.x;
+    auto& y = _cur.y;
+    auto& x = _cur.x;
     auto& lines = this->lines;
     auto& new_line = *lines.emplace(lines.begin() + y + 1);
     auto& line = lines[y];
@@ -629,26 +629,26 @@ bool TextBox::insert_newline() {
 }
 
 void TextBox::draw() {
-    draw_background();
+    _draw_background();
 
     XRectangle rect{
         static_cast<short>(this->x + 1),
         static_cast<short>(this->y + 1),
         static_cast<unsigned short>(this->width - 2),
         static_cast<unsigned short>(this->height - 2)};
-    XSetClipRectangles(this->app.display, this->app.gc, 0, 0, &rect, 1, Unsorted);
-    XftDrawSetClipRectangles(this->app.xft_drawable, 0, 0, &rect, 1);
+    XSetClipRectangles(_app.dpy, _app.gc, 0, 0, &rect, 1, Unsorted);
+    XftDrawSetClipRectangles(_app.xft_drawable, 0, 0, &rect, 1);
 
-    draw_selection();
-    draw_text();
-    draw_cursor();
+    _draw_selection();
+    _draw_text();
+    _draw_cursor();
 
-    XSetClipMask(this->app.display, this->app.gc, None);
-    XftDrawSetClip( this->app.xft_drawable, 0 );
+    XSetClipMask(_app.dpy, _app.gc, None);
+    XftDrawSetClip( _app.xft_drawable, 0 );
 }
 
 void App::redraw() {
-    XClearWindow(this->display, this->win);
+    XClearWindow(this->dpy, this->win);
     text_box.draw();
 }
 
@@ -664,16 +664,16 @@ int TextBox::handle_key_press(XEvent& evt) {
             return 1;
         case 37: /*ctrl left*/
         case 105: /*ctrl right*/
-            app.is_ctrl_pressed = true;
+            _app.is_ctrl_pressed = true;
             return 0;
         case 50: /*shift left*/
         case 62: /*shift right*/
-            app.is_shift_pressed = true;
+            _app.is_shift_pressed = true;
             start_selection();
             return 0;
         case 53: /*ctrl + x*/
-            if (app.is_ctrl_pressed) {
-                write_selected_text_to_clipboard();
+            if (_app.is_ctrl_pressed) {
+                _write_selected_text_to_clipboard();
                 delete_selected_text();
             } else {
                 /*normal text input*/
@@ -686,8 +686,8 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 54: /*ctrl + c*/
-            if (app.is_ctrl_pressed) {
-                write_selected_text_to_clipboard();
+            if (_app.is_ctrl_pressed) {
+                _write_selected_text_to_clipboard();
                 return 0;
             } else {
                 /*normal text input*/
@@ -700,10 +700,10 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 55: /*ctrl + v*/
-            if (app.is_ctrl_pressed) {
+            if (_app.is_ctrl_pressed) {
                 delete_selected_text();
                 const auto text(::barn::x11::cp::get_text_from_clipboard());
-                insert_text(text.c_str());
+                _insert_text(text.c_str());
             } else {
                 /*normal text input*/
                 if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
@@ -726,7 +726,7 @@ int TextBox::handle_key_press(XEvent& evt) {
             break;
         case 36: /*enter*/
             delete_selected_text();
-            insert_newline();
+            _insert_newline();
             break;
         case 111: /*up arrow key*/
             move_cursor_vertically(-1);
@@ -735,16 +735,16 @@ int TextBox::handle_key_press(XEvent& evt) {
             move_cursor_vertically(+1);
             break;
         case 113: /*left arrow key*/
-            app.is_ctrl_pressed ? move_cursor_by_word(-1) : move_cursor(-1);
+            _app.is_ctrl_pressed ? move_cursor_by_word(-1) : move_cursor(-1);
             break;
         case 114: /*right arrow key*/
-            app.is_ctrl_pressed ? move_cursor_by_word(+1) : move_cursor(+1);
+            _app.is_ctrl_pressed ? move_cursor_by_word(+1) : move_cursor(+1);
             break;
         case 110: /*home key*/
-            this->cursor.x = 0;
+            _cur.x = 0;
             break;
         case 115: /*end key*/
-            this->cursor.x = this->lines[this->cursor.y].len;
+            _cur.x = this->lines[_cur.y].len;
             break;
         default:
             if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
@@ -755,7 +755,7 @@ int TextBox::handle_key_press(XEvent& evt) {
                 return 0;
             }
     }
-    app.redraw();
+    _app.redraw();
     return 0;
 }
 
@@ -765,18 +765,19 @@ int TextBox::handle_key_release(XEvent& evt) {
     }
     const unsigned int key_code = evt.xkey.keycode;
     if (key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
-        app.is_ctrl_pressed = false;
+        _app.is_ctrl_pressed = false;
     } else if (key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
-        app.is_shift_pressed = false;
+        _app.is_shift_pressed = false;
     }
     return 0;
 }
 
 int App::run() {
+    text_box.lines.emplace_back();
     text_box.has_focus = true;
 
     XEvent evt;
-    while (!XNextEvent(this->display, &evt)) {
+    while (!XNextEvent(this->dpy, &evt)) {
         switch (evt.type) {
         case Expose:
             if (evt.xexpose.count == 0) {
@@ -795,7 +796,7 @@ int App::run() {
             break;
         case VisibilityNotify:
             if (evt.xvisibility.state != VisibilityUnobscured) {
-                XRaiseWindow(this->display, this->win);
+                XRaiseWindow(this->dpy, this->win);
             }
             break;
         }

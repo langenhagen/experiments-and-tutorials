@@ -8,6 +8,5 @@ author: andreasl
 
 int main(int argc, const char* argv[]) {
     barn::x11::App app;
-    app.text_box.lines.emplace_back();
     return app.run();
 }

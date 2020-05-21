@@ -15,9 +15,9 @@ author: andreasl
 namespace barn {
 namespace x11 {
 
-struct App;
+class App;
 
-/*A representation for a text line.*/
+/*Representation of a text line.*/
 struct Line {
     size_t buf_size;  /*Raw text buffer size.*/
     char* buf;  /*Text buffer.*/
@@ -30,7 +30,7 @@ struct Line {
     ~Line();  /*Destructor.*/
 };
 
-/*A representation of text coordinates.*/
+/*Representation of text coordinates.*/
 struct TextCoord {
     int y;  /*Row.*/
     int x;  /*Column.*/
@@ -38,20 +38,23 @@ struct TextCoord {
 
 bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoords for equality.*/
 
-/*Representation of a text input field widget.*/
-struct TextBox {
-    App& app;  /*Enclosing application.*/
-
+/*Representation of a text input widget.*/
+class TextBox {
+public:  /*vars*/
     std::vector<Line> lines;  /*The lines containing the text.*/
+    bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
     const size_t y;  /*Widget y position.*/
     const size_t x;  /*Widget x position.*/
     const size_t width;  /*Widget width in pixels.*/
     const size_t height; /*Widget height in pixels.*/
     const size_t max_n_lines;  /*The maximum number of lines that are allowed for input.*/
-    TextCoord cursor = {0, 0};  /*Cursor position.*/
-    TextCoord selection_start = {-1, -1};  /*Selection boundary.*/
-    bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
 
+private:  /*vars*/
+    App& _app;  /*Enclosing application.*/
+    TextCoord _cur = {0, 0};  /*Cursor position.*/
+    TextCoord _sel_start = {-1, -1};  /*Selection boundary.*/
+
+public:  /*methods*/
     /*Constructor.*/
     TextBox(
         App& app,
@@ -61,79 +64,76 @@ struct TextBox {
         const size_t height,
         const size_t max_n_lines = 0);
 
-    void start_selection();  /*Set the variable selection_start to the current cursor position.*/
-    void invalidate_selection();  /*Set selection-related member variables to invalid values.*/
-    /*Get the TextCoords of beginning and end of the current selection.*/
-    std::pair<const TextCoord&, const TextCoord&> get_selection_bounds() const;
-    std::string get_selected_text() const;  /*Get the currently selected text as a string.*/
-    void write_selected_text_to_clipboard() const;  /*Write the selected text to clipboard.*/
-
     void draw();  /*Draw the widget.*/
-    void draw_background();  /*Draw the background and the border.*/
-    void draw_text();  /*Draw the text.*/
-    void draw_cursor();  /*Draw the text cursor.*/
-    void draw_selection();  /*Draw the selection rectangles.*/
+    void start_selection();  /*Set the variable selection_start to the current cursor position.*/
 
     void move_cursor(int inc);  /*Move the cursor by increment forward/backward.*/
     void move_cursor_vertically(const int inc);  /*Move the cursor by inc up/down*/
     void move_cursor_by_word(int n_words);  /*Move the cursor by n words.*/
 
     void insert_char(const char c);  /*Insert given character at the current cursor position.*/
-    bool insert_text(const char* str);  /*Insert given string at the current cursor position.*/
-    bool insert_newline();  /*Insert a newline.*/
     void delete_chars(int n_chars);  /*Delete given number characters at the cursor position.*/
-    /*Delete the text between given TextCoords.*/
-    void delete_text(const TextCoord& start, const TextCoord& end);
     bool delete_selected_text();  /*Delete the text within the current selection.*/
 
     int handle_key_press(XEvent& evt);  /*Handle key press events.*/
     int handle_key_release(XEvent& evt);  /*Handle key release events.*/
+
+private: /*methods*/
+    void _invalidate_selection();  /*Set selection-related member variables to invalid values.*/
+    /*Get the TextCoords of beginning and end of the current selection.*/
+    std::pair<const TextCoord&, const TextCoord&> _get_selection_bounds() const;
+    std::string _get_selected_text() const;  /*Get the currently selected text as a string.*/
+    void _write_selected_text_to_clipboard() const;  /*Write the selected text to clipboard.*/
+
+    void _draw_background();  /*Draw the background and the border.*/
+    void _draw_text();  /*Draw the text.*/
+    void _draw_cursor();  /*Draw the text cursor.*/
+    void _draw_selection();  /*Draw the selection rectangles.*/
+
+    bool _insert_text(const char* str);  /*Insert given string at the current cursor position.*/
+    bool _insert_newline();  /*Insert a newline.*/
+    /*Delete the text between given TextCoords.*/
+    void _delete_text(const TextCoord& start, const TextCoord& end);
 };
 
 /*Simple x11 window application for for text I/O.*/
-struct App {
+class App {
+public:  /*vars*/
     /*x11 essentials*/
-    Display* display;
+    Display* dpy;
     int screen;
-    Window root_win;
     Window win;
     GC gc;
 
     /*Xft stuff*/
     XftDraw* xft_drawable;
     XftFont* font;
-
-    /*application stuff*/
-    unsigned int height = 300;
-    unsigned int width = 500;
     unsigned int line_height;
 
+    /*Widgets*/
     TextBox text_box;
 
+    /*State*/
     bool is_ctrl_pressed = false;
     bool is_shift_pressed = false;
 
-    /*constructors & destructor*/
+private:  /*vars*/
+    Window _root_win;
 
-    /*Constructor.*/
-    App();
+    /*application stuff*/
+    unsigned int _height = 300;
+    unsigned int _width = 500;
 
-    /*Desctructor.*/
-    ~App();
+public:  /*methods*/
+    App();  /*Constructor.*/
+    ~App();  /*Desctructor.*/
 
-    /*methods*/
+    int run();  /*Run the application loop and exit with an error code.*/
+    void redraw();  /*Redraw the application.*/
 
-    /*Redraw the application.*/
-    void redraw();
-
-    /*Attempt to grab the keyboard.*/
-    int grab_keyboard();
-
-    /*Specify and load the xft font.*/
-    void setup_xft_font();
-
-    /*Run the application loop and exit with an error code.*/
-    int run();
+private:  /*methods*/
+    int _grab_keyboard();  /*Attempt to grab the keyboard.*/
+    void _setup_xft_font();  /*Specify and load the xft font.*/
 };
 
 } // namespace x11
