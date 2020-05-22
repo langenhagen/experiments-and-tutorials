@@ -30,11 +30,14 @@ struct Line {
     ~Line();  /*Destructor.*/
 };
 
-/*Representation of text coordinates.*/
-struct TextCoord {
+/*Representation of integer coordinates.*/
+struct IntCoord {
     int y;  /*Row.*/
     int x;  /*Column.*/
 };
+
+/*Representation of text coordinates.*/
+using TextCoord = IntCoord;
 
 bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoords for equality.*/
 
@@ -53,9 +56,7 @@ private:  /*vars*/
     std::vector<Line> _lines;  /*The lines containing the text.*/
     TextCoord _cur = {0, 0};  /*Cursor position.*/
     TextCoord _sel_start = {-1, -1};  /*Selection boundary.*/
-
-    int _off_y = 0;  /*View y offset.*/
-    int _off_x = 0;  /*View x offset.*/
+    IntCoord _off = {0, 0};  /*View offset.*/
 
 public:  /*methods*/
     /*Constructor.*/

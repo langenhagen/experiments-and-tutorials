@@ -288,13 +288,12 @@ void TextBox::_draw_text() {
 
     for (size_t i = 0; i < _lines.size(); ++i) {
         auto& line = _lines[i];
-
         XftDrawString8(
-            _app.xft_drawable /*drawable*/,
-            &xft_color /*color*/,
-            _app.font /*font*/,
-            this->x + 1,
-            _app.line_height * i + _app.font->ascent + this->y + 1,
+            _app.xft_drawable,
+            &xft_color,
+            _app.font,
+            this->x + 1 - _off.x,
+            _app.line_height * i + _app.font->ascent + this->y + 1 - _off.y,
             (unsigned char*)line.buf,
             line.len);
     }
@@ -325,18 +324,15 @@ void TextBox::_draw_cursor() {
     const int x = glyph_info_all.width - glyph_info_remaining.width;
     const int y = _app.line_height * _cur.y;
 
-    XSetForeground(
-        _app.dpy /*display*/,
-        _app.gc,
-        0xffffff /*color*/);
+    XSetForeground(_app.dpy, _app.gc,0xffffff);
     XFillRectangle(
         _app.dpy,
-        _app.win /*drawable*/,
+        _app.win,
         _app.gc,
-        x + this->x + 1,
-        y + this->y + 1,
-        3 /*width*/,
-        _app.line_height /*height*/);
+        x + this->x + 1 - _off.x,
+        y + this->y + 1 - _off.y,
+        3,
+        _app.line_height);
 }
 
 void TextBox::_draw_selection() {
@@ -387,8 +383,8 @@ void TextBox::_draw_selection() {
             _app.dpy,
             _app.win,
             _app.gc,
-            x + this->x + 1,
-            _app.line_height * i + this->y + 1,
+            x + this->x + 1 - _off.x,
+            _app.line_height * i + this->y + 1 - _off.y,
             width,
             _app.line_height);
     }
