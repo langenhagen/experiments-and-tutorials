@@ -152,7 +152,6 @@ void App::_setup_xft_font() {
     this->line_height = this->font->ascent + this->font->descent;
 }
 
-
 TextBox::TextBox(
     App& app,
     const size_t y,
@@ -167,7 +166,9 @@ width(width),
 height(height),
 max_n_lines(max_n_lines),
 _app(app)
-{}
+{
+    _lines.emplace_back();
+}
 
 void TextBox::start_selection() {
     if (_sel_start.y == -1) {
@@ -184,34 +185,33 @@ void TextBox::_invalidate_selection() {
 }
 
 std::pair<const TextCoord&, const TextCoord&> TextBox::_get_selection_bounds() const {
-    const TextCoord& cur = _cur;
     const TextCoord& sel_start = _sel_start;
-    if (cur.y < sel_start.y || (cur.y == sel_start.y && cur.x < sel_start.x)) {
-        return std::pair<const TextCoord&, const TextCoord&>(cur, sel_start);
+    if (_cur.y < sel_start.y || (_cur.y == sel_start.y && _cur.x < sel_start.x)) {
+        return std::pair<const TextCoord&, const TextCoord&>(_cur, sel_start);
     }
-    return std::pair<const TextCoord&, const TextCoord&>(sel_start, cur);
+    return std::pair<const TextCoord&, const TextCoord&>(sel_start, _cur);
 }
 
 std::string TextBox::_get_selected_text() const {
     if (_sel_start.y == -1) {
         return "";
     }
-    const auto sel = _get_selection_bounds();
 
+    const auto sel = _get_selection_bounds();
     int str_len = sel.second.x - sel.first.x + 1;
     for (auto i = sel.first.y; i < sel.second.y; ++i) {
-        str_len += this->lines[i].len + 1;
+        str_len += _lines[i].len + 1;
     }
     char str[str_len];
     if (sel.first.y == sel.second.y) {
         std::memcpy(
             str,
-            &this->lines[sel.first.y].buf[sel.first.x],
+            &_lines[sel.first.y].buf[sel.first.x],
             str_len - 1);
     } else {
         int off = 0;
         for (auto i = sel.first.y; i <= sel.second.y; ++i) {
-            const auto& line = this->lines[i];
+            const auto& line = _lines[i];
             int col = 0;
             int len = line.len;
             if (i == sel.first.y) {
@@ -234,6 +234,24 @@ std::string TextBox::_get_selected_text() const {
 
 void TextBox::_write_selected_text_to_clipboard() const {
     ::barn::x11::cp::write_to_clipboard(_get_selected_text());
+}
+
+std::string TextBox::get_text() {
+    size_t len = 0;
+    for (const auto& line : _lines) {
+        len += line.len + 1;
+    }
+    --len;
+
+    std::string str(len, ' ');
+    size_t index = 0;
+    for (const auto& line : _lines) {
+        for (size_t i = 0; i < line.len; ++i) {
+            str[index++] = line.buf[i];
+        }
+        str[index++] = '\n';
+    }
+    return str;
 }
 
 void TextBox::_draw_background() {
@@ -260,7 +278,6 @@ void TextBox::_draw_background() {
 
 void TextBox::_draw_text() {
     XRenderColor x_color = {65535 /*red*/, 65535 /*green*/, 65535 /*blue*/, 65535 /*alpha*/};
-
     XftColor xft_color;
     XftColorAllocValue(
         _app.dpy,
@@ -269,8 +286,8 @@ void TextBox::_draw_text() {
         &x_color /*color*/,
         &xft_color /*result*/);
 
-    for (size_t i = 0; i < this->lines.size(); ++i) {
-        auto& line = this->lines[i];
+    for (size_t i = 0; i < _lines.size(); ++i) {
+        auto& line = _lines[i];
 
         XftDrawString8(
             _app.xft_drawable /*drawable*/,
@@ -289,7 +306,7 @@ void TextBox::_draw_text() {
 }
 
 void TextBox::_draw_cursor() {
-    const auto& line = this->lines[_cur.y];
+    const auto& line = _lines[_cur.y];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
         _app.dpy /*Display*/,
@@ -329,7 +346,7 @@ void TextBox::_draw_selection() {
 
     const auto sel = _get_selection_bounds();
     for (auto i = sel.first.y; i <= sel.second.y; ++i) {
-        const auto& line = this->lines[i];
+        const auto& line = _lines[i];
         int x = 0;
 
         XGlyphInfo glyph_info_all;
@@ -383,35 +400,33 @@ void TextBox::move_cursor(int inc) {
         _invalidate_selection();
     }
     while (true) {
-        auto& row = _cur.y;
-        auto& col = _cur.x;
-        if (col + inc < 0) {
+        if (_cur.x + inc < 0) {
             /*left up*/
-            if (row == 0) {
+            if (_cur.y == 0) {
                 /*to front*/
-                row = 0;
-                col = 0;
+                _cur.y = 0;
+                _cur.x = 0;
                 return;
             } else {
-                inc += col + 1;
-                row -= 1;
-                col = this->lines[row].len;
+                inc += _cur.x + 1;
+                _cur.y -= 1;
+                _cur.x = _lines[_cur.y].len;
             }
-        } else if (col + inc > this->lines[row].len) {
+        } else if (_cur.x + inc > _lines[_cur.y].len) {
             /*right down*/
-            if (row == this->lines.size() - 1) {
+            if (_cur.y == _lines.size() - 1) {
                 /*past last position*/
-                row = this->lines.size() - 1;
-                col = this->lines[row].len;
+                _cur.y = _lines.size() - 1;
+                _cur.x = _lines[_cur.y].len;
                 return;
             } else {
-                inc -= this->lines[row].len - col + 1;
-                row += 1;
-                col = 0;
+                inc -= _lines[_cur.y].len - _cur.x + 1;
+                _cur.y += 1;
+                _cur.x = 0;
             }
         } else {
             /*in same line*/
-            col += inc;
+            _cur.x += inc;
             return;
         }
     }
@@ -422,23 +437,22 @@ void TextBox::move_cursor_vertically(const int inc) {
     if (!_app.is_shift_pressed) {
         _invalidate_selection();
     }
-    auto& row = _cur.y;
-    auto& col = _cur.x;
-    if (row + inc < 0) {
+
+    if (_cur.y + inc < 0) {
         /*to front*/
-        row = 0;
-        col = 0;
+        _cur.y = 0;
+        _cur.x = 0;
         return;
-    } else if (row + inc >= this->lines.size()) {
+    } else if (_cur.y + inc >= _lines.size()) {
         /*past last position*/
-        row = this->lines.size() - 1;
-        col = this->lines[row].len;
+        _cur.y = _lines.size() - 1;
+        _cur.x = _lines[_cur.y].len;
         return;
     } else {
         /*normal movement*/
-        row += inc;
-        if (col > this->lines[row].len) {
-            col = this->lines[row].len;
+        _cur.y += inc;
+        if (_cur.x > _lines[_cur.y].len) {
+            _cur.x = _lines[_cur.y].len;
         }
     }
 }
@@ -449,24 +463,23 @@ void TextBox::move_cursor_by_word(int n_words) {
         _invalidate_selection();
     }
     while (n_words != 0) {
-        const auto& line = this->lines[_cur.y];
+        const auto& line = _lines[_cur.y];
         const auto& buf = line.buf;
-        const auto col = _cur.x;
         if (n_words < 0) {
             /*go back*/
-            int i = col - 1;
+            int i = _cur.x - 1;
             while (i > 0 && !(buf[i - 1] == ' ' && buf[i] != ' ')) {
                 --i;
             }
-            move_cursor(i - col);
+            move_cursor(i - _cur.x);
             ++n_words;
         } else {
             /*go forward*/
-            int i = col + 1;
+            int i = _cur.x + 1;
             while (i < line.len && !(buf[i - 1] != ' ' && buf[i] == ' ')) {
                 ++i;
             }
-            move_cursor(i - col);
+            move_cursor(i - _cur.x);
             --n_words;
         }
     }
@@ -475,10 +488,9 @@ void TextBox::move_cursor_by_word(int n_words) {
 void TextBox::insert_char(const char c) {
     _invalidate_selection();
 
-    const auto& x = _cur.x;
-    auto& line = this->lines[_cur.y];
-    std::memmove(line.buf + x + 1, line.buf + x, line.len - x);
-    line.buf[x] = c;
+    auto& line = _lines[_cur.y];
+    std::memmove(line.buf + _cur.x + 1, line.buf + _cur.x, line.len - _cur.x);
+    line.buf[_cur.x] = c;
 
     ++_cur.x;
     ++line.len;
@@ -493,19 +505,16 @@ bool TextBox::_insert_text(const char* str) {
             ++n_lines;
             ++tmp;
         }
-        if (this->lines.size() + n_lines > this->max_n_lines) {
+        if (_lines.size() + n_lines > this->max_n_lines) {
             return false;
         }
     }
 
-    auto& cur = _cur;
-    auto& lines = this->lines;
-
     /*save initial line ending*/
     Line tmp;
-    tmp.len = lines[cur.y].len - cur.x;
-    std::memcpy(tmp.buf, lines[cur.y].buf + cur.x, tmp.len);
-    lines[cur.y].len = cur.x;
+    tmp.len = _lines[_cur.y].len - _cur.x;
+    std::memcpy(tmp.buf, _lines[_cur.y].buf + _cur.x, tmp.len);
+    _lines[_cur.y].len = _cur.x;
 
     /*copy lines*/
     int line_start = 0;
@@ -513,23 +522,23 @@ bool TextBox::_insert_text(const char* str) {
     while (str[line_end] != '\0') {
         if (str[line_end] == '\n') {
             std::memcpy(
-                lines[cur.y].buf + lines[cur.y].len,
+                _lines[_cur.y].buf + _lines[_cur.y].len,
                 str + line_start,
                 line_end - line_start);
-            lines[cur.y].len += line_end - line_start;
-            ++cur.y;
-            cur.x = 0;
-            lines.emplace(lines.begin() + cur.y);
+            _lines[_cur.y].len += line_end - line_start;
+            ++_cur.y;
+            _cur.x = 0;
+            _lines.emplace(_lines.begin() + _cur.y);
             line_start = line_end + 1;
         }
         ++line_end;
     }
 
     /*last line*/
-    auto& line = lines[cur.y];
+    auto& line = _lines[_cur.y];
     std::memcpy(line.buf + line.len, str + line_start, line_end - line_start);
     line.len += line_end - line_start;
-    cur.x = line_end + (line_start == 0 ? cur.x : -line_start);
+    _cur.x = line_end + (line_start == 0 ? _cur.x : -line_start);
     std::memcpy(line.buf + line.len, tmp.buf, tmp.len);
     line.len += tmp.len;
     return true;
@@ -538,45 +547,41 @@ bool TextBox::_insert_text(const char* str) {
 void TextBox::delete_chars(int n_chars) {
     /*Delete the given number characters from the text at the cursor's position.*/
     while (true) {
-        auto& row = _cur.y;
-        auto& col = _cur.x;
-        auto& lines = this->lines;
-        auto& line = lines[row];
-        char* pos = line.buf + col;
-
-        if (col + n_chars < 0) {
+        auto& line = _lines[_cur.y];
+        char* pos = line.buf + _cur.x;
+        if (_cur.x + n_chars < 0) {
             /*left up*/
-            if (row == 0) {
-                n_chars = -col;
+            if (_cur.y == 0) {
+                n_chars = -_cur.x;
             } else {
-                auto& line_above = lines[row - 1];
+                auto& line_above = _lines[_cur.y - 1];
                 const auto new_col = line_above.len;
-                std::memcpy(line_above.buf + line_above.len, pos, line.len - col);
-                line_above.len += line.len - col;
-                lines.erase(lines.begin() + row);
-                n_chars += col + 1;
-                --row;
-                col = new_col;
+                std::memcpy(line_above.buf + line_above.len, pos, line.len - _cur.x);
+                line_above.len += line.len - _cur.x;
+                _lines.erase(_lines.begin() + _cur.y);
+                n_chars += _cur.x + 1;
+                --_cur.y;
+                _cur.x = new_col;
             }
-        } else if (col + n_chars > line.len) {
+        } else if (_cur.x + n_chars > line.len) {
             /*right down*/
-            if (row == lines.size() - 1) {
-                n_chars = line.len - col;
+            if (_cur.y == _lines.size() - 1) {
+                n_chars = line.len - _cur.x;
             } else {
-                n_chars -= line.len - col + 1;
-                auto& line_below = lines[row + 1];
+                n_chars -= line.len - _cur.x + 1;
+                auto& line_below = _lines[_cur.y + 1];
                 std::memcpy(pos, line_below.buf, line_below.len);
-                line.len = col + line_below.len;
-                lines.erase(lines.begin() + row + 1);
+                line.len = _cur.x + line_below.len;
+                _lines.erase(_lines.begin() + _cur.y + 1);
             }
         } else {
             /*in same line*/
             if (n_chars < 0) {
-                std::memmove(pos + n_chars, pos, line.len - col);
-                col += n_chars;
+                std::memmove(pos + n_chars, pos, line.len - _cur.x);
+                _cur.x += n_chars;
                 line.len += n_chars;
             } else {
-                std::memmove(pos, pos + n_chars, line.len - col + n_chars);
+                std::memmove(pos, pos + n_chars, line.len - _cur.x + n_chars);
                 line.len -= n_chars;
             }
             return;
@@ -585,14 +590,14 @@ void TextBox::delete_chars(int n_chars) {
 }
 
 void TextBox::_delete_text(const TextCoord& start, const TextCoord& end) {
-    const auto remaining_len = lines[end.y].len - end.x;
+    const auto remaining_len = _lines[end.y].len - end.x;
     std::memmove(
-        this->lines[start.y].buf + start.x,
-        this->lines[end.y].buf + end.x,
+        _lines[start.y].buf + start.x,
+        _lines[end.y].buf + end.x,
         remaining_len);
-    this->lines[start.y].len = start.x + remaining_len;
-    for (auto i = start.y + 1; i <= end.y; ++i) {
-        this->lines.erase(this->lines.begin() + end.y);
+    _lines[start.y].len = start.x + remaining_len;
+    for (int i = start.y + 1; i <= end.y; ++i) {
+        _lines.erase(_lines.begin() + end.y);
     }
 }
 
@@ -610,21 +615,18 @@ bool TextBox::delete_selected_text() {
 }
 
 bool TextBox::_insert_newline() {
-    if (this->lines.size() >= this->max_n_lines) {
+    if (_lines.size() >= this->max_n_lines) {
         return false;
     }
-    auto& y = _cur.y;
-    auto& x = _cur.x;
-    auto& lines = this->lines;
-    auto& new_line = *lines.emplace(lines.begin() + y + 1);
-    auto& line = lines[y];
-    char* pos = line.buf + x;
+    auto& new_line = *_lines.emplace(_lines.begin() + _cur.y + 1);
+    auto& line = _lines[_cur.y];
+    char* pos = line.buf + _cur.x;
 
-    new_line.len = line.len - x;
+    new_line.len = line.len - _cur.x;
     line.len -= new_line.len;
     std::memcpy(new_line.buf, pos, new_line.len);
-    ++y;
-    x = 0;
+    ++_cur.y;
+    _cur.x = 0;
     return true;
 }
 
@@ -661,6 +663,7 @@ int TextBox::handle_key_press(XEvent& evt) {
 
     switch (evt.xkey.keycode) {
         case 9: /*esc*/
+            std::cout << "---\n" << _app.text_box.get_text() << "\n---" << std::endl;
             return 1;
         case 37: /*ctrl left*/
         case 105: /*ctrl right*/
@@ -744,7 +747,7 @@ int TextBox::handle_key_press(XEvent& evt) {
             _cur.x = 0;
             break;
         case 115: /*end key*/
-            _cur.x = this->lines[_cur.y].len;
+            _cur.x = _lines[_cur.y].len;
             break;
         default:
             if (XLookupString(&evt.xkey, buf, buf_size, nullptr, nullptr) > 0) {
@@ -773,7 +776,6 @@ int TextBox::handle_key_release(XEvent& evt) {
 }
 
 int App::run() {
-    text_box.lines.emplace_back();
     text_box.has_focus = true;
 
     XEvent evt;

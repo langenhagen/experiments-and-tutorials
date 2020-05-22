@@ -41,7 +41,6 @@ bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoord
 /*Representation of a text input widget.*/
 class TextBox {
 public:  /*vars*/
-    std::vector<Line> lines;  /*The lines containing the text.*/
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
     const size_t y;  /*Widget y position.*/
     const size_t x;  /*Widget x position.*/
@@ -51,8 +50,12 @@ public:  /*vars*/
 
 private:  /*vars*/
     App& _app;  /*Enclosing application.*/
+    std::vector<Line> _lines;  /*The lines containing the text.*/
     TextCoord _cur = {0, 0};  /*Cursor position.*/
     TextCoord _sel_start = {-1, -1};  /*Selection boundary.*/
+
+    int _off_y = 0;  /*View y offset.*/
+    int _off_x = 0;  /*View x offset.*/
 
 public:  /*methods*/
     /*Constructor.*/
@@ -66,6 +69,7 @@ public:  /*methods*/
 
     void draw();  /*Draw the widget.*/
     void start_selection();  /*Set the variable selection_start to the current cursor position.*/
+    std::string get_text();  /*Get the text from the widget.*/
 
     void move_cursor(int inc);  /*Move the cursor by increment forward/backward.*/
     void move_cursor_vertically(const int inc);  /*Move the cursor by inc up/down*/
