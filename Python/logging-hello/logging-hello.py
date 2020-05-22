@@ -34,27 +34,36 @@ def foo():
         # to the logging function
         # exc_info=False is implicitly True here
         # stack_info=True not implicitly True here, but could make sense
+        logger.exception('This Exception should also print an exc_info')
+    print('---6---')
+    try:
+        raise ValueError('hohoho')
+    except ValueError:
+        # this is with stack_info=True; makes print the stack trace
+        # to the logging function
+        # exc_info=False is implicitly True here
+        # stack_info=True not implicitly True here, but could make sense
         logger.exception('This Exception should also print an exc_info', stack_info=True)
+    print('---7---')
     try:
         raise ValueError('hihihihi')
     except ValueError:
-        print('---6---')
         logger.error('Using logger.error seems not to print the stack trace without saying')
 foo()
 
 
 def bar():
-    print('---7---')
-    logger.log(logging.DEBUG, 'mickey')
     print('---8---')
+    logger.log(logging.DEBUG, 'mickey')
+    print('---9---')
     logger.log(logging.WARN, 'mouse')
 bar()
 
 
-print('---9---')
+print('---10---')
 otherfile.foo(':)')
 
-print('---10---')
+print('---11---')
 console_handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(console_handler)
 handler2 = logging.StreamHandler(sys.stdout)
