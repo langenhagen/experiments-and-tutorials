@@ -61,8 +61,8 @@ _root_win(RootWindow(dpy, screen)),
 text_box(*this, 10, 20, 200, 40, 3)
 {
     XSetWindowAttributes attrs;
-    attrs.override_redirect = True; /*if True, window manager doesn't mess with the window*/
-    attrs.background_pixel = 0x282828; /*rgb values*/
+    attrs.override_redirect = True;
+    attrs.background_pixel = 0x282828;
     attrs.event_mask =
         ExposureMask
         | KeyPressMask
@@ -71,18 +71,18 @@ text_box(*this, 10, 20, 200, 40, 3)
 
     const Screen* const screen DefaultScreenOfDisplay(this->dpy);
     this->win = XCreateWindow(
-        this->dpy /*display*/,
-        _root_win /*parent*/,
-        (screen->width - _width) / 2 /*pos x*/,
-        (screen->height - _height) / 3 /*pos y*/,
-        _width /*width; minimal 1px*/,
-        _height /*height; minimal 1px*/,
-        0 /*border width*/,
-        CopyFromParent /*depth*/,
-        CopyFromParent /*class*/,
-        CopyFromParent /*visual*/,
-        CWOverrideRedirect | CWBackPixel | CWEventMask /*valuemask; bitmask*/,
-        &attrs /*attributes; values matching the valuemask*/);
+        this->dpy,
+        _root_win,
+        (screen->width - _width) / 2,
+        (screen->height - _height) / 3,
+        _width,
+        _height,
+        0,
+        CopyFromParent,
+        CopyFromParent,
+        CopyFromParent,
+        CWOverrideRedirect | CWBackPixel | CWEventMask,
+        &attrs);
 
     this->gc = XCreateGC(this->dpy, this->win, 0, 0);
 
@@ -115,12 +115,12 @@ int App::_grab_keyboard() {
     We may have to wait for another process to ungrab.*/
     for (int i = 0; i < 1000; ++i) {
         int grab_result = XGrabKeyboard(
-            this->dpy /*display*/,
-            _root_win /*grab-win*/,
-            True /*owner events*/,
-            GrabModeAsync /*pointer mode*/,
-            GrabModeAsync /*keyboard mode*/,
-            CurrentTime /*time*/);
+            this->dpy,
+            _root_win,
+            True,
+            GrabModeAsync,
+            GrabModeAsync,
+            CurrentTime);
 
         if (grab_result == GrabSuccess) {
             return 0;
@@ -134,7 +134,7 @@ int App::_grab_keyboard() {
 void App::_setup_xft_font() {
     this->xft_drawable = XftDrawCreate(
         this->dpy,
-        this->win /*drawable*/,
+        this->win,
         DefaultVisual(this->dpy, 0),
         DefaultColormap(this->dpy, 0));
 
@@ -277,14 +277,14 @@ void TextBox::_draw_background() {
 }
 
 void TextBox::_draw_text() {
-    XRenderColor x_color = {65535 /*red*/, 65535 /*green*/, 65535 /*blue*/, 65535 /*alpha*/};
+    XRenderColor x_color{65535, 65535, 65535, 65535};
     XftColor xft_color;
     XftColorAllocValue(
         _app.dpy,
-        DefaultVisual(_app.dpy, _app.screen) /*visual*/,
-        DefaultColormap(_app.dpy, _app.screen) /*colormap*/,
-        &x_color /*color*/,
-        &xft_color /*result*/);
+        DefaultVisual(_app.dpy, _app.screen),
+        DefaultColormap(_app.dpy, _app.screen),
+        &x_color,
+        &xft_color);
 
     for (size_t i = 0; i < _lines.size(); ++i) {
         auto& line = _lines[i];
@@ -309,18 +309,18 @@ void TextBox::_draw_cursor() {
     const auto& line = _lines[_cur.y];
     XGlyphInfo glyph_info_all;
     XftTextExtents8(
-        _app.dpy /*Display*/,
-        _app.font /*xftfont*/,
-        reinterpret_cast<const XftChar8*>(line.buf) /*string*/,
-        line.len /*int len*/,
-        &glyph_info_all /*out glyph info*/);
+        _app.dpy,
+        _app.font,
+        reinterpret_cast<const XftChar8*>(line.buf),
+        line.len,
+        &glyph_info_all);
     XGlyphInfo glyph_info_remaining;
     XftTextExtents8(
-        _app.dpy /*Display*/,
-        _app.font /*xftfont*/,
-        reinterpret_cast<const XftChar8*>(&line.buf[_cur.x]) /*string*/,
-        line.len - _cur.x /*int len*/,
-        &glyph_info_remaining /*out glyph info*/);
+        _app.dpy,
+        _app.font,
+        reinterpret_cast<const XftChar8*>(&line.buf[_cur.x]),
+        line.len - _cur.x,
+        &glyph_info_remaining);
 
     const int x = glyph_info_all.width - glyph_info_remaining.width;
     const int y = _app.line_height * _cur.y;
@@ -382,7 +382,7 @@ void TextBox::_draw_selection() {
              width -= glyph_info_remaining.width;
         }
 
-        XSetForeground(_app.dpy, _app.gc, 0x444477 /*color*/);
+        XSetForeground(_app.dpy, _app.gc, 0x444477);
         XFillRectangle(
             _app.dpy,
             _app.win,
