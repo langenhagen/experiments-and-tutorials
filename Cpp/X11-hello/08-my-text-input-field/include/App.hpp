@@ -51,13 +51,14 @@ private:  /*constants*/
     constexpr static const unsigned long _fc_cursor = 0xffffff;  /*Cursor color.*/
     constexpr static const unsigned long _bc_selection = 0x444477;  /*Selection back color.*/
     constexpr static const unsigned long _fc_border = 0xaaaaaa;  /*Cursor color.*/
+
 public:  /*vars*/
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
-    const size_t y;  /*Widget y position.*/
-    const size_t x;  /*Widget x position.*/
-    const size_t width;  /*Widget width in pixels.*/
-    const size_t height; /*Widget height in pixels.*/
-    const size_t max_n_lines;  /*The maximum number of lines that are allowed for input.*/
+    const int y;  /*Widget y position.*/
+    const int x;  /*Widget x position.*/
+    const int width;  /*Widget width in pixels.*/
+    const int height; /*Widget height in pixels.*/
+    const int max_n_lines;  /*The maximum number of lines that are allowed for input.*/
 
 private:  /*vars*/
     App& _app;  /*Enclosing application.*/
@@ -70,8 +71,8 @@ public:  /*methods*/
     /*Constructor.*/
     TextBox(
         App& app,
-        const size_t y,
-        const size_t x,
+        const int y,
+        const int x,
         const size_t width,
         const size_t height,
         const size_t max_n_lines = 0);
@@ -97,10 +98,12 @@ private: /*methods*/
     std::pair<const TextCoord&, const TextCoord&> _get_selection_bounds() const;
     std::string _get_selected_text() const;  /*Get the currently selected text as a string.*/
     void _write_selected_text_to_clipboard() const;  /*Write the selected text to clipboard.*/
+    IntCoord _calc_cursor_pos() const;  /*Calculate the cursor position in pixels.*/
+    void _adjust_offset(const IntCoord& coords);  /*Update the view offset to contain the cursor.*/
 
     void _draw_background();  /*Draw the background and the border.*/
     void _draw_text();  /*Draw the text.*/
-    void _draw_cursor();  /*Draw the text cursor.*/
+    void _draw_cursor(const IntCoord& coords);  /*Draw the text cursor.*/
     void _draw_selection();  /*Draw the selection rectangles.*/
 
     bool _insert_text(const char* str);  /*Insert given string at the current cursor position.*/
@@ -121,7 +124,7 @@ public:  /*vars*/
     /*Xft stuff*/
     XftDraw* xft_drawable;
     XftFont* font;
-    unsigned int line_height;
+    int line_height;
 
     /*Widgets*/
     TextBox text_box;

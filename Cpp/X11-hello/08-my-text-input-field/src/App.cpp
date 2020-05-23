@@ -58,7 +58,7 @@ App::App()
 dpy(XOpenDisplay(nullptr)),
 screen(DefaultScreen(dpy)),
 _root_win(RootWindow(dpy, screen)),
-text_box(*this, 10, 20, 200, 60, 3)
+text_box(*this, 10, 20, 240, 90, 7)
 {
     XSetWindowAttributes attrs;
     attrs.override_redirect = True;
@@ -154,8 +154,8 @@ void App::_setup_xft_font() {
 
 TextBox::TextBox(
     App& app,
-    const size_t y,
-    const size_t x,
+    const int y,
+    const int x,
     const size_t width,
     const size_t height,
     const size_t max_n_lines)
@@ -254,6 +254,42 @@ std::string TextBox::get_text() {
     return str;
 }
 
+IntCoord TextBox::_calc_cursor_pos() const {
+    const auto& line = _lines[_cur.y];
+    XGlyphInfo glyph_info_all;
+    XftTextExtents8(
+        _app.dpy,
+        _app.font,
+        reinterpret_cast<const XftChar8*>(line.buf),
+        line.len,
+        &glyph_info_all);
+    XGlyphInfo glyph_info_remaining;
+    XftTextExtents8(
+        _app.dpy,
+        _app.font,
+        reinterpret_cast<const XftChar8*>(&line.buf[_cur.x]),
+        line.len - _cur.x,
+        &glyph_info_remaining);
+
+    return IntCoord{
+        _app.line_height * _cur.y + _padding,
+        glyph_info_all.width - glyph_info_remaining.width + _padding};
+}
+
+void TextBox::_adjust_offset(const IntCoord& cur_coords) {
+    if (cur_coords.y + _app.line_height - _off.y >= this->height - _padding) {
+        /*cursor below visible area*/
+        const int i =
+            (cur_coords.y + _app.line_height - _off.y - this->height + _padding) / _app.line_height;
+        _off.y += (i + 1) * _app.line_height;
+    } else if (cur_coords.y - _off.y < _padding) {
+        /*cursor above visible area*/
+        const int i = (_padding - cur_coords.y + _off.y) / _app.line_height;
+        _off.y -= i * _app.line_height;
+    }
+    // TODO X scrolling
+}
+
 void TextBox::_draw_background() {
     XSetForeground(_app.dpy, _app.gc, _bc_widget);
     XFillRectangle(
@@ -303,33 +339,14 @@ void TextBox::_draw_text() {
         &xft_color);
 }
 
-void TextBox::_draw_cursor() {
-    const auto& line = _lines[_cur.y];
-    XGlyphInfo glyph_info_all;
-    XftTextExtents8(
-        _app.dpy,
-        _app.font,
-        reinterpret_cast<const XftChar8*>(line.buf),
-        line.len,
-        &glyph_info_all);
-    XGlyphInfo glyph_info_remaining;
-    XftTextExtents8(
-        _app.dpy,
-        _app.font,
-        reinterpret_cast<const XftChar8*>(&line.buf[_cur.x]),
-        line.len - _cur.x,
-        &glyph_info_remaining);
-
-    const int x = glyph_info_all.width - glyph_info_remaining.width;
-    const int y = _app.line_height * _cur.y;
-
+void TextBox::_draw_cursor(const IntCoord& coords) {
     XSetForeground(_app.dpy, _app.gc, _fc_cursor);
     XFillRectangle(
         _app.dpy,
         _app.win,
         _app.gc,
-        x + this->x + _padding - _off.x,
-        y + this->y + _padding - _off.y,
+        coords.x + this->x - _off.x,
+        coords.y + this->y - _off.y,
         _cursor_width,
         _app.line_height);
 }
@@ -636,12 +653,14 @@ void TextBox::draw() {
     XSetClipRectangles(_app.dpy, _app.gc, 0, 0, &rect, 1, Unsorted);
     XftDrawSetClipRectangles(_app.xft_drawable, 0, 0, &rect, 1);
 
+    IntCoord cur_pos(_calc_cursor_pos());
+    _adjust_offset(cur_pos);
     _draw_selection();
-    _draw_cursor();
+    _draw_cursor(cur_pos);
     _draw_text();
 
     XSetClipMask(_app.dpy, _app.gc, None);
-    XftDrawSetClip( _app.xft_drawable, 0 );
+    XftDrawSetClip( _app.xft_drawable, 0);
 }
 
 void App::redraw() {
