@@ -26,7 +26,7 @@ struct Line {
     explicit Line(const size_t buf_size = 256);  /*Constructor.*/
     explicit Line(const Line& other);  /*Copy constructor.*/
     Line(Line&& other);  /*Move constructor.*/
-    Line& operator=(Line&&);  /*Move assignment operator.*/
+    Line& operator=(Line&& other);  /*Move assignment operator.*/
     ~Line();  /*Destructor.*/
 };
 
