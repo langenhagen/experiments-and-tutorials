@@ -58,7 +58,7 @@ App::App()
 dpy(XOpenDisplay(nullptr)),
 screen(DefaultScreen(dpy)),
 _root_win(RootWindow(dpy, screen)),
-text_box(*this, 10, 20, 200, 45, 3)
+text_box(*this, 10, 20, 200, 60, 3)
 {
     XSetWindowAttributes attrs;
     attrs.override_redirect = True;
@@ -262,8 +262,8 @@ void TextBox::_draw_background() {
         _app.gc,
         this->x,
         this->y,
-        this->width - 1,
-        this->height -1);
+        this->width,
+        this->height);
 
     XSetForeground(_app.dpy, _app.gc, _fc_border);
     XDrawRectangle(
@@ -272,8 +272,8 @@ void TextBox::_draw_background() {
         _app.gc,
         this->x,
         this->y,
-        this->width - 1,
-        this->height -1 );
+        this->width,
+        this->height);
 }
 
 void TextBox::_draw_text() {
@@ -291,9 +291,9 @@ void TextBox::_draw_text() {
             _app.xft_drawable,
             &xft_color,
             _app.font,
-            this->x + 1 - _off.x,
-            _app.line_height * i + _app.font->ascent + this->y + 1 - _off.y,
-            (unsigned char*)line.buf,
+            this->x + _padding - _off.x,
+            _app.line_height * i + _app.font->ascent + this->y + _padding - _off.y,
+            reinterpret_cast<unsigned char*>(line.buf)  ,
             line.len);
     }
     XftColorFree(
@@ -328,8 +328,8 @@ void TextBox::_draw_cursor() {
         _app.dpy,
         _app.win,
         _app.gc,
-        x + this->x + 1 - _off.x,
-        y + this->y + 1 - _off.y,
+        x + this->x + _padding - _off.x,
+        y + this->y + _padding - _off.y,
         3,
         _app.line_height);
 }
@@ -382,8 +382,8 @@ void TextBox::_draw_selection() {
             _app.dpy,
             _app.win,
             _app.gc,
-            x + this->x + 1 - _off.x,
-            _app.line_height * i + this->y + 1 - _off.y,
+            x + this->x + _padding - _off.x,
+            _app.line_height * i + this->y + _padding - _off.y,
             width,
             _app.line_height);
     }
@@ -629,16 +629,16 @@ void TextBox::draw() {
     _draw_background();
 
     XRectangle rect{
-        static_cast<short>(this->x + 1),
-        static_cast<short>(this->y + 1),
-        static_cast<unsigned short>(this->width - 2),
-        static_cast<unsigned short>(this->height - 2)};
+        static_cast<short>(this->x + _padding),
+        static_cast<short>(this->y + _padding),
+        static_cast<unsigned short>(this->width - 2 * _padding),
+        static_cast<unsigned short>(this->height - 2 * _padding)};
     XSetClipRectangles(_app.dpy, _app.gc, 0, 0, &rect, 1, Unsorted);
     XftDrawSetClipRectangles(_app.xft_drawable, 0, 0, &rect, 1);
 
     _draw_selection();
-    _draw_text();
     _draw_cursor();
+    _draw_text();
 
     XSetClipMask(_app.dpy, _app.gc, None);
     XftDrawSetClip( _app.xft_drawable, 0 );
