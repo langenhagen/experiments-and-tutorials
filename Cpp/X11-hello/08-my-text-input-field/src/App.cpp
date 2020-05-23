@@ -330,7 +330,7 @@ void TextBox::_draw_cursor() {
         _app.gc,
         x + this->x + _padding - _off.x,
         y + this->y + _padding - _off.y,
-        3,
+        _cursor_width,
         _app.line_height);
 }
 
