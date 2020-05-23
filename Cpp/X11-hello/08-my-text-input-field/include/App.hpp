@@ -43,6 +43,14 @@ bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoord
 
 /*Representation of a text input widget.*/
 class TextBox {
+private:  /*constants*/
+    constexpr static const int _cursor_width = 3;  /*Width of the cursor.*/
+    constexpr static const int _border_width = 1;  /*Widget frame width.*/
+    constexpr static const XRenderColor _fc_text{65535, 65535, 65535, 65535};  /*Text color.*/
+    constexpr static const unsigned long _bc_widget = 0x222222;  /*Background color.*/
+    constexpr static const unsigned long _fc_cursor = 0xffffff;  /*Cursor color.*/
+    constexpr static const unsigned long _bc_selection = 0x444477;  /*Selection back color.*/
+    constexpr static const unsigned long _fc_border = 0xaaaaaa;  /*Cursor color.*/
 public:  /*vars*/
     bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
     const size_t y;  /*Widget y position.*/

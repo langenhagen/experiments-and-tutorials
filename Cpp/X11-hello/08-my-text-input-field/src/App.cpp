@@ -58,7 +58,7 @@ App::App()
 dpy(XOpenDisplay(nullptr)),
 screen(DefaultScreen(dpy)),
 _root_win(RootWindow(dpy, screen)),
-text_box(*this, 10, 20, 200, 40, 3)
+text_box(*this, 10, 20, 200, 45, 3)
 {
     XSetWindowAttributes attrs;
     attrs.override_redirect = True;
@@ -255,7 +255,7 @@ std::string TextBox::get_text() {
 }
 
 void TextBox::_draw_background() {
-    XSetForeground(_app.dpy, _app.gc, 0x222222);
+    XSetForeground(_app.dpy, _app.gc, _bc_widget);
     XFillRectangle(
         _app.dpy,
         _app.win,
@@ -265,7 +265,7 @@ void TextBox::_draw_background() {
         this->width - 1,
         this->height -1);
 
-    XSetForeground(_app.dpy, _app.gc, 0xaaaaaa);
+    XSetForeground(_app.dpy, _app.gc, _fc_border);
     XDrawRectangle(
         _app.dpy,
         _app.win,
@@ -277,13 +277,12 @@ void TextBox::_draw_background() {
 }
 
 void TextBox::_draw_text() {
-    XRenderColor x_color{65535, 65535, 65535, 65535};
     XftColor xft_color;
     XftColorAllocValue(
         _app.dpy,
         DefaultVisual(_app.dpy, _app.screen),
         DefaultColormap(_app.dpy, _app.screen),
-        &x_color,
+        &_fc_text,
         &xft_color);
 
     for (size_t i = 0; i < _lines.size(); ++i) {
@@ -324,7 +323,7 @@ void TextBox::_draw_cursor() {
     const int x = glyph_info_all.width - glyph_info_remaining.width;
     const int y = _app.line_height * _cur.y;
 
-    XSetForeground(_app.dpy, _app.gc,0xffffff);
+    XSetForeground(_app.dpy, _app.gc, _fc_cursor);
     XFillRectangle(
         _app.dpy,
         _app.win,
@@ -378,7 +377,7 @@ void TextBox::_draw_selection() {
              width -= glyph_info_remaining.width;
         }
 
-        XSetForeground(_app.dpy, _app.gc, 0x444477);
+        XSetForeground(_app.dpy, _app.gc, _bc_selection);
         XFillRectangle(
             _app.dpy,
             _app.win,
