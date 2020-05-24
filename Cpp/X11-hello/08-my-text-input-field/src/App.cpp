@@ -309,7 +309,8 @@ void TextBox::_draw_background() {
         this->width,
         this->height);
 
-    XSetForeground(_app.dpy, _app.gc, _fc_border);
+    const unsigned long fc_border = _has_focus ? _fc_border : _fc_border_inactive;
+    XSetForeground(_app.dpy, _app.gc, fc_border);
     XDrawRectangle(
         _app.dpy,
         _app.win,
@@ -650,6 +651,15 @@ bool TextBox::_insert_newline() {
     return true;
 }
 
+bool TextBox::has_focus() const {
+    return _has_focus;
+}
+
+void TextBox::set_focus(const bool has_focus) {
+    _has_focus = has_focus;
+    this->draw();
+}
+
 void TextBox::draw() {
     _draw_background();
 
@@ -664,8 +674,10 @@ void TextBox::draw() {
     IntCoord cur_pos(_calc_cursor_pos());
     _adjust_offset(cur_pos);
     _draw_selection();
-    _draw_cursor(cur_pos);
     _draw_text();
+    if (_has_focus) {
+        _draw_cursor(cur_pos);
+    }
 
     XSetClipMask(_app.dpy, _app.gc, None);
     XftDrawSetClip( _app.xft_drawable, 0);
@@ -677,16 +689,13 @@ void App::redraw() {
 }
 
 int TextBox::handle_key_press(XEvent& evt) {
-    if (!this->has_focus) {
+    if (!_has_focus) {
         return 0;
     }
     const int buf_size = 8;
     char buf[buf_size];
 
     switch (evt.xkey.keycode) {
-        case 9: /*esc*/
-            std::cout << "---\n" << _app.text_box.get_text() << "\n---" << std::endl;
-            return 1;
         case 37: /*ctrl left*/
         case 105: /*ctrl right*/
             _app.is_ctrl_pressed = true;
@@ -785,7 +794,7 @@ int TextBox::handle_key_press(XEvent& evt) {
 }
 
 int TextBox::handle_key_release(XEvent& evt) {
-    if (!this->has_focus) {
+    if (!_has_focus) {
         return 0;
     }
     const unsigned int key_code = evt.xkey.keycode;
@@ -798,7 +807,7 @@ int TextBox::handle_key_release(XEvent& evt) {
 }
 
 int App::run() {
-    text_box.has_focus = true;
+    text_box.set_focus(true);
 
     XEvent evt;
     while (!XNextEvent(this->dpy, &evt)) {
@@ -809,7 +818,12 @@ int App::run() {
             }
             break;
         case KeyPress:
-            if (text_box.handle_key_press(evt)) {
+            if (evt.xkey.keycode == 9 /*esc*/) {
+                std::cout << "---\n" << this->text_box.get_text() << "\n---" << std::endl;
+                return 0;
+            } else if (evt.xkey.keycode == 23 /*tab*/) {
+                text_box.set_focus(!text_box.has_focus());
+            } else if (text_box.handle_key_press(evt)) {
                 return 0;
             }
             break;

@@ -50,10 +50,10 @@ private:  /*constants*/
     constexpr static const unsigned long _bc_widget = 0x222222;  /*Background color.*/
     constexpr static const unsigned long _fc_cursor = 0xffffff;  /*Cursor color.*/
     constexpr static const unsigned long _bc_selection = 0x444477;  /*Selection back color.*/
-    constexpr static const unsigned long _fc_border = 0xaaaaaa;  /*Cursor color.*/
+    constexpr static const unsigned long _fc_border = 0xaaaaaa;  /*Border color.*/
+    constexpr static const unsigned long _fc_border_inactive = 0x666666;  /*Inactive border color.*/
 
 public:  /*vars*/
-    bool has_focus = false;  /*Specifies whether the widget should have the focus.*/
     const int y;  /*Widget y position.*/
     const int x;  /*Widget x position.*/
     const int width;  /*Widget width in pixels.*/
@@ -66,6 +66,7 @@ private:  /*vars*/
     TextCoord _cur = {0, 0};  /*Cursor position.*/
     TextCoord _sel_start = {-1, -1};  /*Selection boundary.*/
     IntCoord _off = {0, 0};  /*View offset.*/
+    bool _has_focus = false;  /*Specifies whether the widget should have the focus.*/
 
 public:  /*methods*/
     /*Constructor.*/
@@ -76,6 +77,9 @@ public:  /*methods*/
         const size_t width,
         const size_t height,
         const size_t max_n_lines = 0);
+
+    bool has_focus() const;  /*Check whether the widget has focus.*/
+    void set_focus(const bool has_focus);  /*Specify whether the widget has focus.*/
 
     void draw();  /*Draw the widget.*/
     void start_selection();  /*Set the variable selection_start to the current cursor position.*/
