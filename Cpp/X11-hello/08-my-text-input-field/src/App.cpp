@@ -277,17 +277,25 @@ IntCoord TextBox::_calc_cursor_pos() const {
 }
 
 void TextBox::_adjust_offset(const IntCoord& cur_coords) {
-    if (cur_coords.y + _app.line_height - _off.y >= this->height - _padding) {
-        /*cursor below visible area*/
-        const int i =
-            (cur_coords.y + _app.line_height - _off.y - this->height + _padding) / _app.line_height;
-        _off.y += (i + 1) * _app.line_height;
-    } else if (cur_coords.y - _off.y < _padding) {
+    if (cur_coords.y - _off.y < _padding) {
         /*cursor above visible area*/
-        const int i = (_padding - cur_coords.y + _off.y) / _app.line_height;
-        _off.y -= i * _app.line_height;
+        const int increment = (_padding - cur_coords.y + _off.y) / _app.line_height;
+        _off.y -= increment * _app.line_height;
+    } else if (cur_coords.y + _app.line_height - _off.y > this->height - _padding) {
+        /*cursor below visible area*/
+        const int increment =
+            (cur_coords.y + _app.line_height - _off.y - this->height + _padding) / _app.line_height;
+        _off.y += (increment + 1) * _app.line_height;
     }
-    // TODO X scrolling
+    if (cur_coords.x - _off.x < _padding) {
+        /*cursor left of the visible area*/
+        const int increment = _padding - cur_coords.x + _off.x;
+        _off.x -= increment;
+    } else if (cur_coords.x + _cur_width - _off.x > this->width - _padding) {
+        /*cursor right of the visible area*/
+        const int increment = cur_coords.x + _cur_width - _off.x - this->width + _padding;
+        _off.x += increment;
+    }
 }
 
 void TextBox::_draw_background() {
@@ -347,7 +355,7 @@ void TextBox::_draw_cursor(const IntCoord& coords) {
         _app.gc,
         coords.x + this->x - _off.x,
         coords.y + this->y - _off.y,
-        _cursor_width,
+        _cur_width,
         _app.line_height);
 }
 

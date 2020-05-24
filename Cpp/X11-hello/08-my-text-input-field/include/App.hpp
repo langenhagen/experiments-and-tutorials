@@ -44,7 +44,7 @@ bool operator==(const TextCoord& lhs, const TextCoord& rhs);  /*Test 2 TextCoord
 /*Representation of a text input widget.*/
 class TextBox {
 private:  /*constants*/
-    constexpr static const int _cursor_width = 3;  /*Width of the cursor.*/
+    constexpr static const int _cur_width = 3;  /*Width of the cursor.*/
     constexpr static const int _padding = 5;  /*Inner padding.*/
     constexpr static const XRenderColor _fc_text{65535, 65535, 65535, 65535};  /*Text color.*/
     constexpr static const unsigned long _bc_widget = 0x222222;  /*Background color.*/
