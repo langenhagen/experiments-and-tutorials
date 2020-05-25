@@ -152,6 +152,14 @@ void App::_setup_xft_font() {
     this->line_height = this->font->ascent + this->font->descent;
 }
 
+bool App::is_ctrl_pressed() const {
+    return this->_ctrl_l || this->_ctrl_r;
+}
+
+bool App::is_shift_pressed() const {
+    return this->_shift_l || this->_shift_r;
+}
+
 TextBox::TextBox(
     App& app,
     const int y,
@@ -417,7 +425,7 @@ void TextBox::_draw_selection() {
 
 void TextBox::move_cursor(int inc) {
     /*Move the cursor by increment to the left/right and consider line- and text- starts & ends.*/
-    if (!_app.is_shift_pressed) {
+    if (!_app.is_shift_pressed()) {
         _invalidate_selection();
     }
     while (true) {
@@ -455,7 +463,7 @@ void TextBox::move_cursor(int inc) {
 
 void TextBox::move_cursor_vertically(const int inc) {
     /*Move the cursor by inc up/down and consider line lengths and text beginning & end.*/
-    if (!_app.is_shift_pressed) {
+    if (!_app.is_shift_pressed()) {
         _invalidate_selection();
     }
 
@@ -480,7 +488,7 @@ void TextBox::move_cursor_vertically(const int inc) {
 
 void TextBox::move_cursor_by_word(int n_words) {
     /*Move the cursor by n_words and consider line-lengths and text- starts & end.*/
-    if (!_app.is_shift_pressed) {
+    if (!_app.is_shift_pressed()) {
         _invalidate_selection();
     }
     while (n_words != 0) {
@@ -696,17 +704,12 @@ int TextBox::handle_key_press(XEvent& evt) {
     char buf[buf_size];
 
     switch (evt.xkey.keycode) {
-        case 37: /*ctrl left*/
-        case 105: /*ctrl right*/
-            _app.is_ctrl_pressed = true;
-            return 0;
         case 50: /*shift left*/
         case 62: /*shift right*/
-            _app.is_shift_pressed = true;
             start_selection();
             return 0;
         case 53: /*ctrl + x*/
-            if (_app.is_ctrl_pressed) {
+            if (_app.is_ctrl_pressed()) {
                 _write_selected_text_to_clipboard();
                 delete_selected_text();
             } else {
@@ -720,7 +723,7 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 54: /*ctrl + c*/
-            if (_app.is_ctrl_pressed) {
+            if (_app.is_ctrl_pressed()) {
                 _write_selected_text_to_clipboard();
                 return 0;
             } else {
@@ -734,7 +737,7 @@ int TextBox::handle_key_press(XEvent& evt) {
             }
             break;
         case 55: /*ctrl + v*/
-            if (_app.is_ctrl_pressed) {
+            if (_app.is_ctrl_pressed()) {
                 delete_selected_text();
                 const auto text(::barn::x11::cp::get_text_from_clipboard());
                 _insert_text(text.c_str());
@@ -769,10 +772,10 @@ int TextBox::handle_key_press(XEvent& evt) {
             move_cursor_vertically(+1);
             break;
         case 113: /*left arrow key*/
-            _app.is_ctrl_pressed ? move_cursor_by_word(-1) : move_cursor(-1);
+            _app.is_ctrl_pressed() ? move_cursor_by_word(-1) : move_cursor(-1);
             break;
         case 114: /*right arrow key*/
-            _app.is_ctrl_pressed ? move_cursor_by_word(+1) : move_cursor(+1);
+            _app.is_ctrl_pressed() ? move_cursor_by_word(+1) : move_cursor(+1);
             break;
         case 110: /*home key*/
             _cur.x = 0;
@@ -789,20 +792,10 @@ int TextBox::handle_key_press(XEvent& evt) {
                 return 0;
             }
     }
-    _app.redraw();
     return 0;
 }
 
 int TextBox::handle_key_release(XEvent& evt) {
-    if (!_has_focus) {
-        return 0;
-    }
-    const unsigned int key_code = evt.xkey.keycode;
-    if (key_code == 37 /*ctrl left*/  || key_code == 105 /*ctrl right*/) {
-        _app.is_ctrl_pressed = false;
-    } else if (key_code == 50 /*shift left*/ || key_code == 62 /*shift right*/) {
-        _app.is_shift_pressed = false;
-    }
     return 0;
 }
 
@@ -818,18 +811,46 @@ int App::run() {
             }
             break;
         case KeyPress:
-            if (evt.xkey.keycode == 9 /*esc*/) {
-                std::cout << "---\n" << this->text_box.get_text() << "\n---" << std::endl;
-                return 0;
-            } else if (evt.xkey.keycode == 23 /*tab*/) {
-                text_box.set_focus(!text_box.has_focus());
-            } else if (text_box.handle_key_press(evt)) {
-                return 0;
+            switch(evt.xkey.keycode) {
+                case 37: /*ctrl left*/
+                    _ctrl_l = true;
+                    break;
+                case 105: /*ctrl right*/
+                    _ctrl_r = true;
+                    break;
+                case 50: /*shift left*/
+                    _shift_l = true;
+                    break;
+                case 62: /*shift right*/
+                    _shift_r = true;
+                    break;
+                case 9: /*esc*/
+                    std::cout << "---\n" << this->text_box.get_text() << "\n---" << std::endl;
+                    return 0;
+                case 23: /*tab*/
+                    text_box.set_focus(!text_box.has_focus());
+                    break;
+                default:
+                    text_box.handle_key_press(evt);
             }
             break;
         case KeyRelease:
             if (text_box.handle_key_release(evt)) {
                 return 0;
+            }
+            switch(evt.xkey.keycode) {
+                case 37: /*ctrl left*/
+                    _ctrl_l = false;
+                    break;
+                case 105: /*ctrl right*/
+                    _ctrl_r = false;
+                    break;
+                case 50: /*shift left*/
+                    _shift_l = false;
+                    break;
+                case 62: /*shift right*/
+                    _shift_r = false;
+                    break;
             }
             break;
         case VisibilityNotify:
@@ -838,6 +859,7 @@ int App::run() {
             }
             break;
         }
+        this->redraw();
     }
 }
 

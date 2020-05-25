@@ -6,7 +6,6 @@ author: andreasl
 #pragma once
 
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <X11/Xlib.h>
@@ -133,9 +132,11 @@ public:  /*vars*/
     /*Widgets*/
     TextBox text_box;
 
-    /*State*/
-    bool is_ctrl_pressed = false;
-    bool is_shift_pressed = false;
+private:  /*vars*/
+    bool _ctrl_l = false;  /*Indicates whether left control is pressed.*/
+    bool _ctrl_r = false;  /*Indicates whether right control is pressed.*/
+    bool _shift_l = false;  /*Indicates whether left shift is pressed.*/
+    bool _shift_r = false;  /*Indicates whether right shift is pressed.*/
 
 private:  /*vars*/
     Window _root_win;
@@ -150,6 +151,9 @@ public:  /*methods*/
 
     int run();  /*Run the application loop and exit with an error code.*/
     void redraw();  /*Redraw the application.*/
+
+    bool is_ctrl_pressed() const;  /*Indicate if a ctrl-button is pressed.*/
+    bool is_shift_pressed() const;  /*Indicate if a shift-button is pressed.*/
 
 private:  /*methods*/
     int _grab_keyboard();  /*Attempt to grab the keyboard.*/
