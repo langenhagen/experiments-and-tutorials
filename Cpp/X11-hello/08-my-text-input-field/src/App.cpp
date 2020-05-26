@@ -787,11 +787,11 @@ void App::_setup_xft_font() {
 }
 
 bool App::is_ctrl_pressed() const {
-    return this->_ctrl_l || this->_ctrl_r;
+    return _ctrl_l || _ctrl_r;
 }
 
 bool App::is_shift_pressed() const {
-    return this->_shift_l || this->_shift_r;
+    return _shift_l || _shift_r;
 }
 
 void App::redraw() {
