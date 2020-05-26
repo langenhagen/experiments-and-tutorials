@@ -53,113 +53,6 @@ bool operator==(const TextCoord& lhs, const TextCoord& rhs) {
     return lhs.y == rhs.y && lhs.x == rhs.x;
 }
 
-App::App()
-:
-dpy(XOpenDisplay(nullptr)),
-screen(DefaultScreen(dpy)),
-_root_win(RootWindow(dpy, screen)),
-text_box(*this, 10, 20, 240, 90, 7)
-{
-    XSetWindowAttributes attrs;
-    attrs.override_redirect = True;
-    attrs.background_pixel = 0x282828;
-    attrs.event_mask =
-        ExposureMask
-        | KeyPressMask
-        | KeyReleaseMask
-        | VisibilityChangeMask;
-
-    const Screen* const screen DefaultScreenOfDisplay(this->dpy);
-    this->win = XCreateWindow(
-        this->dpy,
-        _root_win,
-        (screen->width - _width) / 2,
-        (screen->height - _height) / 3,
-        _width,
-        _height,
-        0,
-        CopyFromParent,
-        CopyFromParent,
-        CopyFromParent,
-        CWOverrideRedirect | CWBackPixel | CWEventMask,
-        &attrs);
-
-    this->gc = XCreateGC(this->dpy, this->win, 0, 0);
-
-    XSetStandardProperties(
-        this->dpy,
-        this->win,
-        "My nice Window",
-        "HI!",
-        None,
-        nullptr,
-        0,
-        nullptr);
-
-    _setup_xft_font();
-
-    XClearWindow(this->dpy, this->win);
-    XMapRaised(this->dpy, this->win);
-
-    _grab_keyboard();
-}
-
-App::~App() {
-    XFreeGC(this->dpy, this->gc);
-    XDestroyWindow(this->dpy, this->win);
-    XCloseDisplay(this->dpy);
-}
-
-int App::_grab_keyboard() {
-    /*try to grab keyboard 1000 times.
-    We may have to wait for another process to ungrab.*/
-    for (int i = 0; i < 1000; ++i) {
-        int grab_result = XGrabKeyboard(
-            this->dpy,
-            _root_win,
-            True,
-            GrabModeAsync,
-            GrabModeAsync,
-            CurrentTime);
-
-        if (grab_result == GrabSuccess) {
-            return 0;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
-    std::cerr << "Could not grab keyboard" << std::endl;
-    return 1;
-}
-
-void App::_setup_xft_font() {
-    this->xft_drawable = XftDrawCreate(
-        this->dpy,
-        this->win,
-        DefaultVisual(this->dpy, 0),
-        DefaultColormap(this->dpy, 0));
-
-    this->font = XftFontOpen(
-        this->dpy,
-        this->screen,
-        XFT_FAMILY,
-        XftTypeString,
-        "monospace",
-        XFT_SIZE,
-        XftTypeDouble,
-        11.0,
-        nullptr);
-
-    this->line_height = this->font->ascent + this->font->descent;
-}
-
-bool App::is_ctrl_pressed() const {
-    return this->_ctrl_l || this->_ctrl_r;
-}
-
-bool App::is_shift_pressed() const {
-    return this->_shift_l || this->_shift_r;
-}
-
 TextBox::TextBox(
     App& app,
     const unsigned int y,
@@ -691,11 +584,6 @@ void TextBox::draw() {
     XftDrawSetClip( _app.xft_drawable, 0);
 }
 
-void App::redraw() {
-    XClearWindow(this->dpy, this->win);
-    text_box.draw();
-}
-
 int TextBox::handle_key_press(XEvent& evt) {
     if (!_has_focus) {
         return 0;
@@ -797,6 +685,118 @@ int TextBox::handle_key_press(XEvent& evt) {
 
 int TextBox::handle_key_release(XEvent& evt) {
     return 0;
+}
+
+App::App()
+:
+dpy(XOpenDisplay(nullptr)),
+screen(DefaultScreen(dpy)),
+_root_win(RootWindow(dpy, screen)),
+text_box(*this, 10, 20, 240, 90, 7)
+{
+    XSetWindowAttributes attrs;
+    attrs.override_redirect = True;
+    attrs.background_pixel = 0x282828;
+    attrs.event_mask =
+        ExposureMask
+        | KeyPressMask
+        | KeyReleaseMask
+        | VisibilityChangeMask;
+
+    const Screen* const screen DefaultScreenOfDisplay(this->dpy);
+    this->win = XCreateWindow(
+        this->dpy,
+        _root_win,
+        (screen->width - _width) / 2,
+        (screen->height - _height) / 3,
+        _width,
+        _height,
+        0,
+        CopyFromParent,
+        CopyFromParent,
+        CopyFromParent,
+        CWOverrideRedirect | CWBackPixel | CWEventMask,
+        &attrs);
+
+    this->gc = XCreateGC(this->dpy, this->win, 0, 0);
+
+    XSetStandardProperties(
+        this->dpy,
+        this->win,
+        "My nice Window",
+        "HI!",
+        None,
+        nullptr,
+        0,
+        nullptr);
+
+    _setup_xft_font();
+
+    XClearWindow(this->dpy, this->win);
+    XMapRaised(this->dpy, this->win);
+
+    _grab_keyboard();
+}
+
+App::~App() {
+    XFreeGC(this->dpy, this->gc);
+    XDestroyWindow(this->dpy, this->win);
+    XCloseDisplay(this->dpy);
+}
+
+int App::_grab_keyboard() {
+    /*try to grab keyboard 1000 times.
+    We may have to wait for another process to ungrab.*/
+    for (int i = 0; i < 1000; ++i) {
+        int grab_result = XGrabKeyboard(
+            this->dpy,
+            _root_win,
+            True,
+            GrabModeAsync,
+            GrabModeAsync,
+            CurrentTime);
+
+        if (grab_result == GrabSuccess) {
+            return 0;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    std::cerr << "Could not grab keyboard" << std::endl;
+    return 1;
+}
+
+void App::_setup_xft_font() {
+    this->xft_drawable = XftDrawCreate(
+        this->dpy,
+        this->win,
+        DefaultVisual(this->dpy, 0),
+        DefaultColormap(this->dpy, 0));
+
+    this->font = XftFontOpen(
+        this->dpy,
+        this->screen,
+        XFT_FAMILY,
+        XftTypeString,
+        "monospace",
+        XFT_SIZE,
+        XftTypeDouble,
+        11.0,
+        nullptr);
+
+    this->line_height = this->font->ascent + this->font->descent;
+}
+
+bool App::is_ctrl_pressed() const {
+    return this->_ctrl_l || this->_ctrl_r;
+}
+
+bool App::is_shift_pressed() const {
+    return this->_shift_l || this->_shift_r;
+}
+
+void App::redraw() {
+    XClearWindow(this->dpy, this->win);
+    text_box.draw();
 }
 
 int App::run() {
