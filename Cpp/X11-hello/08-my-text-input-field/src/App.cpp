@@ -162,11 +162,11 @@ bool App::is_shift_pressed() const {
 
 TextBox::TextBox(
     App& app,
-    const int y,
-    const int x,
-    const size_t width,
-    const size_t height,
-    const size_t max_n_lines)
+    const unsigned int y,
+    const unsigned int x,
+    const unsigned int width,
+    const unsigned int height,
+    const unsigned int max_n_lines)
 :
 y(y),
 x(x),

@@ -53,11 +53,11 @@ private:  /*constants*/
     constexpr static const unsigned long _fc_border_inactive = 0x666666;  /*Inactive border color.*/
 
 public:  /*vars*/
-    const int y;  /*Widget y position.*/
-    const int x;  /*Widget x position.*/
-    const int width;  /*Widget width in pixels.*/
-    const int height; /*Widget height in pixels.*/
-    const int max_n_lines;  /*The maximum number of lines that are allowed for input.*/
+    const unsigned int y;  /*Widget y position.*/
+    const unsigned int x;  /*Widget x position.*/
+    const unsigned int width;  /*Widget width in pixels.*/
+    const unsigned int height; /*Widget height in pixels.*/
+    const unsigned int max_n_lines;  /*The maximum number of lines that are allowed for input.*/
 
 private:  /*vars*/
     App& _app;  /*Enclosing application.*/
@@ -71,11 +71,11 @@ public:  /*methods*/
     /*Constructor.*/
     TextBox(
         App& app,
-        const int y,
-        const int x,
-        const size_t width,
-        const size_t height,
-        const size_t max_n_lines = 0);
+        const unsigned int y,
+        const unsigned int x,
+        const unsigned int width,
+        const unsigned int height,
+        const unsigned int max_n_lines = 0);
 
     bool has_focus() const;  /*Check whether the widget has focus.*/
     void set_focus(const bool has_focus);  /*Specify whether the widget has focus.*/
