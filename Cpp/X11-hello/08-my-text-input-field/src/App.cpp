@@ -829,10 +829,9 @@ int App::run() {
                     return 0;
                 case 23: /*tab*/
                     text_box.set_focus(!text_box.has_focus());
-                    break;
-                default:
-                    text_box.handle_key_press(evt);
+                    continue;
             }
+            text_box.handle_key_press(evt);
             break;
         case KeyRelease:
             if (text_box.handle_key_release(evt)) {
