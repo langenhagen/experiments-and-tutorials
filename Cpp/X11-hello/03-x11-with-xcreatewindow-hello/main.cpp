@@ -208,6 +208,7 @@ static int run(App *app) {
             break;
         }
     }
+    return 0;
 }
 
 int main(int argc, const char* argv[]) {
