@@ -23,8 +23,6 @@ based on: http://mech.math.msu.su/~nap/2/GWindow/xintro.html
 /* order of X11 includes allegedly important*/
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/Xos.h>
-#include <X11/Xatom.h>
 
 Display *display;
 int screen;
@@ -86,30 +84,8 @@ static void init_x() {
         0,
         nullptr);
 
-    /* disable window decorations
-       based on https://stackoverflow.com/questions/31361859/simple-window-without-titlebar
-       I had however to replace  _NET_WM_WINDOW_TYPE  with  _MOTIF_WM_HINTS*/
-    Atom window_type = XInternAtom(
-        display,
-        "_MOTIF_WM_HINTS" /*atom name*/,
-        False /*only if exists*/);
-    Atom value = XInternAtom(
-        display,
-        "_NET_WM_WINDOW_TYPE_DOCK" /*atom name*/,
-        False /*only if exists*/);
-    XChangeProperty(
-        display,
-        window,
-        window_type,
-        XA_ATOM,
-        32,
-        PropModeAppend,
-        (unsigned char*)&value,
-        1);
-
     /* create the Graphics Context */
     gc = XCreateGC(display, window, 0, 0);
-
 
     /* here is another routine to set the foreground and background
        colors _currently_ in use in the window.*/
