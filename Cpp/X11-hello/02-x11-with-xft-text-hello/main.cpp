@@ -14,8 +14,6 @@ author: andreasl
 
 /* order of X11 includes allegedly important*/
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xos.h>
 #include <X11/Xft/Xft.h>
 
 struct App {
@@ -134,7 +132,7 @@ static void redraw(App *app) {
     draw_text(app);
 }
 
-static int listen_for_events(App *app) {
+static void listen_for_events(App *app) {
     XSelectInput(
         app->display,
         app->window,
