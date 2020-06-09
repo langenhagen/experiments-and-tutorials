@@ -2,6 +2,8 @@
 
 - based on my prior learnings
 
+- see: https://tronche.com/gui/x/xlib/graphics/filling-areas/XFillPolygon.html
+
 author: andreasl
 */
 #include <X11/Xlib.h>
@@ -9,6 +11,7 @@ author: andreasl
 
 #include <array>
 #include <cmath>
+#include <iostream>
 
 Display* display;
 int screen;
@@ -16,7 +19,7 @@ Window window;
 GC gc;
 XFontStruct *font; /* classic approach*/
 
-int n_redraws = 0;
+bool full_first = false;
 
 static void init_x() {
     display = XOpenDisplay(nullptr);
@@ -32,8 +35,8 @@ static void init_x() {
         DefaultRootWindow(display),
         100 /*pos x*/,
         100 /*pos y*/,
-        400 /*width*/,
-        200 /*height*/,
+        550 /*width*/,
+        270 /*height*/,
         0 /*border width*/,
         white /*border*/,
         black /*background*/);
@@ -65,37 +68,47 @@ static void draw_star(
     Display* dpy, Window win, GC gc, int outer_radius, int inner_radius, int y, int x) {
 
     static const double pi = std::acos(-1);
-
-    // std::array<XPoint, 10> points;
-    // for (int i=0; i<points.max_size(); ++i) {
-    //     // todo populate the points given the offsets y, x and the outer and inner radii
-    // }
-
-    XPoint points[] = {
-      {0, 0},
-      {15, 10},
-      {0, 20},
-      {-15, 10},
-      {0, 0}
-    };
-    for (int i=0; i<5; ++i) {
-        points[i].y += y;
-        points[i].x += x;
+    std::array<XPoint, 11> points;
+    for (int i=0; i<points.max_size(); ++i) {
+        const double radius = i % 2 == 0 ? inner_radius : outer_radius;
+        const short int point_x = std::sin(pi/5*i) * radius + x + outer_radius;
+        const short int point_y = std::cos(pi/5*i) * radius + y + outer_radius;
+        points[i] = {point_x, point_y};
     }
 
     const unsigned long white = WhitePixel(display, screen);
     XSetForeground(display, gc, white);
-    XDrawLines(dpy, win, gc, points, 5, CoordModeOrigin);
+    XDrawLines(dpy, win, gc, points.data(), points.max_size(), CoordModeOrigin);
 }
 
-static void draw_full_star(Display* dpy, Window win, GC gc, int radius, int y, int x) {
-    // TODO
+static void draw_full_star(
+    Display* dpy, Window win, GC gc, int outer_radius, int inner_radius, int y, int x) {
+
+    static const double pi = std::acos(-1);
+    std::array<XPoint, 11> points;
+    for (int i=0; i<points.max_size(); ++i) {
+        const double radius = i % 2 == 0 ? inner_radius : outer_radius;
+        const short int point_x = std::sin(pi/5*i) * radius + x + outer_radius;
+        const short int point_y = std::cos(pi/5*i) * radius + y + outer_radius;
+        points[i] = {point_x, point_y};
+    }
+
+    const unsigned long white = WhitePixel(display, screen);
+    XSetForeground(display, gc, white);
+    XFillPolygon(display, win, gc, points.data(), points.max_size(), Nonconvex, CoordModeOrigin);
 }
 
 static void redraw() {
-    // std::cout << "redrawing " << ++n_redraws << std::endl;
     XClearWindow(display, window);
-    draw_star(display, window, gc, 90, 30, 50, 70);
+    constexpr const int outer_radius = 120;
+    constexpr const int inner_radius = outer_radius * 0.375;
+    if (full_first) {
+        draw_full_star(display, window, gc, outer_radius, inner_radius, 10, 10);
+        draw_star(display, window, gc, outer_radius, inner_radius, 10, 260);
+    } else {
+        draw_star(display, window, gc, outer_radius, inner_radius, 10, 10);
+        draw_full_star(display, window, gc, outer_radius, inner_radius, 10, 260);
+    }
 }
 
 int main(int argc, const char* argv[]) {
@@ -120,7 +133,7 @@ int main(int argc, const char* argv[]) {
             if (event.xkey.keycode == 9 /*esc*/) {
                 break;
             } else if (event.xkey.keycode == 23 /*tab*/) {
-                // TODO implement switching from hollow to full star
+                full_first = !full_first;
             }
             redraw();
         }
