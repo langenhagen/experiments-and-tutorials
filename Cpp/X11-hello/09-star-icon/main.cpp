@@ -64,10 +64,9 @@ static void close_x() {
     XCloseDisplay(display);
 }
 
-static void draw_star(
-    Display* dpy, Window win, GC gc, int outer_radius, int inner_radius, int y, int x) {
-
+static void draw_star(Display* dpy, Window win, GC gc, int outer_radius, int y, int x) {
     static const double pi = std::acos(-1);
+    const int inner_radius = outer_radius * 0.375;
     std::array<XPoint, 11> points;
     for (int i=0; i<points.max_size(); ++i) {
         const double radius = i % 2 == 0 ? inner_radius : outer_radius;
@@ -81,10 +80,9 @@ static void draw_star(
     XDrawLines(dpy, win, gc, points.data(), points.max_size(), CoordModeOrigin);
 }
 
-static void draw_full_star(
-    Display* dpy, Window win, GC gc, int outer_radius, int inner_radius, int y, int x) {
-
+static void draw_full_star(Display* dpy, Window win, GC gc, int outer_radius, int y, int x) {
     static const double pi = std::acos(-1);
+    const int inner_radius = outer_radius * 0.375;
     std::array<XPoint, 11> points;
     for (int i=0; i<points.max_size(); ++i) {
         const double radius = i % 2 == 0 ? inner_radius : outer_radius;
@@ -103,11 +101,11 @@ static void redraw() {
     constexpr const int outer_radius = 120;
     constexpr const int inner_radius = outer_radius * 0.375;
     if (full_first) {
-        draw_full_star(display, window, gc, outer_radius, inner_radius, 10, 10);
-        draw_star(display, window, gc, outer_radius, inner_radius, 10, 260);
+        draw_full_star(display, window, gc, outer_radius, 10, 10);
+        draw_star(display, window, gc, outer_radius, 10, 260);
     } else {
-        draw_star(display, window, gc, outer_radius, inner_radius, 10, 10);
-        draw_full_star(display, window, gc, outer_radius, inner_radius, 10, 260);
+        draw_star(display, window, gc, outer_radius, 10, 10);
+        draw_full_star(display, window, gc, outer_radius, 10, 260);
     }
 }
 
