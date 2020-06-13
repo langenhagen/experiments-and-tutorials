@@ -1,7 +1,7 @@
 #!/bin/bash
 # Showcase usage of the gitlabe api.
 #
-# See: ?per_page=50"
+# See:
 # - https://subscription.packtpub.com/book/application_development/9781783986842/6/ch06lvl1sec51/getting-your-private-token-for-the-api
 # - https://gitlab.celeraone.com/profile/personal_access_tokens
 # - https://docs.gitlab.com/ee/api/README.html#oauth2-tokens
