@@ -7,6 +7,7 @@ based on:
     - https://stackoverflow.com/questions/2329571/c-libcurl-get-output-into-a-string
     - https://curl.haxx.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
     - https://stackoverflow.com/questions/28283822/curl-returns-binary-data-instead-of-html
+    - https://curl.haxx.se/libcurl/c/CURLOPT_WRITEFUNCTION.html
 */
 #include <cstring>
 #include <iostream>
@@ -16,13 +17,10 @@ based on:
 
 #include <curl/curl.h>
 
-struct string {
-  char* ptr;
-  size_t len;
-};
-
-/*Callback function, curl defines the interface.*/
-size_t my_callback(void* ptr, size_t size, size_t nmemb, std::ostringstream* oss) {
+/*Callback function, curl defines the interface.
+"size is always 1; nmemb is the size of the chunk*/
+size_t my_callback(void* ptr, const size_t size, const size_t nmemb, std::ostringstream* oss) {
+    std::cout << "chunk  size: " << size << "  nmemb: " << nmemb << std::endl;
     (*oss) << reinterpret_cast<char*>(ptr);
     return size * nmemb;
 }
