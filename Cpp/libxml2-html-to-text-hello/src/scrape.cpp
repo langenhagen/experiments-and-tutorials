@@ -1,38 +1,27 @@
-/* Get the text from a html page using libxml2.
+/* Implementation for scrape.hpp.
 
 author: andreasl
-
-based on:
-    - https://stackoverflow.com/questions/10740250/c-cpp-version-of-beautifulsoup-especially-at-handling-malformed-html
-    - http://www.xmlsoft.org/html/libxml-HTMLparser.html
-    - http://xmlsoft.org/html/libxml-xmlerror.html#xmlParserErrors
 */
+#include "scrape.hpp"
+
 #include <cstring>
-#include <iostream>
 #include <sstream>
 #include <string>
+
+#include <iostream>
 
 #include <curl/curl.h>
 #include <libxml2/libxml/encoding.h>
 #include <libxml2/libxml/HTMLparser.h>
 
-/*Error code when downloading a web site.*/
-enum class DownloadResultErrorCode {
-    OK = 0  /*No error*/,
-    FAILED_INIT_CURL = 1  /*Initializing CURL failed*/,
-    CURL_ERROR = 2  /*Downloading via CURL failed*/
-};
+namespace barn {
+namespace web {
 
-/*Result of downloading a website.*/
-struct DownloadResult {
-    DownloadResultErrorCode code;  /*Download result error code.*/
-    CURLcode curl_code;  /*Curl error code.*/
-    std::string content;  /*Downloaded content.*/
-};
+namespace {
 
-/*Parse the chunk of incoming data.*/
-size_t curl_callback(void* ptr, const size_t size, const size_t nmemb, htmlParserCtxtPtr* parser) {
-    htmlParseChunk(*parser, reinterpret_cast<char*>(ptr), nmemb, 0);
+/*Parse a chunk of incoming data.*/
+size_t parse_chunk(void* ptr, const size_t size, const size_t nmemb, htmlParserCtxtPtr* parser) {
+    htmlParseChunk(*parser, static_cast<char*>(ptr), nmemb, 0);
     return size * nmemb;
 }
 
@@ -41,6 +30,7 @@ bool check_if_node_is_safe_to_print(const xmlNode* root) {
     for (const xmlNode* node = root; node; node = node->next) {
         if (!node->name
             || std::strcmp(reinterpret_cast<const char*>(node->name), "script") == 0
+            || std::strcmp(reinterpret_cast<const char*>(node->name), "comment") == 0
             || !check_if_node_is_safe_to_print(node->children)) {
             return false;
         }
@@ -52,6 +42,8 @@ bool check_if_node_is_safe_to_print(const xmlNode* root) {
 void walk_xml_tree(const xmlNode* root, std::ostringstream& oss) {
     for (const xmlNode* node = root; node; node = node->next) {
         if (!check_if_node_is_safe_to_print(node)) {
+            // std::cout << ":::>" << node->name << std::endl;
+            // std::cout << ":::>" << reinterpret_cast<char*>(xmlNodeGetContent(node)) << std::endl;
             walk_xml_tree(node->children, oss);
             continue;
         }
@@ -59,19 +51,19 @@ void walk_xml_tree(const xmlNode* root, std::ostringstream& oss) {
     }
 }
 
+} // namespace
+
 /*Download a website's text.*/
 DownloadResult get_website_text(const std::string& url) {
     CURL* curl = curl_easy_init();
     if (!curl) {
-        std::cerr << "Failed to init CURL" << std::endl;
         return {DownloadResultErrorCode::FAILED_INIT_CURL, CURLE_OK, ""};
     }
 
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl,CURLOPT_ENCODING , "");  /*handle also gzip-encoded results*/
-
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_callback);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, parse_chunk);
     htmlParserCtxtPtr parser = htmlCreatePushParserCtxt(
         nullptr,
         nullptr,
@@ -85,30 +77,14 @@ DownloadResult get_website_text(const std::string& url) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &parser);
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
-        std::cerr << "Error: curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
         return {DownloadResultErrorCode::CURL_ERROR, res, ""};
     }
     curl_easy_cleanup(curl);
-
-    /*//following would be enough if it weren't for the non-visible stuff, like `script` nodes
-    std::string s(reinterpret_cast<char*>(xmlNodeGetContent(xmlDocGetRootElement(parser->myDoc))));
-    std::cout << "content: " << s << std::endl;
-    /**/
 
     std::ostringstream oss;
     walk_xml_tree(xmlDocGetRootElement(parser->myDoc), oss);
     return {DownloadResultErrorCode::OK, CURLE_OK, oss.str()};
 }
 
-int main(int argc, const char* argv[]) {
-    if (argc > 1) {
-        for(int i=1; i<argc; ++i) {
-            DownloadResult result  = get_website_text(argv[i]);
-            std::cout << result.content << "\n=======================================" <<std::endl;
-        }
-    } else {
-        DownloadResult result  = get_website_text("https://amazon.com");
-        std::cout << result.content << std::endl;
-    }
-    return 0;
-}
+} // namespace web
+} // namespace barn
