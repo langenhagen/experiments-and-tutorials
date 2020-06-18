@@ -8,8 +8,6 @@ author: andreasl
 #include <sstream>
 #include <string>
 
-#include <iostream>
-
 #include <curl/curl.h>
 #include <libxml2/libxml/encoding.h>
 #include <libxml2/libxml/HTMLparser.h>
@@ -42,8 +40,6 @@ bool check_if_node_is_safe_to_print(const xmlNode* root) {
 void walk_xml_tree(const xmlNode* root, std::ostringstream& oss) {
     for (const xmlNode* node = root; node; node = node->next) {
         if (!check_if_node_is_safe_to_print(node)) {
-            // std::cout << ":::>" << node->name << std::endl;
-            // std::cout << ":::>" << reinterpret_cast<char*>(xmlNodeGetContent(node)) << std::endl;
             walk_xml_tree(node->children, oss);
             continue;
         }
