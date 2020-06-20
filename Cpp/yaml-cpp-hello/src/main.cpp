@@ -82,6 +82,19 @@ static void load_yaml_1() {
     std::cout << std::endl;
 }
 
+static void load_yaml_vector() {
+    std::cout << "---\nVery simple test but parse the vector directly:\n";
+
+    const YAML::Node& primes = YAML::Load("[2, 3, 5, 7, 11]");
+    std::vector<int> ints = primes.as<std::vector<int>>();
+
+    for( const auto& i : ints) {
+        std::cout << ">> " << i << std::endl;
+    }
+
+
+}
+
 static void load_yaml_2() {
     std::cout << "---\nLoading from file:\n";
 
@@ -205,6 +218,7 @@ int main(int argc, const char* argv[]) {
     std::cout << "Hello!\n" << std::endl;
 
     load_yaml_1();
+    load_yaml_vector();
     load_yaml_2();
     load_yaml_3();
     load_missing_yaml_file();
