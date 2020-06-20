@@ -8,7 +8,7 @@
 - build like:
     mkdir -p build; cd build; cmake .. && cmake --build .
 
-- run from project root in roder to get the cwd right
+- run from project root in order to get the cwd right
 
 author: andreasl*/
 #include <ctime>  /*tm, strftime()*/
