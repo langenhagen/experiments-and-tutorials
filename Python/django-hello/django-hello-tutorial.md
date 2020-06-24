@@ -13,7 +13,7 @@ django-admin startproject hello_mysite
 cd hello_mysite
 python manage.py runserver
 ```
-Check it out at 127.0.0.1:8000
+Check it out at `127.0.0.1:8000`
 
 
 ## II First Migrate, Create Superuser, Create an App
@@ -38,7 +38,7 @@ python manage.py startapp myapp
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("Hello World! ")
+    return HttpResponse("Hello World!")
 ```
 
 2. Create a file hello_mysite/myapp/urls.py:
@@ -58,7 +58,7 @@ from django.urls import path, include
 
 urlpatterns = [
     # [...]
-    path("", include("tasks.urls"))
+    path("", include("myapp.urls"))
 ]
 ```
 
@@ -72,7 +72,8 @@ python manage.py runserver
 1. Create a templates folder and a template:
 ```bash
 mkdir -p hello_mysite/myapp/templates/myapp
-touch mytemplate.html  # populate it nicely
+touch hello_mysite/myapp/templates/myapp/mytemplate.html
+# then populate the template nicely
 ```
 
 2. Change the response in hello_mysite/myapp/views.py:
@@ -80,9 +81,22 @@ touch mytemplate.html  # populate it nicely
 from django.http import HttpResponse
 
 def index(request):
-    # return HttpResponse("Hello World! ")  # comment that out
+    # return HttpResponse("Hello World!")  # comment that out
     return render(request, "myapp/mytemplate.html")
 ```
+
+2. a) I also had to add to `settings.py`:
+- see https://stackoverflow.com/questions/41623788/django-not-searching-templates-directory-defined-in-app-dirs-setings
+```python
+TEMPLATES = [
+    {
+        # [...]
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],   # this was necessary to find my templates
+        # [...]
+    }
+]
+```
+- I later adjusted the path to the templates to my own liking
 
 3. Create a model in hello_mysite/myapp/models.py:
 ```python
