@@ -31,8 +31,8 @@ def get_exif(image_path):
     return exif
 
 
-def append_exif_data_to_csv(cvs_file, image_paths):
-    """Append the exif data to the cvs file with the given path."""
+def append_exif_data_to_csv(csv_file, image_paths):
+    """Append the exif data to the csv file with the given path."""
 
     for image_path in image_paths:
         exif = get_exif(image_path)
@@ -50,14 +50,14 @@ def append_exif_data_to_csv(cvs_file, image_paths):
         csv_line = "" + image_path + ";" + file + ";" + iso + \
             ";" + fnumber + ";" + focal_length + ";" + exposure_time
         print csv_line
-        cvs_file.write(csv_line + "\n")
+        csv_file.write(csv_line + "\n")
 
 
-def tabulate_images(cvs_file_path, image_paths):
+def tabulate_images(csv_file_path, image_paths):
     """Extract exif data from the images in the given directory and appends them to the given csv file."""
 
     try:
-        csv_file = open(cvs_file_path, 'a')
+        csv_file = open(csv_file_path, 'a')
         append_exif_data_to_csv(csv_file, image_paths)
     except:
         print("Exception:")
