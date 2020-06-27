@@ -27,8 +27,9 @@ json_data = [
 df1 = pandas.read_json(json.dumps(json_data))
 df1.insert(1, "New Column", "XXX")
 df2 = pandas.read_json(json.dumps(json_data))
-df = pandas.concat([df1, df2])
+df = pandas.concat([df1, df2], sort=False)
 df.sort_values(by="timestamp", inplace=True)
+# csv = df.to_csv(index=False, header=False)
 csv = df.to_csv(index=False)
 
 print(csv)
