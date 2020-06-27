@@ -24,16 +24,25 @@ json_data = [
     }
 ]
 
-dataframe1 = pandas.read_json(json.dumps(json_data))
-dataframe1.insert(1, "New Column", "XXX")
-dataframe2 = pandas.read_json(json.dumps(json_data))
-dataframe = pandas.concat([dataframe1, dataframe2])
-dataframe.sort_values(by="timestamp", inplace=True)
-csv = dataframe.to_csv(index=False)
+df1 = pandas.read_json(json.dumps(json_data))
+df1.insert(1, "New Column", "XXX")
+df2 = pandas.read_json(json.dumps(json_data))
+df = pandas.concat([df1, df2])
+df.sort_values(by="timestamp", inplace=True)
+csv = df.to_csv(index=False)
 
 print(csv)
 
-print("--- 2 nested json to csv ---")
+print("--- 2 flat json to csv with defined columns")
+
+df = pandas.read_json(json.dumps(json_data))
+df = df.reindex(columns=["timestamp", "name", "age", "imaginary"])
+df.sort_values(by="timestamp", inplace=True)
+csv = df.to_csv(index=False)
+
+print(csv)
+
+print("--- 3 nested json to csv ---")
 
 json_data = [
     {
@@ -55,8 +64,8 @@ json_data = [
     }
 ]
 
-dataframe = pandas.io.json.json_normalize(json_data)
-dataframe.sort_values(by="timestamp", inplace=True)
-csv = dataframe.to_csv(index=False)
+df = pandas.io.json.json_normalize(json_data)
+df.sort_values(by="timestamp", inplace=True)
+csv = df.to_csv(index=False)
 
 print(csv)
