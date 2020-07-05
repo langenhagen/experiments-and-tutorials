@@ -19,13 +19,12 @@ Check it out at `127.0.0.1:8000`
 ## II First Migrate, Create Superuser, Create an App
 ```bash
 python manage.py migrate
-python manage.py create superuser
+python manage.py createsuperuser
 python manage.py runserver
 # log in to 127.0.0.1:8000/admin
 # shut down the server
 
 python manage.py startapp myapp
-#
 # let django know about that app in its settings.py file:
 # add your app name into settings.py:INSTALLED_APPS list
 
@@ -33,7 +32,7 @@ python manage.py startapp myapp
 
 
 ## III Setup a First View
-1. Add in hello_mysite/myapp/views.py:
+1. Add in `hello_mysite/myapp/views.py`:
 ```python
 from django.http import HttpResponse
 
@@ -41,7 +40,7 @@ def index(request):
     return HttpResponse("Hello World!")
 ```
 
-2. Create a file hello_mysite/myapp/urls.py:
+2. Create a file `hello_mysite/myapp/urls.py`:
 ```python
 from django.urls import path
 
@@ -85,7 +84,7 @@ def index(request):
     return render(request, "myapp/mytemplate.html")
 ```
 
-2. a) I also had to add to `settings.py`:
+2. a) The first time, I also had to add to `settings.py`:
 - see https://stackoverflow.com/questions/41623788/django-not-searching-templates-directory-defined-in-app-dirs-setings
 ```python
 TEMPLATES = [
