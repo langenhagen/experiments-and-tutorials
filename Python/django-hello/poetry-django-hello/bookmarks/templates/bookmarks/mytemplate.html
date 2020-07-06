@@ -1,0 +1,65 @@
+<html>
+<head>
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+</style>
+</head>
+<body>
+
+{% if bookmarks_json %}
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script type='text/javascript'>
+    var bookmarks = {{ bookmarks_json|safe }};
+  </script>
+  <div id="app">
+    [[message]]
+
+      <!-- <a v-bind:href="bookmark.url">[[ bookmark.title ]]</a> <button v-on:click="greet(bookmark.title)">hey</button> -->
+
+      <table>
+        <tr v-for="bookmark in bookmarks">
+            <td><a v-bind:href="bookmark.url">[[ bookmark.title ]]</a></td>
+            <td>[[bookmark.url]]</td>
+            <td>[[bookmark.created]]</td>
+            <td>[[bookmark.last_access]]</td>
+            <td><button v-on:click="greet(bookmark.title)">hey</button></td>
+        </tr>
+        <br>
+        </table>
+  </div>
+
+  <script>
+    var app = new Vue({
+      delimiters: ['[[', ']]'],
+      el: '#app',
+      data: {
+          message: 'Hello Vue!',
+          bookmarks: bookmarks,
+      },
+      methods: {
+          greet: function(name) {
+              alert('Hello from ' + name + '!')
+          }
+      }
+    });
+  </script>
+{% else %}
+  <p>No items available.</p>
+{% endif %}
+
+</body>
+</html>

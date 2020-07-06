@@ -1,7 +1,7 @@
 import dataclasses
 import datetime
 import pathlib
-from typing import List
+from typing import Any, Dict, List
 
 import yaml
 
@@ -28,10 +28,10 @@ def load_bookmark(path: pathlib.Path) -> Bookmark:
     return bookmark
 
 
-def load_bookmarks() -> List[Bookmark]:
-    """Load all bookmarks from filesystem."""
+def load_bookmarks_as_json() -> List[Dict[str, Any]]:
+    """Retrieve json/dict-representations of the bookmarks."""
     bookmarks_path = pathlib.Path.home() / ".config/barn-bookmarks/bookmarks"
     bookmarks = []
     for path in bookmarks_path.glob("*.yml"):
-        bookmarks.append(load_bookmark(path))
+        bookmarks.append(load_bookmark(path).__dict__)
     return bookmarks
