@@ -1,22 +1,6 @@
 <html>
 <head>
-<style>
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-    }
-
-    tr:nth-child(even) {
-      background-color: #dddddd;
-    }
-</style>
+  <link rel="stylesheet" type="text/css" href="static/style.css" />
 </head>
 <body>
 
@@ -26,17 +10,27 @@
     var bookmarks = {{ bookmarks_json|safe }};
   </script>
   <div id="app">
-    [[message]]
-
-      <!-- <a v-bind:href="bookmark.url">[[ bookmark.title ]]</a> <button v-on:click="greet(bookmark.title)">hey</button> -->
-
+      <h1>Bookmarks</h1>
       <table>
+        <tr>
+          <th>Title</th>
+          <th>Url</th>
+          <th>Tags</th>
+          <th>Comment</th>
+          <th>Rating</th>
+          <th>Created on</th>
+          <th>Copy URL</th>
+          <th>Copy Title</th>
+        </tr>
         <tr v-for="bookmark in bookmarks">
             <td><a v-bind:href="bookmark.url">[[ bookmark.title ]]</a></td>
             <td>[[bookmark.url]]</td>
+            <td><span v-for="tag in bookmark.tags">-[[tag]] </span></td>
+            <td>[[bookmark.comment]]</td>
+            <td>[[bookmark.rating]]</td>
             <td>[[bookmark.created]]</td>
-            <td>[[bookmark.last_access]]</td>
-            <td><button v-on:click="greet(bookmark.title)">hey</button></td>
+            <td><button v-on:click="greet(bookmark.title)">Copy URL</button></td>
+            <td><button v-on:click="greet(bookmark.title)">Copy Title</button></td>
         </tr>
         <br>
         </table>
@@ -58,7 +52,7 @@
     });
   </script>
 {% else %}
-  <p>No items available.</p>
+  <p>No bookmarks available.</p>
 {% endif %}
 
 </body>
