@@ -1,7 +1,7 @@
 /*Generate Mongo db Documents for pt-templates into the db `c1_cre` into the collection
 `sso_page_template`` on the given mongodb server.
 
-Please review/change neighboring file `args.json` for template document specifications.
+Please review/change accompanying file `args.json` for template document specifications.
 
 Usage:
   mongo mongodb://news-stage-db1:32000/ upload-templates.js
