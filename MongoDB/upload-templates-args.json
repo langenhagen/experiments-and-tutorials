@@ -1,0 +1,65 @@
+[
+  {
+    "name": "email_activation_landing",
+    "path": "templates/master-cam/email_activation_landing.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "email_activation",
+    "path": "templates/master-cam/email_activation.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "error",
+    "path": "templates/master-cam/error.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "main",
+    "path": "templates/master-cam/main.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "pw_forgot_confirm",
+    "path": "templates/master-cam/pw_forgot_confirm.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "pw_forgot_email",
+    "path": "templates/master-cam/pw_forgot_email.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "pw_forgot_req",
+    "path": "templates/master-cam/pw_forgot_req.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "pw_reset_confirm",
+    "path": "templates/master-cam/pw_reset_confirm.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  },
+  {
+    "name": "pw_reset_form",
+    "path": "templates/master-cam/pw_reset_form.pt",
+    "sso_service_id": "c1news",
+    "language": "en",
+    "default": false
+  }
+]
