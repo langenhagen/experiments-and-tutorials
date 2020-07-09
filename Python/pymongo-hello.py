@@ -6,6 +6,9 @@ get it via `pip install pymongo`
 
 import pymongo
 
+
+print("--- 1 simple case ---")
+
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 
 db = client["non-existing"]  # accessing non-existing dbs works
@@ -17,3 +20,4 @@ collection = db.mynonexisting  # shortcut; works also for non-existing collectio
 collection = db["sso_page_template"]
 for doc in collection.find({}):
     print(doc["name"])
+
