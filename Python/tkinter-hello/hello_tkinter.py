@@ -57,7 +57,7 @@ class Application:
         self.yellow_rectangle = Rectangle(self.canvas, "#ffff00")
 
     def on_click(self, event):
-        # import pdb;pdb.set_trace()
+        # breakpoint()
         # print(f"You clicked a rectangle with args: {event}")
         # print(f"At: {event.x}, {event.y}")
         # print(f"Widget: {event.widget.find_closest(event.x, event.y)}")
