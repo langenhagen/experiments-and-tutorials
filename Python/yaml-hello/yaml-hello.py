@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Showcase simple usage of the nonstandard package pyyaml.
 
-Get it viaÖ pip install pyyaml
+Get it via `pip install pyyaml`.
 """
 import pprint
 
@@ -14,8 +14,8 @@ pp = pprint.PrettyPrinter(indent=4)
 # parse a yaml file
 print("---1---")
 
-with open('labels.yml') as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
+with open("labels.yml") as file:
+    data = yaml.load(file, Loader=yaml.FullLoader)
     pp.pprint(data)
 
 # transform yaml data to a tree structure
