@@ -1,0 +1,37 @@
+<html metal:use-macro="load: required_template.pt">
+    <body metal:fill-slot="pagebody">
+        FOOO!
+    </body>
+</html>
+
+<!-- stitched together that should be like the following -->
+<!-- <html metal:define-macro="required_template">
+    <head>
+        <style type="text/css">
+            body {
+                  color: red;
+                }
+        </style>
+    </head>
+    <body metal:define-slot="pagebody"></body>
+</html>
+<html metal:use-macro="template.macros['required_template']">
+    <body metal:fill-slot="pagebody">
+        FOOO!
+    </body>
+</html> -->
+
+
+
+<!-- example from the web that works somewhat -->
+<!-- <p metal:define-macro="hello">
+    Hello <span metal:define-slot="name"></span>
+</p>
+<html>
+
+  <body>
+    <p metal:use-macro="template.macros['hello']">
+       <span metal:fill-slot="name">Andreas</span>
+    </p>
+  </body>
+</html> -->
