@@ -1,17 +1,20 @@
-<html metal:use-macro="load: required_template.pt">
+<!-- <html metal:use-macro="load: required_template.pt">
     <body metal:fill-slot="pagebody">
         FOOO!
     </body>
-</html>
+</html> -->
 
 <!-- stitched together that should be like the following -->
-<!-- <html metal:define-macro="required_template">
+<html metal:define-macro="required_template">
     <head>
         <style type="text/css">
             body {
                   color: red;
                 }
         </style>
+        <body>
+        Bruh!
+        </body>
     </head>
     <body metal:define-slot="pagebody"></body>
 </html>
@@ -19,7 +22,7 @@
     <body metal:fill-slot="pagebody">
         FOOO!
     </body>
-</html> -->
+</html>
 
 
 

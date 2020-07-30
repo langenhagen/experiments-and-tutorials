@@ -30,7 +30,7 @@ def view_from_template(request):
     )
 
 if __name__ == "__main__":
-    config=Configurator()
+    config = Configurator()
 
     # for chameleon template rendering with newer versions
     # see: https://docs.pylonsproject.org/projects/pyramid/en/latest/whatsnew-1.5.html#major-backwards-incompatibilities

@@ -5,6 +5,9 @@
                   color: red;
                 }
         </style>
+        <body>
+        Bruh!
+        </body>
     </head>
     <body metal:define-slot="pagebody"></body>
 </html>
