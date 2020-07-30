@@ -4,20 +4,25 @@
     </body>
 </html> -->
 
+
 <!-- stitched together that should be like the following -->
-<html metal:define-macro="required_template">
-    <head>
-        <style type="text/css">
-            body {
-                  color: red;
-                }
-        </style>
-        <body>
-        Bruh!
-        </body>
-    </head>
-    <body metal:define-slot="pagebody"></body>
-</html>
+<!-- mind that I wrap the define-macro in a false conditional -->
+<!-- otherwise it would render the macro definition, too -->
+<p tal:condition="nothing">
+    <html metal:define-macro="required_template">
+        <head>
+            <style type="text/css">
+                body {
+                    color: red;
+                    }
+            </style>
+            <body>
+            Bruh!
+            </body>
+        </head>
+        <body metal:define-slot="pagebody"></body>
+    </html>
+</p>
 <html metal:use-macro="template.macros['required_template']">
     <body metal:fill-slot="pagebody">
         FOOO!
@@ -25,10 +30,11 @@
 </html>
 
 
-
-<!-- example from the web that works somewhat -->
-<!-- <p metal:define-macro="hello">
-    Hello <span metal:define-slot="name"></span>
+<!-- modified example from the web that works -->
+<!-- <p tal:condition="nothing">
+    <p metal:define-macro="hello">
+        Hello <span metal:define-slot="name"></span>
+    </p>
 </p>
 <html>
 
@@ -38,3 +44,14 @@
     </p>
   </body>
 </html> -->
+
+
+<!-- Another example -->
+<!-- <p tal:condition="nothing">
+    <p metal:define-macro="hello">
+    Hello <b metal:define-slot="name">World</b>
+    </p>
+</p>
+<p metal:use-macro='template.macros["hello"]'>
+  Hello <b metal:fill-slot="name">Kevin Bacon</b>
+</p> -->
