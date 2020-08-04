@@ -3,7 +3,8 @@
 #
 # author: andreasl
 
-get_gitlab_repos() {
+get_gitlab_repo_urls() {
+    # Get the URLS of all visible gitlab repos.
     private_token='YyVD3x3ta59_srrRyLGm'
     url='https://gitlab.celeraone.com/api/v4/projects'
     page_size=50
@@ -17,7 +18,7 @@ get_gitlab_repos() {
     done
 }
 
-urls_str="$(get_gitlab_repos)"
+urls_str="$(get_gitlab_repo_urls)"
 mapfile -t urls <<< "$urls_str"
 for quoted_url in "${urls[@]}"; do
     tmp="${quoted_url%\"}"
