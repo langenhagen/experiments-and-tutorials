@@ -3,12 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
+    <title>Hello Vue.js!</title>
     <link href="index.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div id="app">
+      Vars:<br>
       {{ message }}
+      <br><br><br>
+
+      Input:<br>
+      <input v-model="input" placeholder="edit me">
+      <p>Message is: {{ input }}</p>
+      <br><br><br>
     </div>
 
     <script src="https://unpkg.com/vue"></script>
