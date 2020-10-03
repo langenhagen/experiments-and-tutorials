@@ -35,6 +35,7 @@ if __name__ == "__main__":
     out2 = layer.forward(x2)
     print(f"out2: {out2}")
 
+    # the layer can handle single input vectors or stacked vectors, aka batches
     x12 = np.concatenate((x1,x2))
     print(f"x12: {x12}")
     out12 = layer.forward(x12)
