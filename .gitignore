@@ -5,3 +5,4 @@ __pycache__/
 Cpp/**/build
 a.out
 .vscode
+.venv
