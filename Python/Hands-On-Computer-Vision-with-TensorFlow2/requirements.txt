@@ -1,0 +1,7 @@
+bpython
+jupyterlab
+matplotlib
+numpy
+
+# chapter 1, p38
+mnist
