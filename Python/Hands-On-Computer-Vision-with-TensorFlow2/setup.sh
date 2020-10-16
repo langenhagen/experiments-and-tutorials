@@ -1,7 +1,7 @@
 #!/bin/bash
-# Set up the python project
+# Set up the python project.
 
-pyenv local 3.8.3
+command -v pyenv && pyenv local 3.8.3
 
 python -m venv .venv
 source .venv/bin/activate
