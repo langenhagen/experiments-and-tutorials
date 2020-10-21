@@ -9,7 +9,7 @@ import pymongo
 
 print("--- 1 simple case ---")
 
-client = pymongo.MongoClient('mongodb://localhost:27017/')
+client = pymongo.MongoClient("mongodb://localhost:27017/")
 
 db = client["non-existing"]  # accessing non-existing dbs works
 db = client.non_existing  # shortcut; works only for with allowed characters; works also with non-existing; don't use it
