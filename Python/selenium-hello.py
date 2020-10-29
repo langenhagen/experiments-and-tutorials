@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Hello World for Selenium web driver.
 https://selenium-python.readthedocs.io/installation.html#drivers
 

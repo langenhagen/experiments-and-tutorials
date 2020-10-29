@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Showcase the usage of the Abstract Syntax Tree module ast."""
 import ast
 import sys

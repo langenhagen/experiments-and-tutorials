@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Showcase usage of the module multiprocessing that can create processes for
 multi-core programming.
 

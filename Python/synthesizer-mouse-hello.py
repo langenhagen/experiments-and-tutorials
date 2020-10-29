@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 # author: andreasl
 """Showcase the usage of the package synthesizer and pynput by making
 a sound by moving the mouse.

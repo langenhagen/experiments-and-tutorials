@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the behavior of @classmethods in the light of subclassing.
 Sublclassing is possible, cls.__names__ match the actually instantiated classes/instances.
 Basically straightforward & what I hoped for.

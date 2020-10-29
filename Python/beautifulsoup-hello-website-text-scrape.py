@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Scrape the text from a website using beautifulsoup.
 
 Simple but flawed. Also scrapes the javascript-scripts.

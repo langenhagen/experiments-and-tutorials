@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the usage of the external package sqlalchemy to execute queries.
 
 SQL ALchemy has a big documentation. I found these tutorials concise and helful:

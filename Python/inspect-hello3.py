@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Check if the functions that exceed a given number of lines in the given file
 have a docstring.
 

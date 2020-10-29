@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Showcase how to export json objects to csv.
 
 Works in python2 with pandas 0.24.2.

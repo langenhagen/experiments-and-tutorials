@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Show that sys.argv can also be retrieved from inside a function."""
 import sys
 

@@ -1,4 +1,4 @@
-#!/usr/env/bin python3
+#!/usr/bin/env python3
 """Hello Dataclasses."""
 from dataclasses import dataclass
 from typing import ClassVar
