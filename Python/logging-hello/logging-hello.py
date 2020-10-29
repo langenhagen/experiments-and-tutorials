@@ -10,7 +10,7 @@ import otherfile
 
 logging.basicConfig(
     # filename='myfile.log',  # enables logging to file
-    format='%(asctime)s [%(levelname)s]: %(message)s\n',
+    format="%(asctime)s [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
     datefmt="%a, %Y-%m-%d %H:%M:%S",
     level=logging.DEBUG
 )
