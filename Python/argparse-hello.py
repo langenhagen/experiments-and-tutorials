@@ -55,7 +55,7 @@ parser.add_argument(
 )
 parser.add_argument(
     'my_mandatory_positional_arg',
-    nargs=1,  # 0 or 1
+    nargs=1,  # 1
     help='an unnamed mandatory argument'
 )
 
