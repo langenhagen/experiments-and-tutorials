@@ -41,6 +41,7 @@ def catch():
         print(f"type(exc_traceback): {type(exc_traceback)}")
         print(f"type(formatted): {type(formatted)}")
         print(f"formatted:\n {formatted}")
+        return exc_traceback
 
 
-catch()
+tb = catch()
