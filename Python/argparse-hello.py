@@ -3,7 +3,9 @@
 use argparse.ArgumentParser.parse_args() with something specific. if nothing is
 given, it uses sys.argv[1:] by default.
 
-See: https://pymotw.com/3/argparse/index.html
+See:
+https://pymotw.com/3/argparse/index.html
+https://docs.python.org/3/library/argparse.html#nargs
 """
 import argparse
 import pathlib
@@ -49,13 +51,13 @@ parser.add_argument(
 )
 parser.add_argument(
     'my_optional_positional_arg',
-    nargs='?',  # 0 or 1
+    nargs='?',  # ?: a single argument, 0 or 1
     default=pathlib.Path.cwd(),
     help='an unnamed optional argument'
 )
 parser.add_argument(
     'my_mandatory_positional_arg',
-    nargs=1,  # 1
+    # nargs=1,  # 1: list of 1 item
     help='an unnamed mandatory argument'
 )
 
