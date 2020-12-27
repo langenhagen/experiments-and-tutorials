@@ -18,6 +18,11 @@ TODO
   https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_creating_session.htm
   https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_using_query.htm
 
+
+Tutorial:
+  - https://leportella.com/sqlalchemy-tutorial/
+    - https://github.com/leportella/sqlalchemy-basics-post/
+
 Tested with sqlalchemy 1.3.20."""
 import datetime
 
