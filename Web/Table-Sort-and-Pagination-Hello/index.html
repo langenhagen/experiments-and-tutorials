@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Hello Sortable, Paginated Table with Vue.js!</title>
+    <link href="index.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="app">
+
+        <table>
+            <thead>
+                <tr>
+                    <th @click="sort('name')">Name</th>
+                    <th @click="sort('age')">Age</th>
+                    <th @click="sort('breed')">Breed</th>
+                    <th @click="sort('gender')">Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="cat in sortedCats">
+                    <td>{{cat.name}}</td>
+                    <td>{{cat.age}}</td>
+                    <td>{{cat.breed}}</td>
+                    <td>{{cat.gender}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            <button @click="prevPage">Previous</button>
+            <button @click="nextPage">Next</button>
+        </p>
+
+        debug: sort={{currentSort}}, dir={{currentSortDir}}, page={{currentPage}}
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
