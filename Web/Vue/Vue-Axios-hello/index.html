@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Hello Vue.js with Axios!</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" v-cloak>
     Info:<br>
     {{ info }}
     <br><br><br>
@@ -17,6 +17,10 @@
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="index.js"></script>
+  <script type="text/x-template" id="my-component">
+    <div>My component template</div>
+    <NonStandardMarkupIsFineHere/>
+  </script>
 </body>
 
 </html>
