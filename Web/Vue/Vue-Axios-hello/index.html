@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
@@ -9,18 +10,45 @@
 
 <body>
   <div id="app" v-cloak>
-    Info:<br>
-    {{ info }}
+
+    Expenses:<br><br>
+    <div v-for="expense in expenses">
+      <b>{{ expense.employee.firstName }} {{ expense.employee.lastName }}</b>
+      schuldet <b>{{ expense.amount }} {{ expense.currency }}</b> seit <i>{{ expense.createdAt }}</i>.
+      ID: {{ expense.id }} State: <b>{{ expense.state }}</b> <br>
+    </div>
+
     <br><br><br>
+    Blah
   </div>
 
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="index.js"></script>
-  <script type="text/x-template" id="my-component">
-    <div>My component template</div>
-    <NonStandardMarkupIsFineHere/>
-  </script>
 </body>
 
 </html>
+
+
+
+<!--
+Next steps:
+
+1. add stuff to table
+2. make table clickable
+3. have detail view
+4. add accept and decline buttons to detail view
+mutation myMutation {
+  acceptExpense(id:"684a1482-ce20-4e74-8df2-0bf4af89fd09") {
+    ok
+    msg
+  }
+}
+
+5. have a search endpoint that fetches all items and re.match-filters it via `first_name last_name
+   aggregate_id employee_id`
+
+6. bootstrap the stuff
+
+That should be it.
+-->
