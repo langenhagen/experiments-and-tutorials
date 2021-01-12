@@ -129,7 +129,7 @@ print("--- 6 @patch.object ---")
 # mock.patch() doesn't require that you import the object before patching
 # mock.patch.object() does require that you import the object
 # mock.patch.object() is good when you have a reference to the object already
-# also, mock.patch.object() would complain if the given object does not have the patched fied,
+# also, mock.patch.object() would complain if the given object does not have the patched field,
 # whereas mock.patch() would simply add it
 
 @unittest.mock.patch.object(json, "loads", return_value="big quatsch")
