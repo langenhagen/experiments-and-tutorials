@@ -12,23 +12,23 @@ win	the window name
 dur	wait number of ms or until key is pressed
 */
 void showImage(Mat& img, string win, double dur = 0){
-  
+
     // use copy for normalization
     Mat tempDisplay;
     if (img.channels() == 1)
 		normalize(img, tempDisplay, 0, 255, CV_MINMAX);
     else
 		tempDisplay = img.clone();
-    
+
     tempDisplay.convertTo(tempDisplay, CV_8UC1);
-    
+
     // create window and display omage
     namedWindow( win.c_str(), 0 );
     imshow( win.c_str(), tempDisplay );
     // wait
     if (dur>=0) cvWaitKey(dur);
     // be tidy
-    destroyWindow(win.c_str());   
+    destroyWindow(win.c_str());
 }
 
 
@@ -52,29 +52,29 @@ Mat calcDirectionalGrad(Mat& image, double sigma){
   //Mat kernel_y(ksize, ksize, CV_32FC1);
   for(int i=0; i<ksize; i++){
       for(int j=0; j<ksize; j++){
-	
+
 	  val  = pow((i+0.5-mu)/sigma,2);
 	  val += pow((j+0.5-mu)/sigma,2);
 	  val = exp(-0.5*val);
 	  sum += val;
-	  
+
 	  kernel.at<float>(i, j) = -(j+0.5-mu)*val;
-	  
+
       }
   }
   kernel /= sum;
-  
+
   // use those kernels to compute gradient in x- and y-direction independently
   vector<Mat> grad(2);
   filter2D(image, grad[0], -1, kernel);
   filter2D(image, grad[1], -1, kernel.t());
-  
+
   // combine both real-valued gradient images to a single complex-valued image
   Mat output;
   merge(grad, output);
-  
+
   return output;
-  
+
 }
 
 
@@ -86,17 +86,17 @@ Mat retrieveEdges( Mat& input_image, double threshold)
 	for( int r=0; r<input_image.rows; ++r)
 		for( int c=0; c<input_image.cols; ++c)
 		{
-			
+
 			for( int channel=0; channel<input_image.channels(); ++channel)
 			{
-				 
+
 
 			}
 
 			vector<Mat> channels;
 			split( input_image, channels);
 			Mat max_mat;
-			max(channels[0], channels[1], max_mat); 
+			max(channels[0], channels[1], max_mat);
 		}
 		return ret;
 }
