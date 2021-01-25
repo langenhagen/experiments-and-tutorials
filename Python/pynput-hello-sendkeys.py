@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the sending keys via the 3rd party package pynput
 
 Tested with pynput 1.7.1.

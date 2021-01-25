@@ -1,4 +1,4 @@
-#!/usr/env/bin/python
+#!/usr/bin/env python
 """Showcase the usage of raise ... from to raise sequences of exceptions."""
 
 try:

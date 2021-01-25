@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the usage of Python's standard librarby package `csv`
 
 Code based on: https://pymotw.com/3/csv/

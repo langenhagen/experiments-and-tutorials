@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the usage of a streaming requests with Python's common 3rd party
 library `requests."""
 

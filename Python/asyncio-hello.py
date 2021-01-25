@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Showcase the usage of the python standard library `asyncio`.
 
 I don't really get the benefits yet but I also scratched part of it.

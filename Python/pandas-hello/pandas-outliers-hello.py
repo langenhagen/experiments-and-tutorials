@@ -1,4 +1,4 @@
-#!/usr/env/bin pandas
+#!/usr/bin/env python
 """Showcase how to filter outliers from a dataframe."""
 import numpy as np
 import pandas as pd
