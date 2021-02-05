@@ -4,7 +4,7 @@ from flask_github import GitHub
 
 app = Flask(__name__)
 app.config['GITHUB_CLIENT_ID'] = 'langenhagen'
-app.config['GITHUB_CLIENT_SECRET'] = 'ca3GITHUB7c65'
+app.config['GITHUB_CLIENT_SECRET'] = 'mynicepassword'
 
 # For GitHub Enterprise
 app.config['GITHUB_BASE_URL'] = 'https://HOSTNAME/api/v3/'
