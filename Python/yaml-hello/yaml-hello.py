@@ -19,6 +19,7 @@ with open("labels.yml") as file:
 
 print("--- 2 - transform yaml data to a tree structure ---")
 
+
 class Label(tree.Node):
     """A label that can be attached to a transaction post."""
 
@@ -35,7 +36,7 @@ def build_label_tree(dictionary: dict, root: Label = None):
         if key == "regex":
             continue
         if isinstance(value, dict):
-            regex=value.get("regex")
+            regex = value.get("regex")
             label = Label(name=key, regex=regex)
             build_label_tree(dictionary=value, root=label)
         else:
@@ -52,3 +53,19 @@ build_label_tree(data["Income"], income)
 assert isinstance(data.get("Expense"), dict)
 expense = Label("Expense")
 build_label_tree(data["Expense"], expense)
+
+print("--- 3 - write yaml data to file ---")
+
+data = dict(
+    A="a",
+    B=dict(
+        C="c",
+        D="d",
+        E="e",
+    ),
+)
+
+with open("written.yml", "w") as file:
+    yaml.dump(data, file, default_flow_style=False)
+
+print("Check the file `written.yml`")
