@@ -12,6 +12,7 @@ $ python mock-hello.py
 $ pytest -s mock-hello.py  # suppress capturing/hiding ouput
 """
 import json
+import pprint
 import unittest.mock
 
 import pytest
@@ -124,6 +125,7 @@ def test_with_contextmanager():
 
 
 print("--- 6 @patch.object ---")
+# patch object that you import already
 # see: https://stackoverflow.com/questions/29152170/what-is-the-difference-between-mock-patch-object-and-mock-patch
 
 # mock.patch() doesn't require that you import the object before patching
@@ -202,3 +204,24 @@ with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
         mock_json_loads.foo("shouldbreak")
     except AttributeError:
         print("Calling json.loads.foo('shouldbreak') caused an AttributeError")
+
+
+print("--- 9 specify return value of function of mock object. ---")
+
+
+def my_side_effect(arg):
+    """A side effect."""
+    print("Miau!")
+    print(f"Original arg={arg}")
+
+
+def foo():
+    """Show how to specify function return values of mock objects."""
+    with unittest.mock.patch("pprint.PrettyPrinter") as mock_pretty_printer:
+        mock_pretty_printer.return_value.pprint = unittest.mock.Mock(side_effect=my_side_effect)
+
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(dict(Hund="wuff!"))  # should print "Miau!"
+
+
+foo()
