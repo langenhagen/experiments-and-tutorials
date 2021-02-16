@@ -11,15 +11,13 @@ import tree
 
 pp = pprint.PrettyPrinter(indent=4)
 
-# parse a yaml file
-print("---1---")
+print("--- 1 - parse a yaml file ---")
 
 with open("labels.yml") as file:
     data = yaml.load(file, Loader=yaml.FullLoader)
     pp.pprint(data)
 
-# transform yaml data to a tree structure
-print("---2---")
+print("--- 2 - transform yaml data to a tree structure ---")
 
 class Label(tree.Node):
     """A label that can be attached to a transaction post."""
