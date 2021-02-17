@@ -8,7 +8,7 @@ r = requests.get("https://google.com")
 r.raise_for_status()  # throws an exception if the response doesn't have a 2xx success error code
 print(r)  # 200
 print(r.headers)
-print(r.content)
+print(r.content)  # in bytes; use r.text for str content
 
 print("--- 2 - POSTing stuff ---")
 r = requests.post("https://httpbin.org/post", data={"key": "value"})
