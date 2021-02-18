@@ -2,9 +2,12 @@
 
 you can nicely preview the the QML view via:
 
-    qmlscene main.qml
+    qmlscene 02-main-components-hello.qml
 
 based on: https://doc.qt.io/qt-5/qml-tutorial2.html
+
+see:
+  - https://doc.qt.io/qt-5/qtqml-syntax-signals.html
 
 @author: andreasl
 */
@@ -32,6 +35,7 @@ Rectangle {
         columns: 3
         spacing: 3
 
+        /* Instanciate the custom types and give them some event handlers.*/
         Cell { cellColor: "red"; onClicked: helloText.color = cellColor }
         Cell { cellColor: "green"; onClicked: helloText.color = cellColor }
         Cell { cellColor: "blue"; onClicked: helloText.color = cellColor }

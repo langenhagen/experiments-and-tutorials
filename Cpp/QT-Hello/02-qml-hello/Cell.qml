@@ -5,7 +5,9 @@ Preview the component via:
 
         qmlscene Cell.qml
 
-see: https://doc.qt.io/qt-5/qml-tutorial2.html
+see:
+  - https://doc.qt.io/qt-5/qml-tutorial2.html
+  - https://doc.qt.io/qt-5/qtqml-syntax-signals.html
 
 @author: andreasl
 */
@@ -14,9 +16,11 @@ import QtQuick 2.0
 Item {
     id: container
     property alias cellColor: rectangle.color
+
+    /*define a custom signal; signals are events*/
     signal clicked(color cellColor)   /*I had to change that from the original tutorial due to changed syntax*/
 
-    width: 40; height: 25
+    width: 80; height: 60
 
     Rectangle {
         id: rectangle
@@ -26,6 +30,13 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: container.clicked(container.cellColor)
+
+        /* onClicked is an event handler, its function body is JavaScript
+        This one emits the signal defined above.
+        */
+        onClicked: {
+            container.clicked(container.cellColor);
+            console.log("clicked the " + parent.cellColor + " one");
+        }
     }
 }
