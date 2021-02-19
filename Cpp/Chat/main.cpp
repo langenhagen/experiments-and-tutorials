@@ -60,20 +60,20 @@ void main(int argc, char** argv)
 {
 	rlutil::cls();
     cout << "***********************" << endl
-         << "*** Welcome to Chat ***" << endl 
+         << "*** Welcome to Chat ***" << endl
          << "***********************" << endl
          << endl;
 
 
-    // According to the number of input parameters, Chat will treat them differently 
+    // According to the number of input parameters, Chat will treat them differently
     // and will itself behave differently.
-    
+
     if( argc == 1)                  // SERVER mode
     {
         cout    <<  "USAGE:\n"
                 <<  usage_description();
 
-        server_mode();    
+        server_mode();
     }
     else if( argc == 2)             // CLIENT mode
     {
@@ -95,7 +95,7 @@ void main(int argc, char** argv)
                         "Use Chat as follows:\n"
                     <<  usage_description() << "\n"
                         "*** Press any key to exit *** ";
-    
+
         rlutil::anykey();
     }
 
@@ -113,9 +113,9 @@ void main(int argc, char** argv)
  *         0: no error
  */
 int server_mode( const short port, const string& password)
-{  
+{
     int ret(0);
- 
+
     try
     {
         boost::asio::io_service io_service;
@@ -129,8 +129,8 @@ int server_mode( const short port, const string& password)
     }
     catch (std::exception& e)
     {
-        std::cerr << "Exception in server_mode:\n" 
-                  << e.what() 
+        std::cerr << "Exception in server_mode:\n"
+                  << e.what()
                   << "\n";
         ret = 1;
     }
@@ -154,7 +154,7 @@ int client_mode( const char* host, const short port, const string& password)
     try
     {
         boost::asio::io_service io_service;
-        
+
         std::ostringstream port_oss;
         port_oss << port;
 
@@ -171,11 +171,11 @@ int client_mode( const char* host, const short port, const string& password)
     catch (std::exception& e)
     {
         std::cerr   << "Exception in client_mode:\n"
-                    << e.what() 
+                    << e.what()
                     << "\n";
         ret = 1;
     }
-    
+
     return ret;
 }
 

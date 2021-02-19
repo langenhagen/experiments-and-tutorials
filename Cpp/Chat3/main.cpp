@@ -52,7 +52,7 @@ const unsigned int start_error_code    (2);
 int start_chat( const bool is_server_mode,
                 const string& host,
                 const unsigned short read_port,
-                const unsigned short write_port, 
+                const unsigned short write_port,
                 const string& password);
 
 const string usage_description();
@@ -79,8 +79,8 @@ int main(int argc, char** argv)
     if( argc >= 2 && 0==stricmp(argv[1],"s"))
     {
         // SERVER mode
-        
-        const unsigned short read_port  (argc >= 3 ? atoi( argv[2]) : std_port1); 
+
+        const unsigned short read_port  (argc >= 3 ? atoi( argv[2]) : std_port1);
         const unsigned short write_port (argc >= 4 ? atoi( argv[3]) : std_port2);
         const string password           (argc >= 5 ? argv[4] : std_password);
 
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 
 
 /**
- * Prints the usage description, waits for any key to be pressed 
+ * Prints the usage description, waits for any key to be pressed
  * and then returns an integer which represents the error code
  * for wrong command line parameters.
  * @return Returns the integer 1
@@ -150,7 +150,7 @@ int on_command_line_param_error()
 }
 
 
-/** 
+/**
  * Retrieves the usage description of the Chat executable.
  * @return The usage description of Chat.
  */
@@ -175,7 +175,7 @@ const string usage_description()
 
 /**
  * Starts Chat.
- * @param is_server_mode Specifies, if Chat objects shall be started 
+ * @param is_server_mode Specifies, if Chat objects shall be started
  * in server mode or in client mode.
  * TRUE  - start as server
  * FALSE - start as client
@@ -189,7 +189,7 @@ const string usage_description()
 int start_chat( const bool is_server_mode,
                  const string& host,
                  const unsigned short read_port,
-                 const unsigned short write_port, 
+                 const unsigned short write_port,
                  const string& password)
 {
     int ret(0);
