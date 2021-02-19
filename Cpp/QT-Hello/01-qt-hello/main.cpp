@@ -1,4 +1,4 @@
-/* A simple QT application from the command line.
+/* A simple QT application from the command line via `qmake`.
 
 1. Install QTs prerequisites:
 
