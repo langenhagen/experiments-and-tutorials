@@ -13,12 +13,19 @@ class MyAttrClass:
     my_field = attr.ib()
     my_other_field = attr.ib()
 
-print("=== 1 simple usage ===")
+print("--- 1 simple usage ---")
 o = MyAttrClass(42, "answer to wh0t")
 print(f"{o=}")
 print(f"{o.my_field=}")
 print(f"{o.my_other_field=}")
 
-print("=== 1 convert attr class to dict ===")
+print("--- 2 convert attr class to dict ---")
 d = attr.asdict(o)
 print(d)
+
+print("--- 3 copy an object from another object ---")
+o2 = attr.evolve(o)
+print(f"{o2=}")
+print(f"{o2.my_field=}")
+print(f"{o2.my_other_field=}")
+assert o is not o2  # o and o2 are different objects
