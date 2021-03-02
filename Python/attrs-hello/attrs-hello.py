@@ -11,13 +11,17 @@ import attr
 class MyAttrClass:
     """Similar to dataclass but with extra features."""
     my_field = attr.ib()
-    my_other_field = attr.ib()
+    my_other_field = attr.ib(default=None)
 
 print("--- 1 simple usage ---")
 o = MyAttrClass(42, "answer to wh0t")
 print(f"{o=}")
 print(f"{o.my_field=}")
 print(f"{o.my_other_field=}")
+
+p = MyAttrClass(32)
+print(f"{p=}")
+# q = MyAttrClass()  # doesn't work
 
 print("--- 2 convert attr class to dict ---")
 d = attr.asdict(o)
