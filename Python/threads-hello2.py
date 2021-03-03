@@ -2,9 +2,9 @@
 """
 Showcase how events work with Python's Multithreading.
 """
+import logging
 import threading
 import time
-import logging
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(threadName)-12s] %(message)s',)

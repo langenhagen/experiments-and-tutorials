@@ -10,8 +10,9 @@ found here:
 http://people.csail.mit.edu/hubert/pyaudio/#wire-callback-example
 
 """
-import pyaudio
 import time
+
+import pyaudio
 
 WIDTH = 2
 CHANNELS = 2

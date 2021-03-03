@@ -73,8 +73,10 @@ class TestProfileBoundStoresInitializerListener(sdl.ProfileBoundStoresInitialize
 # --------------------------------------------------------------------------------------------------
 
 import os
+from subprocess import CalledProcessError, check_call
+
 import psutil
-from subprocess import check_call, CalledProcessError
+
 
 class dafoo:
 

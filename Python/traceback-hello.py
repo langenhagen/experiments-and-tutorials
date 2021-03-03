@@ -9,7 +9,6 @@ See: https://docs.python.org/3.6/library/traceback.html
 import sys
 import traceback
 
-
 print("=== 1 print a traceback ===")
 
 

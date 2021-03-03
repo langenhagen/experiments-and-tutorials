@@ -9,9 +9,8 @@ author: andreasl
 """
 
 from abc import abstractmethod
-from typing import NamedTuple, Optional
 from dataclasses import dataclass
-
+from typing import NamedTuple, Optional
 
 
 class Event():

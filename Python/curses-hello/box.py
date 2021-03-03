@@ -1,5 +1,6 @@
 import curses
 
+
 def main():
     stdscr = curses.initscr()
 

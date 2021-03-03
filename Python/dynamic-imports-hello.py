@@ -3,7 +3,6 @@
 import importlib
 import sys
 
-
 print(f'len(sys.argv) = {len(sys.argv)}')
 print(f'sys.argv = {sys.argv}')
 
@@ -15,6 +14,7 @@ print(f"Given Module path: {module_path}")
 
 # Import module via file location
 import importlib.util
+
 module_spec = importlib.util.spec_from_file_location("my.module.name", module_path)
 my_module = importlib.util.module_from_spec(module_spec)
 module_spec.loader.exec_module(my_module)

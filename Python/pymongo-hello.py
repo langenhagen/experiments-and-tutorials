@@ -6,7 +6,6 @@ get it via `pip install pymongo`
 
 import pymongo
 
-
 print("--- 1 simple case ---")
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")

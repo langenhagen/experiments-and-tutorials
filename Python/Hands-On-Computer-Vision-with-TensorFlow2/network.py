@@ -3,7 +3,6 @@
 author: andreasl
 """
 import numpy as np
-
 from layer import FullyConnectedLayer
 
 

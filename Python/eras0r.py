@@ -3,12 +3,13 @@ In the subtree. Can also filter parts of the subtree
 that shall not be affected.
 """
 
-import sys
-import getopt
 import fnmatch
-import os, os.path
+import getopt
+import os
+import os.path
 import re
 import shutil
+import sys
 
 """USAGE:
 eras0r.py [-r <root-dir>] [-i <subdir to be ignored> ] [...] [<filetype-glob/foldername>] [...]

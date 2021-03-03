@@ -7,8 +7,9 @@ Taken from: https://nitratine.net/blog/post/simulate-keypresses-in-python/
 
 author: andreasl
 """
-import time
 import random
+import time
+
 from pynput.keyboard import Controller
 
 keyboard = Controller()  # Create the controller

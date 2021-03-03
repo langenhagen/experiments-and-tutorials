@@ -3,7 +3,7 @@
 import curses
 
 from common import addstr, elide_middle, getmaxyx, move
-from line import Line, ItemLine
+from line import ItemLine, Line
 from lineview import LineView
 from node import ItemNode
 

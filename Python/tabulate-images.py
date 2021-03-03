@@ -6,13 +6,14 @@
 # author: langenhagen
 # version: 17-08-24
 
-from fractions import Fraction
-from optparse import OptionParser
-from PIL import Image
-from PIL.ExifTags import TAGS
 import os
 import sys
 import traceback
+from fractions import Fraction
+from optparse import OptionParser
+
+from PIL import Image
+from PIL.ExifTags import TAGS
 
 
 def get_exif(image_path):

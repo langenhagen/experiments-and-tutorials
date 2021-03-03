@@ -8,6 +8,7 @@ version: 19-07-02
 """
 import inspect
 
+
 def foo(s: str, i=0):
 
     print(f"{s} : {i}")

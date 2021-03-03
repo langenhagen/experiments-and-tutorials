@@ -5,9 +5,8 @@ Get it via `pip install pyyaml`.
 """
 import pprint
 
-import yaml
-
 import tree
+import yaml
 
 pp = pprint.PrettyPrinter(indent=4)
 

@@ -9,12 +9,13 @@ Usage:
 Example:
   applicat0r.py -r "C:\Root Folder\" -i .\NotThisFolder -i ".\This Neither" -a BpmCounter.exe *.mp3 *.wav
 """
-import sys
-import getopt
 import fnmatch
-import os, os.path
+import getopt
+import os
+import os.path
 import re
 import subprocess
+import sys
 
 
 def main(argv):

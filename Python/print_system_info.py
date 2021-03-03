@@ -2,6 +2,7 @@
 
 import platform
 
+
 def print_platform_info():
     print "platform.machine():   " + platform.machine()
     print "platform.version():   " + platform.version()

@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 
 from flask import Flask
 
-
 app = Flask(__name__)
 
 class AbstractFlaskServer(ABC):

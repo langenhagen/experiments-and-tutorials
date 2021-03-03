@@ -8,6 +8,7 @@ import multiprocessing
 import random
 import time
 
+
 def worker(name: str) -> None:
     print(f'Started worker {name}')
     worker_time = random.choice(range(1, 5))

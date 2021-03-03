@@ -3,13 +3,13 @@ Test the treemap module.
 author: andreasl
 """
 import random
-import random
 import tkinter
 import tkinter.font
 from dataclasses import dataclass
 from typing import List
 
 import treemap
+
 
 @dataclass
 class Item:

@@ -3,7 +3,6 @@
 import os
 import subprocess
 
-
 # Run a command and get the output
 os.chdir("../../scripts")
 

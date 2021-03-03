@@ -7,6 +7,7 @@ version: 19-07-02
 import inspect
 import sys
 
+
 def get_function_arguments():
     """Retrieve the calling function's parameter and argument dictionary."""
     frame = sys._getframe(1)

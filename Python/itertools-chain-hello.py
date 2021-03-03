@@ -7,7 +7,6 @@ import itertools
 
 import requests
 
-
 a = requests.get('http://google.com')
 b = requests.get('http://twitter.com')
 c = requests.get('http://instagram.com')

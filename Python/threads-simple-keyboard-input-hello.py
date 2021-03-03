@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Showcase simple keyboard input."""
+import logging
 import threading
 import time
-import logging
 
 
 def wait_for_event(event):

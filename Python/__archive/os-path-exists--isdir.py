@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+
 #from os.path import isfile, join
 
 path = "/Users/langenha/personal/Media/Images/Fotos/DSLR"

@@ -1,10 +1,10 @@
 from datetime import datetime
+from wsgiref.simple_server import make_server
 
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPServerError
-from pyramid.response import Response
 from pyramid.renderers import render_to_response
-from wsgiref.simple_server import make_server
+from pyramid.response import Response
 
 
 def default_view(request):

@@ -3,8 +3,8 @@
 library `requests."""
 
 import json
-import requests
 
+import requests
 
 # url = "https://httpbin.org/stream/20"  # returns http streaming data
 url = "https://cashcog.xcnt.io/stream"  # returns http streaming data

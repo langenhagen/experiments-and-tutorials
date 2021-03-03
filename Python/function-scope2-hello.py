@@ -1,6 +1,7 @@
 """ Showcase that inner functions can see outer params."""
 import requests
 
+
 def foo(param1):
     def bar():
         print(f"In bar(): param1= {param1}")  # param1 is visible from within bar()

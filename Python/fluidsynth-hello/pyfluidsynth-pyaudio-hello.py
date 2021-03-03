@@ -4,9 +4,10 @@ See:
 https://github.com/nwhitehead/pyfluidsynth
 """
 import time
+
+import fluidsynth
 import numpy
 import pyaudio
-import fluidsynth
 
 pa = pyaudio.PyAudio()
 strm = pa.open(

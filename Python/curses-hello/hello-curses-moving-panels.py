@@ -5,6 +5,7 @@ import curses.panel
 
 from common import *
 
+
 class Box():
 
     def __init__(self, text, h, w, y, x):

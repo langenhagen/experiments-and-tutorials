@@ -2,7 +2,6 @@
 """Showcase the usage of pandas.merge()"""
 import pandas as pd
 
-
 print("=== 1 pd.merge(...'inner'...) multiplexes dataframes with duplicate entries in in {left,right}_on ==")
 
 df1 = pd.DataFrame({"a":[1,2,1], "b":["a","b","c"]})

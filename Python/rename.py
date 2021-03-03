@@ -1,8 +1,8 @@
 """Rename several files in a directory."""
 # Muss in das Verzeichnis kopiert werden, in der sie arbeiten soll
+import math
 import os
 import os.path
-import math
 
 mode = int( input("Which type of mode?\n\
 \t0: Add pre-string, \n\

@@ -6,8 +6,8 @@ Found here: https://www.jonwitts.co.uk/archives/896
 # adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py
 import sys
 import termios
-import tty
 import time
+import tty
 
 
 def getch() -> str:

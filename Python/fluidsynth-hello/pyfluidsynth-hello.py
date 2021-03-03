@@ -4,6 +4,7 @@ See:
 https://github.com/nwhitehead/pyfluidsynth
 """
 import time
+
 import fluidsynth
 
 fs = fluidsynth.Synth()

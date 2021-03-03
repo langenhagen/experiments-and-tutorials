@@ -2,6 +2,7 @@ import random
 import tkinter
 import tkinter.font
 
+
 class Rectangle:
     tk_rect_id: int
     tk_text_id: int
