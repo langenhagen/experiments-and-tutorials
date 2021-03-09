@@ -10,7 +10,9 @@ Based on: https://golang.org/doc/tutorial/getting-started
 go mod init hello
 ```
 
-`go.mod` is basically like a `requirements.txt` or `setup.py` stuff.
+The file `go.mod` tracks the module's dependencies. It is similar to a `requirements.txt` or
+`setup.py` stuff.
+
 
 2. write the code
 
