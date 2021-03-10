@@ -1,7 +1,11 @@
 # Go Modules
 
 
-based on: https://golang.org/doc/tutorial/create-module
+based on:
+    - https://golang.org/doc/tutorial/create-module
+    - https://golang.org/doc/tutorial/call-module-code
+    - https://golang.org/doc/tutorial/handle-errors
+    - https://golang.org/doc/tutorial/random-greeting
 
 see also: https://www.golangprograms.com/naming-conventions-for-golang-functions.html
 
