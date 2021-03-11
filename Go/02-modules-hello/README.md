@@ -1,11 +1,14 @@
 # Go Modules
 
 
-based on:
+based on a larger tutorial:
     - https://golang.org/doc/tutorial/create-module
     - https://golang.org/doc/tutorial/call-module-code
     - https://golang.org/doc/tutorial/handle-errors
     - https://golang.org/doc/tutorial/random-greeting
+    - https://golang.org/doc/tutorial/greetings-multiple-people
+    - https://golang.org/doc/tutorial/add-a-test
+    - https://golang.org/doc/tutorial/compile-install
 
 see also: https://www.golangprograms.com/naming-conventions-for-golang-functions.html
 
@@ -48,4 +51,60 @@ go mod tidy
 From within subdir `hello/`, call:
 ```bash
 go run .
+```
+
+6. Add the test
+```bash
+cd greetings
+touch greetings_test.go   # tests end with `_test.go`
+```
+Then, implement the file greetings_test.go
+
+7. Run the tests
+```bash
+cd greetings
+go test  # alternatively, call `go test -v`
+```
+
+8. Build the program
+Create a classical executable via `go build`:
+```bash
+cd hello
+go build
+```
+
+Run the program via
+```bash
+./hello
+```
+
+
+9. Install the proram
+
+Discover the install path:
+```bash
+go list -f '{{.Target}}'  # something like $HOME/go/bin/hello
+```
+
+You can 1) add the install path to your $PATH or 2) change the install path:
+1. add the install path to your `$PATH`
+  ```bash
+  export PATH=$PATH:/path/to/your/install/directory
+  ```
+OR
+2. Change Go's install path to something you already have
+  ```bash
+  go env -w GOBIN=/path/to/your/bin
+  ```
+
+Then simply
+```bash
+go install
+```
+Then, you should be able, to call `hello` from anywhere.
+
+
+Nice:
+```bash
+go env   # list go environment variables
 ```

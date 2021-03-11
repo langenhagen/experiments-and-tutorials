@@ -38,6 +38,23 @@ func Hello(name string) (string, error) {
 	return message, nil
 }
 
+// Hellos returns a map that associates each of the named people
+// with a greeting message.
+func Hellos(names []string) (map[string]string, error) {
+	messages := make(map[string]string) /*make a map of string to string*/
+	// Loop through the received slice of names, calling
+	// the Hello function to get a message for each name.
+	for _, name := range names {
+		message, err := Hello(name)
+		if err != nil {
+			return nil, err
+		}
+		// In the map, associate the retrieved message with the name.
+		messages[name] = message
+	}
+	return messages, nil
+}
+
 /*Every file can have 0 or more `init()` functions to set up the module. The `init()` functions run
 after imports and variable declarations are done.
 
