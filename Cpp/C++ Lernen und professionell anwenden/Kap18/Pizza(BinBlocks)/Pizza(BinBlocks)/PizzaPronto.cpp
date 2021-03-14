@@ -20,7 +20,7 @@ char pizzaDatei[256] = "pizza.dat";
 int main()
 {
 	cout <<header << endl;
-	
+
 	int exitCode=0;
 
 	ofstream outFile(pizzaDatei, ios::out | ios::binary);

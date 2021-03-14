@@ -29,7 +29,7 @@ int main()
 	cout	<< header
 				<< "1 Speisekarte anzeigen\n2 Pizzen hinzufuegen und speichern"
 				<<	"\n0 Standardwerte\ne fuer Escape\n" << line;
-	
+
 	while(true)
 	{
 		do
@@ -55,14 +55,14 @@ int main()
 
 				cout	<< line << header << "       * * * SPEISEKARTE * * *\n\n"
 							<< setw(32) << left << "Gericht"
-							<< setw(5) << right << "Preis" << line; 			
-				
+							<< setw(5) << right << "Preis" << line;
+
 				for( int i=0; i<anz; i++ )
 				{
 					if(	!inFile.read( (char*)&pizzakarte[i], sizeof(Pizza) ) )
 						readErr(pizzaDatei);
-					cout	<< setw(32) << left << pizzakarte[i].name 
-								<< setw(5) << right << fixed << setprecision(2) << pizzakarte[i].preis << " EURO\n"; 
+					cout	<< setw(32) << left << pizzakarte[i].name
+								<< setw(5) << right << fixed << setprecision(2) << pizzakarte[i].preis << " EURO\n";
 				}
 
 				inFile.close();
@@ -73,28 +73,28 @@ int main()
 			{
 				cout	<< line
 							<< "Bitte Pizzen zum Sortiment hinzufuegen\n";
-				
+
 				while(true)
 				{
 					if( MAXANZ - anz < 1 )
-					{			
+					{
 						cerr << "\nAlle Plaetze der Speisekarte belegt!\n";
-						break;			
+						break;
 					}
 
 					cout << "Es besteht noch Platz fuer " << MAXANZ - anz << " Pizzen.\n\n";
-			
+
 					cin.clear();
 					cin.sync();
 					cout << "Name:  "; ;
 					if( cin.getline( pizzakarte[anz].name, 32 ) && strlen(pizzakarte[anz].name)<1 )	break;
 					cout << "Preis: "; cin.clear(); cin.sync(); cin >> pizzakarte[anz].preis;
-				
+
 					anz++;
 				}
 
 				cout << "\nKommen wir nun zum Speicherprozess der Daten...\n";
-			
+
 				ofstream outFile( pizzaDatei, ios::out | ios::binary );
 				if( !outFile.is_open() )
 					openErr( pizzaDatei );
