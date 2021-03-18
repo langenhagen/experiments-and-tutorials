@@ -20,7 +20,7 @@ Steps:
 ```bash
 mkdir greetings
 cd greetings
-go mod init example.com/greetings  # create the module "command"
+go mod init example.com/greetings  # create the module "greetings"
 touch greetings.go
 ```
 Then, implement the file greetings.go
