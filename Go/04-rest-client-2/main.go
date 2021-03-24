@@ -1,3 +1,12 @@
+// Showcase a simple Go REST client.
+//
+// see:
+//   - https://dev.to/plutov/writing-rest-api-client-in-go-3fkg
+//   - https://eager.io/blog/go-and-json/
+//   - https://www.scaledrone.com/blog/creating-an-api-client-in-go/
+//   - was helpful: https://mholt.github.io/json-to-go/
+//
+// author: andreasl
 package main
 
 import (
@@ -8,14 +17,13 @@ import (
 )
 
 func main() {
-
 	c := client.NewClient()
 
 	ctx := context.Background()
-	response, err := c.Get(ctx)
+	res, err := c.Get(ctx, "foo=bar")
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 
-	fmt.Println("Success: ", response)
+	fmt.Printf("Success %#v\n", res)
 }

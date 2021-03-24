@@ -1,11 +1,3 @@
-// Showcase a simple GO rest client.
-//
-// see:
-//   - https://dev.to/plutov/writing-rest-api-client-in-go-3fkg
-//   - https://eager.io/blog/go-and-json/
-//   - also nice: https://mholt.github.io/json-to-go/
-//
-// author: andreasl
 package client
 
 import (
@@ -35,8 +27,22 @@ func NewClient() *Client {
 }
 
 type getResponse struct {
-	Code int         `json:"code"` // the `json:"code"` part defines which fields of a json object to parse when creating the struct
-	Data interface{} `json:"data"`
+	Code int `json:"code"` // the `json:"code"` part defines which fields of a json object to parse when creating the struct
+	Data getResponseData
+}
+
+type getResponseData struct {
+	Args struct {
+		Foo string `json:"foo"`
+	} `json:"args"`
+	Headers struct {
+		Accept       string `json:"Accept"`
+		Host         string `json:"Host"`
+		UserAgent    string `json:"User-Agent"`
+		XAmznTraceID string `json:"X-Amzn-Trace-Id"`
+	} `json:"headers"`
+	Origin string `json:"origin"`
+	URL    string `json:"url"`
 }
 
 // curl -X GET 'https://httpbin.org/get?foo=bar'
@@ -53,10 +59,9 @@ type getResponse struct {
 //  "origin": "91.66.9.159",
 //  "url": "https://httpbin.org/get?fpp=bar"
 //}
-
-func (c *Client) Get(ctx context.Context) (*getResponse, error) {
+func (c *Client) Get(ctx context.Context, querystring string) (*getResponse, error) {
 	url := fmt.Sprintf(c.BaseURL + "/get")
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url+"?"+querystring, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +74,7 @@ func (c *Client) Get(ctx context.Context) (*getResponse, error) {
 	return &res, nil
 }
 
-func (c *Client) sendRequest(req *http.Request, v interface{}) error {
+func (c *Client) sendRequest(req *http.Request, result *getResponse) error {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 
@@ -84,7 +89,6 @@ func (c *Client) sendRequest(req *http.Request, v interface{}) error {
 		return fmt.Errorf("Error: status code: %d", res.StatusCode)
 	}
 
-	result := getResponse{Data: v}
 	if err = json.NewDecoder(res.Body).Decode(&result.Data); err != nil {
 		return err
 	}
