@@ -60,8 +60,8 @@ type getResponseData struct {
 //  "url": "https://httpbin.org/get?fpp=bar"
 //}
 func (c *Client) Get(ctx context.Context, querystring string) (*getResponse, error) {
-	url := fmt.Sprintf(c.BaseURL + "/get")
-	req, err := http.NewRequestWithContext(ctx, "GET", url+"?"+querystring, nil)
+	url := fmt.Sprintf(c.BaseURL + "/get" + "?" + querystring)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
