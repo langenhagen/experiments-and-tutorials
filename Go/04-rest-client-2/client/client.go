@@ -126,15 +126,12 @@ func (c *Client) sendRequest(req *http.Request, result *response) error {
 //   "origin": "91.66.9.159",
 //   "url": "https://httpbin.org/post"
 // }
-func (c *Client) Post(ctx context.Context, payload interface{}, querystring string) (*response, error) {
+func (c *Client) Post(ctx context.Context, payload string, querystring string) (*response, error) {
 	url := fmt.Sprintf(c.BaseURL + "/post" + "?" + querystring)
 
-	j, err := json.Marshal(payload)
-	if err != nil {
-		return nil, err
-	}
+	jsonStr := []byte(payload)
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer((j)))
+	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer((jsonStr)))
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@
 //   - https://dev.to/plutov/writing-rest-api-client-in-go-3fkg
 //   - https://eager.io/blog/go-and-json/
 //   - https://www.scaledrone.com/blog/creating-an-api-client-in-go/
+//   - https://stackoverflow.com/questions/24455147/how-do-i-send-a-json-string-in-a-post-request-in-go
 //   - was helpful: https://mholt.github.io/json-to-go/
 //
 // author: andreasl
