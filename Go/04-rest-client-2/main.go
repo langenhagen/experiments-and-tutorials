@@ -11,6 +11,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"example.com/rest-client/client"
@@ -19,11 +20,30 @@ import (
 func main() {
 	c := client.NewClient()
 
+	fmt.Println("=== 1 GET request ===")
+
 	ctx := context.Background()
 	res, err := c.Get(ctx, "foo=bar")
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 
-	fmt.Printf("Success %#v\n", res)
+	pretty_result, err := json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	fmt.Printf("Get Result:\n%s\n", pretty_result)
+
+	fmt.Println("\n=== 2 POST request ===")
+
+	res, err = c.Post(ctx, `{"andi":"mandi"}`, "foo=bar")
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+
+	pretty_result, err = json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	fmt.Printf("POST Result:\n%s\n", pretty_result)
 }

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -26,47 +27,50 @@ func NewClient() *Client {
 	}
 }
 
-type getResponse struct {
-	Code int `json:"code"` // the `json:"code"` part defines which fields of a json object to parse when creating the struct
-	Data getResponseData
+type response struct {
+	Code int
+	Data interface{} // A generic response. I suspect its best to only use it if necessary.
 }
 
-type getResponseData struct {
-	Args struct {
-		Foo string `json:"foo"`
-	} `json:"args"`
-	Headers struct {
-		Accept       string `json:"Accept"`
-		Host         string `json:"Host"`
-		UserAgent    string `json:"User-Agent"`
-		XAmznTraceID string `json:"X-Amzn-Trace-Id"`
-	} `json:"headers"`
-	Origin string `json:"origin"`
-	URL    string `json:"url"`
-}
+// example of a more fleshed out response, if possible, I believe such might be better
+// type getResponseData struct {
+// 	Args struct {
+// 		Foo string `json:"foo"`
+// 	} `json:"args"`
+// 	Headers struct {
+// 		Accept       string `json:"Accept"`
+// 		Host         string `json:"Host"`
+// 		UserAgent    string `json:"User-Agent"`
+// 		XAmznTraceID string `json:"X-Amzn-Trace-Id"`
+// 	} `json:"headers"`
+// 	Origin string `json:"origin"`
+// 	URL    string `json:"url"`
+// }
 
+// The following function basically does what the following `curl` call may do:
 // curl -X GET 'https://httpbin.org/get?foo=bar'
+// Yields:
 // {
-//  "args": {
-//    "fpp": "bar"
-//  },
-//  "headers": {
-//    "Accept": "*/*",
-//    "Host": "httpbin.org",
-//    "User-Agent": "curl/7.68.0",
-//    "X-Amzn-Trace-Id": "Root=1-605a5ed2-63c5e92103445a5c211a776a"
-//  },
-//  "origin": "91.66.9.159",
-//  "url": "https://httpbin.org/get?fpp=bar"
-//}
-func (c *Client) Get(ctx context.Context, querystring string) (*getResponse, error) {
+//   "args": {
+//     "fpp": "bar"
+//   },
+//   "headers": {
+//     "Accept": "*/*",
+//     "Host": "httpbin.org",
+//     "User-Agent": "curl/7.68.0",
+//     "X-Amzn-Trace-Id": "Root=1-605a5ed2-63c5e92103445a5c211a776a"
+//   },
+//   "origin": "91.66.9.159",
+//   "url": "https://httpbin.org/get?fpp=bar"
+// }
+func (c *Client) Get(ctx context.Context, querystring string) (*response, error) {
 	url := fmt.Sprintf(c.BaseURL + "/get" + "?" + querystring)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	res := getResponse{}
+	res := response{}
 	if err := c.sendRequest(req, &res); err != nil {
 		return nil, err
 	}
@@ -74,7 +78,7 @@ func (c *Client) Get(ctx context.Context, querystring string) (*getResponse, err
 	return &res, nil
 }
 
-func (c *Client) sendRequest(req *http.Request, result *getResponse) error {
+func (c *Client) sendRequest(req *http.Request, result *response) error {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 
@@ -97,26 +101,48 @@ func (c *Client) sendRequest(req *http.Request, result *getResponse) error {
 	return nil
 }
 
-// curl -H "Content-Type: application/json" -X POST --data '{"username":"xyz","password":"xyz"}' https://httpbin.org/post
-//{
-//  "args": {},
-//  "data": "{\"username\":\"xyz\",\"password\":\"xyz\"}",
-//  "files": {},
-//  "form": {},
-//  "headers": {
-//    "Accept": "*/*",
-//    "Content-Length": "35",
-//    "Content-Type": "application/json",
-//    "Host": "httpbin.org",
-//    "User-Agent": "curl/7.68.0",
-//    "X-Amzn-Trace-Id": "Root=1-605a60a4-089d11174f578f0d48080b71"
-//  },
-//  "json": {
-//    "password": "xyz",
-//    "username": "xyz"
-//  },
-//  "origin": "91.66.9.159",
-//  "url": "https://httpbin.org/post"
-//}
-// func (s *Client) Post(todo *Todo) error {
+// Like the function `Get()`, the following function basically does what the following `curl` call
+// may do:
+// curl -H "Content-Type: application/json" -X POST --data '{"username":"xyz","password":"xyz"}' \
+//   https://httpbin.org/post
+// Yields:
+// {
+//   "args": {},
+//   "data": "{\"username\":\"xyz\",\"password\":\"xyz\"}",
+//   "files": {},
+//   "form": {},
+//   "headers": {
+//     "Accept": "*/*",
+//     "Content-Length": "35",
+//     "Content-Type": "application/json",
+//     "Host": "httpbin.org",
+//     "User-Agent": "curl/7.68.0",
+//     "X-Amzn-Trace-Id": "Root=1-605a60a4-089d11174f578f0d48080b71"
+//   },
+//   "json": {
+//     "password": "xyz",
+//     "username": "xyz"
+//   },
+//   "origin": "91.66.9.159",
+//   "url": "https://httpbin.org/post"
 // }
+func (c *Client) Post(ctx context.Context, payload interface{}, querystring string) (*response, error) {
+	url := fmt.Sprintf(c.BaseURL + "/post" + "?" + querystring)
+
+	j, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer((j)))
+	if err != nil {
+		return nil, err
+	}
+
+	res := response{}
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
