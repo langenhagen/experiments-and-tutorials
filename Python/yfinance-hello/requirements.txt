@@ -1,2 +1,3 @@
 bpython
+forex-python
 yfinance
