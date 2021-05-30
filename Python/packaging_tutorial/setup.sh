@@ -16,4 +16,3 @@ printf "# My Readme!\nbased on https://packaging.python.org/tutorials/packaging-
 
 touch setup.cfg
 touch pyproject.toml
-
