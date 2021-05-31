@@ -8,7 +8,11 @@ from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="My Super Project",
+    description="This is a very fancy project, with auto docs for the API and everything",
+    version="0.1.0",
+)
 
 
 # Dependency
