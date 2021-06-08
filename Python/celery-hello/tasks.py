@@ -24,12 +24,14 @@ BROKER_HOST = "localhost"  # Maps to redis host.
 BROKER_PORT = 6379         # Maps to redis port.
 BROKER_VHOST = "0"         # Maps to database number.
 
-app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
+# app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
+app = Celery('tasks', backend='redis://localhost', broker='redis://localhost', task_always_eager=True)  # call tasks inline; doesn't need any backend
 
 
 @app.task
 def add(x, y):
     # return x + y / 0  that would die in the celery.log
+    print(f"x + y = {x + y}")
     return x + y
 
 
