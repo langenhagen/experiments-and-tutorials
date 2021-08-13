@@ -25,6 +25,6 @@ def hello(myoption, myarg1, myarg2):
     """The docstring of the function may be used in the help string."""
     click.echo(f"myoption={myoption}\nmyarg1={myarg1}\nmyarg2={myarg2}")
 
-if __name__=="__main__":
+if __name__ == "__main__":
     hello()
 
