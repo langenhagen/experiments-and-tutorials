@@ -12,8 +12,9 @@
 #   scripts/setup.sh --clean       # clean already existing artifacts and set up the project
 set -e
 
-[[ "$*" =~ '--clean' ]] && { rm -fr .venv/; python -m venv .venv; }
+[[ "$*" =~ '--clean' ]] && rm -fr .venv/
 
+python -m venv .venv
 # shellcheck disable=SC1091
 source .venv/bin/activate
 
