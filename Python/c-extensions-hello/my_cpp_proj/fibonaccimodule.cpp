@@ -3,9 +3,14 @@ C extension code.
 
 see:
 - https://www.youtube.com/watch?v=a65JdvOaygM&ab_channel=DrapsTV
+- https://docs.python.org/3/extending/extending.html
 */
-#define PY_SSIZE_T_CLEAN  /*It is recommended to always define PY_SSIZE_T_CLEAN before including Python.h.*/
 
+/*Python recommends to always define PY_SSIZE_T_CLEAN before including Python.h.*/
+#define PY_SSIZE_T_CLEAN
+
+/*Python.h defines some macros that could influence standard-library headers, so Python recommends
+to include this before all other header includes.*/
 #include <Python.h>
 
 /** A native C/C++ function.*/
@@ -13,10 +18,18 @@ int Cfib(const int n) {
     return n < 2 ? n : Cfib(n-1) + Cfib(n-2);
 }
 
-/** Wrapper function.*/
+/** Wrapper function.
+The C function always has two arguments, conventionally named self and args.
+
+The self argument points to the module object for module-level functions; for a method it would
+point to the object instance.
+
+The args argument will be a pointer to a Python tuple object containing the arguments. Each item of
+the tuple corresponds to an argument in the call’s argument list.
+*/
 static PyObject* fib(PyObject* self, PyObject* args) {
     int n;
-    if (!PyArg_ParseTuple(args, "i", &n)) /*"i" means, parse args as an ""*/
+    if (!PyArg_ParseTuple(args, "i", &n)) /*"i" means, parse args as an int.*/
         return nullptr;
 
     return Py_BuildValue("i", Cfib(n));
@@ -42,5 +55,6 @@ static struct PyModuleDef my_module = {
 };
 
 PyMODINIT_FUNC PyInit_myModule() {
-    return PyModule_Create(&my_module);
+    PyObject* m = PyModule_Create(&my_module);
+    return m;
 };
