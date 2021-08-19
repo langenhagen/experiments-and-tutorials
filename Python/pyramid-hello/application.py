@@ -10,10 +10,12 @@ from pyramid.response import Response
 def default_view(request):
     # raise HTTPServerError(detail="Hallo")  # gives: this server has either erred... and on the next line "Hallo"
     raise HTTPServerError("MiauMiauMiau")  # same
-    return Response('Hello World!')
+    return Response("Hello World!")
+
 
 def view2(request):
     return Response(HTTPServerError.explanation)
+
 
 def view3(request):
     # controller/view
@@ -22,12 +24,15 @@ def view3(request):
 
     return Response("<h1>hey there! It is: {} </h2>".format(dt_string))
 
+
 def view_from_template(request):
     # use abs path here, templates are relative to some config, not to the pwd
-    return render_to_response("/home/andreasl/Dev/experiments-and-tutorials/Python/pyramid-hello/mytemplate.pt",
+    return render_to_response(
+        "/home/andreasl/Dev/experiments-and-tutorials/Python/pyramid-hello/mytemplate.pt",
         {},
-        request=request
+        request=request,
     )
+
 
 if __name__ == "__main__":
     config = Configurator()
@@ -52,4 +57,3 @@ if __name__ == "__main__":
     app = config.make_wsgi_app()
     server = make_server("0.0.0.0", 6543, app)
     server.serve_forever()
-

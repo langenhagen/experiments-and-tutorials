@@ -12,13 +12,12 @@ KeyboardListener = pynput.keyboard.Listener
 
 class AudioRecorder:
     """An audio recorder that records as long as you press a button."""
+
     SAMPLE_FORMAT: int = pyaudio.paInt16  # 16 bits per sample
 
     def __init__(
-            self,
-            channels: int = 1,
-            chunk_size: int = 1024,
-            framerate: int = 44100):
+        self, channels: int = 1, chunk_size: int = 1024, framerate: int = 44100
+    ):
         """Initialize the audio recorder."""
         self.audio_interface = pyaudio.PyAudio()
         self.do_record: bool = False
@@ -33,8 +32,8 @@ class AudioRecorder:
     def record(self):
         """Do record audio."""
         with KeyboardListener(
-                on_press=self._on_key_press,
-                on_release=self._on_key_release) as listener:
+            on_press=self._on_key_press, on_release=self._on_key_release
+        ) as listener:
             while True:
                 if self.do_record:
                     frames = self._record_audio()
@@ -55,13 +54,7 @@ class AudioRecorder:
             print("End Recording")
             self.do_record = False
 
-    def _fill_audio_buffer(
-            self,
-            frames,
-            in_data,
-            frame_count,
-            time_info,
-            status_flags):
+    def _fill_audio_buffer(self, frames, in_data, frame_count, time_info, status_flags):
         """Continuously collect from the audio stream, into the buffer."""
         if self.do_record:
             frames.append(in_data)
@@ -77,9 +70,8 @@ class AudioRecorder:
             frames_per_buffer=self.chunk_size,
             input=True,
             rate=self.framerate,
-            stream_callback=functools.partial(
-                self._fill_audio_buffer,
-                frames))
+            stream_callback=functools.partial(self._fill_audio_buffer, frames),
+        )
 
         while audio_stream.is_active():
             pass

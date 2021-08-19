@@ -2,7 +2,7 @@
 """Showcase the usage of pandas.Series.cumsum()"""
 import pandas as pd
 
-df = pd.DataFrame({"a":[1,2,1,3]})
+df = pd.DataFrame({"a": [1, 2, 1, 3]})
 print("Dataframe:")
 print(df)
 

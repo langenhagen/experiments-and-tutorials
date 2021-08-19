@@ -16,4 +16,4 @@ df = ticker_data.history(period="1d", start="2010-1-1", end="2052-1-25")
 
 # see your data
 rate_converter = forex_python.converter.CurrencyRates()
-print(df * rate_converter.get_rate("USD","EUR", dt.datetime(2021,2,12)))
+print(df * rate_converter.get_rate("USD", "EUR", dt.datetime(2021, 2, 12)))

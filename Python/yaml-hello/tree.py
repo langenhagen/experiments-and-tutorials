@@ -11,6 +11,7 @@ from typing import Callable, Iterable, List, Type
 @dataclasses.dataclass
 class Node:
     """A simple Node in an n-ary tree or directed graph."""
+
     children: List["Node"] = dataclasses.field(default_factory=list)
 
 
@@ -52,9 +53,7 @@ def yield_leaves(root: Node) -> Iterable[Node]:
 
 
 def get_paths_to_leaves(
-        root: Node,
-        path: List[Node] = [],
-        paths: List[List[Node]] = []
+    root: Node, path: List[Node] = [], paths: List[List[Node]] = []
 ) -> List[List[Node]]:
     """Get the paths to all leaves in a given tree."""
     path.append(root)

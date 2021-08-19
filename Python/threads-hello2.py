@@ -6,8 +6,10 @@ import logging
 import threading
 import time
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='[%(threadName)-12s] %(message)s',)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(threadName)-12s] %(message)s",
+)
 
 
 def wait_for_event(event):
@@ -31,16 +33,12 @@ def wait_for_event_timeout(event, timeout):
 
 if __name__ == "__main__":
     event = threading.Event()
-    t1 = threading.Thread(
-        name="blocking",
-        target=wait_for_event,
-        args=(event,))
+    t1 = threading.Thread(name="blocking", target=wait_for_event, args=(event,))
     t1.start()
 
     t2 = threading.Thread(
-        name="non-blocking",
-        target=wait_for_event_timeout,
-        args=(event, 1))
+        name="non-blocking", target=wait_for_event_timeout, args=(event, 1)
+    )
     t2.start()
 
     logging.debug("Waiting before calling Event.set()")

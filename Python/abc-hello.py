@@ -3,15 +3,17 @@ import abc
 
 # @abc.abstractstaticmethod is deprecated
 
-class C(abc.ABC):
 
+class C(abc.ABC):
     @staticmethod
     @abc.abstractmethod
     def foo():
         print("hello")
 
+
 class D(C):
     pass
+
 
 class E(D):
     @staticmethod
@@ -25,5 +27,5 @@ C.foo()  # prints hello
 # d=D()  # fails: TypeError: Can't instantiate abstract class D with abstract methods foo
 D.foo()  # prints hello
 
-e=E()    # works
+e = E()  # works
 E.foo()  # prints world

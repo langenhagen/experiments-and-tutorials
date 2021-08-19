@@ -22,7 +22,8 @@ stream = audio_interface.open(
     CHANNELS=CHANNELS,
     rate=FRAMERATE,
     frames_per_buffer=CHUNK_SIZE,
-    input=True)
+    input=True,
+)
 
 # read and store store data in chunks for 3 seconds
 frames = []  # Initialize array to store frames

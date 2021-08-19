@@ -46,7 +46,7 @@ def elide_middle(text: str, max_n_chars: int) -> str:
     if len(text) <= max_n_chars:
         return text
     if max_n_chars <= 3:
-        return '.' * max_n_chars
+        return "." * max_n_chars
 
     n_first_chars = max_n_chars // 2 - 2
     n_last_chars = max_n_chars - n_first_chars - 3
@@ -58,7 +58,7 @@ def elide_end(text: str, max_n_chars: int) -> str:
     if len(text) <= max_n_chars:
         return text
     if max_n_chars <= 3:
-        return '.' * max_n_chars
+        return "." * max_n_chars
 
     n_first_chars = max_n_chars - 3
     return f"{text[:n_first_chars]}..."
@@ -66,6 +66,7 @@ def elide_end(text: str, max_n_chars: int) -> str:
 
 def prompt_screen_too_small(screen):
     """Prompt that the screen is too small and ask for action."""
+
     def show_message(screen):
         screen.clear()
         screen.insstr(
@@ -73,13 +74,14 @@ def prompt_screen_too_small(screen):
             0,
             "Warning: terminal too small,\n"
             " please either resize your terminal,\n"
-            " press i to ignore, or press q to quit."
+            " press i to ignore, or press q to quit.",
         )
+
     show_message(screen)
     char = None
-    while not (char == ord('i') or char == ord('q')):
+    while not (char == ord("i") or char == ord("q")):
         char = screen.getch()
         if char == curses.KEY_RESIZE:
             show_message(screen)
     screen.clear()
-    return True if char == ord('i') else False
+    return True if char == ord("i") else False

@@ -15,7 +15,7 @@ print(f"search_results: {search_results}")
 print(f"find_results: {find_results}")
 print(f"split: {split}")
 
-recombined = [None]*(len(split)+len(find_results))
+recombined = [None] * (len(split) + len(find_results))
 recombined[::2] = split
 recombined[1::2] = find_results
 print(f"recombined: {recombined}")
@@ -33,7 +33,7 @@ print(f"search_results: {search_results}")
 print(f"find_results: {find_results}")
 print(f"split: {split}")
 
-recombined = [None]*(len(split)+len(find_results))
+recombined = [None] * (len(split) + len(find_results))
 recombined[::2] = split
 recombined[1::2] = find_results
 print(f"recombined: {recombined}")
@@ -49,7 +49,7 @@ print(f"search_results: {search_results}")
 print(f"find_results: {find_results}")
 print(f"split: {split}")
 
-recombined = [None]*(len(split)+len(find_results))
+recombined = [None] * (len(split) + len(find_results))
 recombined[::2] = split
 recombined[1::2] = find_results
 print(f"recombined: {recombined}")

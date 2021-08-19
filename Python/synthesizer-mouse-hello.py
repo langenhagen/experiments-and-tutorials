@@ -9,9 +9,8 @@ import synthesizer
 player = synthesizer.Player(rate=44100)
 player.open_stream()
 synth = synthesizer.Synthesizer(
-    osc1_waveform=synthesizer.Waveform.sine,
-    osc1_volume=1.0,
-    use_osc2=False)
+    osc1_waveform=synthesizer.Waveform.sine, osc1_volume=1.0, use_osc2=False
+)
 
 
 def on_move(x, y):
@@ -34,7 +33,6 @@ def on_scroll(x, y, dx, dy):
 
 
 with pynput.mouse.Listener(
-        on_move=on_move,
-        on_click=on_click,
-        on_scroll=on_scroll) as listener:
+    on_move=on_move, on_click=on_click, on_scroll=on_scroll
+) as listener:
     listener.join()

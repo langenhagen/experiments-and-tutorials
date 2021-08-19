@@ -10,11 +10,7 @@ os.chdir("../../scripts")
 #             for some weird reason, this has to be set when using
 #             command line options
 # stdout=subprocess.PIPE: capture the output for later usage
-result = subprocess.run(
-    "git log --oneline",
-    shell=True,
-    stdout=subprocess.PIPE
-)
+result = subprocess.run("git log --oneline", shell=True, stdout=subprocess.PIPE)
 
 print(f"Return code: {result.returncode}")
 # apparently, the output is utf-8 encoded, so, decode it prior to reading

@@ -6,16 +6,18 @@ https://stackoverflow.com/questions/990422/how-to-get-a-reference-to-current-mod
 """
 import sys
 
-print('---')
-print('Function/Method names')
+print("---")
+print("Function/Method names")
+
+
 class C:
-    def get_name_of_function(self, frame_nr = 0):
+    def get_name_of_function(self, frame_nr=0):
         frame = sys._getframe(frame_nr)
         function_name = frame.f_code.co_name
         return function_name
 
 
-def bar(frame_nr = 0):
+def bar(frame_nr=0):
     c = C()
     return c.get_name_of_function(frame_nr)
 
@@ -34,10 +36,12 @@ c = C()
 method_ref = c.__getattribute__(function_name)
 print(method_ref)
 
-def get_frame(frame_nr = 0):
+
+def get_frame(frame_nr=0):
     i = 42
     j = 12.3
     frame = sys._getframe(frame_nr)
     return frame
+
 
 get_frame()

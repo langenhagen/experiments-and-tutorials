@@ -31,12 +31,12 @@ def foo(s: str, i=0):
 
 class SomeClass:
     """Show that the mechanism can also find methods."""
+
     def bar(self):
         return 3.14
 
     def zaz():
         return "static"
-
 
     def foo(self, s: str, i=0):
         print(f"Method: {s} : {i}")
@@ -51,8 +51,7 @@ def load_module(path: pathlib.Path) -> types.ModuleType:
     except (AttributeError, SyntaxError):
         log.exception(f'Failed to load the given module from "{path}"')
     except BaseException:
-        log.exception(
-            f'Unexpected error while loading the given module from "{path}"')
+        log.exception(f'Unexpected error while loading the given module from "{path}"')
     return module
 
 
@@ -66,9 +65,9 @@ def check_for_docstrings(n_function_lines_threshold, symbol):
         obj = member[1]
         # print(f"---{name}  {inspect.isbuiltin(obj)}---")
         try:
-            if(inspect.isclass(obj) and name != "__class__"):
+            if inspect.isclass(obj) and name != "__class__":
                 check_for_docstrings(n_function_lines_threshold, obj)
-            elif(inspect.isfunction(obj)):
+            elif inspect.isfunction(obj):
                 src = inspect.getsource(obj)
                 sig = inspect.signature(obj)
                 lineno = inspect.getsourcelines(obj)[-1]
@@ -79,6 +78,7 @@ def check_for_docstrings(n_function_lines_threshold, symbol):
                 check_for_docstrings(n_function_lines_threshold, obj)
         except OSError:
             print(f"ERROR {name}")
+
 
 if __name__ == "__main__":
     n_lines = sys.argv[1]

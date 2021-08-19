@@ -41,7 +41,7 @@ class CursesApp:
             self.screen,
             self.screen_rows // 2,
             (self.screen_cols - len(message)) // 2,
-            message
+            message,
         )
 
     def read_screen_size(self):
@@ -66,7 +66,7 @@ class CursesApp:
 
     def handle_key_event(self, key):
         """Handle key events. Override this method."""
-        if key == ord('q'):
+        if key == ord("q"):
             self.keep_running = False
 
     def redraw(self):

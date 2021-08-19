@@ -15,9 +15,9 @@ import sys
 
 
 def trace_exceptions(frame, event, arg):
-    if not 'exception-hello2.py' in frame.f_code.co_filename:
+    if not "exception-hello2.py" in frame.f_code.co_filename:
         return trace_exceptions  # return itself to keep tracing
-    if event != 'exception':
+    if event != "exception":
         return trace_exceptions
 
     co = frame.f_code
@@ -25,17 +25,22 @@ def trace_exceptions(frame, event, arg):
     line_no = frame.f_lineno
     filename = co.co_filename
     exc_type, exc_value, exc_traceback = arg
-    print('!!! Trace: {} "{}" on line {} of function {}() in file {}'
-        .format(exc_type.__name__, exc_value, line_no, func_name, filename))
+    print(
+        '!!! Trace: {} "{}" on line {} of function {}() in file {}'.format(
+            exc_type.__name__, exc_value, line_no, func_name, filename
+        )
+    )
     # print('  sys.exc_info={}'.format(sys.exc_info()))  # would be (None, None, None)
     return
 
 
 def c():
-    raise RuntimeError('generating exception in c()')
+    raise RuntimeError("generating exception in c()")
+
 
 def b():
     c()
+
 
 def a():
     b()
@@ -43,21 +48,21 @@ def a():
 
 sys.settrace(trace_exceptions)
 
-print('---')
+print("---")
 try:
     a()
 except Exception as e:
-    print(':: Handler:', e)
-    print('   Fix w/ except')
+    print(":: Handler:", e)
+    print("   Fix w/ except")
     print(sys.exc_info())
 
-print('---')
+print("---")
 try:
     a()
 except Exception as e:
-    print(':: Handler:', e)
-    print('   Fix w/ except')
-    print('  ', sys.exc_info())
+    print(":: Handler:", e)
+    print("   Fix w/ except")
+    print("  ", sys.exc_info())
 
-print('---')
+print("---")
 a()

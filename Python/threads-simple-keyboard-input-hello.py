@@ -20,10 +20,7 @@ if __name__ == "__main__":
     input()
 
     event = threading.Event()
-    t1 = threading.Thread(
-        name="blocking",
-        target=wait_for_event,
-        args=(event,))
+    t1 = threading.Thread(name="blocking", target=wait_for_event, args=(event,))
     t1.start()
 
     print("Wait for key press ENTER to end...")

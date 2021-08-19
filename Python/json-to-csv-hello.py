@@ -12,16 +12,8 @@ import pandas
 print("--- 1 flat json to csv")
 
 json_data = [
-    {
-        "name": "Andreas",
-        "age": 32,
-        "timestamp": 1234
-    },
-    {
-        "name": "Jimbo",
-        "color": "red",
-        "timestamp": 890
-    }
+    {"name": "Andreas", "age": 32, "timestamp": 1234},
+    {"name": "Jimbo", "color": "red", "timestamp": 890},
 ]
 
 df1 = pandas.read_json(json.dumps(json_data))
@@ -48,21 +40,15 @@ print("--- 3 nested json to csv ---")
 json_data = [
     {
         "age": 32,
-        "fields": {
-            "codename": "barn",
-            "number": 42
-        },
+        "fields": {"codename": "barn", "number": 42},
         "name": "Andreas",
-        "timestamp": 1234
+        "timestamp": 1234,
     },
     {
-        "fields": {
-            "codename": "rrred",
-            "hex": "0xff0000"
-        },
+        "fields": {"codename": "rrred", "hex": "0xff0000"},
         "timestamp": 23,
-        "xcolor": "red"
-    }
+        "xcolor": "red",
+    },
 ]
 
 df = pandas.io.json.json_normalize(json_data)

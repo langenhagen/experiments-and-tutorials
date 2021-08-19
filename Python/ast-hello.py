@@ -14,8 +14,10 @@ def foo():
 
 def bar():
     """"""
+
     def inner_fun():
         pass
+
     inner_fun()
 
 
@@ -27,8 +29,9 @@ class MyTestClass:
 @dataclass
 class MyDataClass:
     """Just for testing something rather complex."""
+
     i: int
-    s: str = 'default string'
+    s: str = "default string"
 
 
 # ------------------------------------------------------------------------------

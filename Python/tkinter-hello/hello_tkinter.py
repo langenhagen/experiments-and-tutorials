@@ -12,10 +12,7 @@ class Rectangle:
     def _lazy_init_class_vars():
         if Rectangle.font:
             return
-        Rectangle.font = tkinter.font.Font(
-            family="FreeMono",
-            size=12
-        )
+        Rectangle.font = tkinter.font.Font(family="FreeMono", size=12)
 
     def __init__(self, canvas, fill_color):
         Rectangle._lazy_init_class_vars()
@@ -29,18 +26,18 @@ class Rectangle:
 
         w = random.randint(50, max_x // 2)
         h = random.randint(50, max_y // 2)
-        x = random.randint(0, max_x-w)
-        y = random.randint(0, max_y-h)
+        x = random.randint(0, max_x - w)
+        y = random.randint(0, max_y - h)
 
-
-        self.tk_rect_id = canvas.create_rectangle(x, y, x+w, y+h, fill=fill_color)
+        self.tk_rect_id = canvas.create_rectangle(x, y, x + w, y + h, fill=fill_color)
         self.tk_text_id = canvas.create_text(
-            x+2,
-            y+2,
+            x + 2,
+            y + 2,
             anchor="nw",
             fill="#000000",
             font=Rectangle.font,
-            text=f"ID: {self.tk_rect_id}")
+            text=f"ID: {self.tk_rect_id}",
+        )
 
     def as_set(self):
         return {self.tk_rect_id, self.tk_text_id}
@@ -74,7 +71,8 @@ class Application:
             raise ValueError(
                 f"clicked_widget_id={clicked_widget_id}\n"
                 f"Red Rectangle={self.red_rectangle}\n"
-                f"Yellow Rectangle={self.yellow_rectangle}")
+                f"Yellow Rectangle={self.yellow_rectangle}"
+            )
 
         self.redraw_canvas()
 

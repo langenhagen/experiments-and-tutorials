@@ -13,5 +13,6 @@ class C:
 class D(C):
     pass
 
+
 c = C()  # calls the print
 d = D()  # also calls the print

@@ -21,6 +21,7 @@ def bar(i):
     traceback.print_stack()
     print("Normal traceback END")
 
+
 foo()
 
 

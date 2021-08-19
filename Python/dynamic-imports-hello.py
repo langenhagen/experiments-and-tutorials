@@ -3,8 +3,8 @@
 import importlib
 import sys
 
-print(f'len(sys.argv) = {len(sys.argv)}')
-print(f'sys.argv = {sys.argv}')
+print(f"len(sys.argv) = {len(sys.argv)}")
+print(f"sys.argv = {sys.argv}")
 
 module_path = sys.argv[1]
 print(f"Given Module path: {module_path}")

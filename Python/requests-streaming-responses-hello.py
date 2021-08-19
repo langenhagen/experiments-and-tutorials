@@ -14,5 +14,5 @@ response = requests.get(url, stream=True)
 for line in response.iter_lines():
     # ignore possible keep-alive newlines
     if line:
-        decoded_line = line.decode('utf-8')
+        decoded_line = line.decode("utf-8")
         print(f"Nice, innit?: {json.loads(decoded_line)}")

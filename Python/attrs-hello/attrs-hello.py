@@ -10,8 +10,10 @@ import attr
 @attr.s()
 class MyAttrClass:
     """Similar to dataclass but with extra features."""
+
     my_field = attr.ib()
     my_other_field = attr.ib(default=None)
+
 
 print("--- 1 simple usage ---")
 o = MyAttrClass(42, "answer to wh0t")

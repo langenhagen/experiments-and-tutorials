@@ -11,5 +11,6 @@ def print_platform_info():
     print "platform.system():    " + platform.system()
     print "platform.processor(): " + platform.processor()
 
+
 if __name__ == "__main__":
     print_platform_info()

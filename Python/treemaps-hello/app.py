@@ -16,13 +16,14 @@ class Item:
     id: int
     value: float
 
+
 area = treemap.Rectangle(100, 100, 500, 500)
-items = [ Item(x, random.randint(1,100)) for x in range(10) ]
+items = [Item(x, random.randint(1, 100)) for x in range(10)]
 items.sort(key=lambda i: i.value, reverse=True)
-values = [ i.value for i in items ]
-sizes = treemap.get_normalized_sizes(values, area.w*area.h)
+values = [i.value for i in items]
+sizes = treemap.get_normalized_sizes(values, area.w * area.h)
 layout = treemap.generate_treemap_layout(sizes, area)
-items_and_layouts = list(zip(items,layout))
+items_and_layouts = list(zip(items, layout))
 
 print(values)
 
@@ -40,10 +41,7 @@ class Rectangle:
     def _lazy_init_class_vars():
         if Rectangle.font:
             return
-        Rectangle.font = tkinter.font.Font(
-            family="FreeMono",
-            size=12
-        )
+        Rectangle.font = tkinter.font.Font(family="FreeMono", size=12)
 
     def __init__(self, item, canvas, text, treemap_rect, fill_color):
         Rectangle._lazy_init_class_vars()
@@ -51,17 +49,17 @@ class Rectangle:
         self.tk_rect_id = canvas.create_rectangle(
             treemap_rect.x,
             treemap_rect.y,
-            treemap_rect.x+treemap_rect.w,
-            treemap_rect.y+treemap_rect.h,
-            fill=fill_color
+            treemap_rect.x + treemap_rect.w,
+            treemap_rect.y + treemap_rect.h,
+            fill=fill_color,
         )
         self.tk_text_id = canvas.create_text(
-            treemap_rect.x+2,
-            treemap_rect.y+2,
+            treemap_rect.x + 2,
+            treemap_rect.y + 2,
             anchor="nw",
             fill="#000000",
             font=Rectangle.font,
-            text=text
+            text=text,
         )
 
     def tk_ids(self):
@@ -76,20 +74,13 @@ class Application:
         self.canvas.delete("all")
         self.rectangles = []
         for i in items_and_layouts:
-            blue = "0x{:02x}".format(int((100-i[0].value)/100*255))[2:]
-            red = "0x{:02x}".format(int(i[0].value/100*255))[2:]
+            blue = "0x{:02x}".format(int((100 - i[0].value) / 100 * 255))[2:]
+            red = "0x{:02x}".format(int(i[0].value / 100 * 255))[2:]
             color = f"#{red}00{blue}"
 
-            r =Rectangle(
-                i[0],
-                self.canvas,
-                f"<TEXT>",
-                i[1],
-                color
-            )
+            r = Rectangle(i[0], self.canvas, f"<TEXT>", i[1], color)
             self.canvas.itemconfig(
-                r.tk_text_id,
-                text=f"ID: {i[0].id}\ntk IDs: {r.tk_ids()}"
+                r.tk_text_id, text=f"ID: {i[0].id}\ntk IDs: {r.tk_ids()}"
             )
 
             self.rectangles.append(r)
@@ -99,7 +90,6 @@ class Application:
         for r in self.rectangles:
             if clicked_widget_id in r.tk_ids():
                 print(r.item.id)
-
 
     def on_right_click(self, event):
         print(f"You right clicked the canvas with args: {event}")

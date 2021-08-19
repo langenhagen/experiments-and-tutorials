@@ -21,7 +21,7 @@ audio_string = fluidsynth.raw_audio_string(samples)
 
 def pyaudio_callback(in_data, frame_count, time_info, status):
     global audio_string
-    slice_size = 128*2*16
+    slice_size = 128 * 2 * 16
     next_slice = audio_string[:slice_size]
     audio_string = audio_string[slice_size:]
     if len(next_slice) < slice_size:
@@ -36,7 +36,8 @@ strm = audio.open(
     channels=2,
     rate=44100,
     output=True,
-    stream_callback=pyaudio_callback)
+    stream_callback=pyaudio_callback,
+)
 strm.start_stream()
 
 
@@ -53,7 +54,7 @@ def on_press(key):
 
     synth.noteon(0, note, 100)
 
-    synth_samples = numpy.append([], synth.get_samples(44100*1))
+    synth_samples = numpy.append([], synth.get_samples(44100 * 1))
     global audio_string
     audio_string = fluidsynth.raw_audio_string(synth_samples)
 

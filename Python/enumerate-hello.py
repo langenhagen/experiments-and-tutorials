@@ -6,8 +6,8 @@ Showcase that nested enumerate() works as expected.
 
 """
 
-l = ["a","b","c"]
-m = ["x","y","z"]
+l = ["a", "b", "c"]
+m = ["x", "y", "z"]
 
 for i, x in enumerate(l):
     for j, y in enumerate(m):

@@ -17,7 +17,7 @@ def some_free_function():
     j = 12.3
     print("Hello from some_free_function()! {} {}".format(i, j))
     print(get_function_name())
-    return 'miau'
+    return "miau"
 
 
 class C:
@@ -41,17 +41,17 @@ class E(C):
         print(get_function_name())
 
 
-print('---')
+print("---")
 some_free_function()
-print('---')
-c=C()
+print("---")
+c = C()
 c.foo()
 C.bar()
-print('---')
-d=D()
+print("---")
+d = D()
 d.foo()
 D.bar()
-print('---')
-e=E()
+print("---")
+e = E()
 e.foo()
 E.bar()

@@ -6,5 +6,6 @@ import logging
 
 log = logging.getLogger(name=__name__)  # will use the same configuration
 
-def foo(msg=''):
-    log.info('hello from the otherfile! ' + msg)
+
+def foo(msg=""):
+    log.info("hello from the otherfile! " + msg)

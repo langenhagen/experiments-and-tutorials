@@ -19,6 +19,7 @@ print("Running under Python: " + sys.version)
 
 is_running = True
 
+
 def panic_shutdown(event):
     """A panic button to shut down a running sikuli script,
     e.g. when its execution goes out of hand."""
@@ -51,7 +52,6 @@ for step in range(30):
     if not exists("1628177309638.png"):
         print("Found no stock icon. Bailing out!")
         break
-
 
     # focus the chrome address bar
     type("l", Key.CTRL)

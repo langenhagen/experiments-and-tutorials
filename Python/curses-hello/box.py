@@ -12,7 +12,6 @@ def main():
     window.box()
     window.addstr("Hey there!!")
 
-
     running = True
     while running:
         key = window.getch()
@@ -22,5 +21,6 @@ def main():
         pass
 
     curses.endwin()
+
 
 main()

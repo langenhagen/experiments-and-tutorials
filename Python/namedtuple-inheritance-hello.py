@@ -13,13 +13,13 @@ from dataclasses import dataclass
 from typing import NamedTuple, Optional
 
 
-class Event():
-
+class Event:
     @abstractmethod
     def to_json(self) -> dict:
         """
         :return:
         """
+
 
 @dataclass
 class CreateEvent(Event):
@@ -34,10 +34,11 @@ class CreateEvent(Event):
                  See also Envelope docblock comment for more details
         """
         return {
-            'transid': self.purchase_id,
-            'ssoid': self.user_id,
-            'shopid': self.store_id,
-            'resellerid': self.reseller_id,
+            "transid": self.purchase_id,
+            "ssoid": self.user_id,
+            "shopid": self.store_id,
+            "resellerid": self.reseller_id,
         }
 
-EEE = CreateEvent(purchase_id='foo')
+
+EEE = CreateEvent(purchase_id="foo")

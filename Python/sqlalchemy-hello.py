@@ -62,7 +62,9 @@ print(f"type(results) {type(results)}")
 print(results)
 
 print("\n=== 5 - compose a query via functions ===")
-ankauf_items = db.Table("ankauf_anfragen", metadata, autoload=True, autoload_with=engine)
+ankauf_items = db.Table(
+    "ankauf_anfragen", metadata, autoload=True, autoload_with=engine
+)
 query = db.select([ankauf_items]).limit(10)  # select * FROM ankauf_items LIMIT 10
 print(f"str(query): {str(query)}")
 

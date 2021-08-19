@@ -26,21 +26,21 @@ def create_lines():
 
 
 def draw_top_line(screen):
-    line = Line('nte 0.1 - Use the arrow keys to navigate, press ? for help')
-    line.draw(screen, 0, invert_color=True, fill_character=' ')
+    line = Line("nte 0.1 - Use the arrow keys to navigate, press ? for help")
+    line.draw(screen, 0, invert_color=True, fill_character=" ")
 
 
 def draw_path_line(screen, path):
     _, cols = getmaxyx(screen)
     line = Line(elide_middle(f"--- {path} ---", cols))
-    line.draw(screen, 1, invert_color=False, fill_character='-')
+    line.draw(screen, 1, invert_color=False, fill_character="-")
 
 
 def draw_bottom_line(screen, aggregated_total, n_items):
     rows, _ = getmaxyx(screen)
     footer_string = f"Total aggregated value: {aggregated_total}  Items: {n_items}"
     line = Line(footer_string)
-    line.draw(screen, rows-1, True, ' ')
+    line.draw(screen, rows - 1, True, " ")
 
 
 def draw_screen(screen, line_view):
@@ -60,8 +60,8 @@ def main(screen):
 
     draw_screen(screen, line_view)
 
-    key = ord('x')
-    while key != ord('q'):
+    key = ord("x")
+    while key != ord("q"):
         key = screen.getch()
 
         if key == curses.KEY_RESIZE:
@@ -69,7 +69,7 @@ def main(screen):
             draw_screen(screen, line_view)
 
         elif key == curses.KEY_UP:
-            line_view.cursor_pos -=  1
+            line_view.cursor_pos -= 1
 
         elif key == curses.KEY_DOWN:
             line_view.cursor_pos += 1

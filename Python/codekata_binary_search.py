@@ -3,13 +3,13 @@
 import random
 
 
-def binary_search(list, wantedNumber ):
+def binary_search(list, wantedNumber):
     """This is the function's docstring."""
 
     idx = len(list) // 2
     stepsize = idx
 
-   # handle one-element containers and straightaway hits
+    # handle one-element containers and straightaway hits
     if list[idx] == wantedNumber:
         return idx
 
@@ -40,9 +40,9 @@ random.seed()
 numbers = []
 
 for i in range(10):
-    numbers.append( random.randint(0, 9))
+    numbers.append(random.randint(0, 9))
 numbers.sort()
-print( numbers)
+print(numbers)
 
 for i in range(10):
-    print( i, binary_search( numbers, i ))
+    print(i, binary_search(numbers, i))

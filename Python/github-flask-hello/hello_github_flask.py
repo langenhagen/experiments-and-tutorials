@@ -3,12 +3,12 @@ from flask import Flask
 from flask_github import GitHub
 
 app = Flask(__name__)
-app.config['GITHUB_CLIENT_ID'] = 'langenhagen'
-app.config['GITHUB_CLIENT_SECRET'] = 'mynicepassword'
+app.config["GITHUB_CLIENT_ID"] = "langenhagen"
+app.config["GITHUB_CLIENT_SECRET"] = "mynicepassword"
 
 # For GitHub Enterprise
-app.config['GITHUB_BASE_URL'] = 'https://HOSTNAME/api/v3/'
-app.config['GITHUB_AUTH_URL'] = 'https://HOSTNAME/login/oauth/'
+app.config["GITHUB_BASE_URL"] = "https://HOSTNAME/api/v3/"
+app.config["GITHUB_AUTH_URL"] = "https://HOSTNAME/login/oauth/"
 
 github = GitHub(app)
 
@@ -17,6 +17,6 @@ github = GitHub(app)
 # app.config.from_object(__name__)
 
 
-@app.route('/login')
+@app.route("/login")
 def login():
     return github.authorize()

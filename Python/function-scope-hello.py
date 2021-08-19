@@ -13,26 +13,30 @@ See:
 https://stackoverflow.com/questions/15284552/python-recursive-function-not-initializing-default-argument-values
 """
 
+
 class O:
     def __init__(self):
         self.x = 42
 
-def foo(obj = O()):
+
+def foo(obj=O()):
     print(obj.x)
     obj.x += 1
     if obj.x < 100:
         foo()  # here, obj is passed forward without being passed in
 
-foo() # yields 42, 43, 44, ..., 99
+
+foo()  # yields 42, 43, 44, ..., 99
 
 # print(f">>> {obj.x}")  # outside the function however, obj is not visible
 
 
-def bar(obj = O()):
+def bar(obj=O()):
     print(f"-{obj.x}")  # yields -42, -43, ..., -99
     obj.x += 1
     if obj.x < 100:
         bar()  # here, obj is passed forward without being passed in
     print(f"+{obj.x}")  # yields +100, +100, ..., +100
+
 
 bar()

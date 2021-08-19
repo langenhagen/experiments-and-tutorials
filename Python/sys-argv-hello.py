@@ -7,4 +7,4 @@ def foo(some, params):
     print(sys.argv)  # finds the program's argv also from within a function
 
 
-foo(42, 'bar')
+foo(42, "bar")

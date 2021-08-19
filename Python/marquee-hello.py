@@ -28,6 +28,7 @@ A string that reads "Scanning..." is 11 characters long and has 22 variations:
 "           "
 """
 
+
 def make_marquee_generator(text: str):
     """Yield a marquee-like text effect version of the given string."""
     while True:
@@ -39,17 +40,15 @@ def make_marquee_generator(text: str):
 
 s = "Scanning..."
 
-print('---1---')
+print("---1---")
 for c in make_marquee_generator(s):
     print(c)
 
 
-print('---2---')
+print("---2---")
 gen = make_marquee_generator(s)  # creates a generator-object
-t = gen.send(None)   # a generator object is initially invoked with send(None)
+t = gen.send(None)  # a generator object is initially invoked with send(None)
 print(f"+ {t}")
 for i in range(3000000000):
-    t = gen.send(i)   # later, send() is called with an integer
+    t = gen.send(i)  # later, send() is called with an integer
     print(f"> {t}")
-
-

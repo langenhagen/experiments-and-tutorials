@@ -7,14 +7,14 @@ https://waymoot.org/home/python_string/
 """
 from StringIO import StringIO
 
-print('---1---')
+print("---1---")
 io = StringIO()
-io.write('hello')
-io.write(' dear\n')
-io.write('world!')
+io.write("hello")
+io.write(" dear\n")
+io.write("world!")
 print(io.getvalue())
 
-print('---2---')
+print("---2---")
 io = StringIO("this will be overwritten")
 print(io.getvalue())
 io.write(123456)
