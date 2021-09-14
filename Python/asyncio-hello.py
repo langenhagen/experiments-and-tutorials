@@ -41,3 +41,21 @@ async def foo():
 
 
 asyncio.run(foo())
+
+print("--- 3 async context managers ---")
+
+
+class AsyncContextManager:
+    async def __aenter__(self):
+        print("entering context")
+
+    async def __aexit__(self, exc_type, exc, tb):
+        print("exiting context")
+
+
+async def foo():
+    async with AsyncContextManager():
+        print("in the with block")
+
+
+asyncio.run(foo())
