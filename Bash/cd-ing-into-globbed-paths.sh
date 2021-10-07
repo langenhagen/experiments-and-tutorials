@@ -5,7 +5,7 @@ printf 'This showcase ,ight only work with an activated Python virtual environme
 
 python_dir="$(dirname $(command -v python3))/.."
 
-dir="${python_dir}/lib/python3*/site-packages/"
+dir="${python_dir}/lib/python3*/site-packages/"  # mind the star * in the path
 
 printf 'Variable with quotes:\n'
 echo "$dir"
