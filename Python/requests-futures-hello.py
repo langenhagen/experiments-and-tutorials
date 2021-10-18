@@ -19,7 +19,7 @@ def post():
     """Make a POST call."""
     session = FuturesSession()
     print ("Calling POST http://0.0.0.0:8000/foo ...")
-    session.post("http://0.0.0.0:8000/foo")
+    session.post("http://0.0.0.0:8000/foo")  # this endpoint takes a few seconds to respond
     print ("Finishing in `post()")
 
 
