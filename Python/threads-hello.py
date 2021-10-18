@@ -19,7 +19,7 @@ def main():
     for x in range(4):                                     # 4 times
         mythread = MyThread(name="Thread-{}".format(x + 1))  # instantiate a thread and pass a unique ID to it
         mythread.start()                                   # start the thread, invoke the run method
-        # mythread.join()
+        # mythread.join()     # that would make the threads run sequentially
         time.sleep(.9)                                     # wait 0.9 seconds before starting another thread
 
 
