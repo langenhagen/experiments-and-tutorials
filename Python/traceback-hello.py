@@ -38,9 +38,11 @@ def catch():
     except ValueError as err:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         formatted = traceback.format_tb(exc_traceback)
-        print(f"type(exc_traceback): {type(exc_traceback)}")
-        print(f"type(formatted): {type(formatted)}")
-        print(f"formatted:\n {formatted}")
+        print(f"{type(exc_type)=};  {type(exc_value)=};  {type(exc_traceback)=}\n")
+        print(f"{type(formatted)=}")
+        print(f"formatted:\n {formatted}\n")
+        print(f"{traceback.format_exc()=}\n")
+
         return exc_traceback
 
 
