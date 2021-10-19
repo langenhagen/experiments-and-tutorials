@@ -1,0 +1,44 @@
+<html>
+<script>
+    function foo(drp_id) {
+        var e = document.getElementById(drp_id);
+        var value = e.options[e.selectedIndex].text;
+        window.alert("Hallo " + value);
+    }
+</script>
+
+<body>
+    <table>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Country</th>
+            <th>Dropdown</th>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+            <td>
+                <select id="drp_1">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
+                <button type="button" onclick="foo('drp_1')">Click Me!</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Centro comercial Moctezuma</td>
+            <td>Francisco Chang</td>
+            <td>Mexico</td>
+            <td>
+                <select id="drp_2"></select>
+                <button type="button" onclick="foo('drp_2')">Click Me!</button>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
