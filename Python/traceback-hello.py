@@ -43,6 +43,8 @@ def catch():
         print(f"formatted:\n {formatted}\n")
         print(f"{traceback.format_exc()=}\n")
 
+        print(f"{traceback.format_exception(*sys.exc_info())=}\n")
+
         return exc_traceback
 
 
