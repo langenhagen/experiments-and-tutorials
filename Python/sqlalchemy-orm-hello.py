@@ -33,7 +33,7 @@ class Customer(Base):
     __tablename__ = "customers"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     address = Column(String)
     email = Column(String)
 
@@ -51,19 +51,17 @@ session.add(c)
 d = Customer(name="Andi L")
 session.add(d)
 
+# would cause an sqlalchemy.exc.IntegrityError bc unique constraint on the name
+e = Customer(name="Andi L")
+# session.add(e)
+
 session.commit()
 
 session.add_all(
     [
-        Customer(
-            name="Komal Pande", address="Koti, Hyderabad", email="komal@gmail.com"
-        ),
-        Customer(
-            name="Rajender Nath", address="Sector 40, Gurgaon", email="nath@gmail.com"
-        ),
-        Customer(
-            name="S.M.Krishna", address="Budhwar Peth, Pune", email="smk@gmail.com"
-        ),
+        Customer(name="Komal", address="Hyderabad", email="komal@gmail.com"),
+        Customer(name="Rajender Nath", address="Sector 7", email="nath@gmail.com"),
+        Customer(name="S.M.Krishna", address="Perth", email="smk@gmail.com"),
     ]
 )
 session.commit()
@@ -80,13 +78,12 @@ for row in result:
     print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
 
 # filtered query
-result = session.query(Customer).filter(Customer.name == "Komal Pande").all()
+result = session.query(Customer).filter(Customer.name == "Andi L").all()
 print(f"{result=}")
 
 for row in result:
     print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
 
 # count
-result = session.query(Customer).filter(Customer.name == "Komal Pande").count()
+result = session.query(Customer).filter(Customer.name == "Andi L").count()
 print(f"{result=}")
-
