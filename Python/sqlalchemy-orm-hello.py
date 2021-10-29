@@ -91,7 +91,11 @@ result = session.query(Customer).filter(Customer.name == "Andi L").count()
 print(f"{result=}")
 
 # combined filters
-result = session.query(Customer).filter(Customer.name != "Andi L", Customer.address == "Perth").all()
+result = (
+    session.query(Customer)
+    .filter(Customer.name != "Andi L", Customer.address == "Perth")
+    .all()
+)
 print(f"{result=}")
 for row in result:
     print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
