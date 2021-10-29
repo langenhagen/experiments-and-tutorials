@@ -57,6 +57,8 @@ e = Customer(name="Andi L")
 
 session.commit()
 
+# c.name = "Andi L"  # also violates the uniqueness error
+
 session.add_all(
     [
         Customer(name="Komal", address="Hyderabad", email="komal@gmail.com"),
