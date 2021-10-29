@@ -27,7 +27,7 @@ print("\n=== 2 have a model ===\n")
 Base = declarative_base()
 
 
-class Customers(Base):
+class Customer(Base):
     """A model class."""
 
     __tablename__ = "customers"
@@ -45,20 +45,23 @@ print("\n=== 3 adding objects ===\n")
 Session = sessionmaker(bind=engine)
 session = Session()
 
-c = Customers(name="Ravi Kumar", address="Station Road Nanded", email="ravi@gmail.com")
-
+c = Customer(name="Ravi Kumar", address="Station Road Nanded", email="ravi@gmail.com")
 session.add(c)
+
+d = Customer(name="Andi L")
+session.add(d)
+
 session.commit()
 
 session.add_all(
     [
-        Customers(
+        Customer(
             name="Komal Pande", address="Koti, Hyderabad", email="komal@gmail.com"
         ),
-        Customers(
+        Customer(
             name="Rajender Nath", address="Sector 40, Gurgaon", email="nath@gmail.com"
         ),
-        Customers(
+        Customer(
             name="S.M.Krishna", address="Budhwar Peth, Pune", email="smk@gmail.com"
         ),
     ]
@@ -70,19 +73,20 @@ print("\n=== 4 queries ===\n")
 # https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_using_query.htm
 
 # all customers
-result = session.query(Customers).all()
+result = session.query(Customer).all()
 print(f"{result=}")
 
 for row in result:
     print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
 
 # filtered query
-result = session.query(Customers).filter(Customers.name == "Komal Pande").all()
+result = session.query(Customer).filter(Customer.name == "Komal Pande").all()
 print(f"{result=}")
 
 for row in result:
     print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
 
 # count
-result = session.query(Customers).filter(Customers.name == "Komal Pande").count()
+result = session.query(Customer).filter(Customer.name == "Komal Pande").count()
 print(f"{result=}")
+
