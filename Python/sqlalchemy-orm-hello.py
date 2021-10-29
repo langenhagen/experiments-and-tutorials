@@ -45,7 +45,7 @@ print("\n=== 3 adding objects ===\n")
 Session = sessionmaker(bind=engine)
 session = Session()
 
-c = Customer(name="Ravi Kumar", address="Station Road Nanded", email="ravi@gmail.com")
+c = Customer(name="Katja", address="Cadia", email="katsche@gmail.com")
 session.add(c)
 
 d = Customer(name="Andi L", address="Perth")
@@ -61,9 +61,9 @@ session.commit()
 
 session.add_all(
     [
-        Customer(name="Komal", address="Hyderabad", email="komal@gmail.com"),
-        Customer(name="Rajender Nath", address="Sector 7", email="nath@gmail.com"),
-        Customer(name="S.M.Krishna", address="Perth", email="smk@gmail.com"),
+        Customer(name="Toni", address="Hyderabad", email="Toni@gmail.com"),
+        Customer(name="Olaf", address="Sector 7", email="olli@gmail.com"),
+        Customer(name="Martha", address="Perth", email="m.artha@gmail.com"),
     ]
 )
 session.commit()
