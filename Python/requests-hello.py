@@ -12,7 +12,7 @@ print(r.headers)
 print(r.content)  # in bytes; use r.text for str content
 
 print("--- 2 - POSTing stuff ---")
-r = requests.post("https://httpbin.org/post", data={"key": "value"})
+r = requests.post("https://httpbin.org/post", json={"key": "value"})
 r.raise_for_status()
 
 print(f"Type: {type(r.json())}")
