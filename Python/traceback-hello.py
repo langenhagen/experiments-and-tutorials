@@ -40,8 +40,9 @@ def catch():
         formatted = traceback.format_tb(exc_traceback)
         print(f"{type(exc_type)=};  {type(exc_value)=};  {type(exc_traceback)=}\n")
         print(f"{type(formatted)=}")
-        print(f"formatted:\n {formatted}\n")
-        print(f"{traceback.format_exc()=}\n")
+        print(f"{formatted=}\n")
+        print(f"{type(traceback.format_exc())=}")
+        print(f"{traceback.format_exc()=}")
 
         print(f"{traceback.format_exception(*sys.exc_info())=}\n")
 
