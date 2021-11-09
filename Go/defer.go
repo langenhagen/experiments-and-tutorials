@@ -12,8 +12,8 @@ import "fmt"
 
 // Prints `hello` then `nice` then `world`.
 func main() {
-	defer fmt.Println("world")
-	defer fmt.Println("nice")
+	defer fmt.Println("world") // prints last
+	defer fmt.Println("nice") // prints second last
 
 	fmt.Println("hello")
 }
