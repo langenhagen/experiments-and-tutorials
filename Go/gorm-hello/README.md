@@ -15,6 +15,7 @@ go mod tidy  # create a go.sum file
 bash start-database.sh -rm
 
 # install the postgres extension `uuid-ossp` that brings the function `uuid_generate_v4()`
+export PGPASSWORD=pass
 psql -h localhost -U user -d mydb -a -c 'create extension "uuid-ossp";'
 
 go run .
