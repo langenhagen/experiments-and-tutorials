@@ -47,10 +47,10 @@ func main() {
 	showRecord(db, newID)
 }
 
-func dropTables(db *gorm.DB) {
-	db.DropTable(&Child{})
-	db.DropTable(&Parent{})
-}
+// func dropTables(db *gorm.DB) {
+// 	db.DropTable(&Child{})
+// 	db.DropTable(&Parent{})
+// }
 
 func createTables(db *gorm.DB) {
 	db.CreateTable(&Parent{})
