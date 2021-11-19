@@ -3,7 +3,6 @@
 // run via:
 //   go run variables-with-initializers.go
 
-
 package main
 
 import "fmt"
@@ -11,6 +10,6 @@ import "fmt"
 var i, j int = 1, 2
 
 func main() {
-	var c, python, java = true, false, "no!"  // works!
+	var c, python, java = true, false, "no!" // works!
 	fmt.Println(i, j, c, python, java)
 }
