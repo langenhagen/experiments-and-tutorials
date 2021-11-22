@@ -3,6 +3,8 @@
 // The deferred call's arguments are evaluated immediately, but the function call is not executed
 // until the surrounding function returns.
 //
+// `defer` doesn't work when calling `os.Exit()`, see https://gobyexample.com/exit
+//
 // taken from: https://tour.golang.org/flowcontrol/12
 //
 // author: andreasl
