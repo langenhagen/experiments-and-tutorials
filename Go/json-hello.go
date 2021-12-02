@@ -128,25 +128,25 @@ func jsonValid() {
 
 func main() {
 
-	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes --- ")
+	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
 	marshal_string_2_json_via_json_Marshal_breaks()
 
-	fmt.Println("--- 2 marshal string to json --- ")
+	fmt.Println("--- 2 marshal string to json ---")
 	b := marshal_string_2_json()
 
-	fmt.Println("\n--- 3 unmarshal json to string --- ")
+	fmt.Println("\n--- 3 unmarshal json to string ---")
 	unmarshal_json_2_string(b)
 
-	fmt.Println("\n--- 4 marshal type to json --- ")
+	fmt.Println("\n--- 4 marshal type to json ---")
 	obj := marshal_object_2_json()
 
-	fmt.Println("\n--- 5 unmarshal json to type --- ")
+	fmt.Println("\n--- 5 unmarshal json to type ---")
 	unmarshal_json_2_object(obj)
 
-	fmt.Println("\n--- 6 marshal nested type to json --- ")
+	fmt.Println("\n--- 6 marshal nested type to json ---")
 	nested := marshal_nested_type_2_json()
 
-	fmt.Println("\n--- 7 unmarshal json to nested type --- ")
+	fmt.Println("\n--- 7 unmarshal json to nested type ---")
 	unmarshal_nested_json_2_object(nested)
 
 	fmt.Println("\n--- 8 json.Valid")
