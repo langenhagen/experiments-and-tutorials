@@ -7,20 +7,25 @@ package main
 
 import "fmt"
 
-// defining function has integer pointer as return type
+// returnPointer returns an integer pointer.
 func returnPointer() *int {
+	myLocalVar := 69 // local var on the heap
 
-	// local var on the heap
-	myLocalVar := 69
-
-	// returning a reference to a local variable is OK.
+	// returning a reference to a local variable is OK. Golang uses garbage collection
 	return &myLocalVar
 }
 
+// returnPointer returns a Nil integer pointer.
+func returnNil() *int {
+	return nil
+}
+
 func main() {
+	fmt.Println("\n--- 1 functions can return local vars as pointers ---")
+	i := returnPointer()
+	fmt.Printf("i = %d\n", *i)
 
-	fmt.Println("--- 1 functions can return local vars as pointers ---")
-	n := returnPointer()
-
-	fmt.Println("Value of n is: ", *n)
+	fmt.Println("\n--- 2 functions can return nil ---")
+	j := returnNil()
+	fmt.Printf("j = %#v\n", j)
 }
