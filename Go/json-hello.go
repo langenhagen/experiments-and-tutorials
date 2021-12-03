@@ -137,7 +137,7 @@ func marshalObjectWithOmittableFieldToJSON() []byte {
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("simple json: %s\n", j)
+	fmt.Printf("json: %s\n", j)
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
 	return j
 }
