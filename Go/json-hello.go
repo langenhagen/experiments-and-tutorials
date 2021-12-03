@@ -16,7 +16,8 @@ import (
 )
 
 type helloType struct {
-	Hello string `json:"hello"`
+	Hello    string `json:"hello"` // `Hello` in the struct translates to `hello` in JSON
+	Verbatim string // `Verbatim` in the struct translates to `Verbatim` in JSON
 }
 
 type nestedType struct {
@@ -52,19 +53,17 @@ func marshal_string_2_json() []byte {
 	return b
 }
 
-func unmarshal_json_2_string(b []byte) helloType {
+func unmarshal_json_2_string(b []byte) {
 	var obj helloType
 	e := json.Unmarshal(b, &obj) // just pass in a the simple bytes-array as input
 	if e != nil {
 		panic(e)
 	}
 	fmt.Printf("unmarshalled json: %+v\n", obj)
-
-	return obj
 }
 
 func marshal_object_2_json() []byte {
-	obj := helloType{Hello: "World"}
+	obj := helloType{Hello: "World", Verbatim: "moo"}
 	fmt.Printf("object: %+v\n", obj)
 	j, e := json.Marshal(obj)
 	if e != nil {
@@ -126,6 +125,32 @@ func jsonValid() {
 	fmt.Printf("json.Valid() on %s: %t\n", b, json.Valid(b))
 }
 
+type typeWithOmittables struct {
+	// `OmittableField` translates to `field`; marshalling to JSON will omit the field if its empty
+	OmittableField int `json:"field,omitempty"`
+}
+
+func marshal_object_with_omittable_field_2_json() []byte {
+	obj := typeWithOmittables{} // omits field
+	fmt.Printf("object: %+v\n", obj)
+	j, e := json.Marshal(obj)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("simple json: %s\n", j)
+	fmt.Printf("json is valid: %t\n", json.Valid(j))
+	return j
+}
+
+func unmarshal_json_2_object_with_omittable_field(b []byte) {
+	var obj typeWithOmittables
+	e := json.Unmarshal(b, &obj)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("unmarshalled object: %+v\n", obj)
+}
+
 func main() {
 
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
@@ -151,6 +176,12 @@ func main() {
 
 	fmt.Println("\n--- 8 json.Valid")
 	jsonValid()
+
+	fmt.Println("\n--- 9 marshal type with omittable field to json ---")
+	withOmittable := marshal_object_with_omittable_field_2_json()
+
+	fmt.Println("\n--- 10 unmarshal json to type with omittable field ---")
+	unmarshal_json_2_object_with_omittable_field(withOmittable)
 
 	fmt.Println("\nEnd.")
 }
