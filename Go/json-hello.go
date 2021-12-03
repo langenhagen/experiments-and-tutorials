@@ -25,7 +25,7 @@ type nestedType struct {
 	Simple helloType `json:"nested"`
 }
 
-func marshal_string_2_json_via_json_Marshal_breaks() {
+func marshalStringToJSONViaJSONMarshalBreaks() {
 	// Marshalling strings to json via the function json.Marshal that you use on objects doesn't
 	// work since it causes issues with escaped double quotes
 	// still, json.Valid() is `true`.
@@ -40,7 +40,7 @@ func marshal_string_2_json_via_json_Marshal_breaks() {
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
 }
 
-func marshal_string_2_json() []byte {
+func marshalStringToJSON() []byte {
 	s := `{"hello":"world"}`
 	fmt.Printf("string: %s\n", s)
 	b := []byte(s) // necessary for strings to convert to []byte; json.Marshal() doesn't work on strings
@@ -53,7 +53,7 @@ func marshal_string_2_json() []byte {
 	return b
 }
 
-func unmarshal_json_2_string(b []byte) {
+func unmarshalJSONToString(b []byte) {
 	var obj helloType
 	e := json.Unmarshal(b, &obj) // just pass in a the simple bytes-array as input
 	if e != nil {
@@ -62,7 +62,7 @@ func unmarshal_json_2_string(b []byte) {
 	fmt.Printf("unmarshalled json: %+v\n", obj)
 }
 
-func marshal_object_2_json() []byte {
+func marshalObjectToJSON() []byte {
 	obj := helloType{Hello: "World", Verbatim: "moo"}
 	fmt.Printf("object: %+v\n", obj)
 	j, e := json.Marshal(obj)
@@ -74,7 +74,7 @@ func marshal_object_2_json() []byte {
 	return j
 }
 
-func unmarshal_json_2_object(b []byte) {
+func unmarshalJSONToObject(b []byte) {
 	var obj helloType
 	e := json.Unmarshal(b, &obj)
 	if e != nil {
@@ -83,7 +83,7 @@ func unmarshal_json_2_object(b []byte) {
 	fmt.Printf("unmarshalled object: %+v\n", obj)
 }
 
-func marshal_nested_type_2_json() []byte {
+func marshalNestedTypeToJSON() []byte {
 	obj := nestedType{Id: 23, Simple: helloType{Hello: "World"}}
 	fmt.Printf("nested object: %+v\n", obj)
 
@@ -97,7 +97,7 @@ func marshal_nested_type_2_json() []byte {
 	return j
 }
 
-func unmarshal_nested_json_2_object(b []byte) {
+func unmarshalNestedJSONToObject(b []byte) {
 	var nested nestedType
 	e := json.Unmarshal(b, &nested)
 	if e != nil {
@@ -130,7 +130,7 @@ type typeWithOmittables struct {
 	OmittableField int `json:"field,omitempty"`
 }
 
-func marshal_object_with_omittable_field_2_json() []byte {
+func marshalObjectWithOmittableFieldToJSON() []byte {
 	obj := typeWithOmittables{} // omits field
 	fmt.Printf("object: %+v\n", obj)
 	j, e := json.Marshal(obj)
@@ -142,7 +142,7 @@ func marshal_object_with_omittable_field_2_json() []byte {
 	return j
 }
 
-func unmarshal_json_2_object_with_omittable_field(b []byte) {
+func unmarshalJSONToObjectWithOmittableField(b []byte) {
 	var obj typeWithOmittables
 	e := json.Unmarshal(b, &obj)
 	if e != nil {
@@ -154,34 +154,34 @@ func unmarshal_json_2_object_with_omittable_field(b []byte) {
 func main() {
 
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
-	marshal_string_2_json_via_json_Marshal_breaks()
+	marshalStringToJSONViaJSONMarshalBreaks()
 
 	fmt.Println("--- 2 marshal string to json ---")
-	b := marshal_string_2_json()
+	b := marshalStringToJSON()
 
 	fmt.Println("\n--- 3 unmarshal json to string ---")
-	unmarshal_json_2_string(b)
+	unmarshalJSONToString(b)
 
 	fmt.Println("\n--- 4 marshal type to json ---")
-	obj := marshal_object_2_json()
+	obj := marshalObjectToJSON()
 
 	fmt.Println("\n--- 5 unmarshal json to type ---")
-	unmarshal_json_2_object(obj)
+	unmarshalJSONToObject(obj)
 
 	fmt.Println("\n--- 6 marshal nested type to json ---")
-	nested := marshal_nested_type_2_json()
+	nested := marshalNestedTypeToJSON()
 
 	fmt.Println("\n--- 7 unmarshal json to nested type ---")
-	unmarshal_nested_json_2_object(nested)
+	unmarshalNestedJSONToObject(nested)
 
 	fmt.Println("\n--- 8 json.Valid")
 	jsonValid()
 
 	fmt.Println("\n--- 9 marshal type with omittable field to json ---")
-	withOmittable := marshal_object_with_omittable_field_2_json()
+	withOmittable := marshalObjectWithOmittableFieldToJSON()
 
 	fmt.Println("\n--- 10 unmarshal json to type with omittable field ---")
-	unmarshal_json_2_object_with_omittable_field(withOmittable)
+	unmarshalJSONToObjectWithOmittableField(withOmittable)
 
 	fmt.Println("\nEnd.")
 }
