@@ -1,4 +1,4 @@
-module gin-hello
+module simple-gin-hello
 
 go 1.17
 

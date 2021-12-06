@@ -1,5 +1,10 @@
 // Gin-hello showcases the usage of the web framework `gin`.
 // See: https://github.com/gin-gonic/gin#quick-start
+//
+// ping the endpoint e.g. via:
+//
+//   curl 'localhost:8080/ping'
+//
 package main
 
 import "github.com/gin-gonic/gin"
