@@ -25,6 +25,13 @@ type nestedType struct {
 	Simple helloType `json:"nested"`
 }
 
+type complexType struct {
+	Id      int        `json:"id"`
+	Num     bool       `json:"bool"`
+	Simple  helloType  `json:"nested"`
+	Pointer *helloType `json:"pointer"`
+}
+
 func marshalStringToJSONViaJSONMarshalBreaks() {
 	// Marshalling strings to json via the function json.Marshal that you use on objects doesn't
 	// work since it causes issues with escaped double quotes
@@ -151,6 +158,18 @@ func unmarshalJSONToObjectWithOmittableField(b []byte) {
 	fmt.Printf("unmarshalled object: %+v\n", obj)
 }
 
+func unmarshalEmptyJSONToObject() {
+	s := `{}`
+	b := []byte(s)
+	fmt.Printf("bytes message: %+v\n", b)
+	var nested complexType
+	e := json.Unmarshal(b, &nested)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("unmarshalled nested object: %+v\n", nested)
+}
+
 func main() {
 
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
@@ -182,6 +201,9 @@ func main() {
 
 	fmt.Println("\n--- 10 unmarshal json to type with omittable field ---")
 	unmarshalJSONToObjectWithOmittableField(withOmittable)
+
+	fmt.Println("\n--- 11 unmarshal empty json to a complex type ---")
+	unmarshalEmptyJSONToObject()
 
 	fmt.Println("\nEnd.")
 }
