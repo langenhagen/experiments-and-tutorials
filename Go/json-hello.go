@@ -181,7 +181,7 @@ func arrays() {
 	fmt.Printf("unmarshalled object: %+v\n", res)
 }
 
-// Showcase how to unmarshal JSON data whose context you don't know at compile time.
+// Show how to marshal maps and unmarshal JSON data whose context you don't know at compile time.
 func unstructuredData() {
 
 	// The keys need to be strings, the values can be any serializable value
