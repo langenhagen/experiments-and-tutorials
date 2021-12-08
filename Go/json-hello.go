@@ -1,8 +1,10 @@
 // Showcase how to construct and work with nested json objects.
 // In colang, json is of type `[]byte`.
 //
-// json.Marshal escapes string while serializing it.
-// See also: https://goinbigdata.com/how-to-correctly-serialize-json-string-in-golang/
+// json.Marshal escapes strings while serializing it.
+// See: https://goinbigdata.com/how-to-correctly-serialize-json-string-in-golang/
+//
+// See also: https://www.sohamkamani.com/golang/json/
 //
 // run via:
 //
@@ -47,7 +49,7 @@ func marshalStringToJSONViaJSONMarshalBreaks() {
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
 }
 
-func marshalStringToJSON() []byte {
+func stringAndJSON() {
 	s := `{"hello":"world"}`
 	fmt.Printf("string: %s\n", s)
 	b := []byte(s) // necessary for strings to convert to []byte; json.Marshal() doesn't work on strings
@@ -57,40 +59,33 @@ func marshalStringToJSON() []byte {
 	// b, e := r.MarshalJSON()
 	fmt.Printf("json is valid: %t\n", json.Valid(b))
 
-	return b
-}
-
-func unmarshalJSONToString(b []byte) {
-	var obj helloType
-	e := json.Unmarshal(b, &obj) // just pass in a the simple bytes-array as input
+	var res helloType
+	e := json.Unmarshal(b, &res) // just pass in a the simple bytes-array as input
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled json: %+v\n", obj)
+	fmt.Printf("unmarshalled json: %+v\n", res)
 }
 
-func marshalObjectToJSON() []byte {
+func objectAndJSON() {
 	obj := helloType{Hello: "World", Verbatim: "moo"}
 	fmt.Printf("object: %+v\n", obj)
 	j, e := json.Marshal(obj)
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("simple json: %s\n", j)
+	fmt.Printf("json: %s\n", j)
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
-	return j
-}
 
-func unmarshalJSONToObject(b []byte) {
-	var obj helloType
-	e := json.Unmarshal(b, &obj)
+	var res helloType
+	e = json.Unmarshal(j, &res)
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled object: %+v\n", obj)
+	fmt.Printf("unmarshalled object: %+v\n", res)
 }
 
-func marshalNestedTypeToJSON() []byte {
+func nestedAndJSON() {
 	obj := nestedType{Id: 23, Simple: helloType{Hello: "World"}}
 	fmt.Printf("nested object: %+v\n", obj)
 
@@ -101,16 +96,12 @@ func marshalNestedTypeToJSON() []byte {
 	fmt.Printf("nested json: %s\n", j)
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
 
-	return j
-}
-
-func unmarshalNestedJSONToObject(b []byte) {
-	var nested nestedType
-	e := json.Unmarshal(b, &nested)
+	var res nestedType
+	e = json.Unmarshal(j, &res)
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled nested object: %+v\n", nested)
+	fmt.Printf("unmarshalled nested object: %+v\n", res)
 }
 
 func jsonValid() {
@@ -137,7 +128,7 @@ type typeWithOmittables struct {
 	OmittableField int `json:"field,omitempty"`
 }
 
-func marshalObjectWithOmittableFieldToJSON() []byte {
+func omitempty() {
 	obj := typeWithOmittables{} // omits field
 	fmt.Printf("object: %+v\n", obj)
 	j, e := json.Marshal(obj)
@@ -146,64 +137,104 @@ func marshalObjectWithOmittableFieldToJSON() []byte {
 	}
 	fmt.Printf("json: %s\n", j)
 	fmt.Printf("json is valid: %t\n", json.Valid(j))
-	return j
-}
 
-func unmarshalJSONToObjectWithOmittableField(b []byte) {
-	var obj typeWithOmittables
-	e := json.Unmarshal(b, &obj)
+	var res typeWithOmittables
+	e = json.Unmarshal(j, &res)
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled object: %+v\n", obj)
+	fmt.Printf("unmarshalled object: %+v\n", res)
 }
 
-func unmarshalEmptyJSONToObject() {
+func empty() {
 	s := `{}`
 	b := []byte(s)
 	fmt.Printf("bytes message: %+v\n", b)
-	var nested complexType
-	e := json.Unmarshal(b, &nested)
+	var res complexType
+	e := json.Unmarshal(b, &res)
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled nested object: %+v\n", nested)
+	fmt.Printf("unmarshalled object: %+v\n", res)
+}
+
+func arrays() {
+	objs := []helloType{
+		{Hello: "Aloha!"},
+		{Hello: "Ahoi!"},
+		{Hello: "Bonjour!"},
+	}
+
+	fmt.Printf("object: %+v\n", objs)
+	j, e := json.Marshal(objs)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("json: %s\n", j)
+	fmt.Printf("json is valid: %t\n", json.Valid(j))
+
+	var res []helloType
+	e = json.Unmarshal(j, &res)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("unmarshalled object: %+v\n", res)
+}
+
+// Showcase how to unmarshal JSON data whose context you don't know at compile time.
+func unstructuredData() {
+
+	// The keys need to be strings, the values can be any serializable value
+	objs := map[string]interface{}{
+		"birdSounds": map[string]string{
+			"pigeon": "coo",
+			"eagle":  "squak",
+		},
+		"total birds": 2,
+	}
+
+	fmt.Printf("object: %+v\n", objs)
+	j, e := json.Marshal(objs)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("json: %s\n", j)
+
+	var res map[string]interface{}
+	e = json.Unmarshal(j, &res)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("unmarshalled object: %+v\n", res)
 }
 
 func main() {
-
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
 	marshalStringToJSONViaJSONMarshalBreaks()
 
-	fmt.Println("--- 2 marshal string to json ---")
-	b := marshalStringToJSON()
+	fmt.Println("--- 2 string - json ---")
+	stringAndJSON()
 
-	fmt.Println("\n--- 3 unmarshal json to string ---")
-	unmarshalJSONToString(b)
+	fmt.Println("\n--- 3 type - json ---")
+	objectAndJSON()
 
-	fmt.Println("\n--- 4 marshal type to json ---")
-	obj := marshalObjectToJSON()
+	fmt.Println("\n--- 4 nested type - json ---")
+	nestedAndJSON()
 
-	fmt.Println("\n--- 5 unmarshal json to type ---")
-	unmarshalJSONToObject(obj)
-
-	fmt.Println("\n--- 6 marshal nested type to json ---")
-	nested := marshalNestedTypeToJSON()
-
-	fmt.Println("\n--- 7 unmarshal json to nested type ---")
-	unmarshalNestedJSONToObject(nested)
-
-	fmt.Println("\n--- 8 json.Valid")
+	fmt.Println("\n--- 5 json.Valid ---")
 	jsonValid()
 
-	fmt.Println("\n--- 9 marshal type with omittable field to json ---")
-	withOmittable := marshalObjectWithOmittableFieldToJSON()
+	fmt.Println("\n--- 6 type with omittable field - json ---")
+	omitempty()
 
-	fmt.Println("\n--- 10 unmarshal json to type with omittable field ---")
-	unmarshalJSONToObjectWithOmittableField(withOmittable)
+	fmt.Println("\n--- 7 unmarshal empty json to a complex type ---")
+	empty()
 
-	fmt.Println("\n--- 11 unmarshal empty json to a complex type ---")
-	unmarshalEmptyJSONToObject()
+	fmt.Println("\n--- 8 arrays ---")
+	arrays()
+
+	fmt.Println("\n--- 8 unstructured data ---")
+	unstructuredData()
 
 	fmt.Println("\nEnd.")
 }
