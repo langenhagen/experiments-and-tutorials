@@ -233,7 +233,7 @@ func main() {
 	fmt.Println("\n--- 8 arrays ---")
 	arrays()
 
-	fmt.Println("\n--- 8 unstructured data ---")
+	fmt.Println("\n--- 9 unstructured data ---")
 	unstructuredData()
 
 	fmt.Println("\nEnd.")
