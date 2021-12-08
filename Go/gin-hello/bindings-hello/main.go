@@ -17,6 +17,12 @@
 //
 // Binding seems to be even more capable. See:
 // https://blog.logrocket.com/gin-binding-in-go-a-tutorial-with-examples/
+//
+// However, `binding:"required"` would also fail when you give it values like 0, "", false.
+// Apparently, one should then rather use a pointer type.
+// Consider instead to use the package `validator`:
+// https://github.com/go-playground/validator/blob/master/_examples/simple/main.go It seems much
+// more capable.
 package main
 
 import (
@@ -27,7 +33,7 @@ import (
 
 // Binding from JSON
 type Login struct {
-	User string `json:"user" binding:"required"`
+	User string `json:"user" binding:"required"` // binding:"required" will also fire when the string is empty `""`
 	// binding:"-" seems to be like not writing it at all
 	// see: https://github.com/gin-gonic/gin#:~:text=the%20%27required%27%20tag%22%7D-,Skip%20validate,-When%20running%20the
 	Password string `json:"pass" binding:"-"`
