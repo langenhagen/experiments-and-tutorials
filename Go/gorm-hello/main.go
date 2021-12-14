@@ -4,12 +4,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/jinzhu/gorm/dialects/postgres"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -25,6 +26,7 @@ type Child struct {
 	ParentID uuid.UUID `gorm:"type:uuid REFERENCES parents(id)"`
 	Parent   Parent    `gorm:"ForeignKey:ParentID;AssociationForeignKey:ID`
 	Name     string
+	Blob     postgres.Jsonb
 }
 
 // Connect to a postgres db, create some tables, create an entry, get an entry and print it.
@@ -39,7 +41,7 @@ func main() {
 	}
 	defer db.Close()
 
-	db.LogMode(true) // set to `false` to not get annoying database logs in the program output
+	db.LogMode(false) // set to `false` to avoid annoying database logs in the program output
 
 	//dropTables(db)
 	createTables(db)
@@ -58,11 +60,14 @@ func createTables(db *gorm.DB) {
 }
 
 func createNewRecord(db *gorm.DB) uuid.UUID {
+
+	jsonBlob := []byte(`{"hello":"world"}`)
 	testObject := Child{
 		Name: "I am the child",
 		Parent: Parent{
 			Name: "I am the parent",
 		},
+		Blob: postgres.Jsonb{RawMessage: jsonBlob},
 	}
 	db.Create(&testObject)
 	return testObject.ID
@@ -72,5 +77,12 @@ func showRecord(db *gorm.DB, key interface{}) {
 	var child Child
 	db.Set("gorm:auto_preload", true).Find(&child, "id = ?", key)
 	fmt.Println("The child looks like:")
-	spew.Dump(child)
+	spew.Dump(child) // spew.Dump() nicely prints an object
+
+	var blobObj map[string]interface{}
+	err := json.Unmarshal(child.Blob.RawMessage, &blobObj)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("unmarshalled object: %+v\n", blobObj)
 }
