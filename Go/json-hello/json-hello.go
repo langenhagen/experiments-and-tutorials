@@ -66,12 +66,15 @@ func stringAndJSON() {
 	// b, e := r.MarshalJSON()
 	fmt.Printf("json is valid: %t\n", json.Valid(b))
 
-	var res helloType
-	e := json.Unmarshal(b, &res) // just pass in a the simple bytes-array as input
+	var objRes helloType
+	e := json.Unmarshal(b, &objRes) // just pass in a the simple bytes-array as input
 	if e != nil {
 		panic(e)
 	}
-	fmt.Printf("unmarshalled json: %+v\n", res)
+	fmt.Printf("unmarshalled json as struct type: %+v\n", objRes)
+
+	strRes := string(b)
+	fmt.Printf("unmarshalled json as string: %s\n", strRes)
 }
 
 func objectAndJSON() {
