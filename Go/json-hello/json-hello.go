@@ -15,6 +15,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	uuid "github.com/satori/go.uuid" // unmarshalling UUIDs works with satori/go.uuid
+	// "github.com/google/uuid" // unmarshalling UUIDs works also with google/uuid
 )
 
 type helloType struct {
@@ -32,6 +35,10 @@ type complexType struct {
 	Num     bool       `json:"bool"`
 	Simple  helloType  `json:"nested"`
 	Pointer *helloType `json:"pointer"`
+}
+
+type typeWithUUID struct {
+	Field uuid.UUID `json:"uuid"`
 }
 
 func marshalStringToJSONViaJSONMarshalBreaks() {
@@ -208,6 +215,22 @@ func unstructuredData() {
 	fmt.Printf("unmarshalled object: %+v\n", res)
 }
 
+func uuids() {
+	s := `{"uuid":"84e38fed-8349-4e81-8439-e8731a4023f8"}`
+	// s := `{"uuid":"x4e38fed-8349-4e81-8439-e8731a4023fx"}`  // fails bc not a UUID
+	fmt.Printf("string: %s\n", s)
+	b := []byte(s)
+	fmt.Printf("json is valid: %t\n", json.Valid(b))
+
+	var res typeWithUUID
+	e := json.Unmarshal(b, &res)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Printf("unmarshalled json: %+v\n", res)
+	fmt.Printf("UID from res.Field: %+v\n", res.Field)
+}
+
 func main() {
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
 	marshalStringToJSONViaJSONMarshalBreaks()
@@ -235,6 +258,9 @@ func main() {
 
 	fmt.Println("\n--- 9 unstructured data ---")
 	unstructuredData()
+
+	fmt.Println("\n--- 10 structs with UUIDs ---")
+	uuids()
 
 	fmt.Println("\nEnd.")
 }
