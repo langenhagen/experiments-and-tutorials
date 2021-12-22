@@ -5,7 +5,8 @@
 //
 // `defer` doesn't work when calling `os.Exit()`, see https://gobyexample.com/exit
 //
-// taken from: https://tour.golang.org/flowcontrol/12
+// see: https://tour.golang.org/flowcontrol/12
+// and: https://go.dev/tour/flowcontrol/13
 //
 // author: andreasl
 package main
