@@ -5,7 +5,7 @@ import enum
 print("--- 1 simple enums ---")
 
 
-class MyEnum:
+class MyEnum(enum.Enum):
     """Simple enum with enum.auto()"""
 
     VAL_1 = enum.auto()
@@ -22,7 +22,7 @@ print(f"{b=}")
 print("--- 2 enums with string values ---")
 
 
-class MyStringEnum:
+class MyStringEnum(enum.Enum):
     """Enum with string values."""
 
     VAL_1 = "my val"
