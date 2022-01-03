@@ -38,7 +38,22 @@ func jsonStringToGjson() {
 	fmt.Printf("id: %v\n", id)
 }
 
+func defaults() {
+	s := `{}`
+	fmt.Printf("string: %s\n", s)
+
+	r := gjson.Parse(s)
+
+	fmt.Printf("gjson result: %v\n", r)
+
+	nonexisting := r.Get("values").Int()
+	fmt.Printf("nonexisting: %v\n", nonexisting)
+}
+
 func main() {
 	fmt.Println("--- 1 json string - gjson ---")
 	jsonStringToGjson()
+
+	fmt.Println("--- 2 gjson defaults ---")
+	defaults()
 }
