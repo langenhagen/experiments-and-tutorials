@@ -231,7 +231,7 @@ func uuids() {
 		panic(e)
 	}
 	fmt.Printf("unmarshalled json: %+v\n", res)
-	fmt.Printf("UID from res.Field: %+v\n", res.Field)
+	fmt.Printf("UUID from res.Field: %+v\n", res.Field)
 }
 
 func main() {
