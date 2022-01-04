@@ -40,14 +40,23 @@ func convertToString() {
 	fmt.Printf("string: %s\n", s)
 }
 
-func main() {
+func sleep() {
+	fmt.Println("Going to sleep for 2 seconds")
+	time.Sleep(2 * time.Second)
+	fmt.Println("And waking up.")
+}
 
+func main() {
 	fmt.Println("--- 1 create times ---")
 	createTimes()
 
-	fmt.Println("--- 2 string to time ---")
+	fmt.Println("\n--- 2 string to time ---")
 	parseFromString()
 
-	fmt.Println("--- 3 time to string ---")
+	fmt.Println("\n--- 3 time to string ---")
 	convertToString()
+
+	fmt.Println("\n--- 4 time.Sleep() ---")
+	sleep()
+
 }
