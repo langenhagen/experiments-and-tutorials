@@ -57,7 +57,7 @@ func marshalStringToJSONViaJSONMarshalBreaks() {
 }
 
 func stringAndJSON() {
-	s := `{"hello":"world"}`
+	s := `{"hello":"world", "a bool": true}`
 	fmt.Printf("string: %s\n", s)
 	b := []byte(s) // necessary for strings to convert to []byte; json.Marshal() doesn't work on strings
 	fmt.Printf("bytes message: %+v\n", b)
@@ -238,7 +238,7 @@ func main() {
 	fmt.Println("--- 1 marshal string to json via json.Marshal() breaks bc of escaping qoutes ---")
 	marshalStringToJSONViaJSONMarshalBreaks()
 
-	fmt.Println("--- 2 string - json ---")
+	fmt.Println("\n--- 2 string - json ---")
 	stringAndJSON()
 
 	fmt.Println("\n--- 3 type - json ---")
