@@ -30,7 +30,8 @@ func jsonStringToGjson() {
 	fmt.Printf("anwers: %v\n", r.Get("answer"))
 	fmt.Printf("values is an array: %v\n", r.Get("values").IsArray())
 	fmt.Printf("values: %v\n", r.Get("values"))
-	fmt.Printf("nested.name: %v\n", r.Get("nested.name").String())
+	fmt.Printf("nested.name: %s\n", r.Get("nested.name").String())
+	fmt.Printf("nested.lastname: %s\n", r.Get("nested.lastname").Value()) // .Value()
 	id, e := uuid.FromString(r.Get("id").String())
 	if e != nil {
 		panic(e)
