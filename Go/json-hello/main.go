@@ -216,6 +216,22 @@ func unstructuredData() {
 		panic(e)
 	}
 	fmt.Printf("unmarshalled object: %+v\n", res)
+
+	unknown, ok := res["unknown"]
+	if !ok {
+		fmt.Printf("warning: did not find field `unknown`, as expected; setting `unknown` to 42\n")
+		unknown = 42
+	}
+	fmt.Printf("unknown: %d\n", unknown)
+
+	val, ok := res["total birds"]
+	if !ok {
+		fmt.Printf("error: did not find field `total birds`\n")
+		panic(0)
+	}
+	n_birds := int(val.(float64))
+	fmt.Printf("n_birds: %d\n", n_birds)
+
 }
 
 func uuids() {
