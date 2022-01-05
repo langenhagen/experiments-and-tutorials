@@ -14,6 +14,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +39,7 @@ func stream(c *gin.Context) {
 			fmt.Println("stream end reached")
 			return false
 		}
-		buf := bytes.NewBufferString(fmt.Sprintf("%d", msg))
+		buf := bytes.NewBufferString(strconv.Itoa(msg))
 		// apparently, the use of `...` below is like tuple unpacking in Python.
 		// makes several byte params out of a []byte
 		c.Writer.Write(append(buf.Bytes(), []byte("\n")...))
