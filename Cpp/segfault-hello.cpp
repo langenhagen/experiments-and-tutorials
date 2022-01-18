@@ -3,7 +3,7 @@
 
 int main() {
     std::cout << "Hello from segault-hello.cpp...\n";
-    int i = 1 / 0;  // cause a crashes
+    int i = 1 / 0;  // cause a crash
     std::cout << "END\n";
     return 0;
 }
