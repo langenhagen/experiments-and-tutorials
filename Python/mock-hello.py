@@ -161,7 +161,7 @@ mock.soo
 try:
     mock.boom # crashes, since not specified
 except AttributeError:
-    print("mock.boom has caused an AttributeError")
+    print("mock.boomth has caused an AttributeError")
 try:
     mock.fazz() # crashes, since not specified
 except AttributeError:
@@ -199,6 +199,8 @@ except AttributeError:
 print("--- 8 patch() and autospec ---")
 # use autospec - use it
 with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
+    print(f"type of mock {mock_json_loads=}")
+    print(f"__dir__ of mock {mock_json_loads.__dir__()=}")
     mock_json_loads("arg")
     try:
         mock_json_loads.foo("shouldbreak")
