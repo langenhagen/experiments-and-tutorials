@@ -8,4 +8,10 @@ func main() {
 	if i {
 		fmt.Printf("i is truthy\n")
 	}
+
+    i = false
+	if i {
+		fmt.Printf("i is truthy, but should not be\n")
+	}
+
 }
