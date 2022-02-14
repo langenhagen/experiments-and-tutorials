@@ -12,7 +12,7 @@ func createTimes() {
 
 	// You can build a time struct by providing the year, month, day, etc. Times are always
 	// associated with a Location, i.e. time zone.
-	t := time.Date(2022, 01, 02, 18, 34, 58, 651387237, time.UTC)
+	t := time.Date(2022, 01, 02, 18, 34, 58, 987654321, time.UTC)
 	fmt.Printf("time: %+v\n", t)
 }
 
