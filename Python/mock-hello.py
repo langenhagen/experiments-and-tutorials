@@ -11,6 +11,7 @@ Run this file like:
 $ python mock-hello.py
 $ pytest -s mock-hello.py  # suppress capturing/hiding ouput
 """
+import abc
 import json
 import pprint
 import unittest.mock
@@ -239,3 +240,22 @@ def foo():
 
 
 foo()
+
+
+print("--- 10 - mock isininstance ---")
+
+
+class C(abc.ABC):
+    """Randam abstract class that I cannot instantiate."""
+
+    @abc.abstractmethod
+    def foo(self):
+        """Some random function."""
+        raise NotImplementedError()
+
+
+m = unittest.mock.Mock(spec=C)
+assert isinstance(m, C)
+
+other = unittest.mock.Mock()
+assert not isinstance(other, C)
