@@ -19,7 +19,9 @@ import pytest
 
 print("--- 1 The Mock object ---")
 mock = unittest.mock.Mock(name="My optional name")
-print(f"mock.name= {mock.name}")  # does not resolve to the mock's name but to a new mock!
+print(
+    f"mock.name= {mock.name}"
+)  # does not resolve to the mock's name but to a new mock!
 # Mocks return mocks; mock is a mock, so is mock.foo, and mock.bar()
 print(f"mock.foo= {mock.foo}")
 print(f"mock.bar()= {mock.bar()}")
@@ -28,14 +30,16 @@ print(f"mock.soo('some string', 42)= {mock.soo('some string', 42)}")
 print("--- 2 Mocking assertions ---")
 # mock.foo.assert_called_once()  # breaks mock.foo([...]) was never called
 mock.bar.assert_called_once()
-mock.soo('some string', 42)
-mock.soo.assert_called_with('some string', 42)
+mock.soo("some string", 42)
+mock.soo.assert_called_with("some string", 42)
 # soo.assert_called_once_with('some string', 42)  # breaks: called 2 times
 
 print("--- 3 Getting Usage Information ---")
 print(mock.call_args)  # None
 print(mock.call_args_list)  # []
-print(mock.method_calls)  # [call.bar(), call.soo('some string', 42), call.soo('some string', 42)]
+print(
+    mock.method_calls
+)  # [call.bar(), call.soo('some string', 42), call.soo('some string', 42)]
 
 
 print("--- 4 Mock Return Values ---")
@@ -90,13 +94,18 @@ def test_with_patch(mock_loads):  # param mock_loads comes from the decorator
     print(f"json.loads({{'this': 'works'}})= {res}")
     assert res == "My mocked return value"
 
+
 @unittest.mock.patch("json.dumps")
-@unittest.mock.patch("json.loads", return_value="My mocked return value")  # also possible
-def test_with_two_patches(mock_loads, mock_dumps):  # upper/outer patch-decorator related params come later
+@unittest.mock.patch(
+    "json.loads", return_value="My mocked return value"
+)  # also possible
+def test_with_two_patches(
+    mock_loads, mock_dumps
+):  # upper/outer patch-decorator related params come later
     """Test showcasing @patch decorator."""
     mock_dumps.return_value = '{"a": "123"}'
     res = json.dumps("soeinquatsch")
-    print(f"json.dumps(\"soeinquatsch\")= {res}")
+    print(f'json.dumps("soeinquatsch")= {res}')
     assert res == '{"a": "123"}'
 
     res = json.loads({"this": "works"})
@@ -110,17 +119,17 @@ print("--- 5 Alternative: Patch with a Context Manager")
 def test_with_contextmanager():
     """Test showcasing @patch decorator."""
     res = json.loads('{"a":"1"}')
-    print(f"json.loads('{{\"a\":\"1\"}}')= {res}")
+    print(f'json.loads(\'{{"a":"1"}}\')= {res}')
     assert res == {"a": "1"}
 
     with unittest.mock.patch("json.loads") as mock_loads:
         mock_loads.return_value = "Quatsch"
         res = json.loads('{"x":"9"}')
-        print(f"json.loads('{{\"x\":\"9\"}}')= {res}")
+        print(f'json.loads(\'{{"x":"9"}}\')= {res}')
         assert res == "Quatsch"
 
     res = json.loads('{"b":"2"}')
-    print(f"json.loads('{{\"a\":\"1\"}}')= {res}")
+    print(f'json.loads(\'{{"a":"1"}}\')= {res}')
     assert res == {"b": "2"}
 
 
@@ -133,6 +142,7 @@ print("--- 6 @patch.object ---")
 # mock.patch.object() is good when you have a reference to the object already
 # also, mock.patch.object() would complain if the given object does not have the patched field,
 # whereas mock.patch() would simply add it
+
 
 @unittest.mock.patch.object(json, "loads", return_value="big quatsch")
 def test_with_partial_mock(mock_dumps):
@@ -159,11 +169,11 @@ mock.foo("yeah")
 mock.bar()
 mock.soo
 try:
-    mock.boom # crashes, since not specified
+    mock.boom  # crashes, since not specified
 except AttributeError:
     print("mock.boomth has caused an AttributeError")
 try:
-    mock.fazz() # crashes, since not specified
+    mock.fazz()  # crashes, since not specified
 except AttributeError:
     print("mock.fazz() has caused an AttributeError")
 
@@ -173,11 +183,11 @@ mock = unittest.mock.Mock(spec=json)
 mock.loads()
 mock.dumps("yeah", "yeah")
 try:
-    mock.boom # crashes, since not specified
+    mock.boom  # crashes, since not specified
 except AttributeError:
     print("mock.boom has caused an AttributeError")
 try:
-    mock.fazz() # crashes, since not specified
+    mock.fazz()  # crashes, since not specified
 except AttributeError:
     print("mock.fazz() has caused an AttributeError")
 
@@ -187,11 +197,11 @@ mock = unittest.mock.create_autospec(json)
 mock.loads({})
 mock.dumps("yeah")
 try:
-    mock.boom # crashes, since not specified
+    mock.boom  # crashes, since not specified
 except AttributeError:
     print("mock.boom has caused an AttributeError")
 try:
-    mock.fazz() # crashes, since not specified
+    mock.fazz()  # crashes, since not specified
 except AttributeError:
     print("mock.fazz() has caused an AttributeError")
 
@@ -220,7 +230,9 @@ def my_side_effect(arg):
 def foo():
     """Show how to specify function return values of mock objects."""
     with unittest.mock.patch("pprint.PrettyPrinter") as mock_pretty_printer:
-        mock_pretty_printer.return_value.pprint = unittest.mock.Mock(side_effect=my_side_effect)
+        mock_pretty_printer.return_value.pprint = unittest.mock.Mock(
+            side_effect=my_side_effect
+        )
 
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(dict(Hund="wuff!"))  # should print "Miau!"
