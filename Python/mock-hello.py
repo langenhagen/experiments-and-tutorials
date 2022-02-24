@@ -242,7 +242,7 @@ def foo():
 foo()
 
 
-print("--- 10 - mock isininstance ---")
+print("--- 10 - mock isinstance ---")
 
 
 class C(abc.ABC):
