@@ -1,0 +1,6 @@
+# Python-related project configuration.
+# A start, but not perfect, e.g. pylint has also issues with alembic.
+
+[tool.isort]
+profile = "black"
+known_thirdparty = ["alembic"]
