@@ -52,5 +52,5 @@ def downgrade():
     """Remove an enum type and a column."""
     op.drop_column("mytable", "type")
 
-    pg_enum_type = postgresql.ENUM(type_values, name="Type")
+    pg_enum_type = postgresql.ENUM(name="Type")
     pg_enum_type.drop(op.get_bind())
