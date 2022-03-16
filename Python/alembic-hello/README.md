@@ -68,5 +68,3 @@ A list of further resources.
 1. simple tutorial about alembic https://alembic.sqlalchemy.org/en/latest/tutorial.html
 2. postgres, enums, sqlalchemy and alembic https://stackoverflow.com/questions/37848815/sqlalchemy-postgresql-enum-does-not-create-type-on-db-migrate
 2. changing an PostreSQL enum later: https://medium.com/makimo-tech-blog/upgrading-postgresqls-enum-type-with-sqlalchemy-using-alembic-migration-881af1e30abe
-
-
