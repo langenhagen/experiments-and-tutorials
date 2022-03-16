@@ -18,6 +18,7 @@ import (
 type Parent struct {
 	ID   uuid.UUID `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
 	Name string
+	Bird myEnum `gorm:"type:\"MyEnum\""` // better use all-lowercase enums, otherwise the quotes `"` get ugly
 }
 
 // table name: children
@@ -44,7 +45,12 @@ func main() {
 	db.LogMode(false) // set to `false` to avoid annoying database logs in the program output
 
 	//dropTables(db)
+
+	createEnumType(db)
+	// the tables use some server-side functions `uuid_generate_v4()` from a plugin, thus install it
+	db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
 	createTables(db)
+
 	newID := createNewRecord(db)
 	showRecord(db, newID)
 }
@@ -53,6 +59,18 @@ func main() {
 // 	db.DropTable(&Child{})
 // 	db.DropTable(&Parent{})
 // }
+
+// Gorm, at least Gorm < 1.20, has issues with enums in Postgres. One can circumvent the issue.
+func createEnumType(db *gorm.DB) {
+	db.Exec(`
+		DO $$
+			BEGIN
+			IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'MyEnum') THEN
+				CREATE TYPE "MyEnum" AS ENUM ('albatross', 'penguin', 'seagull');
+			END IF;
+		END $$;
+	`)
+}
 
 func createTables(db *gorm.DB) {
 	db.CreateTable(&Parent{})
@@ -66,6 +84,7 @@ func createNewRecord(db *gorm.DB) uuid.UUID {
 		Name: "I am the child",
 		Parent: Parent{
 			Name: "I am the parent",
+			Bird: penguin,
 		},
 		Blob: postgres.Jsonb{RawMessage: jsonBlob},
 	}
