@@ -1,5 +1,5 @@
 #!/bin/bash
-# Start a docker-based database for local development.
+# Start a Docker-based database for local development.
 #
 # Usage:
 #
