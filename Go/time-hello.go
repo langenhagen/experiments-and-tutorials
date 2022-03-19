@@ -40,6 +40,18 @@ func convertToString() {
 	fmt.Printf("string: %s\n", s)
 }
 
+// Go has an awkward way to format timestamps.
+// GO uses a quasi example format string with magic values to encode certain fields.
+// E.g., 2006 means yyyy, 01 means MM, 02 means DD 15 means HH, 04 means minute and 05 means second.
+// See: https://stackoverflow.com/questions/20234104/how-to-format-current-time-using-a-yyyymmddhhmmss-format
+func convertToCustomFormat() {
+	t := time.Date(2021, 12, 23, 12, 03, 58, 0, time.Local)
+	fmt.Printf("time:   %+v\n", t)
+
+	s := t.Format("2006-01-02 15:04:05")
+	fmt.Printf("custom format string: %s\n", s)
+}
+
 func sleep() {
 	fmt.Println("Going to sleep for 2 seconds")
 	time.Sleep(2 * time.Second)
@@ -56,7 +68,10 @@ func main() {
 	fmt.Println("\n--- 3 time to string ---")
 	convertToString()
 
-	fmt.Println("\n--- 4 time.Sleep() ---")
+	fmt.Println("\n--- 4 time to custom format string ---")
+	convertToCustomFormat()
+
+	fmt.Println("\n--- 5 time.Sleep() ---")
 	sleep()
 
 }
