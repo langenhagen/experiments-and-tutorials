@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform linux -- Python 3.6.15, pytest-7.0.1, pluggy-1.0.0
+rootdir: /home/andreas/Dev/experiments-and-tutorials/Python/pytest-logging-hello, configfile: pyproject.toml
+collected 3 items
+
+main.py::test_true 
+-------------------------------- live log call ---------------------------------
+2022-03-29 18:19:19 [DEBUG]: main.py:35: This a debug msg
+2022-03-29 18:19:19 [INFO]: main.py:36: This an info msg
+2022-03-29 18:19:19 [WARNING]: main.py:37: This a warning msg
+2022-03-29 18:19:19 [ERROR]: main.py:38: This an error msg
+2022-03-29 18:19:19 [ERROR]: main.py:39: This an exception msg
+NoneType: None
+PASSED                                                                   [ 33%]
+main.py::test_function 
+-------------------------------- live log call ---------------------------------
+2022-03-29 18:19:19 [INFO]: main.py:28: Hi from foo()!
+PASSED                                                                   [ 66%]
+main.py::test_request 
+-------------------------------- live log call ---------------------------------
+2022-03-29 18:19:19 [DEBUG]: connectionpool.py:1005: Starting new HTTPS connection (1): httpbin.org:443
+2022-03-29 18:19:20 [DEBUG]: connectionpool.py:465: https://httpbin.org:443 "GET / HTTP/1.1" 200 9593
+PASSED                                                                   [100%]
+
+============================== 3 passed in 0.91s ===============================

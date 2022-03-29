@@ -1,0 +1,9 @@
+2022-03-29 18:23:26 [DEBUG]: main.py:test_true:35: This a debug msg
+2022-03-29 18:23:26 [INFO]: main.py:test_true:36: This an info msg
+2022-03-29 18:23:26 [WARNING]: main.py:test_true:37: This a warning msg
+2022-03-29 18:23:26 [ERROR]: main.py:test_true:38: This an error msg
+2022-03-29 18:23:26 [ERROR]: main.py:test_true:39: This an exception msg
+NoneType: None
+2022-03-29 18:23:26 [INFO]: main.py:log_something:28: Hi from foo()!
+2022-03-29 18:23:26 [DEBUG]: connectionpool.py:_new_conn:1005: Starting new HTTPS connection (1): httpbin.org:443
+2022-03-29 18:23:27 [DEBUG]: connectionpool.py:_make_request:465: https://httpbin.org:443 "GET / HTTP/1.1" 200 9593
