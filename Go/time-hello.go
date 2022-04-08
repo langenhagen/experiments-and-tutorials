@@ -58,6 +58,11 @@ func sleep() {
 	fmt.Println("And waking up.")
 }
 
+func now_unix() {
+	t := time.Now().Unix() // type is int64
+	fmt.Printf("now is: %d\n", t)
+}
+
 func main() {
 	fmt.Println("--- 1 create times ---")
 	createTimes()
@@ -73,5 +78,8 @@ func main() {
 
 	fmt.Println("\n--- 5 time.Sleep() ---")
 	sleep()
+
+	fmt.Println("\n--- 6 time.Unix() ---")
+	now_unix()
 
 }
