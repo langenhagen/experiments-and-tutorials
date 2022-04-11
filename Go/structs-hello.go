@@ -24,6 +24,7 @@ func helloStructs() {
 	fmt.Printf("MyStruct{World:\"DisneyWorld\"}: %+v\n", o)
 }
 
+// Fields and methods as embedded/anonymous fields are also called "promoted"
 func embeddedAnonymousStructs() {
 	var o embeddedAnonymousStruct
 	o = embeddedAnonymousStruct{}
