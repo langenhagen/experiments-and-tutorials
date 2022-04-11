@@ -50,16 +50,25 @@ func fromInvalidUUID4String() {
 	fmt.Printf("UUID: %v\n", u)
 }
 
+func toString() {
+	u := uuid.NewV4()
+	s := fmt.Sprint(u)
+	fmt.Printf("string: %s\n", s)
+}
+
 func main() {
-	fmt.Println("--- 1 UUIDs from string ---")
+	fmt.Println("\n--- 1 UUIDs from string ---")
 	fromString()
 
-	fmt.Println("--- 2 UUIDs from empty string fails ---")
+	fmt.Println("\n--- 2 UUIDs from empty string fails ---")
 	fromEmptyString()
 
-	fmt.Println("--- 3 UUIDs from broken string fails ---")
+	fmt.Println("\n--- 3 UUIDs from broken string fails ---")
 	fromBrokenString()
 
-	fmt.Println("--- 4 UUIDs from invalid uuid4 works ---")
+	fmt.Println("\n--- 4 UUIDs from invalid uuid4 works ---")
 	fromInvalidUUID4String()
+
+	fmt.Println("\n--- 5 UUID to string ---")
+	toString()
 }
