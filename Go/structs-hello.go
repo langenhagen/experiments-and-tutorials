@@ -3,18 +3,40 @@ package main
 
 import "fmt"
 
-type MyStruct struct {
+type myStruct struct {
 	Hello int
 	World string
 }
 
-func main() {
-	var o MyStruct
-	o = MyStruct{} // initializes an object with Hello=0 and World=""
+type embeddedAnonymousStruct struct {
+	myStruct
+	other string
+}
+
+func helloStructs() {
+	var o myStruct
+	o = myStruct{} // initializes an object with Hello=0 and World=""
 	fmt.Printf("MyStruct{} via %%v: %v\n", o)
 	fmt.Printf("MyStruct{} via %%+v: %+v\n", o)
-	fmt.Printf("MyStruct{} via %%#v: %#v\n", o)
+	fmt.Printf("MyStruct{} via %%#v: %#v\n\n", o)
 
-	o = MyStruct{World: "DisneyWorld"} // initializes an object with Hello=0
-	fmt.Printf("MyStruct{World:\"DisneyWorld\": %+v\n", o)
+	o = myStruct{World: "DisneyWorld"} // initializes an object with Hello=0
+	fmt.Printf("MyStruct{World:\"DisneyWorld\"}: %+v\n", o)
+}
+
+func embeddedAnonymousStructs() {
+	var o embeddedAnonymousStruct
+	o = embeddedAnonymousStruct{}
+	fmt.Printf("embeddedAnonymousStruct{} via %%#v: %#v\n\n", o)
+
+	o = embeddedAnonymousStruct{myStruct: myStruct{World: "Cybertron"}, other: "foo"}
+	fmt.Printf("%#v\n", o)
+}
+
+func main() {
+	fmt.Println("--- 1 hello structs ---")
+	helloStructs()
+
+	fmt.Println("\n--- 2 embedded anonymous structs ---")
+	embeddedAnonymousStructs()
 }
