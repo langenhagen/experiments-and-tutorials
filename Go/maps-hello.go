@@ -4,36 +4,45 @@ package main
 import "fmt"
 
 func helloMaps() {
+	// m := map[string]int{"foo": 1, "bar": 2} // works, too
 	m := make(map[string]int)
-
-	m["k1"] = 7
-	m["k2"] = 13
+	m["foo"] = 7
+	m["bar"] = 13
 
 	fmt.Println("m:", m)
 	fmt.Println("len(m):", len(m))
 
-	// normal access
-	v1 := m["k1"]
-	fmt.Println(`m["k1"]: `, v1)
+	v := m["foo"]
+	fmt.Println(`m["foo"]: `, v)
 
-	v1, exists := m["k1"]
-	fmt.Println(`m["k1"]: `, v1)
-	fmt.Println(`m["k1"] exists?: `, exists)
+	v, exists := m["foo"]
+	fmt.Println(`m["foo"]: `, v)
+	fmt.Println(`m["foo"] exists?: `, exists)
+}
 
-	// deletion
-	delete(m, "k2")
+func deletion() {
+	m := map[string]int{"foo": 1, "bar": 2}
+
+	delete(m, "bar")
 	fmt.Println("map:", m)
 
-	// accessing non-existent stuff
+}
+
+func accessNonexistentItems() {
+	m := map[string]int{"foo": 1, "bar": 2} // works, too
+
 	kZero, exists := m["non_existing"]
 	fmt.Println(`m["non_existing"]`, kZero) // zeroed
 	fmt.Println("prs:", exists)             // false
-
-	// Inline creation
-	fmt.Println("map:", map[string]int{"foo": 1, "bar": 2})
 }
 
 func main() {
 	fmt.Println("--- 1 hello maps ---")
 	helloMaps()
+
+	fmt.Println("\n--- 2 deleting elements ---")
+	deletion()
+
+	fmt.Println("\n--- 3 accessing non-existent elements ---")
+	accessNonexistentItems()
 }
