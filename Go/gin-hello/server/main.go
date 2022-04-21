@@ -44,7 +44,6 @@ func stream(c *gin.Context) {
 		// makes several byte params out of a []byte
 		c.Writer.Write(append(buf.Bytes(), []byte("\n")...))
 
-		// c.SSEvent("message", msg)  // that is also something
 		return true
 	})
 }
@@ -65,7 +64,7 @@ func streamWithSSEvent(c *gin.Context) {
 			fmt.Println("stream end reached")
 			return false
 		}
-		c.SSEvent("message", msg) // that is also something
+		c.SSEvent("message", msg)
 		return true
 	})
 }
