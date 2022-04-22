@@ -24,17 +24,18 @@ func ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
+// Stream some numbers to the client.
 func stream(c *gin.Context) {
-	stream := make(chan int, 10)
+	ch := make(chan int, 10)
 	go func() {
-		defer close(stream)
+		defer close(ch)
 		for i := 0; i < 5; i++ {
-			stream <- i
+			ch <- i
 			time.Sleep(time.Second * 1)
 		}
 	}()
 	c.Stream(func(w io.Writer) bool {
-		msg, ok := <-stream
+		msg, ok := <-ch
 		if !ok {
 			fmt.Println("stream end reached")
 			return false
@@ -48,18 +49,18 @@ func stream(c *gin.Context) {
 	})
 }
 
-// something similar to `stream()`
+// Stream some numbers to the client with SSEvents that apparently can send events.
 func streamWithSSEvent(c *gin.Context) {
-	stream := make(chan int, 10)
+	ch := make(chan int, 10)
 	go func() {
-		defer close(stream)
+		defer close(ch)
 		for i := 0; i < 5; i++ {
-			stream <- i
+			ch <- i
 			time.Sleep(time.Second * 1)
 		}
 	}()
 	c.Stream(func(w io.Writer) bool {
-		msg, ok := <-stream
+		msg, ok := <-ch
 		if !ok {
 			fmt.Println("stream end reached")
 			return false
