@@ -79,7 +79,6 @@ func fileStream(c *gin.Context) {
 	}
 	fmt.Print(wd)
 	c.File(wd + "/file.txt")
-
 }
 
 func main() {
@@ -89,5 +88,5 @@ func main() {
 	r.GET("/ssevent", streamWithSSEvent)
 	r.GET("/filestream", fileStream)
 
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run() // listen and serve on 0.0.0.0:8080
 }
