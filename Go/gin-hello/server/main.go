@@ -14,6 +14,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 	"strconv"
 	"time"
 
@@ -70,11 +71,23 @@ func streamWithSSEvent(c *gin.Context) {
 	})
 }
 
+// Stream a file to the client.
+func fileStream(c *gin.Context) {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Print(wd)
+	c.File(wd + "/file.txt")
+
+}
+
 func main() {
 	r := gin.Default()
 	r.GET("/ping", ping)
 	r.GET("/stream", stream)
 	r.GET("/ssevent", streamWithSSEvent)
+	r.GET("/filestream", fileStream)
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
