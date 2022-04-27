@@ -17,8 +17,8 @@ func helloStructs() {
 	var o myStruct
 	o = myStruct{} // initializes an object with Hello=0 and World=""
 	fmt.Printf("MyStruct{} via %%v: %v\n", o)
-	fmt.Printf("MyStruct{} via %%+v: %+v\n", o)
-	fmt.Printf("MyStruct{} via %%#v: %#v\n\n", o)
+	fmt.Printf("MyStruct{} via %%+v: %+v\n", o) // more detailed
+	fmt.Printf("MyStruct{} via %%#v: %#v\n\n", o)  // most detailed
 
 	o = myStruct{World: "DisneyWorld"} // initializes an object with Hello=0
 	fmt.Printf("MyStruct{World:\"DisneyWorld\"}: %+v\n", o)
