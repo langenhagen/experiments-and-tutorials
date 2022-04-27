@@ -29,7 +29,7 @@ func deletion() {
 }
 
 func accessNonexistentItems() {
-	m := map[string]int{"foo": 1, "bar": 2} // works, too
+	m := map[string]int{"foo": 1, "bar": 2}
 
 	kZero, exists := m["non_existing"]
 	fmt.Println(`m["non_existing"]`, kZero) // zeroed
