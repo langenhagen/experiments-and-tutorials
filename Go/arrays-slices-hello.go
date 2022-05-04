@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func toString() {
+func array() {
 	a := [6]int{2, 3, 5, 7, 11, 13}
 	fmt.Printf("Array via %%v: %v\n", a)   // [2 3 5 7 11 13]
 	fmt.Printf("Array via %%+v: %+v\n", a) // [2 3 5 7 11 13]
@@ -16,7 +16,17 @@ func toString() {
 	fmt.Printf("Array to string via custom code: %s\n", s) // 2, 3, 5, 7, 11, 13
 }
 
+func slice() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	fmt.Printf("Slice via %%v: %v\n", s)   // [2 3 5 7 11 13]
+	fmt.Printf("Slice via %%+v: %+v\n", s) // [2 3 5 7 11 13]
+	fmt.Printf("Slice via %%+v: %#v\n", s) // [6]int{2, 3, 5, 7, 11, 13}
+}
+
 func main() {
-	fmt.Println("--- 1 to string ---")
-	toString()
+	fmt.Println("--- 1 arrays ---")
+	array()
+
+	fmt.Println("\n--- 2 slices ---")
+	slice()
 }
