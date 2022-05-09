@@ -18,11 +18,11 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-print("\n=== 1 setting up an sqlite db ===\n")
+print("\n--- 1 setting up an sqlite db ---\n")
 
 engine = create_engine("sqlite:///sales.db", echo=True)
 
-print("\n=== 2 have a model ===\n")
+print("\n--- 2 have a model ---\n")
 
 Base = declarative_base()
 
@@ -40,7 +40,7 @@ class Customer(Base):
 
 Base.metadata.create_all(engine)
 
-print("\n=== 3 adding objects ===\n")
+print("\n--- 3 adding objects ---\n")
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -68,7 +68,7 @@ session.add_all(
 )
 session.commit()
 
-print("\n=== 4 queries ===\n")
+print("\n--- 4 queries ---\n")
 # for different query types see:
 # https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_using_query.htm
 

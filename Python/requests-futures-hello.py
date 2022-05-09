@@ -23,7 +23,7 @@ def post():
     print ("Finishing in `post()")
 
 
-print("=== 1 fire and forget === ")
+print("--- 1 fire and forget --- ")
 
 post()
 print("End")

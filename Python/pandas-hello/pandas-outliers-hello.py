@@ -7,7 +7,7 @@ import scipy.stats as stats
 df = pd.DataFrame(np.random.randn(100, 3))
 print(df)
 
-print("=== 1 use a z-score via scipy to filter outliers ===")
+print("--- 1 use a z-score via scipy to filter outliers ---")
 
 print(stats.zscore(df))
 

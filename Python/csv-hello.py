@@ -7,7 +7,7 @@ author: andreasl
 """
 import csv
 
-print("=== 1 write CSV ===")
+print("--- 1 write CSV ---")
 
 unicode_chars = "å∫ç"
 

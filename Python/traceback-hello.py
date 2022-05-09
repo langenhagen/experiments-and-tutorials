@@ -9,7 +9,7 @@ See: https://docs.python.org/3.6/library/traceback.html
 import sys
 import traceback
 
-print("=== 1 print a traceback ===")
+print("--- 1 print a traceback ---")
 
 
 def foo():
@@ -25,7 +25,7 @@ def bar(i):
 foo()
 
 
-print("\n=== 2 get a traceback object from an exception ===")
+print("\n--- 2 get a traceback object from an exception ---")
 
 
 def fail():

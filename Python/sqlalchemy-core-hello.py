@@ -16,12 +16,12 @@ Tested with sqlalchemy 1.4.26.
 """
 from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine, select
 
-print("\n=== 1 setting up an sqlite db ===\n")
+print("\n--- 1 setting up an sqlite db ---\n")
 
 engine = create_engine("sqlite:///college.db", echo=True)
 meta = MetaData()
 
-print("\n=== 2 setting up a table ===\n")
+print("\n--- 2 setting up a table ---\n")
 
 students = Table(
     "students",
@@ -32,7 +32,7 @@ students = Table(
 )
 meta.create_all(engine)
 
-print("\n=== 3 insert stuff ===\n")
+print("\n--- 3 insert stuff ---\n")
 
 ins = students.insert().values(name="Karan")
 
@@ -53,7 +53,7 @@ conn.execute(
     ],
 )
 
-print("\n=== 4 selecting ===\n")
+print("\n--- 4 selecting ---\n")
 
 # select all
 s = students.select()

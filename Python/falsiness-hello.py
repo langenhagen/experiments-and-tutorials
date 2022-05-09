@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the usage of boolean checks."""
 
-print("=== 1 falsiness of False ===")
+print("--- 1 falsiness of False ---")
 
 cond = False
 
@@ -11,7 +11,7 @@ if not cond:  # triggers
 if cond is False:  # triggers
     print("cond is False")
 
-print("=== 1 falsiness of None ===")
+print("--- 1 falsiness of None ---")
 
 cond2 = None
 
