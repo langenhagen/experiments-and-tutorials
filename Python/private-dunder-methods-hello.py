@@ -2,46 +2,58 @@
 
 
 class C:
-    def __foo(self):
+    def __private_method(self):
         """A private function in python. Only visible inside the class, not
         outside and not to subclasses."""
-        print("Hello from __foo()")
+        print("Hello from __private_method()")
 
-    def foo(self):
-        self.__foo()  # works
+    def method(self):
+        self.__private_method()  # works
 
+    @staticmethod
+    def my_staticmethod():
+        C.__private_staticmethod()
 
-c = C()
-
-
-print("--- 1 calling __foo() on an object  ---")
-
-try:
-    c.__foo()  # breaks with AttributeError: thing is not known
-except AttributeError as e:
-    print(f"Error:  {e}")
-
-print("--- 2 calling __foo() inside a public method works ---")
-
-c.foo()  # works
-
-
-print("--- 3 calling _C__foo() on an object works ---")
-
-c._C__foo()
-
-
-print("--- 4 calling __foo() in a child class breaks ---")
+    @staticmethod
+    def __private_staticmethod():
+        print("Hello from __private_staticmethod()")
 
 
 class D(C):
     def bar(self):
-        self.__foo()
+        self.__private_method()
 
 
+c = C()
 d = D()
+
+
+print("--- 1 calling __private_method() on an object breaks ---")
+try:
+    c.__private_method()  # breaks with AttributeError: thing is not known
+except AttributeError as e:
+    print(f"Error:  {e}")
+
+print("\n--- 2 calling __private_method() inside a public method works ---")
+c.method()  # works
+
+print("\n--- 3 calling _C__private_method() on an object works ---")
+c._C__private_method()
+
+print("\n--- 4 calling __private_method() in a child class breaks ---")
+
+
 
 try:
     d.bar()
 except AttributeError as e:
     print(f"Error:  {e}")
+
+print("\n--- 5 calling __private_staticmethod() on a class breaks ---")
+try:
+    C.__private_staticmethod()  # breaks with AttributeError: thing is not known
+except AttributeError as e:
+    print(f"Error:  {e}")
+
+print("\n--- 6 calling __private_staticmethod() from a public static method works ---")
+C.my_staticmethod()
