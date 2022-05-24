@@ -3,11 +3,11 @@
 //
 // Uage examples:
 //
-// 1. curl --data '{"user":"andi", "pass":"123"}' -X POST 'localhost:8080/login'
+// 1. curl --data '{"user":"andi", "pass":"123", "pin":""}' -X POST 'localhost:8080/login'
 //
 //    results: {"status":"you are logged in"}
 //
-// 2. curl --data '{"user":"carl"}' -X POST 'localhost:8080/login'
+// 2. curl --data '{"user":"carl", "pin":""}' -X POST 'localhost:8080/login'
 //
 //    results: {"status":"unauthorized"}
 //
@@ -18,11 +18,12 @@
 // Binding seems to be even more capable. See:
 // https://blog.logrocket.com/gin-binding-in-go-a-tutorial-with-examples/
 //
-// However, `binding:"required"` would also fail when you give it values like 0, "", false.
-// Apparently, one should then rather use a pointer type.
-// Consider instead to use the package `validator`:
-// https://github.com/go-playground/validator/blob/master/_examples/simple/main.go It seems much
-// more capable.
+// `binding:"required"` fails when you give it zero-values, e.g. 0, "" or false.
+// If you want to allow for zero-values, use a pointer type.
+//
+// Generally, consider to use the package `Validator` as opposed to Gin's own validation:
+// https://github.com/go-playground/validator/blob/master/_examples/simple/main.go
+// `Validator`` It seems much more capable.
 package main
 
 import (
@@ -33,10 +34,15 @@ import (
 
 // Binding from JSON
 type Login struct {
-	User string `json:"user" binding:"required"` // binding:"required" will also fire when the string is empty `""`
+	// binding:"required" will also break when the value is a zero-value `""`
+	User string `json:"user" binding:"required"`
+
 	// binding:"-" seems to be like not writing it at all
 	// see: https://github.com/gin-gonic/gin#:~:text=the%20%27required%27%20tag%22%7D-,Skip%20validate,-When%20running%20the
 	Password string `json:"pass" binding:"-"`
+
+	// binding:"required" on a pointer allows for the value to be zero-value `""`
+	Pin *string `json:"pin" binding:"required"`
 }
 
 func main() {
