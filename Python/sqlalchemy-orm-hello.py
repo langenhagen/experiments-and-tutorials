@@ -37,6 +37,10 @@ class Customer(Base):
     address = Column(String)
     email = Column(String)
 
+    def __str__(self) -> str:
+        """Helper function for pretty printing."""
+        return f"name={self.name}  adress={self.address}  email={self.email}"
+
 
 Base.metadata.create_all(engine)
 
@@ -61,36 +65,32 @@ session.commit()
 
 session.add_all(
     [
-        Customer(name="Toni", address="Hyderabad", email="Toni@gmail.com"),
+        Customer(name="Toni", address="Braunschweig", email="Toni@gmail.com"),
         Customer(name="Olaf", address="Sector 7", email="olli@gmail.com"),
         Customer(name="Martha", address="Perth", email="m.artha@gmail.com"),
     ]
 )
 session.commit()
 
-print("\n--- 4 queries ---\n")
-# for different query types see:
-# https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_using_query.htm
-
-# all customers
+print("\n--- 4 query all ---\n")
 result = session.query(Customer).all()
 print(f"{result=}")
 
 for row in result:
-    print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
+    print(row)
 
-# filtered query
+print("\n--- 5 query filters ---\n")
 result = session.query(Customer).filter(Customer.name == "Andi L").all()
 print(f"{result=}")
 
 for row in result:
-    print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
+    print(row)
 
-# count
+print("\n--- 5 query count ---\n")
 result = session.query(Customer).filter(Customer.name == "Andi L").count()
 print(f"{result=}")
 
-# combined filters
+print("\n--- 6 query combined filters ---\n")
 result = (
     session.query(Customer)
     .filter(Customer.name != "Andi L", Customer.address == "Perth")
@@ -98,4 +98,12 @@ result = (
 )
 print(f"{result=}")
 for row in result:
-    print("Name: ", row.name, "Address:", row.address, "Email:", row.email)
+    print(row)
+
+
+print("\n--- 7 order by and first ---\n")
+first = session.query(Customer).order_by(Customer.name).first()
+print(first)
+
+last = session.query(Customer).order_by(Customer.name.desc()).first()
+print(last)
