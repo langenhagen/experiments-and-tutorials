@@ -100,10 +100,16 @@ print(f"{result=}")
 for row in result:
     print(row)
 
-
 print("\n--- 7 order by and first ---\n")
 first = session.query(Customer).order_by(Customer.name).first()
 print(first)
 
 last = session.query(Customer).order_by(Customer.name.desc()).first()
 print(last)
+
+print("\n--- 8 delete all rows in a table ---\n")
+session.query(Customer).delete()
+session.commit()
+
+n_customers = (session.query(Customer).count())  # = 0
+print(f"{n_customers=}")
