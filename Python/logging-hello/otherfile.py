@@ -4,8 +4,8 @@ as defined in the main file.
 """
 import logging
 
-log = logging.getLogger(name=__name__)  # will use the same configuration
+logger = logging.getLogger(name=__name__)  # uses the same global config as the main file
 
 
 def foo(msg=""):
-    log.info("hello from the otherfile! " + msg)
+    logger.info("hello from the otherfile! " + msg)
