@@ -65,13 +65,29 @@ def foo():
     logger.log(logging.DEBUG, "mickey")
     logger.log(logging.WARN, "mouse")
 
+    print("\n--- 9 variable logging ---")
+
+    class C:
+        """A custom class with custom __str__ function."""
+
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+        def __str__(self):
+            return f"C: {self.a} - {self.b}"
+
+    obj = C(1, "andi")
+
+    logger.info("Log some variables efficiently: %s, %d, %s", "this", 42, obj)
+
 
 foo()
 
-print("\n--- 9 call logs from other files ---")
+print("\n--- 10 call logs from other files ---")
 otherfile.foo(":)")
 
-print("\n--- 10 log stream handlers ---")
+print("\n--- 11 log stream handlers ---")
 console_handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(console_handler)
 
