@@ -18,9 +18,11 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+
 print("\n--- 1 setting up an sqlite db ---\n")
 
-engine = create_engine("sqlite:///sales.db", echo=True)
+engine = create_engine("sqlite:///sales.db", echo=False)
+
 
 print("\n--- 2 have a model ---\n")
 
@@ -43,6 +45,7 @@ class Customer(Base):
 
 
 Base.metadata.create_all(engine)
+
 
 print("\n--- 3 adding objects ---\n")
 
@@ -72,6 +75,7 @@ session.add_all(
 )
 session.commit()
 
+
 print("\n--- 4 query all ---\n")
 result = session.query(Customer).all()
 print(f"{result=}")
@@ -79,16 +83,20 @@ print(f"{result=}")
 for row in result:
     print(row)
 
+
 print("\n--- 5 query filters ---\n")
-result = session.query(Customer).filter(Customer.name == "Andi L").all()
+result = session.query(Customer).filter_by(name="Andi L").all()
+# result = session.query(Customer).filter(Customer.name == "Andi L").all()  # works, too
 print(f"{result=}")
 
 for row in result:
     print(row)
 
+
 print("\n--- 5 query count ---\n")
-result = session.query(Customer).filter(Customer.name == "Andi L").count()
+result = session.query(Customer).filter_by(name="Andi L").count()
 print(f"{result=}")
+
 
 print("\n--- 6 query combined filters ---\n")
 result = (
@@ -96,18 +104,27 @@ result = (
     .filter(Customer.name != "Andi L", Customer.address == "Perth")
     .all()
 )
-print(f"{result=}")
 for row in result:
     print(row)
 
+
 print("\n--- 7 order by and first ---\n")
 first = session.query(Customer).order_by(Customer.name).first()
-print(first)
+print(f"first={first}")
 
 last = session.query(Customer).order_by(Customer.name.desc()).first()
-print(last)
+print(f"last={last}")
 
-print("\n--- 8 delete all rows in a table ---\n")
+
+print("\n--- 8 update ---\n")
+session.query(Customer).filter_by(address="Perth").update({Customer.address: "Krypton"})
+result = session.query(Customer).filter_by(address="Krypton").all()
+
+for row in result:
+    print(row)
+
+
+print("\n--- 9 delete all rows in a table ---\n")
 session.query(Customer).delete()
 session.commit()
 
