@@ -2,7 +2,7 @@
 Fun and games with the statement "yield" which is similar to "return".
 """
 
-print("--- 1 Calling a Generator, a function with a yield, sev times ---")
+print("--- 1 calling a generator, a function with a yield, sev times ---")
 
 
 def foo(i):
@@ -20,7 +20,7 @@ for a in foo(20):
 for a in foo(5):
     print(f"1: {a}")
 
-print("--- 2 Resetting a Generator function ---")
+print("--- 2 resetting a generator function ---")
 f = foo(122)
 for a in f:
     print(f"0: {a}")
@@ -28,7 +28,7 @@ f = foo(20)
 for a in f:
     print(f"1: {a}")
 
-print("--- 3 Calling a nested yield function ---")
+print("--- 3 calling a nested yield function ---")
 
 
 def bar():
