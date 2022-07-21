@@ -21,7 +21,7 @@ print("\n--- 2 simple raise from ---\n")
 
 try:
     raise ValueError("The first message")
-except ValueError:
+except ValueError:  # except ValueError as err is not necessary
     # following raise logs both the first exception and the second exception
     print("Spongebob, no!")
     raise KeyError("Yep, the second message")
