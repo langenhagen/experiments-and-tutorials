@@ -10,9 +10,9 @@ print("--- 1 raise from catched ---\n")
 try:
     try:
         raise ValueError("The first message")
-    except ValueError as err:
+    except ValueError:
         # following raise logs both the first exception and the second exception
-        raise KeyError("Yep, the second message") from err
+        raise KeyError("Yep, the second message")
 except KeyError as err:
     print(f"The error says: {err}")
 
