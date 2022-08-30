@@ -1,0 +1,6 @@
+bpython
+Galaxy_Linux_Python_2.0.2106.9041/api/
+matplotlib
+numpy
+opencv-python
+Pillow

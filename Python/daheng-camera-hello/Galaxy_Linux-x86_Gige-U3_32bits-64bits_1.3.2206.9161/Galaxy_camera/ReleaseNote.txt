@@ -1,0 +1,12 @@
+******************************************************
+RELEASE DATE:2022-06-14
+VERSION:1.3.2206.9141
+******************************************************
+
+NEW FEATURES / CHANGES
+=========================
+<SDK> GxIAPI Library: add "StaticDefectCorrectionValueAll","StaticDefectCorrectionFlashValue","StaticDefectCorrectionFinish","StaticDefectCorrectionInfo","SensorDecimationHorizontal", "SensorDecimationVertical", "StripedCalibrationInfo"function code
+
+CORRECTIONS
+=========================
+<SDK> Gigabit Network Camera TL Library: solve the problem that the user-defined name cannot be written in Chinese
