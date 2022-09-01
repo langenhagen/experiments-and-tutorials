@@ -4,10 +4,11 @@ Based on `GxSingleCamColor.py` version:1.0.1905.9051
 
 author: andreasl
 """
-import gxipy as gx
-import numpy as np
+import traceback
 
 import cv2
+import gxipy as gx
+import numpy as np
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     print("")
     print("-------------------------------------------------------------")
     print(
-        "Sample to show how to acquire color image continuously and show acquired image."
+        "Modified sample to show how to acquire color image continuously and show image."
     )
     print("-------------------------------------------------------------")
     print("")
@@ -60,9 +61,11 @@ def main():
         contrast_lut = None
     if cam.ColorCorrectionParam.is_readable():
         color_correction_param = cam.ColorCorrectionParam.get()
-        print(f"!!!! {color_correction_param}")
     else:
         color_correction_param = 0
+
+    print(f"{gamma_value=}\n{gamma_lut=}\n{contrast_value}\n{contrast_lut}")
+    print(f"{color_correction_param=}")
 
     # start data acquisition
     cam.stream_on()
@@ -89,6 +92,7 @@ def main():
         numpy_image: np.ndarray = rgb_image.get_numpy_array()
         # numpy_image = raw_image.get_numpy_array()
         if numpy_image is None:
+            print("numpy_image is None")
             continue
 
         key = cv2.waitKey(1)
@@ -99,11 +103,9 @@ def main():
         elif key == 84:  # down key
             pass
 
-        try:
-            image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2RGB)
-            # image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2XYZ)
-        except:
-            print("meh")
+        # convert BGR to RGB bc OpenCV deals in BGR by default
+        image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2RGB)
+        # image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2XYZ)
 
         # show acquired image
         cv2.imshow("image", image)
