@@ -28,3 +28,20 @@ following commands to troubleshoot a solution:
 lsusb | grep -i daheng
 lsusb -D /dev/bus/usb/004/010  # detailed info about a USB device
 ```
+
+
+# GalaxyView Reference Application
+A QT4-based camera image viewer for reference.
+
+Requires old QT4 libraries. I installed them on Ubuntu 22.04 via:
+```bash
+sudo add-apt-repository ppa:ubuntuhandbook1/ppa
+sudo apt install libqtgui4 libqt4-network
+```
+
+Then, I could start the program, however, I did not see any output, window or log messages appear. I
+run the program via:
+```bash
+cd Galaxy_Linux-x86_Gige-U3_32bits-64bits_1.3.2206.9161/Galaxy_camera/bin
+./GalaxyView
+```

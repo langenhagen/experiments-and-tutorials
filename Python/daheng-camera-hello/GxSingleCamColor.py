@@ -30,6 +30,8 @@ def main():
         print("Number of enumerated devices is 0")
         return
 
+    print(f"{dev_info_list=}\n")
+
     # open the first device
     cam = device_manager.open_device_by_index(1)
 
@@ -63,9 +65,18 @@ def main():
         color_correction_param = cam.ColorCorrectionParam.get()
     else:
         color_correction_param = 0
+    if cam.BalanceWhiteAuto.is_readable():
+        balance_white_auto = cam.BalanceWhiteAuto.get()
+    else:
+        print("eh, BalanceWhiteAuto not readable")
 
-    print(f"{gamma_value=}\n{gamma_lut=}\n{contrast_value}\n{contrast_lut}")
-    print(f"{color_correction_param=}")
+    if cam.BalanceWhiteAuto.is_writable():
+        cam.BalanceWhiteAuto.set(gx.GxAutoEntry.CONTINUOUS)
+    else:
+        print("eh, BalanceWhiteAuto not writable")
+
+    print(f"{gamma_value=}\n{gamma_lut=}\n{contrast_value=}\n{contrast_lut=}")
+    print(f"{color_correction_param=}\n{balance_white_auto=}\n")
 
     # start data acquisition
     cam.stream_on()
@@ -80,7 +91,7 @@ def main():
             continue
 
         # get RGB image from raw image
-        rgb_image = raw_image.convert("RGB")
+        rgb_image: gx.gxiapi.RGBImage = raw_image.convert("RGB")
         if rgb_image is None:
             print("rgb_image is None")
             continue
@@ -90,7 +101,6 @@ def main():
 
         # create numpy array with data from raw image
         numpy_image: np.ndarray = rgb_image.get_numpy_array()
-        # numpy_image = raw_image.get_numpy_array()
         if numpy_image is None:
             print("numpy_image is None")
             continue
@@ -99,21 +109,26 @@ def main():
         if key == ord("q"):
             keep_running = False
         elif key == 82:  # up key
+            color_correction_param += 1
+            print(f"{color_correction_param=}")
             pass
         elif key == 84:  # down key
+            color_correction_param -= 1
+            print(f"{color_correction_param=}")
             pass
 
-        # convert BGR to RGB bc OpenCV deals in BGR by default
+        # convert BGR to RGB bc OpenCV deals in BGR
         image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2RGB)
-        # image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2XYZ)
+        # image = cv2.resize(image, (1024, 768))
 
         # show acquired image
         cv2.imshow("image", image)
 
         # print height, width, and frame ID of the acquisition image
         print(
-            "Frame ID: %d   Height: %d   Width: %d"
-            % (raw_image.get_frame_id(), raw_image.get_height(), raw_image.get_width())
+            f"Frame ID: {raw_image.get_frame_id()}   "
+            f"Height: {raw_image.get_height()}   "
+            f"Width: {raw_image.get_width()}"
         )
 
     # stop data acquisition
