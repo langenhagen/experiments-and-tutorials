@@ -14,10 +14,9 @@ def foo():
     try:
         raise ValueError("hahaha")
     except ValueError:
-        # myvar = traceback.print_exc()
         exception_with_traceback = traceback.format_exc()
-        print(">>>>{}".format(exception_with_traceback))
-        print("<<<<")
+        print(f">>>>\n{exception_with_traceback}\n<<<<")
+        # traceback.print_exc()  # prints the same info directly
 
 
 def bar():
