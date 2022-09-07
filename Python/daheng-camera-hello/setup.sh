@@ -18,7 +18,7 @@ sudo apt-get install libffi-dev  # prerequisite for the Galaxy/Daheng stuff
 
 if [[ "$*" =~ '--clean' ]]; then
     rm -fr .venv/
-    rm -fr  Galaxy_Linux_Python_2.0.2106.9041/
+    rm -fr Galaxy_Linux_Python_2.0.2106.9041/
     tar xxf Galaxy_Linux_Python_2.0.2106.9041.tar_1.gz
     cd Galaxy_Linux_Python_2.0.2106.9041/api/
     python setup.py build
