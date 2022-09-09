@@ -22,10 +22,8 @@ if [[ "$*" =~ '--clean' ]]; then
     cat MVS_STD_GML_V2.1.1_220511.zip.d/MVS_STD_GML_V2.1.1_220511.zip.split-* > MVS_STD_GML_V2.1.1_220511.zip
     unzip MVS_STD_GML_V2.1.1_220511.zip -d MVS_STD_GML_V2.1.1_220511/
     cd MVS_STD_GML_V2.1.1_220511/
-    tar xxf MVS-2.1.1_x86_64_20220511.tar.gz
-    cd MVS-2.1.1_x86_64_20220511/
-    sudo bash setup.sh
-    cd ../..
+    sudo apt install ./MVS-2.1.1_x86_64_20220511.deb
+    cd ../
 fi
 
 python -m venv .venv

@@ -1,0 +1,6 @@
+bpython
+genicam
+harvesters
+harvesters_gui
+numpy
+opencv-python

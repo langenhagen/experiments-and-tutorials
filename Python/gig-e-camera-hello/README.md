@@ -1,7 +1,19 @@
 # Gig-E Camera Hello
-A proof of concept for making the interaction with the Opto Engineering Gig E camera.
+A proof of concept for making the interaction with the Opto Engineering Gig-E camera.
 
 Run `bash setup.sh` to get an automated setup
+
+
+## The Cam
+The cam captures monochrome images.
+The cam gets power over ethernet, e.g. via a switch of that supports power over ethernet.
+
+I set up the LAN to be `manual` and set my IP to `192.168.100.101`. with a Netmask `24` aka `255.255.255.0`.
+The cam's IP is `192.168.100.42`. Thus, following should work:
+```bash
+ping 192.168.100.42
+```
+
 
 ## MVS Viewer
 A camera image viewer application for reference. Run the setup, then call:
@@ -10,3 +22,10 @@ A camera image viewer application for reference. Run the setup, then call:
 /opt/MVS/bin/MVS.sh
 ```
 
+## Misc
+- the package `harvesters` seems to require Python >=3.7.
+- the package `harvesters_gui` seems to be incompatible with Python 3.9 onwards.
+
+- https://en.wikipedia.org/wiki/GigE_Vision
+- harvesters is Apache 2 license
+- https://github.com/genicam/harvesters/blob/master/docs/TUTORIAL.rst
