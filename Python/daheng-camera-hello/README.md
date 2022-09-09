@@ -14,7 +14,21 @@ the `/usr/lib/libgxiapi.so`, `Galaxy_Linux_Python_2.0.2106.9041.tar_1.gz` contai
 First, unpack and run the setup script from
 `Galaxy_Linux%20x86_Gige%20U3_32bits%2064bits_1.3.2206.9161.tar.gz` in order to install a required
 shared library. Then, check out the script `setup.sh` and run it via `bash setup.sh --clean` in
-order to build the Python package `gxipy and create a suitable virtual env.
+order to build the Python package `gxipy` and create a suitable virtual env:
+
+```bash
+sudo apt-get install libffi-dev  # prerequisite for the Galaxy/Daheng stuff
+
+wget https://dahengimaging.com/downloads/Galaxy_Linux%20x86_Gige%20U3_32bits%2064bits_1.3.2206.9161.tar.gz
+tar xxf Galaxy_Linux\ x86_Gige\ U3_32bits\ 64bits_1.3.2206.9161.tar.gz
+cd Galaxy_Linux-x86_Gige-U3_32bits-64bits_1.3.2206.9161/
+./Galaxy_camera.run
+cd ..
+
+wget https://dahengimaging.com/downloads/Galaxy_Linux_Python_2.0.2106.9041.tar_1.gz
+
+bash setup.sh --clean
+```
 
 I used the sample program`GxSingleCamColor.py` but modified it to use `OpenCV` to display a
 continuous image stream instead of opening a separate image viewer for each image via `pillow`.
