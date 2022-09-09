@@ -71,7 +71,8 @@ def main():
         print("eh, BalanceWhiteAuto not readable")
 
     if cam.BalanceWhiteAuto.is_writable():
-        cam.BalanceWhiteAuto.set(gx.GxAutoEntry.CONTINUOUS)
+        # cam.BalanceWhiteAuto.set(gx.GxAutoEntry.CONTINUOUS)
+        cam.BalanceWhiteAuto.set(gx.GxAutoEntry.OFF)
     else:
         print("eh, BalanceWhiteAuto not writable")
 
