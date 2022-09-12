@@ -3,8 +3,8 @@ A proof of concept for making the interaction with the Opto Engineering Gig-E ca
 
 Inspect and run `bash setup.sh` to get an automated setup.
 
-Inspect and run `harvesters-gui-hello.py` to see the code. Basically taken from the `harvesters_gui`
-website.
+Inspect and run `harvesters-gui-hello.py` to see the image. Basically taken from the
+`harvesters_gui` website.
 
 
 ## The Cam
