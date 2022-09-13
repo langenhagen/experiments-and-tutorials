@@ -137,6 +137,9 @@ def main() -> int:
     frame_info = MV_FRAME_OUT_INFO_EX()
     memset(byref(frame_info), 0, sizeof(frame_info))
 
+    log.info("Press `q` to stop grabbing.")
+
+
     start = dt.datetime.now()
     grab_timeout_millis: int = 1000
     keep_grabbing = True
@@ -206,8 +209,6 @@ def main() -> int:
             pass
 
         cv2.imshow("image", image)
-
-    log.info("Press any key to stop grabbing.")
 
     del data_buf
 
