@@ -10,7 +10,7 @@ import otherfile
 
 logging.basicConfig(
     # filename='myfile.log',  # reroutes the default logging stream to file instead of to stdout
-    format="%(asctime)s [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
+    format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
     datefmt="%a, %Y-%m-%d %H:%M:%S",
     level=logging.DEBUG,
 )
