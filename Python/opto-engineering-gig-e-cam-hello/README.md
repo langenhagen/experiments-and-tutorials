@@ -6,6 +6,7 @@ Check out the `.envrc` file.
 Inspect and run `bash setup.sh --first` to get an initial automated setup.  
 Inspect and run `main.py` to see the image.  
 
+Get the MVS SDK files from a closed source.
 
 ## The Cam
 - The cam captures monochrome images.

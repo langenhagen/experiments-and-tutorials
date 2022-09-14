@@ -1,6 +1,8 @@
 # Gig-E Camera Hello
 A proof of concept for making the interaction with the Opto Engineering Gig-E camera.
 
+Get the MVS SDK files from a closed source.
+
 Inspect and run `bash setup.sh` to get an automated setup.
 
 Inspect and run `harvesters-gui-hello.py` to see the image. Basically taken from the
@@ -29,3 +31,6 @@ A camera image viewer application for reference. Run the setup, then call:
 - https://en.wikipedia.org/wiki/GigE_Vision
 - harvesters is Apache 2 license
 - https://github.com/genicam/harvesters/blob/master/docs/TUTORIAL.rst
+- the Opto Engineering cam does apparently not come with a `*.cti` file. Thus, I took `*.cti` file
+  from Matrix vision as the `harvesters` doc suggests.
+  https://github.com/genicam/harvesters/blob/83b77747bdd4024fb1f7ee1bd54d95ac08339fe2/docs/INSTALL.rst#installing-a-gentl-producer

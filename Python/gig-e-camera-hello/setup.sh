@@ -18,7 +18,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ "$*" =~ '--clean' ]]; then
     rm -fr .venv/
     rm -fr MVS_STD_GML_V2.1.1_220511/
-
+    [ -d MVS_STD_GML_V2.1.1_220511.zip.d ] || { echo 'Error: Did not find MVS install files'; exit 1; }
     cat MVS_STD_GML_V2.1.1_220511.zip.d/MVS_STD_GML_V2.1.1_220511.zip.split-* > MVS_STD_GML_V2.1.1_220511.zip
     unzip MVS_STD_GML_V2.1.1_220511.zip -d MVS_STD_GML_V2.1.1_220511/
     cd MVS_STD_GML_V2.1.1_220511/
