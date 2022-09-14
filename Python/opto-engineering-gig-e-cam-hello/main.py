@@ -23,23 +23,6 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def press_any_key_exit():
-    fd = sys.stdin.fileno()
-    old_ttyinfo = termios.tcgetattr(fd)
-    new_ttyinfo = old_ttyinfo[:]
-    new_ttyinfo[3] &= ~termios.ICANON
-    new_ttyinfo[3] &= ~termios.ECHO
-    # sys.stdout.write(msg)
-    # sys.stdout.flush()
-    termios.tcsetattr(fd, termios.TCSANOW, new_ttyinfo)
-    try:
-        os.read(fd, 7)
-    except:
-        pass
-    finally:
-        termios.tcsetattr(fd, termios.TCSANOW, old_ttyinfo)
-
-
 def main() -> int:
     """Main program function."""
     SDKVersion = MvCamera.MV_CC_GetSDKVersion()
@@ -138,7 +121,6 @@ def main() -> int:
     memset(byref(frame_info), 0, sizeof(frame_info))
 
     log.info("Press `q` to stop grabbing.")
-
 
     start = dt.datetime.now()
     grab_timeout_millis: int = 1000
