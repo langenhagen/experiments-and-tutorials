@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Dynamically import the given module."""
+"""
+Dynamically import the given module.
+
+should work via:
+
+    python hello-dynamic-imports.py treemaps-hello/treemap.py
+    r = my_module.Rectangle(1,2,3,4)
+    print(r)
+"""
 import importlib
 import sys
 
@@ -28,7 +36,3 @@ print(dir(my_module))
 print()
 print(f"{my_module}.__doc__")
 print(my_module.__doc__)
-
-# should work via: python hello-dynamic-imports.py treemaps-hello/treemap.py
-# r = my_module.Rectangle(1,2,3,4)
-# print(r)
