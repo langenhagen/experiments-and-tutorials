@@ -6,3 +6,5 @@ Cpp/**/build
 a.out
 .vscode
 .venv
+
+Python/my-argparse-file.txt
