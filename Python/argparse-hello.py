@@ -110,7 +110,7 @@ def __print_namespace(ns: Namespace):
     print(f"{ns.uint=}")
 
 
-print("\n---1 argument parsing ---")
+print("\n--- 1 argument parsing ---")
 # use parse_args() without params to parse from the command line
 # namespace = parser.parse_args()
 
@@ -129,34 +129,62 @@ namespace = parser.parse_args(
 # fmt: on
 __print_namespace(namespace)
 
-print("\n---2 another parsing---")
+print("\n--- 2 another parsing---")
 namespace = parser.parse_args(["-a", "kaaatz"])
 __print_namespace(namespace)
 
-print("\n---3 with only one argument---")
+print("\n--- 3 with only one argument---")
 namespace = parser.parse_args(["just one argument works"])
 __print_namespace(namespace)
 
-print("\n---4 yet another parsiong---")
+print("\n--- 4 yet another parsiong---")
 namespace = parser.parse_args(["optional", "required"])  # order is important
 __print_namespace(namespace)
 
-print("\n---5 empty argument list might break ---")
+print("\n--- 5 empty argument list might break ---")
 # breaks since my_required_positional_arg is required
 # namespace = parser.parse_args([])
 
-print("\n---6 crash with unrecognized positional arguments ---")
+print("\n--- 6 crash with unrecognized positional arguments ---")
 # error: unrecognized arguments
 # namespace = parser.parse_args(["many", "arguments", "don't", "due to nargs"])
 
-print("\n---7 crash with unknown named arguments ---")
+print("\n--- 7 crash with unknown named arguments ---")
 # error: unrecognized arguments: -x
 # namespace = parser.parse_args(["-x", "42"])
 
-print("\n---8 print help and exit ---")
+print("\n--- 8 print help and exit ---")
 # namespace = parser.parse_args(["--help"])  # prints the help and then exits the program
 # namespace = parser.parse_args(["-h"])  # prints the help and then exits the program
 
-print("\n---9 print version and exit ---")
+print("\n--- 9 print version and exit ---")
 # namespace = parser.parse_args(["--version"])  # prints the version and then exits the program
 # namespace = parser.parse_args(["-v"])  # prints the version and then exits the program
+
+print("\n--- 10 file IO ---")
+# first, write
+parser = argparse.ArgumentParser(description="Argparser for file IO writing")
+parser.add_argument("-o", metavar="out-file", type=argparse.FileType("wt"))
+
+try:
+    results = parser.parse_args(["-o", "my-argparse-file.txt"])
+except IOError as msg:
+    parser.error(str(msg))
+
+print("Output file:", results.o)  # returns an io.TextIOWrapper or None
+
+results.o.write("Hi there!")  # caution: writes to file
+
+# then read
+parser = argparse.ArgumentParser(description="Argparser for file IO reading")
+parser.add_argument("-i", metavar="in-file", type=argparse.FileType("rt"))
+
+try:
+    results = parser.parse_args(["-i", "my-argparse-file.txt"])
+except IOError as msg:
+    parser.error(str(msg))
+
+print("Input file:", results.i)  # returns an io.TextIOWrapper or None
+
+file_contents = results.i.read()
+print(f"{file_contents=}")
