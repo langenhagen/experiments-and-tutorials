@@ -27,6 +27,7 @@ module_spec.loader.exec_module(my_module)
 
 print("*** Module loaded ***")
 
+print(f"{module_spec=}\n---")
 print(f"{dir(my_module)=}\n---")
 print(f"my_module.__doc__:\n{my_module.__doc__}---\n")
 
