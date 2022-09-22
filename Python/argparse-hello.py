@@ -77,14 +77,14 @@ parser.add_argument(
 )
 
 # custom typechecks - cause a nice crash with the look and feel of argparse
-def __check_unsigned_int(value: str) -> int:
+def __check_unsigned_int(arg: str) -> int:
     """Check if the given value is an unsigned int and return it as an int."""
     try:
-        i = int(value)
+        i = int(arg)
     except ValueError:
-        raise argparse.ArgumentTypeError(f"{value} is not an unsigned int value")
+        raise argparse.ArgumentTypeError(f"{arg} is not an unsigned int value")
     if i < 0:
-        raise argparse.ArgumentTypeError(f"{value} is not an unsigned int value")
+        raise argparse.ArgumentTypeError(f"{arg} is not an unsigned int value")
     return i
 
 
