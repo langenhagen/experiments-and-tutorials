@@ -77,7 +77,7 @@ parser.add_argument(
 )
 
 # custom typechecks - cause a nice crash with the look and feel of argparse
-def __check_unsigned_int(value) -> int:
+def __check_unsigned_int(value: str) -> int:
     """Check if the given value is an unsigned int and return it as an int."""
     try:
         i = int(value)
