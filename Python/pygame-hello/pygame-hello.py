@@ -1,7 +1,9 @@
 """Hello world for pygame.
 
 Taken from: https://gist.github.com/nicolasfig/3903404"""
-import pygame, sys
+import sys
+
+import pygame
 from pygame.locals import *
 
 # Set up pygame

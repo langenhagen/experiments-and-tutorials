@@ -2,17 +2,20 @@
 
 
 based on: https://github.com/ChristianD37/YoutubeTutorials/tree/master/PS4%20Controller
+
+Configuration invalid against pygame==2.1.2.
 """
+import json
+from pathlib import Path
 
 import pygame
-import json, os
 
 ################################# LOAD UP A BASIC WINDOW #################################
 pygame.init()
-DISPLAY_W, DISPLAY_H = 960, 570
+DISPLAY_W, DISPLAY_H = 1024, 768
 canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
 window = pygame.display.set_mode(((DISPLAY_W, DISPLAY_H)))
-running = True
+keep_running = True
 player_width = 60
 player = pygame.Rect(DISPLAY_W / 2, DISPLAY_H / 2, player_width, player_width)
 LEFT, RIGHT, UP, DOWN = False, False, False, False
@@ -31,24 +34,26 @@ for i in range(pygame.joystick.get_count()):
 for joystick in joysticks:
     joystick.init()
 
-with open(os.path.join("ps4_keys.json"), "r+") as file:
+
+with open(Path(__file__).resolve().parent / "ps4_keys.json", "r") as file:
     button_keys = json.load(file)
 # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
 analog_keys = {0: 0, 1: 0, 2: 0, 3: 0, 4: -1, 5: -1}
 
 # START OF GAME LOOP
-while running:
+while keep_running:
     ################################# CHECK PLAYER INPUT #################################
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            keep_running = False
         if event.type == pygame.KEYDOWN:
             ############### UPDATE SPRITE IF SPACE IS PRESSED #################################
             pass
 
         # HANDLES BUTTON PRESSES
         if event.type == pygame.JOYBUTTONDOWN:
+            print(event.button)
             if event.button == button_keys["left_arrow"]:
                 LEFT = True
             if event.button == button_keys["right_arrow"]:
@@ -71,7 +76,7 @@ while running:
         # HANDLES ANALOG INPUTS
         if event.type == pygame.JOYAXISMOTION:
             analog_keys[event.axis] = event.value
-            print(analog_keys)
+            # print(analog_keys)
             # Horizontal Analog
             if analog_keys[0] < -0.7:
                 LEFT = True
