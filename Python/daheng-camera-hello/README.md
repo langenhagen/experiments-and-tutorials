@@ -54,7 +54,7 @@ sudo apt install libqtgui4 libqt4-network
 ```
 
 Then, I could start the program, however, I did not see any output, window or log messages appear. I
-run the program via:
+ran the program via:
 ```bash
 cd Galaxy_Linux-x86_Gige-U3_32bits-64bits_1.3.2206.9161/Galaxy_camera/bin
 ./GalaxyView

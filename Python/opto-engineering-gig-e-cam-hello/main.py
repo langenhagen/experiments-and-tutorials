@@ -1,4 +1,4 @@
-""" Showcase the image grabbing from a Opto Engineering Gig E camera.
+"""Showcase the image grabbing from an Opto Engineering Gig E camera.
 
 Based on the product's sample under `/opt/MVS/Samples/64/Python/GrabImage/`.
 """
