@@ -1,0 +1,4 @@
+bpython
+numpy
+opencv-python
+/opt/ids-peak_2.1.0.0-14251_amd64/local/share/ids/bindings/python/wheel/ids_peak-1.4.2.2-cp310-cp310-linux_x86_64.whl
