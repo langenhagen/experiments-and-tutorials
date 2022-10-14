@@ -1,0 +1,4 @@
+bpython
+harvesters==1.3.2  # apparently 1.3.2 is the last version that is compatible with Python 3.6
+numpy
+opencv-python
