@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Showcase the usage of the package harvesters to get images from a GenICame
 standard camera."""
-from curses.ascii import isupper
-from harvesters.core import Harvester, ImageAcquirer, RemoteDevice
-
-import numpy as np
-import sys
-import cv2
 import json
+import sys
+from curses.ascii import isupper
 
-from genicam.genapi import NodeMap, AccessException
+import cv2
+import numpy as np
+from genicam.genapi import AccessException, NodeMap
+from harvesters.core import Harvester, ImageAcquirer, RemoteDevice
 
 
 def _print_nodes_and_values(node_map: NodeMap):

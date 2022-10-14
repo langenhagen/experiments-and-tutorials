@@ -1,7 +1,7 @@
 """
 List connected devices.
 
-based on from:
+based on:
 /opt/ids-peak_2.1.0.0-14251_amd64/share/doc/ids-peak/ids_peak-1.4.2/html/index.html#Python
 
 Just like the other Python code, doesn't work on my setup. the C++ stuff works.
@@ -20,4 +20,4 @@ except ids_peak.Exception as ex:
 finally:
     ids_peak.Library.Close()
 
-print("That's it.")
+print("That's it. Adios.")
