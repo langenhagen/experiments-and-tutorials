@@ -25,7 +25,8 @@ sudo apt install libpython3.10-dev
 # IDS Peak Cockpit
 A QT-based camera image viewer for reference.
 
-Then, I could start the program, however, I did not see any output, window or log messages appear. ran the program via:
+Then, I could start the program, however, I did not see any output, window or log messages appear.
+ran the program via:
 ```bash
 /opt/ids-peak_2.1.0.0-14251_amd64/bin/ids_peak_cockpit
 ```
