@@ -1,6 +1,12 @@
 # IDS Camera Hello
 A proof of concept for making the interaction with an IDS camera.
 
+
+Disclaimer: I could not connect the IDS cam via the package `ids_peak` since `ids_peak` did not
+discover the device. The according C++ implementation works fine, however. I have no explanation for
+the issue.
+
+
 Find the IDS SDK prerequisites here:
 https://en.ids-imaging.com/download-details/AB12776.html?os=linux&version=&bus=64&floatcalc=
 
