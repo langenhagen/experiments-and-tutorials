@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """Showcase the usage of the package harvesters to get images from a GenICame
 standard camera."""
-import json
 import sys
-from curses.ascii import isupper
 
 import cv2
 import numpy as np
 from genicam.genapi import AccessException, NodeMap
 from harvesters.core import Harvester, ImageAcquirer, RemoteDevice
-
 
 def _print_nodes_and_values(node_map: NodeMap):
     """Print the nodes and according values of the given NodeMap."""
@@ -18,14 +15,19 @@ def _print_nodes_and_values(node_map: NodeMap):
         if not name[0].isupper():
             continue
 
+        info = ""
         try:
             node = getattr(node_map, name)
             if hasattr(node, "value"):
                 value = node.value
+            if hasattr(node, "symbolics"):
+                info += f"    {node.symbolics}"
+            if hasattr(node, "execute"):
+                info += f"     \033[92m*EXECUTABLE*\033[0m"
         except AccessException:
             value = "***AccessException***"
 
-        print(f"{name}={value}")
+        print(f"{name}={value}{info}")
 
     print("---")
 
@@ -42,14 +44,24 @@ def main() -> int:
     assert len(h.device_info_list) > 0, "Oh no! No device detected."
 
     ia: ImageAcquirer = h.create_image_acquirer(list_index=0)
+    # ia: ImageAcquirer = h.create_image_acquirer(vendor="IDS Imaging Development Systems GmbH", list_index=0)  # rather restrictive
     device: RemoteDevice = ia.remote_device
     node_map: NodeMap = device.node_map
 
+    node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.Gain.value = 2.0
     node_map.ExposureTime.value = 10_000
     node_map.Width.value = 480
     node_map.Height.value = 360
     node_map.PixelFormat.value = "BayerRG8"  # see `pfnc.py` for available formats
+
+    use_software_trigger = True
+    if use_software_trigger is True:
+        node_map.TriggerMode.value = "On"
+        node_map.TriggerSource.value = (
+            "Software"  # with the IDS cam, "Software" is the default
+        )
+        node_map.TriggerActivation.value = "RisingEdge"  # with the IDS cam, "RisingEdge" is the default and only option
 
     _print_nodes_and_values(node_map)
 
@@ -57,6 +69,10 @@ def main() -> int:
 
     keep_grabbing = True
     while keep_grabbing is True:
+
+        if use_software_trigger is True:
+            node_map.TriggerSoftware.execute()
+
         with ia.fetch_buffer() as buffer:
             component = buffer.payload.components[0]
 
@@ -81,6 +97,11 @@ def main() -> int:
         cv2.imshow("image", img2)
 
     ia.stop_acquisition()
+
+    # reset cam configuration to factory settings
+    node_map.UserSetSelector.value = "Default"
+
+    node_map.UserSetLoad.execute()
 
     ia.destroy()
 
