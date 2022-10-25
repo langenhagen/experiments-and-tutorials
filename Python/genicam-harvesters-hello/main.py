@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Showcase the usage of the package harvesters to get images from a GenICame
 standard camera."""
+import datetime as dt
 import sys
+from itertools import count
+from pathlib import Path
 
 import cv2
 import numpy as np
 from genicam.genapi import AccessException, NodeMap
+from genicam.gentl import InvalidAddressException
 from harvesters.core import Harvester, ImageAcquirer, RemoteDevice
+
 
 def _print_nodes_and_values(node_map: NodeMap):
     """Print the nodes and according values of the given NodeMap."""
@@ -16,6 +21,7 @@ def _print_nodes_and_values(node_map: NodeMap):
             continue
 
         info = ""
+        value = ""
         try:
             node = getattr(node_map, name)
             if hasattr(node, "value"):
@@ -26,18 +32,29 @@ def _print_nodes_and_values(node_map: NodeMap):
                 info += f"     \033[92m*EXECUTABLE*\033[0m"
         except AccessException:
             value = "***AccessException***"
+        except InvalidAddressException:  # happened with the Allied Vision U-508c
+            value = "\033[1;31m***InvalidAddressException***\033[0m"
 
         print(f"{name}={value}{info}")
 
     print("---")
 
 
-def main() -> int:
+def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     """Main program function."""
+
+    if write_images_to_disk is True:
+        now = dt.datetime.now().strftime("%Y-%m-%-d-%H:%M:%S")
+        output_folder = Path.cwd() / f"images-{now}"
+        output_folder.mkdir(exist_ok=False)
+
     h = Harvester()
 
-    # load a suitable CTI file for your cam
-    h.add_file("/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti")
+    # load a suitable CTI files for your cams
+    h.add_file(
+        "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti"
+    )  # Allied Vision
+    h.add_file("/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti")  # IDS
     h.update()
 
     print(f"{len(h.device_info_list)} devices:\n{h.device_info_list}")
@@ -50,12 +67,11 @@ def main() -> int:
 
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.Gain.value = 2.0
-    node_map.ExposureTime.value = 10_000
+    node_map.ExposureTime.value = 15_000
     node_map.Width.value = 480
     node_map.Height.value = 360
     node_map.PixelFormat.value = "BayerRG8"  # see `pfnc.py` for available formats
 
-    use_software_trigger = True
     if use_software_trigger is True:
         node_map.TriggerMode.value = "On"
         node_map.TriggerSource.value = (
@@ -67,9 +83,7 @@ def main() -> int:
 
     ia.start_acquisition()
 
-    keep_grabbing = True
-    while keep_grabbing is True:
-
+    for i in count(0):
         if use_software_trigger is True:
             node_map.TriggerSoftware.execute()
 
@@ -82,19 +96,22 @@ def main() -> int:
             # we're working with a remote device that transmits only a 2D image.
             # So we manipulate only index 0 of the list object, components.
 
-            img_data: np.ndarray = component.data
+            img_data: np.ndarray = component.data  #  1 dimensional array
             img = img_data.reshape(component.height, component.width)
 
             key = cv2.waitKey(1)
             if key == ord("q"):
-                keep_grabbing = False
+                break
             elif key == 82:  # up key
                 pass
             elif key == 84:  # down key
                 pass
 
             img2 = cv2.cvtColor(img, cv2.COLOR_BayerRG2RGB)
+
         cv2.imshow("image", img2)
+        if write_images_to_disk is True:
+            cv2.imwrite(str(output_folder / f"img-{i}.png"), img2)
 
     ia.stop_acquisition()
 
@@ -109,4 +126,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(use_software_trigger=True, write_images_to_disk=False))
