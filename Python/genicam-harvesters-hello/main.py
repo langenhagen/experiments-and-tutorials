@@ -9,8 +9,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 from genicam.genapi import AccessException, NodeMap
-from genicam.gentl import InvalidAddressException
-from harvesters.core import Harvester, ImageAcquirer, RemoteDevice
+from genicam.gentl import InvalidAddressException, NotImplementedException
+from harvesters.core import DeviceInfo, Harvester, ImageAcquirer, RemoteDevice
 
 
 def _print_nodes_and_values(node_map: NodeMap):
@@ -50,15 +50,31 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
 
     h = Harvester()
 
-    # load a suitable CTI files for your cams
-    h.add_file(
-        "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti"
-    )  # Allied Vision
+    # Load a suitable CTI file for your cam.
+    # Although you can add both CTI files at the same time, I recommend avoiding
+    # doing so. When I added both IDS and Allied Vision CTI files, the program
+    # reported 2 Allied Vision Devices. Conversely, when I connected an IDS cam,
+    # adding both CTI files only reported 1 IDS decvice. I suspect the issue is
+    # on the Allied Vision side, also since Allied Vision has some other issues
+    # with Harvesters.
+    # h.add_file(
+    #     "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti"
+    # )  # Allied Vision
     h.add_file("/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti")  # IDS
     h.update()
 
     print(f"{len(h.device_info_list)} devices:\n{h.device_info_list}")
     assert len(h.device_info_list) > 0, "Oh no! No device detected."
+
+    device_info: DeviceInfo = h.device_info_list[0]
+    try:
+        serial_number = str(device_info.serial_number)
+    except NotImplementedException:
+        # AlliedVision doesn't give a serial number properly. It reports a
+        # serial number against the IDS CTI file, but fails down the road.
+        serial_number = "\033[1;31m***NotImplementedException***\033[0m"
+
+    print(f"serial_number={serial_number}")
 
     ia: ImageAcquirer = h.create_image_acquirer(list_index=0)
     # ia: ImageAcquirer = h.create_image_acquirer(vendor="IDS Imaging Development Systems GmbH", list_index=0)  # rather restrictive
