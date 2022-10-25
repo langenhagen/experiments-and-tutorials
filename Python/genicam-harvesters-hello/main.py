@@ -103,9 +103,11 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
             if key == ord("q"):
                 break
             elif key == 82:  # up key
-                pass
+                node_map.ExposureTime.value += 1000
+                print(f"Exposure set to: {node_map.ExposureTime.value}")
             elif key == 84:  # down key
-                pass
+                node_map.ExposureTime.value -= 1000
+                print(f"Exposure set to: {node_map.ExposureTime.value}")
 
             img2 = cv2.cvtColor(img, cv2.COLOR_BayerRG2RGB)
 
