@@ -43,11 +43,6 @@ def _print_nodes_and_values(node_map: NodeMap):
 def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     """Main program function."""
 
-    if write_images_to_disk is True:
-        now = dt.datetime.now().strftime("%Y-%m-%-d-%H:%M:%S")
-        output_folder = Path.cwd() / f"images-{now}"
-        output_folder.mkdir(exist_ok=False)
-
     h = Harvester()
 
     # Load a suitable CTI file for your cam.
@@ -75,6 +70,11 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         serial_number = "\033[1;31m***NotImplementedException***\033[0m"
 
     print(f"serial_number={serial_number}")
+
+    if write_images_to_disk is True:
+        now = dt.datetime.now().strftime("%Y-%m-%-d-%H:%M:%S")
+        output_folder = Path.cwd() / f"images-{now}"
+        output_folder.mkdir(exist_ok=False)
 
     ia: ImageAcquirer = h.create_image_acquirer(list_index=0)
     # ia: ImageAcquirer = h.create_image_acquirer(vendor="IDS Imaging Development Systems GmbH", list_index=0)  # rather restrictive
