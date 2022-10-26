@@ -68,7 +68,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
 
     device_info: DeviceInfo = h.device_info_list[0]
     try:
-        serial_number = str(device_info.serial_number)
+        serial_number = int(device_info.serial_number)
     except NotImplementedException:
         # AlliedVision doesn't give a serial number properly. It reports a
         # serial number against the IDS CTI file, but fails down the road.
