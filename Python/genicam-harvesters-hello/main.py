@@ -85,12 +85,15 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     node_map: NodeMap = device.node_map
 
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
+    node_map.GainAuto.SetValue = "Off"
     node_map.Gain.value = 2.0
     node_map.ExposureTime.value = 15_000
-    node_map.PixelFormat.value = "RGB8"  # see `pfnc.py` for available formats
+    node_map.PixelFormat.value = "BGR8"  # OpenCV works in BGR; use "RGB8" otherwise; see `pfnc.py` for available formats
     # node_map.PixelFormat.value = "Mono8"
-    node_map.Width.value = 480
-    node_map.Height.value = 360
+
+    # these crop the image
+    # node_map.Width.value = 480
+    # node_map.Height.value = 360
 
     if use_software_trigger is True:
         node_map.TriggerMode.value = "On"
@@ -128,10 +131,10 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
                 node_map.Gain.value += 0.1
                 print(f"Gain set to: {node_map.Gain.value}")
             elif key == 82:  # up key
-                node_map.ExposureTime.value += 1000
+                node_map.ExposureTime.value += 50
                 print(f"Exposure set to: {node_map.ExposureTime.value}")
             elif key == 84:  # down key
-                node_map.ExposureTime.value -= 1000
+                node_map.ExposureTime.value -= 50
                 print(f"Exposure set to: {node_map.ExposureTime.value}")
 
             cv2.imshow("image", img)
