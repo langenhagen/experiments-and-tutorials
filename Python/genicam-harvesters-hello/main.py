@@ -45,17 +45,20 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
 
     h = Harvester()
 
-    # Load a suitable CTI file for your cam.
-    # Although you can add both CTI files at the same time, I recommend avoiding
+    # Load suitable CTI files for your cam.
+    # Although you can add sev. CTI files at the same time, I recommend avoiding
     # doing so. When I added both IDS and Allied Vision CTI files, the program
-    # reported 2 Allied Vision Devices. Conversely, when I connected an IDS cam,
-    # adding both CTI files only reported 1 IDS decvice. I suspect the issue is
-    # on the Allied Vision side, also since Allied Vision has some other issues
-    # with Harvesters.
-    # h.add_file(
-    #     "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti"
-    # )  # Allied Vision
-    h.add_file("/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti")  # IDS
+    # reported 2 Allied Vision Devices. However, when I connected an IDS cam,
+    # adding both CTI files correctlyy reported 1 IDS decvice. I suspect the
+    # issue is on the Allied Vision side, also since Allied Vision has some
+    # other issues with Harvesters.
+    cti_files = [
+        # "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti",  # Allied VIsion
+        "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
+    ]
+    for cti_file in cti_files:
+        h.add_file(cti_file)
+
     h.update()
 
     print(f"{len(h.device_info_list)} devices:\n{h.device_info_list}")
@@ -84,16 +87,14 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.Gain.value = 2.0
     node_map.ExposureTime.value = 15_000
-    # node_map.PixelFormat.value = "Mono8"  # see `pfnc.py` for available formats
     node_map.PixelFormat.value = "RGB8"  # see `pfnc.py` for available formats
+    # node_map.PixelFormat.value = "Mono8"
     node_map.Width.value = 480
     node_map.Height.value = 360
 
     if use_software_trigger is True:
         node_map.TriggerMode.value = "On"
-        node_map.TriggerSource.value = (
-            "Software"  # with the IDS cam, "Software" is the default
-        )
+        node_map.TriggerSource.value = "Software"  # with IDS, "Software" is the default
         node_map.TriggerActivation.value = "RisingEdge"  # with the IDS cam, "RisingEdge" is the default and only option
 
     _print_nodes_and_values(node_map)
@@ -114,8 +115,8 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
             # So we manipulate only index 0 of the list object, components.
 
             img_data: np.ndarray = component.data  #  1 dimensional array
-            # img = img_data.reshape(component.height, component.width, 1)  # for mono colors
             img = img_data.reshape(component.height, component.width, 3)
+            # img = img_data.reshape(component.height, component.width, 1)  # for mono colors
 
             key = cv2.waitKey(1)
             if key == ord("q"):
