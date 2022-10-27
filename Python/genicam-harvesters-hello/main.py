@@ -47,11 +47,11 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
 
     # Load suitable CTI files for your cam.
     # Although you can add sev. CTI files at the same time, I recommend avoiding
-    # doing so. When I added both IDS and Allied Vision CTI files, the program
-    # reported 2 Allied Vision Devices. However, when I connected an IDS cam,
-    # adding both CTI files correctlyy reported 1 IDS decvice. I suspect the
-    # issue is on the Allied Vision side, also since Allied Vision has some
-    # other issues with Harvesters.
+    # doing so. When I added both IDS and Allied Vision CTI files and connected
+    # the Allied Vision cam, the program reported 2 Allied Vision Devices.
+    # However, when I connected an IDS cam, adding both CTI files correctlyy
+    # reported 1 IDS decvice. I suspect the issue is on the Allied Vision side,
+    # also since Allied Vision has some other issues with Harvesters.
     cti_files = [
         # "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti",  # Allied VIsion
         "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
