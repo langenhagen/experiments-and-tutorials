@@ -84,9 +84,10 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.Gain.value = 2.0
     node_map.ExposureTime.value = 15_000
+    # node_map.PixelFormat.value = "Mono8"  # see `pfnc.py` for available formats
+    node_map.PixelFormat.value = "RGB8"  # see `pfnc.py` for available formats
     node_map.Width.value = 480
     node_map.Height.value = 360
-    node_map.PixelFormat.value = "BayerRG8"  # see `pfnc.py` for available formats
 
     if use_software_trigger is True:
         node_map.TriggerMode.value = "On"
@@ -113,11 +114,18 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
             # So we manipulate only index 0 of the list object, components.
 
             img_data: np.ndarray = component.data  #  1 dimensional array
-            img = img_data.reshape(component.height, component.width)
+            # img = img_data.reshape(component.height, component.width, 1)  # for mono colors
+            img = img_data.reshape(component.height, component.width, 3)
 
             key = cv2.waitKey(1)
             if key == ord("q"):
                 break
+            elif key == 81:  # left key
+                node_map.Gain.value -= 0.1
+                print(f"Gain set to: {node_map.Gain.value}")
+            elif key == 83:  # right key
+                node_map.Gain.value += 0.1
+                print(f"Gain set to: {node_map.Gain.value}")
             elif key == 82:  # up key
                 node_map.ExposureTime.value += 1000
                 print(f"Exposure set to: {node_map.ExposureTime.value}")
@@ -125,17 +133,14 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
                 node_map.ExposureTime.value -= 1000
                 print(f"Exposure set to: {node_map.ExposureTime.value}")
 
-            img2 = cv2.cvtColor(img, cv2.COLOR_BayerRG2RGB)
-
-        cv2.imshow("image", img2)
-        if write_images_to_disk is True:
-            cv2.imwrite(str(output_folder / f"img-{i}.png"), img2)
+            cv2.imshow("image", img)
+            if write_images_to_disk is True:
+                cv2.imwrite(str(output_folder / f"img-{i}.png"), img)
 
     ia.stop_acquisition()
 
     # reset cam configuration to factory settings
     node_map.UserSetSelector.value = "Default"
-
     node_map.UserSetLoad.execute()
 
     ia.destroy()
