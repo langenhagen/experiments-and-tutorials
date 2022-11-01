@@ -2,6 +2,7 @@
 """Showcase the usage of the package harvesters to get images from a GenICam
 standard camera."""
 import datetime as dt
+import logging
 import sys
 from itertools import count
 from pathlib import Path
@@ -11,6 +12,17 @@ import numpy as np
 from genicam.genapi import AccessException, NodeMap
 from genicam.gentl import InvalidAddressException, NotImplementedException
 from harvesters.core import DeviceInfo, Harvester, ImageAcquirer, RemoteDevice
+
+log = logging.getLogger(__name__)
+
+
+def _setup_log():
+    """Setup logging for the benchmark application."""
+    logging.basicConfig(
+        format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
+        datefmt="%H:%M:%S",
+        level=logging.INFO,
+    )
 
 
 def _print_nodes_and_values(node_map: NodeMap):
@@ -35,15 +47,16 @@ def _print_nodes_and_values(node_map: NodeMap):
         except InvalidAddressException:  # happened with the Allied Vision U-508c
             value = "\033[1;31m***InvalidAddressException***\033[0m"
 
-        print(f"{name}={value}{info}")
+        log.info(f"{name}={value}{info}")
 
-    print("---")
+    log.info("---")
 
 
 def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     """Main program function."""
+    _setup_log()
 
-    h = Harvester()
+    h = Harvester(logger=log)  # logger = None silences Harvester logs
 
     # Load suitable CTI files for your cam.
     # Although you can add sev. CTI files at the same time, I recommend avoiding
@@ -61,7 +74,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
 
     h.update()
 
-    print(f"{len(h.device_info_list)} devices:\n{h.device_info_list}")
+    log.info(f"{len(h.device_info_list)} devices:\n{h.device_info_list}")
     assert len(h.device_info_list) > 0, "Oh no! No device detected."
 
     device_info: DeviceInfo = h.device_info_list[0]
@@ -72,7 +85,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         # serial number against the IDS CTI file, but fails down the road.
         serial_number = "\033[1;31m***NotImplementedException***\033[0m"
 
-    print(f"serial_number={serial_number}")
+    log.info(f"serial_number={serial_number}")
 
     if write_images_to_disk is True:
         now = dt.datetime.now().strftime("%Y-%m-%-d-%H:%M:%S")
@@ -126,16 +139,16 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
                 break
             elif key == 81:  # left key
                 node_map.Gain.value -= 0.1
-                print(f"Gain set to: {node_map.Gain.value}")
+                log.info(f"Gain set to: {node_map.Gain.value}")
             elif key == 83:  # right key
                 node_map.Gain.value += 0.1
-                print(f"Gain set to: {node_map.Gain.value}")
+                log.info(f"Gain set to: {node_map.Gain.value}")
             elif key == 82:  # up key
                 node_map.ExposureTime.value += 50
-                print(f"Exposure set to: {node_map.ExposureTime.value}")
+                log.info(f"Exposure set to: {node_map.ExposureTime.value}")
             elif key == 84:  # down key
                 node_map.ExposureTime.value -= 50
-                print(f"Exposure set to: {node_map.ExposureTime.value}")
+                log.info(f"Exposure set to: {node_map.ExposureTime.value}")
 
             cv2.imshow("image", img)
             if write_images_to_disk is True:
