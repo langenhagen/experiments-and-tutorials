@@ -34,3 +34,5 @@ with ThreadPoolExecutor(max_workers=5) as executor:
             print("%r generated an exception: %s" % (url, exc))
         else:
             print("%r page is %d bytes" % (url, len(data)))
+
+print("DONE.")  # appears after all threads are done; the context manager is blocking.
