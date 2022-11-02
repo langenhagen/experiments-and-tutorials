@@ -4,7 +4,7 @@ Showcase the usage of a Python3 ThreadPoolExecutor.
 
 Based on: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
 """
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.request import urlopen
 
 URLS = [
@@ -26,13 +26,16 @@ def load_url(url, timeout):
 with ThreadPoolExecutor(max_workers=5) as executor:
     # Start the load operations and mark each future with its URL
     future_to_url = {executor.submit(load_url, url, 60): url for url in URLS}
-    for future in concurrent.futures.as_completed(future_to_url):
-        url = future_to_url[future]
-        try:
-            data = future.result()
-        except Exception as exc:
-            print("%r generated an exception: %s" % (url, exc))
-        else:
-            print("%r page is %d bytes" % (url, len(data)))
+
+print("*** All threads finished. All futures are ready. ***")
+
+for future in as_completed(future_to_url):
+    url = future_to_url[future]
+    try:
+        data = future.result()
+    except Exception as exc:
+        print("%r generated an exception: %s" % (url, exc))
+    else:
+        print("%r page is %d bytes" % (url, len(data)))
 
 print("DONE.")  # appears after all threads are done; the context manager is blocking.
