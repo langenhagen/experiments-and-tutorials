@@ -98,7 +98,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     node_map: NodeMap = device.node_map
 
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
-    node_map.GainAuto.SetValue = "Off"
+    node_map.GainAuto = "Off"
     node_map.Gain.value = 2.0
     node_map.ExposureTime.value = 15_000
     node_map.PixelFormat.value = "BGR8"  # OpenCV works in BGR; use "RGB8" otherwise; see `pfnc.py` for available formats
