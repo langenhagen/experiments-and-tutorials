@@ -1,1 +1,3 @@
-sqlalchemy
+bpython
+# SQLAlchemy  # without version to get the latest
+SQLAlchemy==1.2.5  # related to a recent problem
