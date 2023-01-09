@@ -8,6 +8,7 @@ See: https://docs.python.org/3.6/library/traceback.html
 """
 import sys
 import traceback
+from typing import List
 
 print("--- 1 print a traceback ---")
 
@@ -17,9 +18,15 @@ def foo():
 
 
 def bar(i):
-    print("Normal traceback BEGIN")
+    print("BEGIN print_stack()")
     traceback.print_stack()
-    print("Normal traceback END")
+    print("END print_stack()\n")
+    print('BEGIN manually print stack trace via "".join(format_list(extract_stack()))')
+    stack: List[traceback.FrameSummary] = traceback.extract_stack()
+    formatted: List[str] = traceback.format_list(stack)
+    print("formatted:")
+    print("".join(formatted))
+    print('END manually print stack trace via "".join(format_list(extract_stack()))\n')
 
 
 foo()
@@ -38,13 +45,13 @@ def catch():
     except ValueError as err:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         formatted = traceback.format_tb(exc_traceback)
-        print(f"{type(exc_type)=};  {type(exc_value)=};  {type(exc_traceback)=}\n")
-        print(f"{type(formatted)=}")
-        print(f"{formatted=}\n")
-        print(f"{type(traceback.format_exc())=}")
-        print(f"{traceback.format_exc()=}")
+        print(f"{type(exc_type)};  {type(exc_value)};  {type(exc_traceback)}\n")
+        print(f"{type(formatted)}")
+        print(f"{formatted}\n")
+        print(f"{type(traceback.format_exc())}")
+        print(f"{traceback.format_exc()}")
 
-        print(f"{traceback.format_exception(*sys.exc_info())=}\n")
+        print(f"{traceback.format_exception(*sys.exc_info())}\n")
 
         return exc_traceback
 
