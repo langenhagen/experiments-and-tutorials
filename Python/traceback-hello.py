@@ -22,6 +22,9 @@ def bar(i):
     traceback.print_stack()
     print("END print_stack()\n")
     print('BEGIN manually print stack trace via "".join(format_list(extract_stack()))')
+    # short recipe:
+    # import traceback
+    # "".join(traceback.format_list(traceback.extract_stack()))
     stack: List[traceback.FrameSummary] = traceback.extract_stack()
     formatted: List[str] = traceback.format_list(stack)
     print("formatted:")
