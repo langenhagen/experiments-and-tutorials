@@ -1,9 +1,9 @@
 """Showcase the quirks and use of mypy.
 
 run via:
-  mypy mypy-any-hello.py
+  mypy mypy-hello.py
 """
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Literal, Optional
 
 print("\n--- 1 Mypy is inconsistent about whether None is in `Any` or not ---\n")
 
@@ -39,3 +39,27 @@ def receive_iterables(l: Iterable[int]):
 
 receive_iterables(l)  # ok
 receive_iterables(t)  # ok
+
+
+print("\n--- 3 no dynamic literals; values in Literals must be ... literals ---\n")
+
+A: Literal["Hey"] = "Hey"
+B = "Ho!"
+C = "Let's"
+D = "Go!"
+
+ALL = [A, B, C, D]
+
+
+def get_literal() -> Literal["Hey", "Ho!", "Let's", "Go!"]:
+    return A
+
+
+# Literal[*ALL] doesn't work
+
+# won't work, either
+# All_TYPE = Literal[A,B,C,D]
+# neither does
+# All_TYPE = Literal[*ALL]
+# def get_literal2() -> All_TYPE:  # Literal[*ALL] doesn't work
+#     return A
