@@ -35,6 +35,4 @@ while inotifywait -e close_write mytestfile.txt; do
     printf '>> Close write mytestfile.txt 3\n'
 done
 
-# TODO test with dirs
-
 printf 'Done'
