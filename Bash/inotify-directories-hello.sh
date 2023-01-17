@@ -18,7 +18,7 @@ trap clean_up EXIT
 clean_up
 
 while true; do  # `modify` reacts to creation and changes, not to rm and mv
-    inotify_output="$(inotifywait -e modify "$PWD" 2>/dev/null)"  # 2>/dev/null shadows output a la "Setting up watches. Watches established."
+    inotify_output="$(inotifywait --event modify --recursive "$PWD" 2>/dev/null)"  # 2>/dev/null shadows output a la "Setting up watches. Watches established."
     printf '\ninotify_output:\n%s\n' "$inotify_output"
     inotify_line="$(grep --max-count=1 ' MODIFY ' <<< "$inotify_output")"
     filename="$(rev <<<  "$inotify_line" | cut -d' ' -f1 | rev)"
