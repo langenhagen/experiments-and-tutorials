@@ -11,8 +11,6 @@
 #   printf "Hello!" > mytestfile.txt
 #   rm mytestfile.txt
 
-
-
 function clean_up {
     rm mytestfile.txt
 }
