@@ -10,9 +10,9 @@ https://stackoverflow.com/questions/15753701/how-can-i-pass-a-list-as-a-command-
 """
 import argparse
 import pathlib
-from argparse import Namespace
+from argparse import ArgumentParser, Namespace
 
-parser = argparse.ArgumentParser(description="Short sample app")
+parser = ArgumentParser(description="Short sample app")
 
 # version
 parser.add_argument(
