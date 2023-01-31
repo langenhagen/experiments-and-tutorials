@@ -9,13 +9,18 @@ import string
 # random.seed(None) happens implicitly.
 # random.seed()
 
-print("--- 1 random integers ---")
+print("--- 1 random floats ---")
+
+for _ in range(10):
+    print(random.random())  #  < x < 1
+
+print("\n--- 2 random integers ---")
 
 for _ in range(10):
     print(random.randint(1, 10))  # including min and INCLUDING max
 
 
-print("--- 2 random strings ---")
+print("\n--- 3 random strings ---")
 
 s1 = "".join(random.choices(string.ascii_letters, k=5))
 print(s1)
