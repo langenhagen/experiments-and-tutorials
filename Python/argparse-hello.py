@@ -12,7 +12,8 @@ import argparse
 import pathlib
 from argparse import ArgumentParser, Namespace
 
-parser = ArgumentParser(description="Short sample app")
+# add_help=True is the default; consider setting it to false for a custom option `-h`
+parser = ArgumentParser(description="Short sample app", add_help=True)
 
 # version
 parser.add_argument(
