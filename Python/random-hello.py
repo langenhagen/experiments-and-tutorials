@@ -12,12 +12,12 @@ import string
 print("--- 1 random floats ---")
 
 for _ in range(10):
-    print(random.random())  #  < x < 1
+    print(random.random())  #  ]0,1[
 
 print("\n--- 2 random integers ---")
 
 for _ in range(10):
-    print(random.randint(1, 10))  # including min and INCLUDING max
+    print(random.randint(1, 10))  # (min, max) aka including min and INCLUDING max
 
 
 print("\n--- 3 random strings ---")
