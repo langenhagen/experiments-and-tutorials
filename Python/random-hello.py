@@ -33,3 +33,16 @@ print(s3)
 
 s4 = "".join(random.choices(["a", "b", "c", "1", "2", "3"], k=8))
 print(s4)
+
+
+print("\n--- 4 shuffle lists ---")
+
+l = [1, 2, 3, 4]
+print(f"{l=}")
+
+sampled = random.sample(l, len(l))
+print(f"{sampled=}")  # returns a new shuffled list
+print(f"{l=}")
+
+random.shuffle(l)  # shuffles the list in-place
+print(f"{l=}")
