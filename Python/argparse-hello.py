@@ -66,6 +66,7 @@ parser.add_argument(
     "--my-list",
     nargs="+",  # `+` takes 1 or more args, `*` takes 0 or more args
     required=False,  # False is the default, but for showcasing, I write it out
+    default=[69, 420],
     type=int,  # item-wise type
     help="an optional argument list",
 )
