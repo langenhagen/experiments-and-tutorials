@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the context manager contextlib.suppress() that allows for convenient
 ignoring of exceptions"""
+import time
 from contextlib import suppress
 
 print("--- 1 suppress vs try/except/pass")
@@ -17,7 +18,7 @@ with suppress(ZeroDivisionError):
     hahaha = 12 / 0
 
 
-print("--- 2 suppress on KeyboardInterrupts e.g. <CTRL + C> ---")
+print("\n--- 2 suppress on KeyboardInterrupts e.g. <CTRL + C> ---")
 
 
 def foo():
@@ -25,9 +26,26 @@ def foo():
     while True:
         print(f"{i} Press <CTRL + C>")
         i += 1
+        time.sleep(1)
 
 
 with suppress(KeyboardInterrupt):
+    foo()
+
+
+print("\n--- 3 suppress with several Exception types ---")
+
+
+def foo():
+    i = 10
+    while True:
+        print(f"{i} Press <CTRL + C> or wait")
+        print(f"1/{i} = {1/i}")
+        i -= 1
+        time.sleep(1)
+
+
+with suppress(KeyboardInterrupt, ZeroDivisionError):
     foo()
 
 print("Done")
