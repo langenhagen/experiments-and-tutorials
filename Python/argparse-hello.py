@@ -70,6 +70,11 @@ parser.add_argument(
     type=int,  # item-wise type
     help="an optional argument list",
 )
+
+# decide to change the defaults for an argument
+# parser.set_defaults(l=[70, 421])  # that doesn't work
+parser.set_defaults(my_list=[71, 422])
+
 # append lists, basically you can set this argument several times
 parser.add_argument(
     "-m",
