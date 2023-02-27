@@ -41,25 +41,25 @@ print("--- 1 cut off a long running function via SIGALRM ---")
 signal.signal(signal.SIGALRM, timeout_handler)
 signal.alarm(5)  # send an alarm signal in 10 seconds
 
-print(f"Before: {time.strftime('%H:%M:%S')}")
+print(f"Before: {time.strftime('%T')}")
 with suppress(SIGALRMException):
     long_running_function(7)
 
 # cancel and unset the alarm; doesn't really matter here bc alarm went already off
 signal.alarm(0)
-print(f"After: {time.strftime('%H:%M:%S')}")
+print(f"After: {time.strftime('%T')}")
 
 
 print("\n--- 2 handler still set ---")
 
 signal.alarm(5)  # send an alarm signal in 10 seconds
 
-print(f"Before: {time.strftime('%H:%M:%S')}")
+print(f"Before: {time.strftime('%T')}")
 with suppress(SIGALRMException):
     long_running_function(7)
 
 signal.alarm(0)
-print(f"After: {time.strftime('%H:%M:%S')}")
+print(f"After: {time.strftime('%T')}")
 
 
 print("\n--- 3 quick functions finish before SIGALRM ---")
@@ -67,9 +67,9 @@ print("\n--- 3 quick functions finish before SIGALRM ---")
 # again, but this time the function runs shorter than the alarm
 signal.alarm(5)  # send an alarm signal in 10 seconds
 
-print(f"Before: {time.strftime('%H:%M:%S')}")
+print(f"Before: {time.strftime('%T')}")
 with suppress(SIGALRMException):
     long_running_function(3)
 
 signal.alarm(0)  # cancel and unset the alarm
-print(f"After: {time.strftime('%H:%M:%S')}")
+print(f"After: {time.strftime('%T')}")

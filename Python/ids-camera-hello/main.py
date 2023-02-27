@@ -12,7 +12,7 @@ from ids_peak import ids_peak
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)d [%(levelname)s]: %(lineno)d: %(message)s",
-    datefmt="%H:%M:%S",
+    datefmt="%T",
     level=logging.DEBUG,
 )
 log = logging.getLogger(__name__)

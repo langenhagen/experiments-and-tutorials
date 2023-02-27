@@ -20,7 +20,7 @@ def _setup_log():
     """Setup logging for the benchmark application."""
     logging.basicConfig(
         format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
-        datefmt="%H:%M:%S",
+        datefmt="%T",
         level=logging.INFO,
     )
 
