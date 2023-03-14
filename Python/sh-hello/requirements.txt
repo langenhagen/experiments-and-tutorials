@@ -1,0 +1,3 @@
+bpython
+# tested with sh==2.0.2
+sh
