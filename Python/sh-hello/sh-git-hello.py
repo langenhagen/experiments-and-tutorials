@@ -20,7 +20,7 @@ def main():
     print(diff_files)
 
     print("--- 2 diffs can be problematic with diff-so-fancy - would hang ---")
-
+    # git.diff("HEAD..HEAD~1")
 
 if __name__ == "__main__":
     main()
