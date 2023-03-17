@@ -90,6 +90,18 @@ parser.add_argument(
     help="Either ssh or https/",
 )
 
+group = parser.add_mutually_exclusive_group(required=False)
+group.add_argument(
+    "--group1",
+    type=str,
+    help="A string.",
+)
+group.add_argument(
+    "--othergroup",
+    action="store_true",
+    help="A flag",
+)
+
 # custom typechecks - cause a nice crash with the look and feel of argparse
 def __check_unsigned_int(arg: str) -> int:
     """Check if the given value is an unsigned int and return it as an int."""
@@ -123,6 +135,8 @@ def __print_namespace(ns: Namespace):
     print(f"{ns.my_other_list=}")
     print(f"{ns.choice=}")
     print(f"{ns.uint=}")
+    print(f"{ns.group1=}")
+    print(f"{ns.othergroup=}")
 
 
 print("\n--- 1 argument parsing ---")
@@ -138,14 +152,15 @@ namespace = parser.parse_args(
         "miaaauuu",
         "--my-list", "1", "2", "3",
         "-m", "7", "-m", "8", "-m", "9",
-        "--uint", "0"
+        "--uint", "0",
+        "--group1", "grouped"
     ]
 )
 # fmt: on
 __print_namespace(namespace)
 
 print("\n--- 2 another parsing---")
-namespace = parser.parse_args(["-a", "kaaatz"])
+namespace = parser.parse_args(["-a", "kaaatz", "--othergroup"])
 __print_namespace(namespace)
 
 print("\n--- 3 with only one argument---")
