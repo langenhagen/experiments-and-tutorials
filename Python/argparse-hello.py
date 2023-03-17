@@ -82,6 +82,13 @@ parser.add_argument(
     action="append",
     help="another optional argument list",
 )
+parser.add_argument(
+    "--choice",
+    dest="choice",
+    choices=("ssh", "https"),
+    default="ssh",
+    help="Either ssh or https/",
+)
 
 # custom typechecks - cause a nice crash with the look and feel of argparse
 def __check_unsigned_int(arg: str) -> int:
@@ -114,6 +121,7 @@ def __print_namespace(ns: Namespace):
     print(f"{ns.my_required_positional_arg=}")
     print(f"{ns.my_list=}")
     print(f"{ns.my_other_list=}")
+    print(f"{ns.choice=}")
     print(f"{ns.uint=}")
 
 
