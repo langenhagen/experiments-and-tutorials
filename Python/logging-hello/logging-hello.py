@@ -104,3 +104,8 @@ logger.removeHandler(console_handler)
 logger.removeHandler(other_console_handler)
 
 logger.info("should only be printed once")
+
+print("\n--- 12 logging argument variable types ---")
+
+my_bool = True
+logger.info('Bools can go as "%%s". my_bool=%s', my_bool)
