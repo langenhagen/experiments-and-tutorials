@@ -15,11 +15,5 @@ Run the script in the virtual environment you created when you set the project u
 E.g., run:
 ```bash
 source .venv/bin/activate
-python get-name.py
-```
-
-You may want to run it via `nohup` and detach it from the shell. E.g. run:
-```bash
-source .venv/bin/activate
-python get_name.py
+python random_name.py
 ```
