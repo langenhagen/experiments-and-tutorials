@@ -6,22 +6,9 @@ import lxml.etree
 import requests
 
 
-def process_results(html: str):
-    """Inspect the html text to find random names."""
-    tree = lxml.etree.parse(io.StringIO(html), lxml.etree.HTMLParser())
-    results: list = tree.xpath(
-        '//*[@id="body-inner"]/center/div[contains(@class, "random-results")]'
-    )
-
-    # print(f"{len(results)=}")
-
-    for result in results:
-        name = " ".join([n.text for n in result.getchildren()])
-        print(name)
-
-
-def main():
-    """Query behindthename.com/random to get a random name."""
+def get_random_names(n_names: int = 1) -> list[str]:
+    """Query behindthename.com/random to get a random name
+    Inspect the returned HTML text to find random names."""
 
     url = "https://www.behindthename.com/random/random.php"
 
@@ -30,7 +17,7 @@ def main():
         params={
             "gender": "f",  # "f", "m", "both"
             "number": 1,  # number of middle names
-            "sets": 5,  # number of persons to return; 5 seems to be the max
+            "sets": n_names,  # number of persons to return; 5 seems to be the max
             "randomsurname": "yes",
             # remove all those "usage_xxx" entries to get fully random names
             # adding several languages mixes middle names and surnames across
@@ -44,7 +31,23 @@ def main():
     )
     response.raise_for_status()
 
-    process_results(response.text)
+    tree = lxml.etree.parse(io.StringIO(response.text), lxml.etree.HTMLParser())
+    result_elements: list[lxml.etree.Element] = tree.xpath(
+        '//*[@id="body-inner"]/center/div[contains(@class, "random-results")]'
+    )
+
+    # print(f"{len(results)=}")
+    names = []
+    for result in result_elements:
+        names.append(" ".join([n.text for n in result.getchildren()]))
+
+    return names
+
+
+def main():
+    """Program main entry point."""
+    for name in get_random_names(5):
+        print(name)
 
 
 if __name__ == "__main__":

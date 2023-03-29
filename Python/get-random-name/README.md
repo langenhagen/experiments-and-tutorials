@@ -21,5 +21,5 @@ python get-name.py
 You may want to run it via `nohup` and detach it from the shell. E.g. run:
 ```bash
 source .venv/bin/activate
-nohup python get-name.py &
+python get_name.py
 ```
