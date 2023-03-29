@@ -21,7 +21,7 @@ def process_results(html: str):
 
 
 def main():
-    """Query some ebay kleinanzeigen searches and process the results."""
+    """Query behindthename.com/random to get a random name."""
 
     url = "https://www.behindthename.com/random/random.php"
 
