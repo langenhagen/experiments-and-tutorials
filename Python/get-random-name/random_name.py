@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Get a random name by querying behindthename.com/random."""
+"""Get a random names by querying behindthename.com/random."""
 import io
 
 import lxml.etree
