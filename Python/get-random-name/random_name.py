@@ -36,7 +36,6 @@ def get_random_names(n_names: int = 1) -> list[str]:
         '//*[@id="body-inner"]/center/div[contains(@class, "random-results")]'
     )
 
-    # print(f"{len(results)=}")
     names = []
     for result in result_elements:
         names.append(" ".join([n.text for n in result.getchildren()]))
