@@ -1,35 +1,60 @@
 #!/usr/bin/env python3
 """Get a random names by querying behindthename.com/random."""
 import io
+import random
 
 import lxml.etree
 import requests
+from requests import HTTPError, ReadTimeout
 
 
-def get_random_names(n_names: int = 1) -> list[str]:
+def get_random_nationality() -> str:
+    """Randomly choose a nationality string."""
+    return random.choice(
+        [
+            "alb",  # Albanian names
+            "arm",  # Armenian
+            "cat",  # Catalan
+            "chi",  # Chinese
+            "geo",  # Georgian
+            "ger",  # German
+            "ind",  # Indian
+            "swe",  # Swedish
+            "per",  # Persian
+            "rus",  # Russian
+            "ukr",  # Ukrainian
+        ]
+    )
+
+
+def get_random_names(n_names: int = 1) -> str | list[str] | None:
     """Query behindthename.com/random to get a random name
-    Inspect the returned HTML text to find random names."""
+    Inspect the returned HTML text to find random names.
 
+    Remove all those "usage_xxx" entries to get fully random names. Adding
+    several languages mixes middle names and surnames across the different
+    nationalities.
+
+    Return None in case of Error.
+    """
     url = "https://www.behindthename.com/random/random.php"
 
-    response = requests.get(
-        url=url,
-        params={
-            "gender": "f",  # "f", "m", "both"
-            "number": 1,  # number of middle names
-            "sets": n_names,  # number of persons to return; 5 seems to be the max
-            "randomsurname": "yes",
-            # remove all those "usage_xxx" entries to get fully random names
-            # adding several languages mixes middle names and surnames across
-            # the different nationalities
-            # "usage_ger": 1,  # German names
-            "usage_geo": 1,  # Georgian names
-            # "usage_alb": 1,  # Albanian names
-            # "usage_per": 1,  # Persian names
-        },
-        timeout=1,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            url=url,
+            params={
+                "gender": "both",  # "f", "m", "both"
+                "number": 1,  # number of middle names
+                "sets": n_names,  # number of persons to return; 5 seems to be the max
+                "randomsurname": "yes",
+                f"usage_{get_random_nationality()}": 1,
+            },
+            timeout=1,
+        )
+        response.raise_for_status()
+    except (HTTPError, ReadTimeout):
+        return None
+
 
     tree = lxml.etree.parse(io.StringIO(response.text), lxml.etree.HTMLParser())
     result_elements: list[lxml.etree.Element] = tree.xpath(
@@ -40,7 +65,7 @@ def get_random_names(n_names: int = 1) -> list[str]:
     for result in result_elements:
         names.append(" ".join([n.text for n in result.getchildren()]))
 
-    return names
+    return names[0] if n_names == 1 else names
 
 
 def main():
