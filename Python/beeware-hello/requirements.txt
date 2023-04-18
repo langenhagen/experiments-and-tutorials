@@ -1,0 +1,5 @@
+bpython
+
+# Briefcase is a BeeWare tool that can be used to package your application for
+# distribution to end users - but it can also be used to bootstrap a new project
+briefcase
