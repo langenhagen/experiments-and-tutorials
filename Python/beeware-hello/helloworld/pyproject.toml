@@ -4,7 +4,7 @@ project_name = "Hello World"
 bundle = "com.example"
 version = "0.0.1"
 url = "https://example.com/helloworld"
-license = "MIT license"
+license = "BSD license"
 author = "Jane Developer"
 author_email = "jane@example.com"
 
