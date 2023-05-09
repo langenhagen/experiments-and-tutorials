@@ -1,0 +1,5 @@
+bpython
+cython  # necessary to run `buildozer android debug deploy run`
+kivy[base]
+kivy_examples
+git+http://github.com/kivy/buildozer  # convenience way to build Kivy platform apps, e.g. Android apps
