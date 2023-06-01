@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Showcase traceback functionality without and with Exceptions being involved.
+Showcase traceback functionality without and with exceptions being involved.
 
 There are different approaches when exceptions are involved.
 
