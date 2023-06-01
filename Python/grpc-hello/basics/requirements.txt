@@ -1,0 +1,10 @@
+bpython
+
+grpcio
+
+# grpcio-tools include the protocol buffer compiler protoc and the special plugin for generating
+# server and client code from .proto service definitions
+grpcio-tools
+
+mypy
+types-protobuf
