@@ -39,6 +39,11 @@ class MyServiceStub(object):
             request_serializer=generated_dot_my__service__pb2.UploadFileRequest.SerializeToString,
             response_deserializer=generated_dot_my__service__pb2.UploadFileResponse.FromString,
         )
+        self.DownloadFile = channel.unary_stream(
+            "/MyService/DownloadFile",
+            request_serializer=generated_dot_my__service__pb2.FileMetaData.SerializeToString,
+            response_deserializer=generated_dot_my__service__pb2.FileResponse.FromString,
+        )
 
 
 class MyServiceServicer(object):
@@ -88,6 +93,12 @@ class MyServiceServicer(object):
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
+    def DownloadFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
 
 def add_MyServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -115,6 +126,11 @@ def add_MyServiceServicer_to_server(servicer, server):
             servicer.UploadFile,
             request_deserializer=generated_dot_my__service__pb2.UploadFileRequest.FromString,
             response_serializer=generated_dot_my__service__pb2.UploadFileResponse.SerializeToString,
+        ),
+        "DownloadFile": grpc.unary_stream_rpc_method_handler(
+            servicer.DownloadFile,
+            request_deserializer=generated_dot_my__service__pb2.FileMetaData.FromString,
+            response_serializer=generated_dot_my__service__pb2.FileResponse.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -262,6 +278,35 @@ class MyService(object):
             "/MyService/UploadFile",
             generated_dot_my__service__pb2.UploadFileRequest.SerializeToString,
             generated_dot_my__service__pb2.UploadFileResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def DownloadFile(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            "/MyService/DownloadFile",
+            generated_dot_my__service__pb2.FileMetaData.SerializeToString,
+            generated_dot_my__service__pb2.FileResponse.FromString,
             options,
             channel_credentials,
             insecure,

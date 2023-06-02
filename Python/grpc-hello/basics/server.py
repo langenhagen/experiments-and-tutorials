@@ -6,6 +6,7 @@ Usage:
 
     python3 server.py
 """
+import datetime as dt
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -15,9 +16,11 @@ from random import randint
 from typing import Generator
 
 import grpc
+from grpc import StatusCode
 
+from common import read_in_chunks
 from generated import my_service_pb2_grpc
-from generated.my_service_pb2 import FileUploadStatus, Nested, Point, UploadFileResponse
+from generated.my_service_pb2 import FileResponse, Nested, Point, UploadFileResponse
 
 logger = logging.getLogger(__name__)
 
@@ -84,31 +87,65 @@ class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
                 logger.info("sending nix back")
 
     def UploadFile(self, request_iterator, context) -> UploadFileResponse:
-        """Miau miau miau"""
+        """TODO Miau miau miau"""
         logger.info("\n ***requested UploadFile... ***")
         first_request = next(request_iterator)
-        assert first_request.metadata is not None
-        assert first_request.file_chunk is not None
+        assert first_request.metadata is not None, "is never none"
+        assert first_request.file_chunk is not None, "is never none"
 
         if not first_request.metadata.file_path:
-            logger.error(f"Something's not right:\n{first_request=}")
-            return UploadFileResponse(status=FileUploadStatus.FAILED)
+            msg = f"Something's not right:\n{first_request=}"
+            logger.error(msg)
+            context.set_details(msg)
+            context.set_code(StatusCode.UNKNOWN)
+            return UploadFileResponse()
 
         logger.info("gut gut")
-        file_name = Path("copied_" + Path(first_request.metadata.file_path).name)
+        now = dt.datetime.now()
+        orig_filenname = Path(first_request.metadata.file_path).name
+        file_name = Path(f"uploaded_{now}_{orig_filenname}")
 
-        with open(file_name, "wb") as f:
+        with file_name.open(mode="wb") as f:
             for request in request_iterator:
-                assert request.metadata is not None
-                assert request.file_chunk is not None
+                assert request.metadata is not None, "is never None"
+                assert request.file_chunk is not None, "is never None"
 
                 try:
                     f.write(request.file_chunk)
-                except Exception:
+                except Exception as err:
                     logger.exception(f"Unable to write to file {file_name}")
-                    return UploadFileResponse(status=FileUploadStatus.FAILED)
+                    context.set_details(str(err))
+                    context.set_code(StatusCode.INTERNAL)
+                    return UploadFileResponse()
 
-        return UploadFileResponse(status=FileUploadStatus.SUCCESS)
+        return UploadFileResponse()
+
+    def DownloadFile(self, request, context) -> Generator[FileResponse, None, None]:
+        """TODO Miau miau miau"""
+        logger.info("\n ***requested DownloadFile... ***")
+
+        file_path = Path(request.file_path)
+
+        if not file_path.exists():
+            logger.error(f'File "{file_path}" does not exist')
+            context.set_details("File does not exist")
+            context.set_code(StatusCode.NOT_FOUND)
+            return FileResponse()
+
+        logger.info("File exists; sending")
+
+        try:
+            with file_path.open(mode="rb") as f:
+                for file_chunk in read_in_chunks(f, chunk_size_bytes=4096):
+                    yield FileResponse(file_chunk=file_chunk)
+        except Exception as err:
+            logger.exception("Got an exception")
+            logger.info("End of Stack trace")
+            context.set_details(str(err))
+            context.set_code(StatusCode.INTERNAL)
+            return FileResponse()
+
+        return None
 
 
 def serve():
@@ -121,10 +158,13 @@ def serve():
 
     server.add_insecure_port("[::]:50051")
     server.start()
-    server.wait_for_termination()
+
+    with suppress(KeyboardInterrupt):
+        server.wait_for_termination()
+
+    server.stop(0)
 
 
 if __name__ == "__main__":
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
-    with suppress(KeyboardInterrupt):
-        serve()
+    serve()

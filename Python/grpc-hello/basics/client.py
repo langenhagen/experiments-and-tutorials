@@ -6,32 +6,27 @@ Usage:
 
     python3 client.py
 """
+import datetime as dt
 import logging
 from contextlib import suppress
 from pathlib import Path
 from random import randint
 from typing import Generator
 
-import grpc
+from grpc import RpcError, StatusCode, insecure_channel
 
-from generated import my_service_pb2_grpc
+from common import read_in_chunks
 from generated.my_service_pb2 import FileMetaData, Nested, Point, UploadFileRequest
+from generated.my_service_pb2_grpc import MyServiceStub
 
 logger = logging.getLogger(__name__)
+
+ONE_DAY_SECONDS = 60 * 60 * 24
 
 
 def gen_point() -> Generator[Point, None, None]:
     for i in range(20):
         yield Point(x=randint(0, i), y=randint(0, i))
-
-
-def read_in_chunks(file_object, chunk_size_bytes=1024) -> Generator[bytes, None, None]:
-    """Generator function to read a file in chunks."""
-    while True:
-        data = file_object.read(chunk_size_bytes)
-        if not data:
-            break
-        yield data
 
 
 def yield_upload_file_requests(
@@ -41,16 +36,31 @@ def yield_upload_file_requests(
     metadata = FileMetaData(file_path=str(file_path))
     yield UploadFileRequest(metadata=metadata)
 
-    with open(file_path, "rb") as f:
-        for file_chunk in read_in_chunks(f, chunk_size_bytes=1024):
+    with file_path.open(mode="rb") as f:
+        for file_chunk in read_in_chunks(f, chunk_size_bytes=4096):
             yield UploadFileRequest(file_chunk=file_chunk)
+
+
+def request_download_file(
+    file_to_download: Path, target_file_path, stub: MyServiceStub
+):
+    metadata = FileMetaData(file_path=str(file_to_download))
+    responses = stub.DownloadFile(metadata)
+
+    with target_file_path.open(mode="wb") as f:
+        for r in responses:
+            logger.info(f"{r=}")
+            try:
+                f.write(r.file_chunk)
+            except Exception:
+                logger.exception(f"Unable to write to file {target_file_path}")
 
 
 def main():
     """Fire some requests against the server."""
 
-    with grpc.insecure_channel("localhost:50051") as channel:
-        stub = my_service_pb2_grpc.MyServiceStub(channel)
+    with insecure_channel("localhost:50051") as channel:
+        stub = MyServiceStub(channel)
 
         logger.info("\n--- 1 Requesting LikeAFunction ---")
         response = stub.LikeAFunction(Point(x=0, y=0))
@@ -64,8 +74,8 @@ def main():
             )
         )
         logger.info(f"{type(response)=}\n{response=}")
-        for p in response:
-            logger.info(f"{p=}")
+        for r in response:
+            logger.info(f"{r=}")
 
         logger.info("\n--- 3 Requesting SendRequestStream ---")
         response = stub.SendRequestStream(Point(x=i, y=-i) for i in range(5))
@@ -77,14 +87,45 @@ def main():
 
         logger.info("\n--- 5 Requesting UploadFile ---")
 
-        file_path = (
-            Path(__file__).parent / "README.md"
-        ).absolute()  # absolute just for show
+        # absolute just for show
+        file_path = (Path(__file__).parent / "README.md").absolute()
         assert file_path.exists()
 
-        response = stub.UploadFile(yield_upload_file_requests(file_path))
+        response = stub.UploadFile(
+            yield_upload_file_requests(file_path),
+            timeout=ONE_DAY_SECONDS,
+        )
 
         logger.info(f"{response=}")
+
+        logger.info("\n--- 6 Requesting DownloadFile ---")
+
+        source_file_path = (Path(__file__).parent / "README.md").absolute()
+        now = dt.datetime.now()
+        target_file_path = Path(f"downloaded_{now}_{source_file_path.name}")
+        request_download_file(source_file_path, target_file_path, stub=stub)
+
+        logger.info("\n--- 7 Requesting DownloadFile with broken file ---")
+
+        source_file_path = Path("that does not exist")
+        now = dt.datetime.now()
+        target_file_path = Path(f"downloaded_{now}_{source_file_path.name}")
+        try:
+            request_download_file(source_file_path, target_file_path, stub=stub)
+        except RpcError as err:
+            status_code = err.code()
+            errror_details = (
+                "Got an error:\n"
+                f"{err.details()=}\n"  # 'File does not exist'
+                f"{status_code=}\n"
+                f"{status_code.name}\n"  # NOT_FOUND
+                f"{status_code.value=}"
+            )
+            logger.error(errror_details)
+
+            if status_code == StatusCode.NOT_FOUND:
+                logger.error("Was a NOT FOUND issue. Prolly wrong file name")
+                target_file_path.unlink()
 
 
 if __name__ == "__main__":

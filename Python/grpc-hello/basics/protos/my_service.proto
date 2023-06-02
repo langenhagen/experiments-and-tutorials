@@ -29,7 +29,7 @@ service MyService {
 
   rpc UploadFile(stream UploadFileRequest) returns (UploadFileResponse) {}
 
-  // rpc DownloadFile(FileMetaData) returns (stream FileResponse) {}
+  rpc DownloadFile(FileMetaData) returns (stream FileResponse) {}
 
 }
 
@@ -53,14 +53,6 @@ message Nested {
   Point other = 2;
 }
 
-// TODO can that go away?
-enum FileUploadStatus {
-  PENDING = 0;
-  IN_PROGRESS = 1;
-  SUCCESS = 2;
-  FAILED = 3;
-}
-
 message FileMetaData {
   string file_path = 1;
 }
@@ -74,6 +66,13 @@ message UploadFileRequest {
   }
 }
 
-message UploadFileResponse {
-  FileUploadStatus status = 1;
+// enum FileUploadStatus {
+//   SUCCESS = 0;
+//   FAILURE = 1;
+// }
+
+message UploadFileResponse {}
+
+message FileResponse {
+  bytes file_chunk = 1;
 }
