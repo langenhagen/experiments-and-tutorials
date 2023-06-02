@@ -10,13 +10,14 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import suppress
+from pathlib import Path
 from random import randint
 from typing import Generator
 
 import grpc
 
 from generated import my_service_pb2_grpc
-from generated.my_service_pb2 import Nested, Point
+from generated.my_service_pb2 import FileUploadStatus, Nested, Point, UploadFileResponse
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +82,33 @@ class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
                 yield in_point
             else:
                 logger.info("sending nix back")
+
+    def UploadFile(self, request_iterator, context) -> UploadFileResponse:
+        """Miau miau miau"""
+        logger.info("\n ***requested UploadFile... ***")
+        first_request = next(request_iterator)
+        assert first_request.metadata is not None
+        assert first_request.file_chunk is not None
+
+        if not first_request.metadata.file_path:
+            logger.error(f"Something's not right:\n{first_request=}")
+            return UploadFileResponse(status=FileUploadStatus.FAILED)
+
+        logger.info("gut gut")
+        file_name = Path("copied_" + Path(first_request.metadata.file_path).name)
+
+        with open(file_name, "wb") as f:
+            for request in request_iterator:
+                assert request.metadata is not None
+                assert request.file_chunk is not None
+
+                try:
+                    f.write(request.file_chunk)
+                except Exception:
+                    logger.exception(f"Unable to write to file {file_name}")
+                    return UploadFileResponse(status=FileUploadStatus.FAILED)
+
+        return UploadFileResponse(status=FileUploadStatus.SUCCESS)
 
 
 def serve():

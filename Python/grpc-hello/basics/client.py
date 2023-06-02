@@ -8,13 +8,14 @@ Usage:
 """
 import logging
 from contextlib import suppress
+from pathlib import Path
 from random import randint
 from typing import Generator
 
 import grpc
 
 from generated import my_service_pb2_grpc
-from generated.my_service_pb2 import Nested, Point
+from generated.my_service_pb2 import FileMetaData, Nested, Point, UploadFileRequest
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,27 @@ logger = logging.getLogger(__name__)
 def gen_point() -> Generator[Point, None, None]:
     for i in range(20):
         yield Point(x=randint(0, i), y=randint(0, i))
+
+
+def read_in_chunks(file_object, chunk_size_bytes=1024) -> Generator[bytes, None, None]:
+    """Generator function to read a file in chunks."""
+    while True:
+        data = file_object.read(chunk_size_bytes)
+        if not data:
+            break
+        yield data
+
+
+def yield_upload_file_requests(
+    file_path: Path,
+) -> Generator[UploadFileRequest, None, None]:
+    """TODO doc."""
+    metadata = FileMetaData(file_path=str(file_path))
+    yield UploadFileRequest(metadata=metadata)
+
+    with open(file_path, "rb") as f:
+        for file_chunk in read_in_chunks(f, chunk_size_bytes=1024):
+            yield UploadFileRequest(file_chunk=file_chunk)
 
 
 def main():
@@ -52,6 +74,17 @@ def main():
         logger.info("\n--- 4 Requesting BidirectionalStream ---")
         for response in stub.BidirectionalStream(gen_point()):
             print(response)
+
+        logger.info("\n--- 5 Requesting UploadFile ---")
+
+        file_path = (
+            Path(__file__).parent / "README.md"
+        ).absolute()  # absolute just for show
+        assert file_path.exists()
+
+        response = stub.UploadFile(yield_upload_file_requests(file_path))
+
+        logger.info(f"{response=}")
 
 
 if __name__ == "__main__":

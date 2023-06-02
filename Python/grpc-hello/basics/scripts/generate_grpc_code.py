@@ -27,7 +27,7 @@ print(
     f'to "{target_folder}"...'
 )
 
-protoc.main(
+success = protoc.main(
     (
         "",
         f"-I{target_folder}={proto_dir}",
@@ -37,4 +37,7 @@ protoc.main(
     )
 )
 
-print("Done.")
+if success == 0:
+    print("Success.")
+else:
+    print("Got errors.")

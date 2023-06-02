@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x1agenerated/my_service.proto"\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05"4\n\x06Nested\x12\x13\n\x03one\x18\x01 \x01(\x0b\x32\x06.Point\x12\x15\n\x05other\x18\x02 \x01(\x0b\x32\x06.Point2\xae\x01\n\tMyService\x12!\n\rLikeAFunction\x12\x06.Point\x1a\x06.Point"\x00\x12(\n\x11GetResponseStream\x12\x07.Nested\x1a\x06.Point"\x00\x30\x01\x12\'\n\x11SendRequestStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x12+\n\x13\x42idirectionalStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x30\x01\x62\x06proto3'
+    b'\n\x1agenerated/my_service.proto"\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05"4\n\x06Nested\x12\x13\n\x03one\x18\x01 \x01(\x0b\x32\x06.Point\x12\x15\n\x05other\x18\x02 \x01(\x0b\x32\x06.Point"!\n\x0c\x46ileMetaData\x12\x11\n\tfile_path\x18\x01 \x01(\t"W\n\x11UploadFileRequest\x12!\n\x08metadata\x18\x01 \x01(\x0b\x32\r.FileMetaDataH\x00\x12\x14\n\nfile_chunk\x18\x02 \x01(\x0cH\x00\x42\t\n\x07request"7\n\x12UploadFileResponse\x12!\n\x06status\x18\x01 \x01(\x0e\x32\x11.FileUploadStatus*I\n\x10\x46ileUploadStatus\x12\x0b\n\x07PENDING\x10\x00\x12\x0f\n\x0bIN_PROGRESS\x10\x01\x12\x0b\n\x07SUCCESS\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x32\xe9\x01\n\tMyService\x12!\n\rLikeAFunction\x12\x06.Point\x1a\x06.Point"\x00\x12(\n\x11GetResponseStream\x12\x07.Nested\x1a\x06.Point"\x00\x30\x01\x12\'\n\x11SendRequestStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x12+\n\x13\x42idirectionalStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x30\x01\x12\x39\n\nUploadFile\x12\x12.UploadFileRequest\x1a\x13.UploadFileResponse"\x00(\x01\x62\x06proto3'
 )
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
@@ -21,12 +21,19 @@ _builder.BuildTopDescriptorsAndMessages(
     DESCRIPTOR, "generated.my_service_pb2", globals()
 )
 if _descriptor._USE_C_DESCRIPTORS == False:
-
     DESCRIPTOR._options = None
+    _FILEUPLOADSTATUS._serialized_start = 296
+    _FILEUPLOADSTATUS._serialized_end = 369
     _POINT._serialized_start = 30
     _POINT._serialized_end = 59
     _NESTED._serialized_start = 61
     _NESTED._serialized_end = 113
-    _MYSERVICE._serialized_start = 116
-    _MYSERVICE._serialized_end = 290
+    _FILEMETADATA._serialized_start = 115
+    _FILEMETADATA._serialized_end = 148
+    _UPLOADFILEREQUEST._serialized_start = 150
+    _UPLOADFILEREQUEST._serialized_end = 237
+    _UPLOADFILERESPONSE._serialized_start = 239
+    _UPLOADFILERESPONSE._serialized_end = 294
+    _MYSERVICE._serialized_start = 372
+    _MYSERVICE._serialized_end = 605
 # @@protoc_insertion_point(module_scope)
