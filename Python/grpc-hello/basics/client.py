@@ -9,18 +9,19 @@ Usage:
 import logging
 from contextlib import suppress
 from random import randint
+from typing import Generator
 
 import grpc
 
 from generated import my_service_pb2_grpc
-from generated.my_service_pb2 import Point, Rectangle
+from generated.my_service_pb2 import Nested, Point
 
 logger = logging.getLogger(__name__)
 
 
-def gen_point():
-    while True:
-        yield Point(x=randint(0, 100), y=randint(0, 100))
+def gen_point() -> Generator[Point, None, None]:
+    for i in range(20):
+        yield Point(x=randint(0, i), y=randint(0, i))
 
 
 def main():
@@ -29,27 +30,27 @@ def main():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = my_service_pb2_grpc.MyServiceStub(channel)
 
-        logger.info("\n---\nRequesting LikeAFunction...")
-        response = stub.LikeAFunction(Point(x=11, y=12))
-        logger.info(f"{type(response)=}\n{response=}")
+        logger.info("\n--- 1 Requesting LikeAFunction ---")
+        response = stub.LikeAFunction(Point(x=0, y=0))
+        logger.info(f"{type(response)=}\n{repr(response)=}")
 
-        logger.info("\n---\nRequesting GetResponseStream...")
+        logger.info("\n--- 2 Requesting GetResponseStream ---")
         response = stub.GetResponseStream(
-            Rectangle(lo=Point(x=12, y=13), hi=Point(x=88, y=99))
+            Nested(
+                one=Point(x=12, y=13),
+                other=Point(x=88, y=99),
+            )
         )
         logger.info(f"{type(response)=}\n{response=}")
         for p in response:
-            logger.info(p)
+            logger.info(f"{p=}")
 
-        logger.info("\n---\nRequesting SendRequestStream...")
-        response = stub.SendRequestStream(
-            Point(x=randint(-5, 5), y=randint(100, 120)) for _ in range(5)
-        )
+        logger.info("\n--- 3 Requesting SendRequestStream ---")
+        response = stub.SendRequestStream(Point(x=i, y=-i) for i in range(5))
         logger.info(f"{type(response)=}\n{response=}")
 
-        logger.info("\n---\nRequesting BidirectionalStream...")
-        # for response in stub.BidirectionalStream(Point(x=10,y=49) for _ in range(1)):  # only 1 item
-        for response in stub.BidirectionalStream(gen_point()):  # endless items
+        logger.info("\n--- 4 Requesting BidirectionalStream ---")
+        for response in stub.BidirectionalStream(gen_point()):
             print(response)
 
 

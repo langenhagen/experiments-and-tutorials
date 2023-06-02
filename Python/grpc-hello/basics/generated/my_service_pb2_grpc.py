@@ -21,7 +21,7 @@ class MyServiceStub(object):
         )
         self.GetResponseStream = channel.unary_stream(
             "/MyService/GetResponseStream",
-            request_serializer=generated_dot_my__service__pb2.Rectangle.SerializeToString,
+            request_serializer=generated_dot_my__service__pb2.Nested.SerializeToString,
             response_deserializer=generated_dot_my__service__pb2.Point.FromString,
         )
         self.SendRequestStream = channel.stream_unary(
@@ -87,7 +87,7 @@ def add_MyServiceServicer_to_server(servicer, server):
         ),
         "GetResponseStream": grpc.unary_stream_rpc_method_handler(
             servicer.GetResponseStream,
-            request_deserializer=generated_dot_my__service__pb2.Rectangle.FromString,
+            request_deserializer=generated_dot_my__service__pb2.Nested.FromString,
             response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
         ),
         "SendRequestStream": grpc.stream_unary_rpc_method_handler(
@@ -157,7 +157,7 @@ class MyService(object):
             request,
             target,
             "/MyService/GetResponseStream",
-            generated_dot_my__service__pb2.Rectangle.SerializeToString,
+            generated_dot_my__service__pb2.Nested.SerializeToString,
             generated_dot_my__service__pb2.Point.FromString,
             options,
             channel_credentials,

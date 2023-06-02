@@ -16,7 +16,7 @@ from typing import Generator
 import grpc
 
 from generated import my_service_pb2_grpc
-from generated.my_service_pb2 import Point, Rectangle
+from generated.my_service_pb2 import Nested, Point
 
 logger = logging.getLogger(__name__)
 
@@ -34,14 +34,14 @@ class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
         return Point(x=request.x + 1, y=request.y + 2)
 
     def GetResponseStream(
-        self, request: Rectangle, context
+        self, request: Nested, context
     ) -> Generator[Point, None, None]:
         logger.info(
             f"requested GetResponseStream\n{type(request)=}\n{request=}\n{type(context)=}\n{context=}\n---\n"
         )
         logger.info(f"{type(request)=}")
         for i in range(10):
-            yield Point(x=request.hi.x + i, y=request.hi.y - i)
+            yield Point(x=request.one.x + i, y=request.other.y - i)
 
     def SendRequestStream(self, request_iterator, context) -> Point:
         logger.info(
@@ -77,7 +77,7 @@ class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
         )
         for in_point in request_iterator:
             if randint(0, 10) > 7:
-                logger.info("sending was back")
+                logger.info(f"sending etwas back: {in_point}")
                 yield in_point
             else:
                 logger.info("sending nix back")

@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x1agenerated/my_service.proto"\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05"3\n\tRectangle\x12\x12\n\x02lo\x18\x01 \x01(\x0b\x32\x06.Point\x12\x12\n\x02hi\x18\x02 \x01(\x0b\x32\x06.Point2\xb1\x01\n\tMyService\x12!\n\rLikeAFunction\x12\x06.Point\x1a\x06.Point"\x00\x12+\n\x11GetResponseStream\x12\n.Rectangle\x1a\x06.Point"\x00\x30\x01\x12\'\n\x11SendRequestStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x12+\n\x13\x42idirectionalStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x30\x01\x62\x06proto3'
+    b'\n\x1agenerated/my_service.proto"\x1d\n\x05Point\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05"4\n\x06Nested\x12\x13\n\x03one\x18\x01 \x01(\x0b\x32\x06.Point\x12\x15\n\x05other\x18\x02 \x01(\x0b\x32\x06.Point2\xae\x01\n\tMyService\x12!\n\rLikeAFunction\x12\x06.Point\x1a\x06.Point"\x00\x12(\n\x11GetResponseStream\x12\x07.Nested\x1a\x06.Point"\x00\x30\x01\x12\'\n\x11SendRequestStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x12+\n\x13\x42idirectionalStream\x12\x06.Point\x1a\x06.Point"\x00(\x01\x30\x01\x62\x06proto3'
 )
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
@@ -21,11 +21,12 @@ _builder.BuildTopDescriptorsAndMessages(
     DESCRIPTOR, "generated.my_service_pb2", globals()
 )
 if _descriptor._USE_C_DESCRIPTORS == False:
+
     DESCRIPTOR._options = None
     _POINT._serialized_start = 30
     _POINT._serialized_end = 59
-    _RECTANGLE._serialized_start = 61
-    _RECTANGLE._serialized_end = 112
-    _MYSERVICE._serialized_start = 115
-    _MYSERVICE._serialized_end = 292
+    _NESTED._serialized_start = 61
+    _NESTED._serialized_end = 113
+    _MYSERVICE._serialized_start = 116
+    _MYSERVICE._serialized_end = 290
 # @@protoc_insertion_point(module_scope)
