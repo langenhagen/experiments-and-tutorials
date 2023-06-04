@@ -1,0 +1,11 @@
+black
+bpython
+coverage[toml]
+flake8
+isort
+mypy
+pylint
+pytest
+pytest-random-order
+ruff
+vulture

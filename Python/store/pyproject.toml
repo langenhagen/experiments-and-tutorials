@@ -1,0 +1,8 @@
+# Python-related project configuration.
+
+[tool.coverage.run]
+command_line = "-m pytest -vv --random-order"
+source = ["store/"]
+
+[tool.isort]
+profile = "black"
