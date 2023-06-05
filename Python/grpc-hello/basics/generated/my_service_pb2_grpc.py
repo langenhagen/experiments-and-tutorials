@@ -6,7 +6,8 @@ from generated import my_service_pb2 as generated_dot_my__service__pb2
 
 
 class MyServiceStub(object):
-    """Service API definition."""
+    """Service API definition.
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -15,45 +16,47 @@ class MyServiceStub(object):
             channel: A grpc.Channel.
         """
         self.LikeAFunction = channel.unary_unary(
-            "/MyService/LikeAFunction",
-            request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.Point.FromString,
-        )
+                '/MyService/LikeAFunction',
+                request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                )
         self.GetResponseStream = channel.unary_stream(
-            "/MyService/GetResponseStream",
-            request_serializer=generated_dot_my__service__pb2.Nested.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.Point.FromString,
-        )
+                '/MyService/GetResponseStream',
+                request_serializer=generated_dot_my__service__pb2.Nested.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                )
         self.SendRequestStream = channel.stream_unary(
-            "/MyService/SendRequestStream",
-            request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.Point.FromString,
-        )
+                '/MyService/SendRequestStream',
+                request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                )
         self.BidirectionalStream = channel.stream_stream(
-            "/MyService/BidirectionalStream",
-            request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.Point.FromString,
-        )
+                '/MyService/BidirectionalStream',
+                request_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                )
         self.UploadFile = channel.stream_unary(
-            "/MyService/UploadFile",
-            request_serializer=generated_dot_my__service__pb2.UploadFileRequest.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.UploadFileResponse.FromString,
-        )
+                '/MyService/UploadFile',
+                request_serializer=generated_dot_my__service__pb2.UploadFileRequest.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.UploadFileResponse.FromString,
+                )
         self.DownloadFile = channel.unary_stream(
-            "/MyService/DownloadFile",
-            request_serializer=generated_dot_my__service__pb2.FileMetaData.SerializeToString,
-            response_deserializer=generated_dot_my__service__pb2.FileResponse.FromString,
-        )
+                '/MyService/DownloadFile',
+                request_serializer=generated_dot_my__service__pb2.FileMetaData.SerializeToString,
+                response_deserializer=generated_dot_my__service__pb2.FileResponse.FromString,
+                )
 
 
 class MyServiceServicer(object):
-    """Service API definition."""
+    """Service API definition.
+    """
 
     def LikeAFunction(self, request, context):
-        """Similar to a normal function call."""
+        """Similar to a normal function call.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def GetResponseStream(self, request, context):
         """A response-streaming RPC where the client sends a request to the server
@@ -61,8 +64,8 @@ class MyServiceServicer(object):
         from the returned stream until there are no more messages.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def SendRequestStream(self, request_iterator, context):
         """A request-streaming RPC where the client writes a sequence of messages
@@ -71,8 +74,8 @@ class MyServiceServicer(object):
         them all and return its response.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def BidirectionalStream(self, request_iterator, context):
         """A bidirectionally-streaming RPC where both sides send a sequence of
@@ -84,235 +87,163 @@ class MyServiceServicer(object):
         and writes. The order of messages in each stream is preserved.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def UploadFile(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def DownloadFile(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_MyServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "LikeAFunction": grpc.unary_unary_rpc_method_handler(
-            servicer.LikeAFunction,
-            request_deserializer=generated_dot_my__service__pb2.Point.FromString,
-            response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-        ),
-        "GetResponseStream": grpc.unary_stream_rpc_method_handler(
-            servicer.GetResponseStream,
-            request_deserializer=generated_dot_my__service__pb2.Nested.FromString,
-            response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-        ),
-        "SendRequestStream": grpc.stream_unary_rpc_method_handler(
-            servicer.SendRequestStream,
-            request_deserializer=generated_dot_my__service__pb2.Point.FromString,
-            response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-        ),
-        "BidirectionalStream": grpc.stream_stream_rpc_method_handler(
-            servicer.BidirectionalStream,
-            request_deserializer=generated_dot_my__service__pb2.Point.FromString,
-            response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
-        ),
-        "UploadFile": grpc.stream_unary_rpc_method_handler(
-            servicer.UploadFile,
-            request_deserializer=generated_dot_my__service__pb2.UploadFileRequest.FromString,
-            response_serializer=generated_dot_my__service__pb2.UploadFileResponse.SerializeToString,
-        ),
-        "DownloadFile": grpc.unary_stream_rpc_method_handler(
-            servicer.DownloadFile,
-            request_deserializer=generated_dot_my__service__pb2.FileMetaData.FromString,
-            response_serializer=generated_dot_my__service__pb2.FileResponse.SerializeToString,
-        ),
+            'LikeAFunction': grpc.unary_unary_rpc_method_handler(
+                    servicer.LikeAFunction,
+                    request_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                    response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+            ),
+            'GetResponseStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetResponseStream,
+                    request_deserializer=generated_dot_my__service__pb2.Nested.FromString,
+                    response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+            ),
+            'SendRequestStream': grpc.stream_unary_rpc_method_handler(
+                    servicer.SendRequestStream,
+                    request_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                    response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+            ),
+            'BidirectionalStream': grpc.stream_stream_rpc_method_handler(
+                    servicer.BidirectionalStream,
+                    request_deserializer=generated_dot_my__service__pb2.Point.FromString,
+                    response_serializer=generated_dot_my__service__pb2.Point.SerializeToString,
+            ),
+            'UploadFile': grpc.stream_unary_rpc_method_handler(
+                    servicer.UploadFile,
+                    request_deserializer=generated_dot_my__service__pb2.UploadFileRequest.FromString,
+                    response_serializer=generated_dot_my__service__pb2.UploadFileResponse.SerializeToString,
+            ),
+            'DownloadFile': grpc.unary_stream_rpc_method_handler(
+                    servicer.DownloadFile,
+                    request_deserializer=generated_dot_my__service__pb2.FileMetaData.FromString,
+                    response_serializer=generated_dot_my__service__pb2.FileResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "MyService", rpc_method_handlers
-    )
+            'MyService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-# This class is part of an EXPERIMENTAL API.
+ # This class is part of an EXPERIMENTAL API.
 class MyService(object):
-    """Service API definition."""
+    """Service API definition.
+    """
 
     @staticmethod
-    def LikeAFunction(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def LikeAFunction(request,
             target,
-            "/MyService/LikeAFunction",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/MyService/LikeAFunction',
             generated_dot_my__service__pb2.Point.SerializeToString,
             generated_dot_my__service__pb2.Point.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetResponseStream(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_stream(
-            request,
+    def GetResponseStream(request,
             target,
-            "/MyService/GetResponseStream",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/MyService/GetResponseStream',
             generated_dot_my__service__pb2.Nested.SerializeToString,
             generated_dot_my__service__pb2.Point.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def SendRequestStream(
-        request_iterator,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.stream_unary(
-            request_iterator,
+    def SendRequestStream(request_iterator,
             target,
-            "/MyService/SendRequestStream",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/MyService/SendRequestStream',
             generated_dot_my__service__pb2.Point.SerializeToString,
             generated_dot_my__service__pb2.Point.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def BidirectionalStream(
-        request_iterator,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.stream_stream(
-            request_iterator,
+    def BidirectionalStream(request_iterator,
             target,
-            "/MyService/BidirectionalStream",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_stream(request_iterator, target, '/MyService/BidirectionalStream',
             generated_dot_my__service__pb2.Point.SerializeToString,
             generated_dot_my__service__pb2.Point.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UploadFile(
-        request_iterator,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.stream_unary(
-            request_iterator,
+    def UploadFile(request_iterator,
             target,
-            "/MyService/UploadFile",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/MyService/UploadFile',
             generated_dot_my__service__pb2.UploadFileRequest.SerializeToString,
             generated_dot_my__service__pb2.UploadFileResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def DownloadFile(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_stream(
-            request,
+    def DownloadFile(request,
             target,
-            "/MyService/DownloadFile",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/MyService/DownloadFile',
             generated_dot_my__service__pb2.FileMetaData.SerializeToString,
             generated_dot_my__service__pb2.FileResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

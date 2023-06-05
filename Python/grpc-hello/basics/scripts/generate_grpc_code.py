@@ -30,7 +30,7 @@ print(
 success = protoc.main(
     (
         "",
-        f"-I{target_folder}={proto_dir}",
+        f"--proto_path={target_folder}={proto_dir}",
         "--python_out=.",
         "--grpc_python_out=.",
         proto_file,
