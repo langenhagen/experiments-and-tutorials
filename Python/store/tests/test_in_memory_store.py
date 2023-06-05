@@ -157,7 +157,9 @@ def test_update_all(test_store, andy, pandy, candy):
     assert candy in items
 
 
-def test_add_item_with_duplicate_value_on_unique_field_raises(test_store):
+def test_add_item_with_duplicate_value_on_unique_field_raises(
+    test_store, andy, pandy, candy
+):
     """Assert that adding an item with a duplicate value on a "unique"-listed
     field raises a `NotUniqueException`."""
 
@@ -165,6 +167,12 @@ def test_add_item_with_duplicate_value_on_unique_field_raises(test_store):
 
     with pytest.raises(NotUniqueException):
         test_store.add(person_with_duplicate_name)
+
+    items = list(test_store.get_by())
+    assert len(items) == 3
+    assert andy in items
+    assert pandy in items
+    assert candy in items
 
 
 def test_update_on_unique_field_raises(test_store):
@@ -191,13 +199,32 @@ def test_save(test_store, pandy, candy):
     assert candy in items
 
 
-def test_saving_items_not_from_store_raises(test_store):
+def test_save_item_not_from_store_raises(test_store):
     """Assert that saving an item that the store did not create raises a
     `NotFromStoreException`."""
 
     sugar = Person("Sugar", age=15)
     with pytest.raises(NotFromStoreException):
         test_store.save(sugar)
+
+
+def test_save_item_with_duplicate_value_on_unique_field_raises(
+    test_store, andy, pandy, candy
+):
+    """Assert that saving an item with a duplicate value on a "unique"-listed
+    field raises a `NotUniqueException`."""
+
+    person = next(test_store.get_by(name="Andy"))
+    person.name = "Pandy"
+
+    with pytest.raises(NotUniqueException):
+        test_store.save(person)
+
+    items = list(test_store.get_by())
+    assert len(items) == 3
+    assert andy in items
+    assert pandy in items
+    assert candy in items
 
 
 def test_items_from_different_stores_do_not_mingle():
