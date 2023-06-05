@@ -198,3 +198,17 @@ def test_saving_items_not_from_store_raises(test_store):
     sugar = Person("Sugar", age=15)
     with pytest.raises(NotFromStoreException):
         test_store.save(sugar)
+
+
+def test_items_from_different_stores_do_not_mingle():
+    """Assert that saving an item from one store into another store raises."""
+
+    my_store = InMemoryStore[Person]()
+    carl = my_store.add(Person("Carl", age=22))
+    carl.age = 23
+
+    other_store = InMemoryStore[Person]()
+    with pytest.raises(NotFromStoreException):
+        other_store.save(carl)
+
+    my_store.save(carl)
