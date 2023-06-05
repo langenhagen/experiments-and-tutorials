@@ -2,7 +2,7 @@
 from copy import deepcopy
 from typing import Any, Generator, Iterable, TypeVar
 
-from store.exceptions import StoreAddException
+from store.exceptions import NotFromStoreException, NotUniqueException
 from store.store import Store
 
 T = TypeVar("T")
@@ -26,6 +26,7 @@ class InMemoryStore(Store[T]):
         Optionally specify the object attributes whose values shall be
         unique over all items in the store."""
 
+        self.__store_marker = f"_in_memory_store_id{id(self)}"
         self.__unique_keys = frozenset(unique_keys)
         self.__objects: list[T] = []
 
@@ -41,25 +42,51 @@ class InMemoryStore(Store[T]):
         for o in self.__get_by_orig(**kwargs):
             yield deepcopy(o)
 
-    def add(self, new: T):
-        """Create a new deep copied object into in-memory persistency.
+    def add(self, new: T) -> T:
+        """Create a new deep copied object into in-memory persistency and return
+        an updateable copy of it.
 
         Raise a `DatabaseInsertionException` in case the new item clashes with
         any existing item on any unique key."""
 
         for key in self.__unique_keys:
-            for _ in self.get_by(**{key: getattr(new, key)}):
-                raise StoreAddException(f'Item not unique for key "{key}"')
+            for _ in self.__get_by_orig(**{key: getattr(new, key)}):
+                raise NotUniqueException(f'Item not unique for key "{key}"')
 
         copied = deepcopy(new)
+        id_ = getattr(new, self.__store_marker, None) or id(copied)
+        setattr(copied, self.__store_marker, id_)
         self.__objects.append(copied)
+        return copied
 
     def update(self, fields: dict[str, Any], **query) -> int:
         """Update all objects matching the query to deep copies of the given
         fields."""
+
+        if any(k in self.__unique_keys for k in fields.keys()):
+            raise NotImplementedError("Updating unique keys is currently not supported")
+
         count = 0
         for o in self.__get_by_orig(**query):
             count += 1
             for name, value in fields.items():
                 setattr(o, name, deepcopy(value))
         return count
+
+    def save(self, obj: T):
+        """Throw away an the old store record and add the given updated item."""
+        obj_id = getattr(obj, self.__store_marker, None)
+        if obj_id is None:
+            raise NotFromStoreException("Item not created by store.")
+
+        for i, orig in enumerate(self.__objects):
+            if obj_id != getattr(orig, self.__store_marker):
+                continue
+
+            self.__objects.pop(i)
+
+            try:
+                self.add(obj)
+            except NotUniqueException:
+                self.__objects.append(orig)
+                raise

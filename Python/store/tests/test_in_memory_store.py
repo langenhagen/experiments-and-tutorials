@@ -5,7 +5,7 @@ from typing import Generator
 import pytest
 from pytest import fixture
 
-from store import InMemoryStore, StoreAddException
+from store import InMemoryStore, NotFromStoreException, NotUniqueException
 
 
 @dataclass
@@ -159,9 +159,42 @@ def test_update_all(test_store, andy, pandy, candy):
 
 def test_add_item_with_duplicate_value_on_unique_field_raises(test_store):
     """Assert that adding an item with a duplicate value on a "unique"-listed
-    field raises a `StoreAddException`."""
+    field raises a `NotUniqueException`."""
 
     person_with_duplicate_name = Person(name="Andy", age=80)
 
-    with pytest.raises(StoreAddException):
+    with pytest.raises(NotUniqueException):
         test_store.add(person_with_duplicate_name)
+
+
+def test_update_on_unique_field_raises(test_store):
+    """Assert that updating on a unique field raises in order to avoid coming
+    into hell's kitchen."""
+
+    with pytest.raises(NotImplementedError):
+        test_store.update(fields={"name": "Andy"})
+
+
+def test_save(test_store, pandy, candy):
+    """Assert that changing and saving an object works."""
+
+    person = next(test_store.get_by(name="Andy"))
+    assert person.age == 12
+    person.age = 55
+
+    test_store.save(person)
+
+    items = list(test_store.get_by())
+    assert len(items) == 3
+    assert person in items
+    assert pandy in items
+    assert candy in items
+
+
+def test_saving_items_not_from_store_raises(test_store):
+    """Assert that saving an item that the store did not create raises a
+    `NotFromStoreException`."""
+
+    sugar = Person("Sugar", age=15)
+    with pytest.raises(NotFromStoreException):
+        test_store.save(sugar)

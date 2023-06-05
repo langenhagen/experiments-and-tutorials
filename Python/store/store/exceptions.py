@@ -1,5 +1,10 @@
 """Exception definitions for the store."""
 
 
-class StoreAddException(Exception):
-    """Error to be raised when an attempt to add something to a store fails."""
+class NotUniqueException(Exception):
+    """To be raised when storing an item would break uniqueness-contraints."""
+
+
+class NotFromStoreException(Exception):
+    """To be raised when an operation expects an item created or retrieved by
+    the store but got another."""
