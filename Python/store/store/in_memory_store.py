@@ -55,7 +55,7 @@ class InMemoryStore(Store[T]):
 
         copied = deepcopy(new)
         id_ = getattr(new, self.__store_marker, None) or id(copied)
-        setattr(copied, self.__store_marker, id_)
+        object.__setattr__(copied, self.__store_marker, id_)
         self.__objects.append(copied)
         return copied
 
