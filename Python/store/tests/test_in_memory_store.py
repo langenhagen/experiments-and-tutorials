@@ -20,19 +20,19 @@ class Person:
 @fixture(name="andy")
 def fixture_andy():
     """The test person Andy."""
-    return Person(name="Andy", age=12, hobbies=["Star Wars", "Bicycles"])
+    yield Person(name="Andy", age=12, hobbies=["Star Wars", "Bicycles"])
 
 
 @fixture(name="pandy")
 def fixture_pandy():
     """The test person Pandy."""
-    return Person(name="Pandy", age=12, hobbies=["Fortnite"])
+    yield Person(name="Pandy", age=12, hobbies=["Fortnite"])
 
 
 @fixture(name="candy")
 def fixture_candy():
     """The test person Candy."""
-    return Person(name="Candy", age=13, hobbies=["Gardening"])
+    yield Person(name="Candy", age=13, hobbies=["Gardening"])
 
 
 @fixture(name="test_store")
@@ -43,7 +43,7 @@ def fixture_test_store(andy, pandy, candy):
     store_.add(andy)
     store_.add(pandy)
     store_.add(candy)
-    return store_
+    yield store_
 
 
 def test_query_one(andy, pandy):
