@@ -1,5 +1,4 @@
 """Common general functionality."""
-
 from typing import Generator
 
 
