@@ -14,7 +14,7 @@ set -e
 
 [[ "$*" =~ '--clean' ]] && rm -fr venv/
 
-python -m venv venv
+python -m venv venv  # Android build thing needs the files under a non-hidden folder
 # shellcheck disable=SC1091
 source venv/bin/activate
 
