@@ -1,9 +1,10 @@
 """Showcase the quirks and use of mypy.
 
 run via:
+
   mypy mypy-hello.py
 """
-from typing import Any, Iterable, Literal, Optional
+from typing import Any, Iterable, Literal, Optional, Union
 
 print("\n--- 1 Mypy is inconsistent about whether None is in `Any` or not ---\n")
 
@@ -14,7 +15,7 @@ def mypy_is_inconsistent_about_any(i: Optional[Any], j: Any) -> Any:
     works on Any, not on Optional[Any]."""
     a = i + 1  #  error: Unsupported operand types for + ("None" and "int")
     b = j + 1
-    return None
+    return a + b
 
 
 print("\n--- 2 Lists and Tuples are Iterables ---\n")
@@ -28,9 +29,9 @@ def receive_lists(l: list[int]):
 
 
 receive_lists(l)  # ok
-receive_lists(
-    t
-)  # error: has incompatible type "Tuple[int, int, int]"; expected "List[int]"
+
+# error: has incompatible type "Tuple[int, int, int]"; expected "List[int]"
+receive_lists(t)
 
 
 def receive_iterables(l: Iterable[int]):
@@ -63,3 +64,18 @@ def get_literal() -> Literal["Hey", "Ho!", "Let's", "Go!"]:
 # All_TYPE = Literal[*ALL]
 # def get_literal2() -> All_TYPE:  # Literal[*ALL] doesn't work
 #     return A
+
+
+print("\n--- 4 shortcut assignments for type hints ---\n")
+
+Mytype = Literal["One"] | Literal["Other"]
+
+
+def foo(x: Mytype) -> None:
+    print(f"Got {x}")
+
+
+foo("was erlauben strunz")  # fails
+foo("One")
+foo("Other")
+foo("other")  # fails
