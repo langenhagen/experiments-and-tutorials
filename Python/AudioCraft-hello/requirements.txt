@@ -1,0 +1,7 @@
+audiocraft
+bpython
+git+https://github.com/huggingface/transformers.git
+ipython
+ipywidgets
+jupyterlab
+torch>=2.0
