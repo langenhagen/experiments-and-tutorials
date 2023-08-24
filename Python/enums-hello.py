@@ -16,7 +16,10 @@ a = MyEnum.VAL_1
 b = MyEnum.VAL_2
 
 print(f"{a=}")
+print(f"{a.value=}")
+
 print(f"{b=}")
+print(f"{b.value=}")
 
 
 print("--- 2 enums with string values ---")
