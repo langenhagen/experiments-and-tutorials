@@ -16,9 +16,11 @@ a = MyEnum.VAL_1
 b = MyEnum.VAL_2
 
 print(f"{a=}")
+print(f"{a.name=}")
 print(f"{a.value=}")
 
 print(f"{b=}")
+print(f"{b.name=}")
 print(f"{b.value=}")
 
 
