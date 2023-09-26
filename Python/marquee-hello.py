@@ -15,7 +15,7 @@ A string that reads "Scanning..." is 11 characters long and has 22 variations:
 "Scanning.  "
 "Scanning.. "
 "Scanning..."
-" canning..."   # < here the seond for-loop kicks in
+" canning..."   # < here the second for-loop kicks in
 "  anning..."
 "   nning..."
 "    ning..."
