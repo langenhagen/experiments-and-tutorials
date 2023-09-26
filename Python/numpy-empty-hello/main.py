@@ -3,8 +3,9 @@
 import sys
 from itertools import count
 
-import numpy as np
 import cv2
+import numpy as np
+
 
 def main() -> int:
     """Program main entry point."""

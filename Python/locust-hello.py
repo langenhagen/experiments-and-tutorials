@@ -13,7 +13,7 @@ based on: https://www.youtube.com/watch?v=SOu6hgklQRA
 
 author: andreasl
 """
-from locust import HttpUser, task, between
+from locust import HttpUser, between, task
 
 
 class WebsiteUser(HttpUser):

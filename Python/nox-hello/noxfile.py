@@ -4,7 +4,6 @@ simple noxfile that runs lint and some tests.
 """
 import nox
 
-
 # optionally, you can specify the default sessions;
 # you can omit the statement to default to all sessions
 # nox.options.sessions = ["lint", "test"]

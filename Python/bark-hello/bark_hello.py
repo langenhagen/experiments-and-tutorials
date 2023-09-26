@@ -28,8 +28,8 @@ ValueError: ERROR, something went wrong
 
 """
 from bark import SAMPLE_RATE, generate_audio, preload_models
-from scipy.io.wavfile import write as write_wav
 from IPython.display import Audio
+from scipy.io.wavfile import write as write_wav
 
 # download and load all models
 preload_models()

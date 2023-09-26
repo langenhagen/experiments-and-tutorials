@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-from PyQt5.QtWidgets import QApplication
+
 from harvesters_gui.frontend.pyqt5 import Harvester
+from PyQt5.QtWidgets import QApplication
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

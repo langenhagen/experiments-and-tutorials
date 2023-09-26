@@ -1,6 +1,6 @@
 """Showcase context manager implementations in Python."""
-from contextlib import contextmanager
 import logging
+from contextlib import contextmanager
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",

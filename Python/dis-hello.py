@@ -3,7 +3,6 @@
 standard library."""
 import dis
 
-
 print("--- 1 - simple disassembly ---")
 
 

@@ -15,6 +15,7 @@ Then test it out via:
 """
 from requests_futures.sessions import FuturesSession
 
+
 def post():
     """Make a POST call."""
     session = FuturesSession()
