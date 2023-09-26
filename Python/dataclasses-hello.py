@@ -10,4 +10,3 @@ class MyClass:
     s: str = "default string"
     class_var: ClassVar[int] = 0
     a_list: list[str] = field(default_factory=list)
-    
