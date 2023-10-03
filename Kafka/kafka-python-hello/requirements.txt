@@ -1,0 +1,6 @@
+bpython
+flake8
+kafka-python
+mypy
+pronounceable
+pylint
