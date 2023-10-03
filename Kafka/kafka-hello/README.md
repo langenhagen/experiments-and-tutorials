@@ -18,4 +18,10 @@ docker-compose exec kafka kafka-topics.sh --create --zookeeper zookeeper:2181 --
 
 # list topics
 docker-compose exec kafka kafka-topics.sh --list --zookeeper zookeeper:2181
+
+# other things to try out
+docker exec -it kafka  /bin/bash
+find / | grep '.*0000.log'
+du /kafka/kafka-logs-e232da6c7c3b/baeldung_linux-0/00000000000000000000.log
+more /kafka/kafka-logs-e232da6c7c3b/baeldung_linux-0/00000000000000000000.log
 ```
