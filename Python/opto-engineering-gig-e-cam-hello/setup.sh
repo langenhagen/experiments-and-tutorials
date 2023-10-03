@@ -4,13 +4,13 @@
 #
 # Usage:
 #
-#   scripts/setup.sh [--clean] [--first]
+#   bash setup.sh [--clean] [--first]
 #
 # Examples:
 #
-#   scripts/setup.sh            # set up the project
-#   scripts/setup.sh --clean    # clean already existing artifacts and set up the project
-#   scripts/setup.sh --first    # clean already existing artifacts, install prerequisites and set up the project
+#   bash setup.sh           # set up the project
+#   bash setup.sh --clean   # clean already existing artifacts and set up the project
+#   bash setup.sh --first   # clean already existing artifacts, install prerequisites and set up the project
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -29,7 +29,7 @@ if [[ "$*" =~ '--first' ]]; then
     cd ..
 fi
 
-python -m venv .venv
+python -m venv '.venv'
 # shellcheck disable=SC1091
 source .venv/bin/activate
 

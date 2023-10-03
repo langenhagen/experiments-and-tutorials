@@ -1,11 +1,11 @@
 #!/bin/bash
+set -e
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-
-
-cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
 
 mkdir -p src/example_pkg
 mkdir -p tests

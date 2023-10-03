@@ -4,19 +4,17 @@
 #
 # Usage:
 #
-#   scripts/setup.sh [--clean]
+#   bash setup.sh [--clean]
 #
 # Examples:
 #
-#   scripts/setup.sh               # set up the project
-#   scripts/setup.sh --clean       # clean already existing artifacts and set up the project
+#   bash setup.sh           # set up the project
+#   bash setup.sh --clean   # clean already existing artifacts and set up the project
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-if [[ "$*" =~ '--clean' ]]; then
-    rm -fr .venv/
-fi
+[[ "$*" =~ '--clean' ]] && rm -fr '.venv/'
 
 python -m venv .venv
 # shellcheck disable=SC1091

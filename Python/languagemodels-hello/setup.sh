@@ -1,5 +1,6 @@
 #!/bin/bash
 # Set up the Python project for local development.
+# Set up a Python virtual environment and install the dependencies.
 #
 # Usage:
 #
