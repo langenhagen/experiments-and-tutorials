@@ -14,14 +14,13 @@ services:
     container_name: kafka
     ports:
       - "9092:9092"
-      - '29092:29092'  # note the extra port
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://127.0.0.1:9092,OUTSIDE://localhost:9093  # i don't quite get that 127.0.0.1 thing but it works
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://localhost:9092,OUTSIDE://localhost:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "mytopic:1:1"  # topic name; replication factor; partition count
+      KAFKA_CREATE_TOPICS: "my-fav-topic:2:1"  # not necessary here, but nice bc # partitions; topic name; partition count; replication factor
     networks:
       - kafka-net
 networks:
