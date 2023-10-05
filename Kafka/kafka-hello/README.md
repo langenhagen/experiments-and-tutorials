@@ -14,10 +14,13 @@ docker-compose exec kafka kafka-console-producer.sh --topic baeldung_linux --bro
 
 
 # create a topic
-docker-compose exec kafka kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic mynewtopic
+docker-compose exec kafka kafka-topics.sh --zookeeper zookeeper:2181 --create --replication-factor 1 --partitions 1 --topic mynewtopic
 
 # list topics
-docker-compose exec kafka kafka-topics.sh --list --zookeeper zookeeper:2181
+docker-compose exec kafka kafka-topics.sh --zookeeper zookeeper:2181 --list
+
+# describe topics
+docker-compose exec kafka kafka-topics.sh --zookeeper zookeeper:2181 --describe mynewtopic
 
 # other things to try out
 docker exec -it kafka  /bin/bash

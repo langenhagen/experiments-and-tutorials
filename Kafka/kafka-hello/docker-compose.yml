@@ -18,7 +18,7 @@ services:
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "mytopic:1:1"  # topic name; replication factor; partition count
+      KAFKA_CREATE_TOPICS: "mytopic:1:1"  # topic name; partition count; replication factor
     networks:
       - kafka-net
 networks:
