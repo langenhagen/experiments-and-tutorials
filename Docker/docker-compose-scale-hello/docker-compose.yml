@@ -1,0 +1,31 @@
+# Showcase how to scale services in a docker-compose service mesh
+# see: https://dockerlabs.collabnix.com/intermediate/workshop/DockerCompose/scale_command.html.
+#
+# Note: did not get it to work for weird reasons but I guess the stuff is itself alright
+#
+# Usage:
+#
+#   docker-compose uo
+#   docker-compose ps --services
+#   docker-compose up --scale redis-slave=3  # scale redis-slave container to 3 instances
+
+version: '3.1'
+services:
+   redis-master:
+     image: redis:latest
+     container_name: webserver
+     restart: unless-stopped
+     ports:
+       - "6379"
+   redis-slave:
+     image: gcr.io/google_samples/gb-redisslave:v1
+     ports:
+       - "6379"
+     environment:
+       - GET_HOSTS_FROM=dns
+   frontend:
+     image: gcr.io/google-samples/gb-frontend:v3
+     ports:
+       - "80:80"
+     environment:
+       - GET_HOSTS_FROM=dns
