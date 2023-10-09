@@ -11,7 +11,7 @@ There are other alternative Python Kafka clients, e.g.:
 - `pykafka` https://github.com/Parsely/pykafka
 
 ```bash
-docker compose up
+docker-compose up
 
 python producer.py
 
