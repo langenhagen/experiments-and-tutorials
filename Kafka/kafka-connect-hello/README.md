@@ -1,38 +1,15 @@
 # Kafka Connect Hello
 Showcase the use of Kafka Connect.
 
+See for more:
+- https://docs.confluent.io/platform/current/installation/configuration/connect/index.html
+- https://docs.confluent.io/platform/current/installation/docker/config-reference.html
+
 
 ```bash
 docker-compose up
 
-PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "insert into mytable (value) values ('andi'),('mandi');"
-PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "select * from mytable;"
-
-
-# inspect connectors
-curl -X GET http://9.9.0.5:8083/connectors
-
-curl -X GET http://9.9.0.5:8083/connectors/my-postgres-connector/status
-```
-
-
-TODO
-```
-# scale partitions; not necessary here because the partition count is set to 2 in the docker-compose.yml already
-docker-compose exec kafka kafka-topics.sh --zookeeper zookeeper:2181 --alter --topic my-fav-topic --partitions 2
-
-# describe topic
-docker-compose exec kafka kafka-topics.sh --zookeeper zookeeper:2181 --describe my-fav-topic
-```
-
-
-
-
-docker-compose exec kafka kafka-topics --bootstrap-server kafka:9092 --list
-
-
-docker-compose exec kafka kafka-console-consumer.sh --topic baeldung_linux --from-beginning --bootstrap-server kafka:9092
-
+# create a connector
 curl -X POST -H "Content-Type: application/json" --data '{
     "name": "my-postgres-connector",
     "config": {
@@ -49,13 +26,30 @@ curl -X POST -H "Content-Type: application/json" --data '{
         "offset.storage.topic": "my-offset-topic",
         "status.storage.topic": "my-status-topic",
         "topic.creation.enable": "true",
-        "topic.prefix": "my-prefix"
+        "topic.creation.default.replication.factor": 1,
+        "topic.creation.default.partitions": 1,
+        "topic.prefix": "my-prefix",
+        "plugin.name": "pgoutput"
     }
 }' http://9.9.0.5:8083/connectors
 
+# inspect connectors
+curl -X GET http://9.9.0.5:8083/connectors
+curl -X GET http://9.9.0.5:8083/connectors/my-postgres-connector/status
 
+# list topics
+docker-compose exec kafka kafka-topics --bootstrap-server kafka:9092 --list  # a.o. my-prefix.public.mytable
 
+# describe topic
+docker-compose exec kafka kafka-topics --bootstrap-server kafka:9092 --describe my-prefix.public.mytable
 
+# open a simple consumer
+docker-compose exec kafka kafka-console-consumer --topic my-prefix.public.mytable --from-beginning --bootstrap-server kafka:9092
 
-https://docs.confluent.io/platform/current/installation/configuration/connect/index.html
-https://docs.confluent.io/platform/current/installation/docker/config-reference.html
+# add something to the db and watch the consumer return
+PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "insert into mytable (value) values ('andi'),('mandi');"
+PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "select * from mytable;"
+
+# delete a connector
+curl -X DELETE http://9.9.0.5:8083/connectors/my-postgres-connector
+```
