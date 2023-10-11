@@ -9,7 +9,7 @@ See for more:
 ```bash
 docker-compose up
 
-# create a connector
+# create a source connector
 curl -X POST -H "Content-Type: application/json" --data '{
     "name": "my-postgres-connector",
     "config": {
@@ -33,9 +33,21 @@ curl -X POST -H "Content-Type: application/json" --data '{
     }
 }' http://9.9.0.5:8083/connectors
 
+# add a sink connector
+curl -X POST -H "Content-Type: application/json" --data '{
+    "name": "file-sink-connector",
+    "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+        "tasks.max": "1",
+        "file": "/home/appuser/my_file_sink.txt",
+        "topics": "my-prefix.public.mytable"
+    }
+}' http://9.9.0.5:8083/connectors
+
 # inspect connectors
 curl -X GET http://9.9.0.5:8083/connectors
 curl -X GET http://9.9.0.5:8083/connectors/my-postgres-connector/status
+curl -X GET http://9.9.0.5:8083/connectors/file-sink-connector/status
 
 # list topics
 docker-compose exec kafka kafka-topics --bootstrap-server kafka:9092 --list  # a.o. my-prefix.public.mytable
@@ -48,8 +60,13 @@ docker-compose exec kafka kafka-console-consumer --topic my-prefix.public.mytabl
 
 # add something to the db and watch the consumer return
 PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "insert into mytable (value) values ('andi'),('mandi');"
+PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "DELETE FROM mytable mt WHERE id = 1;"
 PGPASSWORD=mypass psql -h localhost -U myuser -d mydb -a -c "select * from mytable;"
 
-# delete a connector
+# check the file sink connector
+docker exec -it kafka-connect /bin/bash -c 'cat my_file_sink.txt'
+
+# delete connectors
 curl -X DELETE http://9.9.0.5:8083/connectors/my-postgres-connector
+curl -X DELETE http://9.9.0.5:8083/connectors/file-sink-connector
 ```
