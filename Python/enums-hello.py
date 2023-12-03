@@ -30,7 +30,7 @@ print("--- 2 enums with string values ---")
 class MyStringEnum(enum.Enum):
     """Enum with string values."""
 
-    VAL_1 = "my val"
+    VAL_1 = "my val"  # <NAME> = <VALUE>
     VAL_2 = "my other val"
 
 
@@ -38,8 +38,9 @@ c = MyStringEnum.VAL_1
 d = MyStringEnum.VAL_2
 
 print(f"{c=}")
+print(f"{c.name=}    {c.value=}")
 print(f"{d=}")
-
+print(f"{d.name=}    {d.value=}")
 
 print("--- 3 enums from string values ---")
 
