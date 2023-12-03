@@ -39,3 +39,14 @@ d = MyStringEnum.VAL_2
 
 print(f"{c=}")
 print(f"{d=}")
+
+
+print("--- 3 enums from string values ---")
+
+e = MyStringEnum("my val")
+print(f"{e=}")
+
+f = MyStringEnum("my other val")
+print(f"{f=}")
+
+# g = MyStringEnum("my not existing val")  # ValueError: 'my not existing val' is not a valid MyStringEnum
