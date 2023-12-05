@@ -2,7 +2,7 @@
 """Showcase the usage of Python enumerations."""
 import enum
 
-print("--- 1 simple enums ---")
+print("--- 1 simple enums ---\n")
 
 
 class MyEnum(enum.Enum):
@@ -24,7 +24,7 @@ print(f"{b.name=}")
 print(f"{b.value=}")
 
 
-print("--- 2 enums with string values ---")
+print("\n--- 2 enums with string values ---\n")
 
 
 class MyStringEnum(enum.Enum):
@@ -42,7 +42,7 @@ print(f"{c.name=}    {c.value=}")
 print(f"{d=}")
 print(f"{d.name=}    {d.value=}")
 
-print("--- 3 enums from string values ---")
+print("\n--- 3 enums from string values ---\n")
 
 e = MyStringEnum("my val")
 print(f"{e=}")
@@ -51,3 +51,14 @@ f = MyStringEnum("my other val")
 print(f"{f=}")
 
 # g = MyStringEnum("my not existing val")  # ValueError: 'my not existing val' is not a valid MyStringEnum
+
+
+print("\n--- 4 iterating over keys/values ---\n")
+
+for e in MyEnum:
+    print(f"{e.name} -> {e.value}")
+
+print()
+
+l = [e for e in MyEnum]
+print(l)
