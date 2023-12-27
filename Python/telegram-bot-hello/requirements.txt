@@ -1,0 +1,5 @@
+bpython
+mypy
+python-dateutil
+python-telegram-bot
+types-python-dateutil
