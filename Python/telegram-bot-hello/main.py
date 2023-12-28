@@ -3,16 +3,20 @@
 
 Nice thing is that Telegram queues the messages when the bot is offline. When
 the bot comes back on, it processes the messages.
+Note: also gets messages that you send, then delete, even while the bot is
+offline. This indicates that Telegram may indeed not delete messages you send.
+
 
 Use like:
 
     env TELEGRAM_BOT_TOKEN='<MY BOT TOKEN>' ./main.py
 
 
-To create and manage your bots, talk with @BotFather, the one Telegram bot to rule them all.
-Send the messages "/start" or "/help" to botfather to learn more.
+To create and manage your bots, talk with @BotFather, the one Telegram bot to
+rule them all. Send the messages "/start" or "/help" to botfather to learn more.
 
-Based on: https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/echobot.py
+Based on:
+https://github.com/python-telegram-bot/python-telegram-bot/blob/master/examples/echobot.py
 """
 import logging
 import os
