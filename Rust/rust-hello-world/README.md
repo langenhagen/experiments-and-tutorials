@@ -8,11 +8,13 @@ Related common and helpful commands and tools:
 
 # Rust project management tool
 rustc main.rs  # invoke the rust comiler, only works in this simple form with simple programs
+cargo new my_project  # create an empty scaffold for a my_project
 cargo build  # build via the higher level build system and package management tool `cargo`
 cargo run  # run your build
 
-# rustup ist the toolchain installer and manager
+# rustup ist the toolchain installer and manager, comparable with Python's `pyenv`
 rustup
+rustup install stable  # add the `stable` toolchain
 rustup update
 
 rustfmt myfile.rs  # format the given file
