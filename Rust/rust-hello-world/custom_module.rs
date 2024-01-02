@@ -1,6 +1,7 @@
 use rand::Rng;
 
 // Function in the module
+// &str is a reference (&) into a string-slice (str)
 pub fn generate_greeting(name: &str) -> String {
     format!("Hello, {}!", name)
 }
@@ -24,7 +25,7 @@ impl Calculator {
     ///
     /// rand::thread_rng(): Get a handle to a thread-local random number generator.
     /// .gen_range(1..=100): Generate a random integer within the inclusive range, similar to
-    /// std::uniform_int_distribution<int>(1, 100) in C++.
+    /// `std::uniform_int_distribution<int>`(1, 100) in C++.
     pub fn generate_random(&self) -> i32 {
         // the /function/ gen_range comes with `use run::Rng`. seems I don't have to import anything
         // for `rand::thread_rng()` though. Weird.

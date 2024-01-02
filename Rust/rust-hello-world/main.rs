@@ -1,6 +1,13 @@
-// Compile/run like
-//
-//   cargo run
+//! This is my, Andreas Langenhagen's, "hello world" program in the Rust programming language.
+//! This is a file-level docstring.
+//!
+//! Allegedly, comments starting with //! will be associated with the main module or crate.
+//!
+//! Compile/run like:
+//!
+//!   cargo run
+//!
+//! author: andreasl
 use std::io;
 
 mod custom_module;
@@ -9,7 +16,9 @@ fn main() {
     // Get user input
     let mut input = String::new();
     println!("Enter your name: ");
-    io::stdin().read_line(&mut input).expect("Failed to read line");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line");
     let name = input.trim();
 
     // Call a function from custom_module
