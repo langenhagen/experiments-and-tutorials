@@ -2,8 +2,13 @@
 
 A trie is a tree-based data structure designed for efficient storage and
 retrieval of strings, where each node represents a character, forming paths that
-represent keys. It is commonly employed in tasks such as autocomplete and spell
-checking.
+represent keys.
+
+You can use tries for spell checking and autocompletion tasks.
+
+Tries are a special case of Radix trees. Radix trees can encompass tries but
+specifically emphasize nodes representing sequences of characters, leading to
+potential compression benefits compared to tries.
 
 author: andreasl
 """
