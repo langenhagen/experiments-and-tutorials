@@ -1,0 +1,56 @@
+<!--
+Showcase the client-side loading of several files and being able browse through them.
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Gallery Viewer</title>
+    <style>
+      #gallery {
+        max-width: 100%;
+        max-height: 80vh;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="file" id="fileInput" multiple accept="image/*" />
+    <button onclick="loadImages()">Load Images</button>
+    <button onclick="showNextImage()">Next Image</button>
+    <br />
+
+    <img id="gallery" src="" alt="Image Gallery" />
+
+    <script>
+      let imageUrls = [];
+      let currentIndex = 0;
+      const galleryImage = document.getElementById("gallery");
+      const fileInput = document.getElementById("fileInput");
+
+      function loadImages() {
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+          alert("Please select at least one image.");
+          return;
+        }
+
+        imageUrls = Array.from(files).map((file) => URL.createObjectURL(file));
+        currentIndex = 0;
+        showNextImage();
+      }
+
+      function showNextImage() {
+        if (imageUrls.length === 0) {
+          alert("Please load images first.");
+          return;
+        }
+
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+        galleryImage.src = imageUrls[currentIndex];
+      }
+    </script>
+  </body>
+</html>
