@@ -1,17 +1,15 @@
 <html>
-<style>
-@media print {
-  .noPrint{
-    display:none;
-  }
-}
-</style>
-<body onload="window.print();">
-<p>print me</p>
-<p class="noPrint">dont print me</p>
+  <style>
+    @media print {
+      .noPrint {
+        display: none;
+      }
+    }
+  </style>
+  <body onload="window.print();">
+    <p>print me</p>
+    <p class="noPrint">dont print me</p>
 
-<button onclick="window.print();" class="noPrint">
-Print page
-</button>
-</body>
+    <button onclick="window.print();" class="noPrint">Print page</button>
+  </body>
 </html>
