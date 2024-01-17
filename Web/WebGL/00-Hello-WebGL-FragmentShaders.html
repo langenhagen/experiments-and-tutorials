@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Hello WebGL Fragment Shaders</title>
-</head>
-<body style="margin: 0px; overflow: hidden">
+  </head>
+  <body style="margin: 0px; overflow: hidden">
     This is a complete and minimal WebGL Shading Example.&nbsp;&nbsp;It renders the output of a
-    vertex- and fragment shader onto a full screen quad. As context, a screen-filling canvas
-    is used. A shader program is compiled and linked and a quad that fills the whole
-    viewport is created and its buffer data is linked to the attributes of the shader program.
-    Callbacks for mouse movement, browser-window resizing and cleanup are installed
-    and the render loop is started.
-    <br>
-    <canvas id="canvas" style="position: absolute; width: 100%; height: 100%;"/>
-</body>
+    vertex- and fragment shader onto a full screen quad. As context, a screen-filling canvas is
+    used. A shader program is compiled and linked and a quad that fills the whole viewport is
+    created and its buffer data is linked to the attributes of the shader program. Callbacks for
+    mouse movement, browser-window resizing and cleanup are installed and the render loop is
+    started.
+    <br />
+    <canvas id="canvas" style="position: absolute; width: 100%; height: 100%" />
+  </body>
 
-<script type="x-shader/x-vertex" id="vertex-shader">
+  <script type="x-shader/x-vertex" id="vertex-shader">
     #version 100
 
     attribute vec2 vertexPosition;
@@ -24,23 +24,23 @@
         gl_Position = vec4(vertexPosition, 0.0, 1.0);
         uv = (vertexPosition + 1.0) * 0.5;
     }
-</script>
-<script type="x-shader/x-fragment" id="fragment-shader">
-    #version 100
-    precision mediump float;
+  </script>
+  <script type="x-shader/x-fragment" id="fragment-shader">
+      #version 100
+      precision mediump float;
 
-    varying vec2 uv;
-    uniform float time;
-    uniform vec2 mouse;
-    uniform vec2 resolution;
+      varying vec2 uv;
+      uniform float time;
+      uniform vec2 mouse;
+      uniform vec2 resolution;
 
-    void main() {
-        float z = (sin(time*0.001)+1.0)*0.5;
-        gl_FragColor = vec4(z*uv.x+mouse.x, z*uv.y+mouse.y,z, 1.0);
-  }
-</script>
+      void main() {
+          float z = (sin(time*0.001)+1.0)*0.5;
+          gl_FragColor = vec4(z*uv.x+mouse.x, z*uv.y+mouse.y,z, 1.0);
+    }
+  </script>
 
-<script type="text/javascript" id="webgl-setup">
+  <script type="text/javascript" id="webgl-setup">
     "use strict";
 
     var canvas = document.querySelector("canvas");
@@ -51,105 +51,116 @@
     const timerStart = Date.now();
 
     var uniforms = {
-        time:       function(v) { gl.uniform1f (gl.getUniformLocation(shaderProgram, "time" ),      v); },
-        mouse:      function(v) { gl.uniform2fv(gl.getUniformLocation(shaderProgram, "mouse"),      v); },
-        resolution: function(v) { gl.uniform2fv(gl.getUniformLocation(shaderProgram, "resolution"), v); }
+      time: function (v) {
+        gl.uniform1f(gl.getUniformLocation(shaderProgram, "time"), v);
+      },
+      mouse: function (v) {
+        gl.uniform2fv(gl.getUniformLocation(shaderProgram, "mouse"), v);
+      },
+      resolution: function (v) {
+        gl.uniform2fv(gl.getUniformLocation(shaderProgram, "resolution"), v);
+      },
     };
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    var shaderProgram = compileShaderProgram(gl,
-                                             document.querySelector("#vertex-shader").innerHTML,
-                                             document.querySelector("#fragment-shader").innerHTML);
+    var shaderProgram = compileShaderProgram(
+      gl,
+      document.querySelector("#vertex-shader").innerHTML,
+      document.querySelector("#fragment-shader").innerHTML,
+    );
     gl.useProgram(shaderProgram);
-    createFullscreenQuad(gl,shaderProgram);
+    createFullscreenQuad(gl, shaderProgram);
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('resize', onWindowResize);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("resize", onWindowResize);
     window.addEventListener("beforeunload", cleanup, true);
 
     onWindowResize();
     render();
 
-
     function compileShaderProgram(gl, vertexShaderSource, fragmentShaderSource) {
-        let vertexShader = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vertexShader, vertexShaderSource);
-        gl.compileShader(vertexShader);
-        if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-            alert("Vertex shader did not compile successfully.\n" +
-                "Info log: " + gl.getShaderInfoLog(vertexShader));
-        }
+      let vertexShader = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vertexShader, vertexShaderSource);
+      gl.compileShader(vertexShader);
+      if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+        alert(
+          "Vertex shader did not compile successfully.\n" +
+            "Info log: " +
+            gl.getShaderInfoLog(vertexShader),
+        );
+      }
 
-        let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(fragmentShader, fragmentShaderSource);
-        gl.compileShader(fragmentShader);
-        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-            alert("Fragment shader did not compile successfully.\n" +
-                "Info log: " + gl.getShaderInfoLog(fragmentShader));
-        }
+      let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fragmentShader, fragmentShaderSource);
+      gl.compileShader(fragmentShader);
+      if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+        alert(
+          "Fragment shader did not compile successfully.\n" +
+            "Info log: " +
+            gl.getShaderInfoLog(fragmentShader),
+        );
+      }
 
-        let shaderProgram = gl.createProgram()
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
-        gl.detachShader(shaderProgram, vertexShader);
-        gl.deleteShader(vertexShader);
-        gl.detachShader(shaderProgram, fragmentShader);
-        gl.deleteShader(fragmentShader);
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert("Shader shaderProgram did not link successfully.\n" +
-                "Info log: " + gl.getProgramInfoLog(shaderProgram));
-        }
-        return shaderProgram;
+      let shaderProgram = gl.createProgram();
+      gl.attachShader(shaderProgram, vertexShader);
+      gl.attachShader(shaderProgram, fragmentShader);
+      gl.linkProgram(shaderProgram);
+      gl.detachShader(shaderProgram, vertexShader);
+      gl.deleteShader(vertexShader);
+      gl.detachShader(shaderProgram, fragmentShader);
+      gl.deleteShader(fragmentShader);
+      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert(
+          "Shader shaderProgram did not link successfully.\n" +
+            "Info log: " +
+            gl.getProgramInfoLog(shaderProgram),
+        );
+      }
+      return shaderProgram;
     }
 
     function onWindowResize(event) {
-        uniforms.resolution([gl.drawingBufferWidth, gl.drawingBufferHeight]);
+      uniforms.resolution([gl.drawingBufferWidth, gl.drawingBufferHeight]);
     }
 
     function onMouseMove(event) {
-        uniforms.mouse([event.pageX/gl.drawingBufferWidth, event.pageY/gl.drawingBufferHeight]);
+      uniforms.mouse([event.pageX / gl.drawingBufferWidth, event.pageY / gl.drawingBufferHeight]);
     }
 
     function cleanup() {
-        if(gl) {
-            gl.useProgram(null);
-        }
-        if(shaderProgram) {
-            gl.deleteProgram(shaderProgram);
-        }
+      if (gl) {
+        gl.useProgram(null);
+      }
+      if (shaderProgram) {
+        gl.deleteProgram(shaderProgram);
+      }
     }
 
-    function createFullscreenQuad(gl,shaderProgram) {
-        const vertexArray = new Float32Array([
-            -1.0, -1.0,
-            -1.0, 1.0,
-            1.0, -1.0,
-            1.0, 1.0,
-            ]);
+    function createFullscreenQuad(gl, shaderProgram) {
+      const vertexArray = new Float32Array([-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-        gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, vertexArray, gl.STATIC_DRAW);
 
-        const vertexPositionLoc = gl.getAttribLocation(shaderProgram, "vertexPosition");
-        gl.enableVertexAttribArray(vertexPositionLoc); // enables using attrib vals from buffer array
-        gl.vertexAttribPointer(vertexPositionLoc,
-                               2 /*no of entries per vertex belonging to this attrib in the buffer*/,
-                               gl.FLOAT /* type of entries*/,
-                               false /*is normalized*/,
-                               8 /*total no bytes of one vertex in buffer, e.g the stride*/,
-                               0 /*bytes offset per vertex for this attribute*/
-                               );
+      const vertexPositionLoc = gl.getAttribLocation(shaderProgram, "vertexPosition");
+      gl.enableVertexAttribArray(vertexPositionLoc); // enables using attrib vals from buffer array
+      gl.vertexAttribPointer(
+        vertexPositionLoc,
+        2 /*no of entries per vertex belonging to this attrib in the buffer*/,
+        gl.FLOAT /* type of entries*/,
+        false /*is normalized*/,
+        8 /*total no bytes of one vertex in buffer, e.g the stride*/,
+        0 /*bytes offset per vertex for this attribute*/,
+      );
     }
 
     function render() {
-        window.requestAnimationFrame(render);
+      window.requestAnimationFrame(render);
 
-        uniforms.time(timerStart - Date.now());
+      uniforms.time(timerStart - Date.now());
 
-        // gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0 /*vertex-offset*/, 4 /*vertex-count*/);
+      // gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0 /*vertex-offset*/, 4 /*vertex-count*/);
     }
-
-</script>
+  </script>
 </html>
