@@ -1,0 +1,29 @@
+<!--
+    Showcase the use of JS's fetch API in combination with futures/promises.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promises Hello / Fetch API Example</title>
+  </head>
+  <body>
+    <script>
+      // Function to fetch a resource
+      function fetchResource(url) {
+        return fetch(url).then((response) => response.text());
+      }
+
+      const get1 = fetchResource("./alice.txt");
+      const get2 = fetchResource("./bob.txt");
+
+      // When both requests are completed, proceed
+      Promise.all([get1, get2]).then(([myalice, mybob]) => {
+        console.log("Alice:", myalice);
+        console.log("Bob:", mybob);
+      });
+    </script>
+    Look into the console
+  </body>
+</html>
