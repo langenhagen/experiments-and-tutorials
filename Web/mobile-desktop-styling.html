@@ -1,0 +1,76 @@
+<!--
+    Showcase the use of CSS @media blocks to distinguish device types.
+    Note that those px used in the CSS are CSS-pixels. They don't mean real phyiscal pixels.
+
+    author: andreasl
+ -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile vs Desktop Styling</title>
+    <style>
+      /* Default styles for all devices */
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        display: block;
+        font-size: 24px;
+        margin-top: 20px;
+      }
+
+      /* Styles for smartphones. Those px are CSS pixels, not real pixels. */
+      @media only screen and (max-width: 767px) {
+        body {
+          background-color: green;
+        }
+      }
+
+      /* Styles for desktops. */
+      @media only screen and (min-width: 768px) {
+        body {
+          background-color: red;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="device-label"></div>
+    <br />
+    <div id="user-agent"></div>
+    <br />
+    <div id="navigator-details"></div>
+    <script>
+      // JavaScript to update the labels based on viewport width and user agent
+      window.onload = function () {
+        const userAgent = navigator.userAgent;
+        const label = document.getElementById("device-label");
+        if (/Mobi|Android|iOS|iPhone|iPad/i.test(userAgent)) {
+          label.textContent = "Mobile Device";
+          if (/iPad|tablet/i.test(userAgent)) {
+            label.textContent += " (Tablet)";
+          } else {
+            label.textContent += " (Smartphone)";
+          }
+        } else {
+          label.textContent = "Desktop Device";
+        }
+
+        const userAgentDiv = document.getElementById("user-agent");
+        userAgentDiv.textContent = userAgent;
+
+        const detailsDiv = document.getElementById("navigator-details");
+        detailsDiv.textContent = "navigator stuff:";
+        detailsDiv.textContent += " language: " + navigator.language;
+        detailsDiv.textContent += " languages: " + navigator.languages;
+        detailsDiv.textContent += " platform: " + navigator.platform;
+        detailsDiv.textContent += " cookies enabled: " + navigator.cookieEnabled;
+        detailsDiv.textContent += " onLine: " + navigator.onLine;
+        detailsDiv.textContent += " userAgentData: " + JSON.stringify(navigator.userAgentData);
+
+        console.log(navigator);
+      };
+    </script>
+  </body>
+</html>
