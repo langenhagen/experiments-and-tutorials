@@ -1,0 +1,96 @@
+<!--
+Showcase the use of the Pointer Lock API.
+
+Nice for e.g. implementing First Person Shooter like controls.
+
+Note: When hitting "lock pointer" again quickly after releasing the pointer lock,
+the console shows an error:
+
+    Uncaught (in promise) DOMException: The user has exited the lock before this request was completed.
+
+Also note: Apparently, you cannot automatically initiate pointer lock in modern browsers, e.g. on
+page load, apparently due to security restrictions. Instead, he user has to initiate the pointer
+lock somehow manually. Also, I tried automatically clicking the button upon page load, even deferred
+with a sleep timer. No cigar.
+
+author: andreasl
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello Pointer Lock</title>
+    <style>
+      body {
+        text-align: center;
+        font-size: 24px;
+      }
+      #pointerLockButton {
+        width: 400px;
+        height: 300px;
+        background-color: #ccc;
+        margin: 50px auto;
+        line-height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pointerLockButton">Click to Lock Pointer</div>
+    <div id="deltaDisplay"></div>
+
+    <script>
+      const button = document.getElementById("pointerLockButton");
+      const deltaDisplay = document.getElementById("deltaDisplay");
+      var isPointerLocked = false;
+
+      button.addEventListener("click", function () {
+        if (!isPointerLocked) {
+          button.requestPointerLock =
+            button.requestPointerLock ||
+            button.mozRequestPointerLock ||
+            button.webkitRequestPointerLock;
+          button.requestPointerLock();
+        }
+      });
+
+      function updateMousePositionInfo(event) {
+        const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+        const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+        deltaDisplay.innerHTML = "Mouse Delta X: " + movementX + ", Mouse Delta Y: " + movementY;
+      }
+
+      function onLockChange() {
+        if (
+          document.pointerLockElement === button ||
+          document.mozPointerLockElement === button ||
+          document.webkitPointerLockElement === button
+        ) {
+          isPointerLocked = true;
+          button.innerHTML = "Press Escape to unlock pointer";
+          document.addEventListener("mousemove", updateMousePositionInfo, false);
+          document.addEventListener("keydown", onKeyDown, false);
+        } else {
+          isPointerLocked = false;
+          button.innerHTML = "Click to Lock Pointer";
+          document.removeEventListener("mousemove", updateMousePositionInfo, false);
+          document.removeEventListener("keydown", onKeyDown, false);
+        }
+      }
+      document.addEventListener("pointerlockchange", onLockChange, false);
+      document.addEventListener("mozpointerlockchange", onLockChange, false);
+      document.addEventListener("webkitpointerlockchange", onLockChange, false);
+
+      function onKeyDown(event) {
+        if (event.keyCode === 27) {
+          // Escape key
+          document.exitPointerLock =
+            document.exitPointerLock ||
+            document.mozExitPointerLock ||
+            document.webkitExitPointerLock;
+          document.exitPointerLock();
+        }
+      }
+    </script>
+  </body>
+</html>
