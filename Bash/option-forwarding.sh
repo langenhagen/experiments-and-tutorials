@@ -1,5 +1,5 @@
 #!/bin/bash
-# Showcase the forwarding of command line options and the issues with whitespaces
+# Showcase the forwarding of command line options and the issues with whitespaces.
 #
 # Usage:
 #
