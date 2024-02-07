@@ -1,0 +1,29 @@
+#!/usr/bin/python3 -BEs
+#
+# -B    Don't write .pyc files on import. See also PYTHONDONTWRITEBYTECODE.
+# -E    Ignore environment variables like PYTHONPATH and PYTHONHOME that modify the behavior
+#       of the interpreter.
+# -s    Don't add user site directory to sys.path.
+import os
+import sys
+from pathlib import Path
+
+print("Hello from postinst!")
+print("Python version:", sys.version)
+
+# echo "$nickname" > '/tmp/my_variable_set_in_preinst'
+nickname = Path("/tmp/my_variable_set_in_preinst").read_text().strip()
+
+msg = (
+    f"Hey {nickname}, all your base are belong to us!\n\n"
+    "Check:\n"
+    "/etc/my-hello-deb-package/myfile.txt\n"
+    "/usr/bin/allyourbase.sh"
+)
+os.system(f'whiptail --title "Hello from postinst" --msgbox "{msg}" 12 60')
+
+# Exit with a non-zero code causes files to be installed but the installation
+# ends with a "half-configured" status in the logs instead of an "installed"
+# status. Still the software appears installed in the output of `apt list``.
+
+# sys.exit(99)

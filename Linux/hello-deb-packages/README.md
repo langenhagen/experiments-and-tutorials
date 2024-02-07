@@ -1,6 +1,9 @@
 # Hello Deb Packages
 Showcase the structure of a custom debian package and how to build/install it.
 
+The `.deb` files are actually Unix Archive (`.ar`) files. You can create, inspect and manipulate
+those files with the tool `ar` manually.
+
 Build like:
 ```bash
 dpkg-deb --build my-hello-deb-package/
@@ -8,11 +11,13 @@ dpkg-deb --build my-hello-deb-package/
 
 Install like:
 ```bash
+sudo dpkg -i ./my-hello-deb-package.deb
+# or
 sudo apt install ./my-hello-deb-package.deb
 ```
 
-If you install from a working directory that is not accessible for the user `_apt`, below e.g.
-`$HOME`, you may get a warning like:
+If you install via `apt` from a working directory that is not accessible for the user `_apt`, below
+e.g. `$HOME`, you may get a warning like:
 
 > N: Download is performed unsandboxed as root as file
 > '/home/myuser/myfolder/hello-deb-packages-0.1.0.deb' couldn't be accessed by user '_apt'. -
@@ -32,10 +37,12 @@ ls /etc/my-hello-deb-package/ /usr/bin/allyourbase.sh
 
 Uninstall like:
 ```bash
-sudo apt remove hello-deb-packages-0.1.0
+sudo dpkg -r hello-deb-packages-0.1.0  # keeps configs around
+# or
+sudo apt remove hello-deb-packages-0.1.0  # keeps configs around
+# or
+sudo dpkg --purge hello-deb-packages-0.1.0  # remove everything; calls `postrm` twice!
 ```
-
-
 
 
 ## Control File
@@ -87,3 +94,20 @@ Explanation of the control file fields:
 - Enhances: Packages whose functionality is enhanced by your package.
 - Pre-Depends: Packages that must be installed before your package is installed.
 - Built-Using: List of packages used to build the package.
+
+
+Further reading: https://www.debian.org/doc/debian-policy/ch-controlfields.html
+
+
+## Preinst, Postinst, Prerm and Postrm
+- are optional
+- must be executable, between permission set 0555 - 0777
+- they can be any kind of executable, e.g. a Python script, e.g. `#!/usr/bin/python3 -BEs`
+- they can do basically anything. I/O with the user, file system operations,... you name it
+
+
+## Logs for Installing / Uninstalling
+Calls to `apt install` and `apt remove` get logged into `/var/log/dpkg.log`:
+```bash
+tail -f /var/log/dpkg.log
+```

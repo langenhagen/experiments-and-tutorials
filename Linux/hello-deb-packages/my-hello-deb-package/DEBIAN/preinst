@@ -1,0 +1,26 @@
+#!/bin/bash
+# You can basically do anything in those scripts.
+set -e
+
+echo 'Hello from preinst!'
+
+# Prompt the user for their nickname
+export NEWT_COLORS='
+root=red,black
+window=red,lightgray
+title=black,lightgray
+border=black,lightgray
+textbox=black,lightgray
+entry=black,white
+button=black,gray
+compactbutton=black,lightgray
+shadow=red,black
+'
+nickname="$(whiptail --title "Enter Nickname" --inputbox "What's your nickname" 15 50  3>&1 1>&2 2>&3)"
+echo "You entered: ${nickname}"
+
+# this is a workaround to send info from preinst to postinst
+echo "$nickname" > '/tmp/my_variable_set_in_preinst'
+
+# exit with a non-zero code makes the entire install fail
+# exit 42
