@@ -37,7 +37,7 @@ ls /etc/my-hello-deb-package/ /usr/bin/allyourbase.sh
 
 Uninstall like:
 ```bash
-sudo dpkg -r hello-deb-packages-0.1.0  # keeps configs around
+sudo dpkg --remove hello-deb-packages-0.1.0  # keeps configs around
 # or
 sudo apt remove hello-deb-packages-0.1.0  # keeps configs around
 # or
