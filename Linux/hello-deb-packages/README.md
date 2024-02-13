@@ -9,6 +9,13 @@ Build like:
 dpkg-deb --build my-hello-deb-package/
 ```
 
+Get info about the debfile:
+```bash
+dpkg-deb --info my-hello-deb-package.deb
+
+dpkg-deb --contents my-hello-deb-package.deb
+```
+
 Install like:
 ```bash
 sudo dpkg -i ./my-hello-deb-package.deb
