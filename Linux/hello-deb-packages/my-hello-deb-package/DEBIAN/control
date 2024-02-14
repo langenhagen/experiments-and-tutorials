@@ -3,6 +3,7 @@ Package: hello-deb-packages-0.1.0
 Version: 2024-02-07
 Priority: optional
 Architecture: amd64
+Section: utils
 Installed-Size: 1024
 Depends: ffmpeg, rsync, whiptail
 Conflicts: hello-deb-packages
