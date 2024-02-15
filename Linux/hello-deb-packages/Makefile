@@ -1,5 +1,5 @@
 my-hello-deb-package.deb:
-	dpkg-deb --build my-hello-deb-package
+	dpkg-deb -Zgzip --build my-hello-deb-package
 
 .PHONY: info
 info:

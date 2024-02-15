@@ -59,7 +59,7 @@ Package: my-package
 Version: 1.0
 Architecture: amd64
 Essential: no
-Section: custom
+Section: custom                                  # recommended
 Priority: optional
 Maintainer: John Doe <john.doe@example.com>
 Installed-Size: 1024
@@ -118,3 +118,11 @@ Calls to `apt install` and `apt remove` get logged into `/var/log/dpkg.log`:
 ```bash
 tail -f /var/log/dpkg.log
 ```
+
+
+## Notes:
+- Might be that the bundled files in the `.deb` file are compressed as `.zst` files. Debian 11 does
+  not support them. Support was only added for Debian 12. See:
+  https://unix.stackexchange.com/questions/669004/zst-compression-not-supported-by-apt-dpkg Thus, I
+  specify the compression type on the command line when building the `.deb` file via:
+  `dpkg-deb -Zgzip --build`
