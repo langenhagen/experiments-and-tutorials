@@ -1,14 +1,11 @@
 My-Comment: showcase the debian package control file
-Package: hello-deb-packages-0.1.0
-Version: 2024-02-07
+Package: hello-deb-packages
+Version: 1.0
 Priority: optional
 Architecture: amd64
 Section: utils
 Installed-Size: 1024
-Depends: ffmpeg, rsync, whiptail
-Conflicts: hello-deb-packages
-Replaces: hello-deb-packages
-Provides: hello-deb-packages
+Depends: rsync, whiptail
 Maintainer: andreasl, andreasl megacorp inc.
 Description: Little proof of concept debian package
 MyCustomField: little custom something

@@ -27,7 +27,7 @@ If you install via `apt` from a working directory that is not accessible for the
 e.g. `$HOME`, you may get a warning like:
 
 > N: Download is performed unsandboxed as root as file
-> '/home/myuser/myfolder/hello-deb-packages-0.1.0.deb' couldn't be accessed by user '_apt'. -
+> '/home/myuser/myfolder/hello-deb-packages.deb' couldn't be accessed by user '_apt'. -
 > pkgAcquire::Run (13: Permission denied)
 
 The stuff gets still installed.
@@ -44,67 +44,73 @@ ls /etc/my-hello-deb-package/ /usr/bin/allyourbase.sh
 
 Uninstall like:
 ```bash
-sudo dpkg --remove hello-deb-packages-0.1.0  # keeps configs around
+sudo dpkg --remove hello-deb-packages  # keeps configs around
 # or
-sudo apt remove hello-deb-packages-0.1.0  # keeps configs around
+sudo apt remove hello-deb-packages  # keeps configs around
 # or
-sudo dpkg --purge hello-deb-packages-0.1.0  # remove everything; calls `postrm` twice!
+sudo dpkg --purge hello-deb-packages  # remove everything; calls `postrm` twice!
 ```
 
 
 ## Control File
-According to ChatGPT, this is an exhaustive, but unproven list of things you can specify:
+See: https://www.debian.org/doc/debian-policy/ch-controlfields.html
+
+Wrt binary packages, for the impatient:
 ```
-Package: my-package
-Version: 1.0
-Architecture: amd64
-Essential: no
-Section: custom                                  # recommended
-Priority: optional
-Maintainer: John Doe <john.doe@example.com>
-Installed-Size: 1024
+Package: my-package                                 # Specifies the unique name of the Debian package, mandatory.
+Version: 1.0                                        # Version number of the package, could be anything I guess, mandatory.
+Architecture: amd64                                 # Supported architecture (e.g., amd64, i386), mandatory.
+Essential: no                                       # Indicates whether the package is essential for the system.
+Section: custom                                     # Section of the Debian archive where the package belongs, recommended.
+Priority: optional                                  # Priority level of the package, recommended, https://www.debian.org/doc/debian-policy/ch-archive.html#priorities
+Maintainer: John Doe <john.doe@example.com>         # mandatory
+Installed-Size: 1024                                # Estimated installed size of the package in kilobytes, optional.
 Homepage: http://www.example.com
-Description: A brief description of your package.
+Description: A brief description of your package.   # Short and long description of the package, mandatory
  This is where you provide a longer description
  of your package. You can use multiple lines.
  .
- You can also use markdown-like syntax for formatting.
-Depends: libc6 (>= 2.28), libstdc++6 (>= 8.3), python3 (>= 3.6)
-Recommends: some-recommended-package
-Suggests: some-suggested-package
-Conflicts: conflicting-package (<< 1.0)
-Replaces: replaced-package (<< 1.0)
-Provides: provided-package
-Enhances: enhanced-package
-Pre-Depends: some-other-package (>= 1.0)
-Replaces: old-package
-Built-Using: gcc-9, debhelper (>= 13)
+ Simple point '.' means empty line.
+ Allegedly, markdown-like syntax formatting is OK.
+Depends: libc6 (>= 2.28), libstdc++6 (>= 8.3), python3 (>= 3.6)   # Packages that must be installed for your package to work.
+Recommends: some-recommended-package                              # Suggested additional packages.
+Suggests: some-suggested-package                                  # Optional suggested packages.
+Conflicts: conflicting-package (<< 1.0)                           # Packages that cannot be installed at the same time.
+Replaces: replaced-package (<< 1.0)                               # Packages that your package replaces.
+Provides: provided-package                                        # Virtual package names provided by your package, see below.
+Enhances: enhanced-package                                        # Packages whose functionality is enhanced by your package.
+Pre-Depends: some-other-package (>= 1.0)                          # Packages that must be installed before your package is installed.
+Built-Using: gcc-9, debhelper (>= 13)                             # List of packages used to build the package.
+Package-Type:                                                     # deb for binary packages, udeb for micro binary packages, omit for source packages.
 ```
 
-Explanation of the control file fields:
-- Package: Name of the package.
-- Version: Version number of the package.
-- Architecture: Supported architecture (e.g., amd64, i386).
-- Essential: Indicates whether the package is essential for the system.
-- Section: Section of the Debian archive where the package belongs.
-- Priority: Priority level of the package.
-- Maintainer: Name and email address of the package maintainer.
-- Installed-Size: Estimated installed size of the package in kilobytes.
-- Homepage: URL of the package's homepage.
-- Description: Short and long description of the package.
-- Depends: Packages that must be installed for your package to work.
-- Recommends: Suggested additional packages.
-- Suggests: Optional suggested packages.
-- Conflicts: Packages that cannot be installed at the same time.
-- Replaces: Packages that your package replaces.
-- Provides: Virtual package names provided by your package.
-- Enhances: Packages whose functionality is enhanced by your package.
-- Pre-Depends: Packages that must be installed before your package is installed.
-- Built-Using: List of packages used to build the package.
+### The `Provides` Key
+Let's say there is a package `foo` that depends on `bar`:
+```
+Package: foo
+Depends: bar
+```
+and someone else releases an enhanced version of `bar`. They can say:
+```
+Package: bar-plus
+Provides: bar
+```
+Mean's `bar-plus` also satisfies the dependency in `foo`. I.e., a client that has `bar-plus`
+installed can install `foo`, because its dependency is fulfilled.
 
+See: https://www.debian.org/doc/debian-policy/ch-relationships.html
 
-Further reading: https://www.debian.org/doc/debian-policy/ch-controlfields.html
+### The `Sections` Key
+See: https://www.debian.org/doc/debian-policy/ch-archive.html#s-subsections
 
+> The Debian archive maintainers provide the authoritative list of sections. At present, they are:
+> admin, cli-mono, comm, database, debug, devel, doc, editors, education, electronics, embedded,
+> fonts, games, gnome, gnu-r, gnustep, graphics, hamradio, haskell, httpd, interpreters,
+> introspection, java, javascript, kde, kernel, libdevel, libs, lisp, localization, mail, math,
+> metapackages, misc, net, news, ocaml, oldlibs, otherosfs, perl, php, python, ruby, rust, science,
+> shells, sound, tasks, tex, text, utils, vcs, video, web, x11, xfce, zope. The additional section
+> debian-installer contains special packages used by the installer and is not used for normal Debian
+> packages.
 
 ## Preinst, Postinst, Prerm and Postrm
 - are optional
