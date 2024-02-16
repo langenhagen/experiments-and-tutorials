@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+echo 'Hello from preinst package B preinst!'
+whiptail --title "Hello from preinst package B" --msgbox "This is package B speaking. Have you seen package A installed?" 12 60

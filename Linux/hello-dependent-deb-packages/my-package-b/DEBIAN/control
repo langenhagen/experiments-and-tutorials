@@ -1,0 +1,9 @@
+Package: my-package-b
+Version: 1.0
+Priority: optional
+Architecture: amd64
+Section: utils
+Pre-Depends: my-package-a
+Installed-Size: 1024
+Maintainer: andreasl, andreasl megacorp inc.
+Description: Dependee for package A.
