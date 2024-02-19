@@ -1,4 +1,4 @@
-# Hello Deb Packages
+# Hello Dependent Deb Packages
 Showcase the behavior of a package depending on another.
 
 `Pre-Depends`, actually. Packge B pre-depends on A.

@@ -1,4 +1,4 @@
-# Hello Deb Packages
+# Hello Upgrade Deb Packages
 Showcase the behavior of a package updating.
 
 The `DEBIAN/control/Version` string is evidently used as an indicator for determining which version is
