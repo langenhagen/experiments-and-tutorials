@@ -1,0 +1,11 @@
+Package: my-package-a
+Version: 2024-02-19
+Priority: optional
+Architecture: amd64
+Section: utils
+Installed-Size: 1024
+Conflicts: my-sidegradeable-package
+Replaces: my-sidegradeable-package
+Provides: my-sidegradeable-package
+Maintainer: andreasl, andreasl megacorp inc.
+Description: Package A is sidegrade for package B
