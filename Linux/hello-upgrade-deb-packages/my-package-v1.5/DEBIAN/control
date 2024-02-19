@@ -5,4 +5,4 @@ Architecture: amd64
 Section: utils
 Installed-Size: 1024
 Maintainer: andreasl, andreasl megacorp inc.
-Description: Dependee for package A.
+Description: Upgraded version of my-package

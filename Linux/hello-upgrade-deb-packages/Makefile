@@ -27,7 +27,7 @@ install: install-v1 install-v1.5
 list:
 	-dpkg --list my-package
 	@echo
-	@echo package a contents:
+	@echo package contents:
 	-ls /etc/my-package
 	cat /etc/my-package/*
 
