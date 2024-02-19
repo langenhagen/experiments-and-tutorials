@@ -13,12 +13,12 @@ info:
 	dpkg-deb --info my-package-v1.5.deb
 
 .PHONY: install-v1
-install-v1:
-	sudo dpkg -i ./my-package-v1.deb
+install-v1: my-package-v1.deb
+	sudo dpkg --install ./my-package-v1.deb
 
 .PHONY: install-v1.5
-install-v1.5:
-	sudo dpkg -i ./my-package-v1.5.deb
+install-v1.5: my-package-v1.5.deb
+	sudo dpkg --install ./my-package-v1.5.deb
 
 .PHONY: install
 install: install-v1 install-v1.5

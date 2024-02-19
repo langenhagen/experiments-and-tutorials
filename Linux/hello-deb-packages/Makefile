@@ -12,8 +12,8 @@ info:
 	dpkg-deb --contents my-hello-deb-package.deb
 
 .PHONY: install
-install:
-	sudo dpkg -i ./my-hello-deb-package.deb
+install: my-hello-deb-package.deb
+	sudo dpkg --install ./my-hello-deb-package.deb
 
 .PHONY: list
 list:

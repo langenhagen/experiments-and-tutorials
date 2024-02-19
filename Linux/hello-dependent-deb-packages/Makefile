@@ -13,12 +13,12 @@ info:
 	dpkg-deb --info my-package-b.deb
 
 .PHONY: install-a
-install-a:
-	sudo dpkg -i ./my-package-a.deb
+install-a: my-package-a.deb
+	sudo dpkg --install ./my-package-a.deb
 
 .PHONY: install-b
-install-b:
-	sudo dpkg -i ./my-package-b.deb
+install-b: my-package-b.deb
+	sudo dpkg --install ./my-package-b.deb
 
 .PHONY: install
 install: install-a install-b
