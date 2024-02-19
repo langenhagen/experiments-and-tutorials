@@ -36,7 +36,8 @@ list:
 	ls /etc/my-package-b/
 
 # keeps configs around
-# if you
+# note the order; if you uninstall a first, it keeps it somewhat around
+# since b depends on it
 .PHONY: uninstall
 uninstall:
 	sudo dpkg --remove my-package-b
