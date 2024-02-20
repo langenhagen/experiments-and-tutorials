@@ -3,6 +3,8 @@
 set -e
 
 echo 'Hello from preinst!'
+echo 'whoami says: '
+whoami
 
 # Prompt the user for their nickname
 export NEWT_COLORS='

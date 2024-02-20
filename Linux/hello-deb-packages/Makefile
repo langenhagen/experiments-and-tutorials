@@ -4,7 +4,7 @@ my-hello-deb-package.deb:
 build: my-hello-deb-package.deb
 
 .PHONY: info
-info:
+info: my-hello-deb-package.deb
 	dpkg-deb --info my-hello-deb-package.deb
 
 	@echo
@@ -34,3 +34,7 @@ purge:
 .PHONY: clean
 clean: purge
 	rm ./my-hello-deb-package.deb
+
+.PHONY: apt
+apt: my-hello-deb-package.deb
+	sudo apt install -y ./my-hello-deb-package.deb
