@@ -38,3 +38,9 @@ clean: purge
 .PHONY: apt
 apt: my-hello-deb-package.deb
 	sudo apt install -y ./my-hello-deb-package.deb
+
+# rename packages to their full package names
+# somewhat standard names.
+# not necessary but sounds recommendable.
+hello-deb-packages_1.0_amd64.deb: my-hello-deb-package.deb
+	dpkg-name my-hello-deb-package.deb
