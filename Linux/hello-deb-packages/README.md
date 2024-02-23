@@ -11,16 +11,16 @@ dpkg-deb --build my-hello-deb-package/
 
 Get info about the debfile:
 ```bash
-dpkg-deb --info my-hello-deb-package.deb
+dpkg-deb --info hello-deb-packages_1.0_amd64.deb
 
-dpkg-deb --contents my-hello-deb-package.deb
+dpkg-deb --contents hello-deb-packages_1.0_amd64.deb
 ```
 
 Install like:
 ```bash
-sudo dpkg -i ./my-hello-deb-package.deb
+sudo dpkg -i ./hello-deb-packages_1.0_amd64.deb
 # or
-sudo apt install ./my-hello-deb-package.deb
+sudo apt install ./hello-deb-packages_1.0_amd64.deb
 ```
 
 If you install via `apt` from a working directory that is not accessible for the user `_apt`, below
@@ -34,7 +34,7 @@ The stuff gets still installed.
 If you want to get rid of this warning, the probably easiest way ist to move the `.deb` file to a
 place where the `_apt` user can access it, e.g. to the `/tmp/` folder:
 ```bash
-mv my-hello-deb-package.deb /tmp/
+mv hello-deb-packages_1.0_amd64.deb /tmp/
 ```
 
 Check if files got installed:

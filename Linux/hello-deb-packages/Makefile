@@ -1,19 +1,23 @@
-my-hello-deb-package.deb:
+# rename packages to their full package names
+# somewhat standard names.
+# not necessary but sounds recommendable.
+hello-deb-packages_1.0_amd64.deb:
 	dpkg-deb -Zgzip --build my-hello-deb-package
+	dpkg-name my-hello-deb-package.deb  # rename from dpkg-deb created name to a standardized full name
 
-build: my-hello-deb-package.deb
+build: hello-deb-packages_1.0_amd64.deb
 
 .PHONY: info
-info: my-hello-deb-package.deb
-	dpkg-deb --info my-hello-deb-package.deb
+info: hello-deb-packages_1.0_amd64.deb
+	dpkg-deb --info hello-deb-packages_1.0_amd64.deb
 
 	@echo
 	@echo 'And some contents:'
-	dpkg-deb --contents my-hello-deb-package.deb
+	dpkg-deb --contents hello-deb-packages_1.0_amd64.deb
 
 .PHONY: install
-install: my-hello-deb-package.deb
-	sudo dpkg --install ./my-hello-deb-package.deb
+install: hello-deb-packages_1.0_amd64.deb
+	sudo dpkg --install ./hello-deb-packages_1.0_amd64.deb
 
 .PHONY: list
 list:
@@ -33,14 +37,9 @@ purge:
 
 .PHONY: clean
 clean: purge
-	rm ./my-hello-deb-package.deb
+	rm ./hello-deb-packages_1.0_amd64.deb
 
 .PHONY: apt
-apt: my-hello-deb-package.deb
-	sudo apt install -y ./my-hello-deb-package.deb
+apt: hello-deb-packages_1.0_amd64.deb
+	sudo apt install -y ./hello-deb-packages_1.0_amd64.deb
 
-# rename packages to their full package names
-# somewhat standard names.
-# not necessary but sounds recommendable.
-hello-deb-packages_1.0_amd64.deb: my-hello-deb-package.deb
-	dpkg-name my-hello-deb-package.deb
