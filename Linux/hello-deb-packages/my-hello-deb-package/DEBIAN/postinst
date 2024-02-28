@@ -11,6 +11,10 @@ from pathlib import Path
 print("Hello from postinst!")
 print("Python version:", sys.version)
 
+print("Env vars")
+for key, value in os.environ.items():
+    print(f"  {key}: {value}")
+
 # echo "$nickname" > '/tmp/my_variable_set_in_preinst'
 nickname = Path("/tmp/my_variable_set_in_preinst").read_text().strip()
 
