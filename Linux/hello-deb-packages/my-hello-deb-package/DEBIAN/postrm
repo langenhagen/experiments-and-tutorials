@@ -1,2 +1,2 @@
 #!/bin/bash
-echo 'hello from postrm!'
+echo -e '\033[1mHello from postrm!\033[0m'

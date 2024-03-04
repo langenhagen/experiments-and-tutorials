@@ -2,9 +2,8 @@
 # You can basically do anything in those scripts.
 set -e
 
-echo 'Hello from preinst!'
-echo 'whoami says: '
-whoami
+echo -e '\033[1mHello from preinst!\033[0m'
+env
 
 # Prompt the user for their nickname
 export NEWT_COLORS='

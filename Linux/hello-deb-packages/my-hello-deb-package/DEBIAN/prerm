@@ -1,2 +1,2 @@
 #!/bin/bash
-echo 'hello from prerm!'
+echo -e '\033[1mHello from prerm!\033[0m'

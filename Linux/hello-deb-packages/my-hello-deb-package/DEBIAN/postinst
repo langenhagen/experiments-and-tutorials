@@ -8,7 +8,7 @@ import os
 import sys
 from pathlib import Path
 
-print("Hello from postinst!")
+print("\033[1mHello from postinst!\033[0m")
 print("Python version:", sys.version)
 
 print("Env vars")
