@@ -4,9 +4,7 @@ Based on the product's sample under `/opt/MVS/Samples/64/Python/GrabImage/`.
 """
 import datetime as dt
 import logging
-import os
 import sys
-import termios
 from ctypes import POINTER, byref, c_ubyte, cast, memset, sizeof
 from ipaddress import IPv4Address
 from math import ceil
