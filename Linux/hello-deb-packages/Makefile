@@ -37,7 +37,7 @@ purge:
 
 .PHONY: clean
 clean: purge
-	rm ./hello-deb-packages_1.0_amd64.deb
+	-rm ./hello-deb-packages_1.0_amd64.deb
 
 .PHONY: apt
 apt: hello-deb-packages_1.0_amd64.deb
