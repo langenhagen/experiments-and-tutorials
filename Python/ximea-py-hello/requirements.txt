@@ -1,0 +1,3 @@
+bpython
+opencv-python
+ximea-py
