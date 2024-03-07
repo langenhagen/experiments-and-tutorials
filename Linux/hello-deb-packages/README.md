@@ -131,4 +131,6 @@ tail -f /var/log/dpkg.log
   not support them. Support was only added for Debian 12. See:
   https://unix.stackexchange.com/questions/669004/zst-compression-not-supported-by-apt-dpkg Thus, I
   specify the compression type on the command line when building the `.deb` file via:
-  `dpkg-deb -Zgzip --build`
+  `dpkg-deb -Zgzip --build`.
+- the thing can also create empty folder structures. I may not showcase this though since I cannot
+  put empty folders to git.
