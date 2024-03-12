@@ -14,6 +14,9 @@ Get info about the debfile:
 dpkg-deb --info hello-deb-packages_1.0_amd64.deb
 
 dpkg-deb --contents hello-deb-packages_1.0_amd64.deb
+
+dpkg-deb --control hello-deb-packages_1.0_amd64.deb  # extract DEBIAN folder; control, preinst, ...
+dpkg-deb -x hello-deb-packages_1.0_amd64.deb myfolder  # extract contents
 ```
 
 Install like:
