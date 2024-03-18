@@ -3,6 +3,9 @@
 set -e
 
 echo -e '\033[1mHello from preinst!\033[0m'
+echo "PID: ${$}"
+echo "Parent PID: $(ps -o ppid= ${$})"
+echo "GPID: $(ps -o pgid= -p "${$}")"
 env
 
 # Prompt the user for their nickname

@@ -8,9 +8,11 @@ import os
 import sys
 from pathlib import Path
 
+
 print("\033[1mHello from postinst!\033[0m")
 print("Python version:", sys.version)
 
+print(f"PID: {os.getpid()}\nPPID: {os.getppid()}\nPGID: {os.getpgid(os.getpid())}")
 print("Env vars")
 for key, value in os.environ.items():
     print(f"  {key}: {value}")
