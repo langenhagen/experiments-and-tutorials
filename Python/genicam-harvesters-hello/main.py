@@ -67,7 +67,8 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     # also since Allied Vision has some other issues with Harvesters.
     cti_files = [
         # "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti",  # Allied VIsion
-        "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
+        # "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
+        "/opt/SICKVisionSuite_1.1.6.10_x86_64/lib/sick/cti/sick_gevgentl.cti",
     ]
     for cti_file in cti_files:
         h.add_file(cti_file)
