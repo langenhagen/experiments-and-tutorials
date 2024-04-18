@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 
 
 def _setup_log():
-    """Setup logging for the benchmark application."""
+    """Setup logging for the application."""
     logging.basicConfig(
         format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
         datefmt="%T",
