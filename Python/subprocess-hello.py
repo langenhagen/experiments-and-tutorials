@@ -23,6 +23,12 @@ print(result.stderr)  # Probably None
 
 print("\n--- 2 subprocess.run() is blocking ---\n")
 
+print('Calling subprocess.run(["sleep", "2"]) ...')
 subprocess.run(["sleep", "2"])
+print("Done")
 
-print('Done')
+print("\n--- 3 subprocess.Popen is non-blocking ---\n")
+
+print('Calling subprocess.Popen("sleep 2", shell=True, stderr=subprocess.DEVNULL,) ...')
+subprocess.Popen("sleep 2", shell=True, stderr=subprocess.DEVNULL)
+print("Done")
