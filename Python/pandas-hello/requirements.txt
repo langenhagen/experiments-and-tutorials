@@ -1,0 +1,3 @@
+bpython
+pandas
+scipy
