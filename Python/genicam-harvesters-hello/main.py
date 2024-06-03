@@ -68,7 +68,8 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     cti_files = [
         # "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti",  # Allied VIsion
         # "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
-        "/opt/SICKVisionSuite_1.1.6.10_x86_64/lib/sick/cti/sick_gevgentl.cti",
+        # "/opt/SICKVisionSuite_1.1.6.10_x86_64/lib/sick/cti/sick_gevgentl.cti",
+        "/opt/pylon/lib/gentlproducer/gtl/ProducerGEV.cti",  # Basler
     ]
     for cti_file in cti_files:
         h.add_file(cti_file)
@@ -98,6 +99,8 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     device: RemoteDevice = ia.remote_device
     node_map: NodeMap = device.node_map
 
+    _print_nodes_and_values(node_map)
+
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.GainAuto = "Off"
     node_map.Gain.value = 2.0
@@ -112,9 +115,11 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     if use_software_trigger is True:
         node_map.TriggerMode.value = "On"
         node_map.TriggerSource.value = "Software"  # with IDS, "Software" is the default
-        node_map.TriggerActivation.value = "RisingEdge"  # with the IDS cam, "RisingEdge" is the default and only option
 
-    _print_nodes_and_values(node_map)
+        # TriggerActivation:
+        #   - with the IDS cam, "RisingEdge" is the default and only option
+        #   - with a Basler a2A1920-51gcPRO, I get an access exception, so this goes out
+        # node_map.TriggerActivation.value = "RisingEdge"
 
     ia.start_acquisition()
 
