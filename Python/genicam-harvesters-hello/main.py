@@ -21,7 +21,7 @@ def _setup_log():
     logging.basicConfig(
         format="%(asctime)s.%(msecs)d [%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
         datefmt="%T",
-        level=logging.INFO,
+        level=logging.DEBUG,
     )
 
 
@@ -69,7 +69,9 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         # "/opt/Vimba_6_0/VimbaUSBTL/CTI/x86_64bit/VimbaUSBTL.cti",  # Allied VIsion
         # "/opt/ids-peak_2.1.0.0-14251_amd64/lib/ids/cti/ids_u3vgentl.cti",  # IDS
         # "/opt/SICKVisionSuite_1.1.6.10_x86_64/lib/sick/cti/sick_gevgentl.cti",
-        "/opt/pylon/lib/gentlproducer/gtl/ProducerGEV.cti",  # Basler
+        # "/opt/pylon/lib/gentlproducer/gtl/ProducerGEV.cti",  # Basler
+        # "/opt/spinnaker/lib/spinnaker-gentl/Spinnaker_GenTL.cti",  # Flir
+        "/opt/baumer-gapi-sdk-cpp/lib/libbgapi2_gige.cti",
     ]
     for cti_file in cti_files:
         h.add_file(cti_file)
@@ -100,6 +102,10 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
     node_map: NodeMap = device.node_map
 
     _print_nodes_and_values(node_map)
+
+    # If you need to reset the device
+    # node_map.DeviceReset()
+    # exit(99)
 
     node_map.BalanceWhiteAuto = "Off"  # "Off" is default
     node_map.GainAuto = "Off"
