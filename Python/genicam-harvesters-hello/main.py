@@ -96,6 +96,8 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         output_folder = Path.cwd() / f"images-{now}"
         output_folder.mkdir(exist_ok=False)
 
+
+    # create_image_acquirer() is deprecated in favor of create()
     ia: ImageAcquirer = h.create_image_acquirer(list_index=0)
     # ia: ImageAcquirer = h.create_image_acquirer(vendor="IDS Imaging Development Systems GmbH", list_index=0)  # rather restrictive
     device: RemoteDevice = ia.remote_device
