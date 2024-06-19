@@ -129,7 +129,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         #   - with a Basler a2A1920-51gcPRO, I get an access exception, so this goes out
         # node_map.TriggerActivation.value = "RisingEdge"
 
-    ia.start_acquisition()
+    ia.start_acquisition()  # later deprecated in favor to start()
 
     for i in count(0):
         if use_software_trigger is True:
@@ -168,7 +168,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
             if write_images_to_disk is True:
                 cv2.imwrite(str(output_folder / f"img-{i}.png"), img)
 
-    ia.stop_acquisition()
+    ia.stop_acquisition()  # later deprecated in favor to stop()
 
     # reset cam configuration to factory settings
     node_map.UserSetSelector.value = "Default"
