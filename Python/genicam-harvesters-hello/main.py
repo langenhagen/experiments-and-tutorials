@@ -135,7 +135,7 @@ def main(use_software_trigger: bool, write_images_to_disk: bool) -> int:
         if use_software_trigger is True:
             node_map.TriggerSoftware.execute()
 
-        with ia.fetch_buffer() as buffer:
+        with ia.fetch_buffer() as buffer:  # deprecated in favor of `fetch()``
             component = buffer.payload.components[0]
 
             # note that the number of components can vary. If your
