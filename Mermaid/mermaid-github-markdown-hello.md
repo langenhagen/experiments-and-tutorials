@@ -38,3 +38,31 @@ graph LR
     time? --> |yes| sleep[Sleep a bit]
     sleep --> pick_first
 ```
+
+
+## Clustering Nodes, Subgraphs:
+```mermaid
+graph TD
+    subgraph Cluster1
+        A1[Node A1]
+        A2[Node A2]
+        A3[Node A3]
+    end
+
+    subgraph Cluster2
+        B1[Node B1]
+        B2[Node B2]
+        B3[Node B3]
+    end
+
+    subgraph Cluster3
+        C1[Node C1]
+
+        subgraph InnerCluster
+            C2[Node C2]
+        end
+    end
+
+    Cluster1 --> Cluster2
+    Cluster2 --> Cluster3
+```
