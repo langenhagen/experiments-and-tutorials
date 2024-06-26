@@ -1,7 +1,7 @@
 # GenICam Harvesters Hello
 Showcase the usage of the package `Harvesters` to get images from a GenICam standard camera.
 
-I tested it against an IDS U3-304xCP-C and an Allied Vision Alvium U-508c.
+I tested it against several cameras, including an IDS U3-304xCP-C and an Allied Vision Alvium U-508c.
 
 
 See:
