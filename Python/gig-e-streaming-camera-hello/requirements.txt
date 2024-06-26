@@ -1,0 +1,4 @@
+bpython
+harvesters==1.4.3  # latest version as of development
+numpy
+opencv-python
