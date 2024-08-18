@@ -4,7 +4,11 @@ in your Moxy hotel room
 
 Usage:
 
-    python
+    python pychromecast-hello-moxy.py <ROOM_NR>
+
+Example:
+
+    python pychromecast-hello-moxy.py 123
 """
 import mimetypes
 import sys
