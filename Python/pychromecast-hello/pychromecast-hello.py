@@ -56,7 +56,7 @@ def main():
 
     # local media
     # a bit tricky; host the files via http, e.g. via `python -m http.server`,
-    # # then find out your IP add and compose the URL
+    # then find out your IP add and compose the URL
     host_ip = "192.168.178.21"  # adjust
     # url = f"http:{host_ip}:8000/Vicetone%20-%20Nevada%20%28ft.%20Cozi%20Zuehlsdorff%29.opus"
     # url = f"http:{host_ip}:8000/02%20Midnight%20Angels.mp3"
