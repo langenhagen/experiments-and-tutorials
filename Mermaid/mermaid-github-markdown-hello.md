@@ -11,7 +11,7 @@ graph TD;
     A-->B;
     A-->C;
     B-->D;
-    C-->D;
+    C--->D;
 ```
 
 "is p3.2xlarge working? No"
