@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Fun and games with the statement "yield" which is similar to "return".
 """
