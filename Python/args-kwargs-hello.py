@@ -8,7 +8,7 @@ def my_purely_kwargs_function(**kwargs):
     print(f"{type(kwargs)=}")
 
 
-print("\n--- 1 pure kwargs ---\n")
+print("--- 1 pure kwargs ---\n")
 
 print("Without kwargs")
 my_purely_kwargs_function()

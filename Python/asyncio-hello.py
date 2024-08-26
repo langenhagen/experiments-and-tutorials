@@ -11,7 +11,7 @@ import asyncio
 import random
 import time
 
-print("--- 1 simple call to asyncio.run() ---")
+print("--- 1 simple call to asyncio.run() ---\n")
 
 
 async def foo():
@@ -26,7 +26,7 @@ asyncio.run(foo())
 print("Goodbye program")
 
 
-print("--- 2 nested await ---")
+print("\n--- 2 nested await ---\n")
 
 
 async def say_after(delay: float, what: str):
@@ -48,7 +48,7 @@ async def foo():
 
 asyncio.run(foo())
 
-print("--- 3 async context managers ---")
+print("\n--- 3 async context managers ---\n")
 
 
 class AsyncContextManager:
@@ -67,7 +67,7 @@ async def foo():
 asyncio.run(foo())
 
 
-print("--- 4 create_task() and gather() ---")
+print("\n--- 4 create_task() and gather() ---\n")
 
 
 async def foo():
@@ -88,7 +88,7 @@ async def foo():
 
 asyncio.run(foo())
 
-print("--- 5 as_completed() - act on tasks like in first-done-first-serve fashion ---")
+print("\n--- 5 as_completed() - act on tasks like in first-done-first-serve fashion ---\n")
 
 
 async def foo():

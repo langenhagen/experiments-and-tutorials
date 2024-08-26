@@ -22,7 +22,7 @@ from aiohttp import ClientSession
 
 n_requests = 10
 
-print("--- 1 calling requests synchronously ---")
+print("--- 1 calling requests synchronously ---\n")
 
 
 def make_request(i: int):
@@ -43,7 +43,7 @@ end_time = timer()
 
 print(f"Sequential experiment took {round(end_time - start_time, 3)} seconds")
 
-print("--- 2 calling requests asynchronously ---")
+print("\n--- 2 calling requests asynchronously ---\n")
 
 
 async def make_async_request(i: int, session: ClientSession):
