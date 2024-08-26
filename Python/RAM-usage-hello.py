@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Showcase how to track memory usage via Python's standard `psutil` module.
+"""Showcase how to track memory usage via Python's 3rd party library `psutil`.
 
 The `psutil` module provides an interface for retrieving information on system
 utilization, including memory, disk, and network, for processes and system
@@ -9,8 +9,9 @@ It can monitor application performance and system resource usage in real-time.
 
 author: andreasl
 """
-import psutil
 import os
+
+import psutil
 
 print("--- 1 check memory usage of own process ---\n")
 
