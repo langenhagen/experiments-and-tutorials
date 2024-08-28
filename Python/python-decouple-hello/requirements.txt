@@ -1,0 +1,2 @@
+bpython
+python-decouple
