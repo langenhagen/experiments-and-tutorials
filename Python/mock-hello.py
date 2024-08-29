@@ -18,7 +18,7 @@ import unittest.mock
 
 import pytest
 
-print("--- 1 The Mock object ---")
+print("--- 1 The Mock object ---\n")
 mock = unittest.mock.Mock(name="My optional name")
 print(
     f"mock.name= {mock.name}"
@@ -28,14 +28,14 @@ print(f"mock.foo= {mock.foo}")
 print(f"mock.bar()= {mock.bar()}")
 print(f"mock.soo('some string', 42)= {mock.soo('some string', 42)}")
 
-print("--- 2 Mocking assertions ---")
+print("\n--- 2 Mocking assertions ---\n")
 # mock.foo.assert_called_once()  # breaks mock.foo([...]) was never called
 mock.bar.assert_called_once()
 mock.soo("some string", 42)
 mock.soo.assert_called_with("some string", 42)
 # soo.assert_called_once_with('some string', 42)  # breaks: called 2 times
 
-print("--- 3 Getting Usage Information ---")
+print("\n--- 3 Getting Usage Information ---\n")
 print(mock.call_args)  # None
 print(mock.call_args_list)  # []
 print(
@@ -43,12 +43,12 @@ print(
 )  # [call.bar(), call.soo('some string', 42), call.soo('some string', 42)]
 
 
-print("--- 4 Mock Return Values ---")
+print("\n--- 4 Mock Return Values ---\n")
 mock.foo.return_value = 42
 print(f"mock.foo()= {mock.foo()}")
 print(f"mock.foo('somearg')= {mock.foo('somearg')}")
 
-print("---5 Mock Side Effects ---")
+print("\n---5 Mock Side Effects ---\n")
 
 
 def test_mock_sideeffect():
@@ -84,7 +84,7 @@ def my_other_side_effect_fun(myarg):
 mock.bar.side_effect = None
 mock.bar("See some iterable sideeffects 3")  # works
 
-print("--- 4 @patch Decorator ---")
+print("\n--- 4 @patch Decorator ---\n")
 # use a patch decorator when you mock something that lies outside the file
 # mock where you use it, not where it is defined!
 @unittest.mock.patch("json.loads")  # point to where it is used, not where it is defined
@@ -114,7 +114,7 @@ def test_with_two_patches(
     assert res == "My mocked return value"
 
 
-print("--- 5 Alternative: Patch with a Context Manager")
+print("\n--- 5 Alternative: Patch with a Context Manager ---\n")
 
 
 def test_with_contextmanager():
@@ -134,7 +134,7 @@ def test_with_contextmanager():
     assert res == {"b": "2"}
 
 
-print("--- 6 @patch.object ---")
+print("\n--- 6 @patch.object ---\n")
 # patch object that you import already
 # see: https://stackoverflow.com/questions/29152170/what-is-the-difference-between-mock-patch-object-and-mock-patch
 
@@ -161,7 +161,7 @@ def test_with_partial_mock(mock_dumps):
     assert res == "big quatsch"
 
 
-print("--- 7 Provide an Interface Spec for a Mock ---")
+print("\n--- 7 Provide an Interface Spec for a Mock ---\n")
 # apparently as good as using mock.patch.object()
 mock = unittest.mock.Mock(spec=["foo", "bar", "soo"])
 
@@ -207,7 +207,7 @@ except AttributeError:
     print("mock.fazz() has caused an AttributeError")
 
 
-print("--- 8 patch() and autospec ---")
+print("\n--- 8 patch() and autospec ---\n")
 # use autospec - use it
 with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
     print(f"type of mock {mock_json_loads=}")
@@ -219,7 +219,7 @@ with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
         print("Calling json.loads.foo('shouldbreak') caused an AttributeError")
 
 
-print("--- 9 specify return value of function of mock object. ---")
+print("\n--- 9 specify return value of function of mock object. ---\n")
 
 
 def my_side_effect(arg):
@@ -242,7 +242,7 @@ def foo():
 foo()
 
 
-print("--- 10 - mock isinstance ---")
+print("\n--- 10 - mock isinstance ---\n")
 
 
 class C(abc.ABC):
