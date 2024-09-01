@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Showcase the usage of the python standard library `tracemalloc`.
 
 Allows for monitoring memory allocation over time, useful for identifying memory leaks.
