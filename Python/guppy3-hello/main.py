@@ -27,3 +27,7 @@ print("\n--- 3 analyze memory usage by object ---\n")
 
 print("Memory usage by object:")
 print(h.iso(l))  # iso[late] object l
+
+
+print("\n--- 4 make a memory dump ---\n")
+h.heap().dump("guppy_heap_status.out")
