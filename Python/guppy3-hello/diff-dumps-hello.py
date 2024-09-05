@@ -4,12 +4,23 @@ from pathlib import Path
 
 from guppy import hpy
 
+memdumps_root = Path.home() / "Desktop/memdumps"
+# dir = memdumps_root / "2024-09-05--11-36-without-uvloop-small"
+dir = max([d for d in memdumps_root.iterdir() if d.is_dir()])
 
-dir = Path.home() / "Desktop/memdumps/2024-09-04-21-18-3rd"
+print(dir)
+
+files = [f for f in dir.glob('*.out')]
+oldest_dump = min(files)
+youngest_dump = max(files)
+
+print(f"{oldest_dump.name=}")
+print(f"{youngest_dump.name=}")
+print()
 
 h = hpy()
-h1 = h.load(f"{dir}/2024-09-04_18-24-03_guppy_heap_status.out")
-h2 = h.load(f"{dir}/2024-09-04_19-13-24_guppy_heap_status.out")
+h1 = h.load(str(oldest_dump))
+h2 = h.load(str(youngest_dump))
 
 diff = h2 - h1
 
