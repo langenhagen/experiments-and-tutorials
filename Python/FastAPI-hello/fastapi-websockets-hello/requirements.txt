@@ -1,0 +1,4 @@
+bpython
+FastAPI==0.114.0
+uvicorn==0.30.6
+websockets==13.0.1
