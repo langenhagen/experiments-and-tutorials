@@ -20,7 +20,7 @@ class Bookmark:
 
 def load_bookmark(path: pathlib.Path) -> Bookmark:
     """Load a bookmark from the given path."""
-    with open(path, 'r') as file:
+    with open(path) as file:
         bookmark_yaml = yaml.load(file, Loader=yaml.FullLoader)
     bookmark = Bookmark(**bookmark_yaml)
     bookmark.created =  datetime.datetime.strptime(bookmark.created, '%Y-%m-%d %H:%M')

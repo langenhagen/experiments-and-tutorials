@@ -30,13 +30,13 @@ def main():
     """Program main entry point."""
     pygame.init()
     canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
-    window = pygame.display.set_mode(((DISPLAY_W, DISPLAY_H)))
+    window = pygame.display.set_mode((DISPLAY_W, DISPLAY_H))
     clock = pygame.time.Clock()
 
     joysticks = _init_joysticks()
     print(f"Found {len(joysticks)} joysticks")
 
-    with open(Path(__file__).resolve().parent / "ps4_keys.json", "r") as file:
+    with open(Path(__file__).resolve().parent / "ps4_keys.json") as file:
         key_names2key_codes = json.load(file)
     key_codes2key_names = {v: k for k, v in key_names2key_codes.items()}
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-  # TODO do that anywhere
 from flask import Flask
 from flask_github import GitHub
 

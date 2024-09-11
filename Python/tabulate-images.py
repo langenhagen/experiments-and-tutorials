@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # Crawls the given directory, finds all the jpg-Images, retrieves their exif data
 # and appends iso, f number, focal length and exposure time to a given csv file.

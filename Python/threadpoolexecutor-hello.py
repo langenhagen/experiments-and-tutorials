@@ -34,7 +34,7 @@ for future in as_completed(future_to_url):
     try:
         data = future.result()
     except Exception as exc:
-        print("%r generated an exception: %s" % (url, exc))
+        print("{!r} generated an exception: {}".format(url, exc))
     else:
         print("%r page is %d bytes" % (url, len(data)))
 

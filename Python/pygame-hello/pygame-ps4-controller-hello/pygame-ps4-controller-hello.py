@@ -14,7 +14,7 @@ import pygame
 pygame.init()
 DISPLAY_W, DISPLAY_H = 1024, 768
 canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
-window = pygame.display.set_mode(((DISPLAY_W, DISPLAY_H)))
+window = pygame.display.set_mode((DISPLAY_W, DISPLAY_H))
 keep_running = True
 player_width = 60
 player = pygame.Rect(DISPLAY_W / 2, DISPLAY_H / 2, player_width, player_width)
@@ -35,7 +35,7 @@ for joystick in joysticks:
     joystick.init()
 
 
-with open(Path(__file__).resolve().parent / "ps4_keys.json", "r") as file:
+with open(Path(__file__).resolve().parent / "ps4_keys.json") as file:
     button_keys = json.load(file)
 # 0: Left analog horizonal, 1: Left Analog Vertical, 2: Right Analog Horizontal
 # 3: Right Analog Vertical 4: Left Trigger, 5: Right Trigger
