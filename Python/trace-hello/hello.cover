@@ -1,0 +1,7 @@
+    1: """Gets imported by main.py"""
+       
+    1: def say_hello():
+    2:     print("Hello, world!")
+       
+    1: def unused_function():
+           print("This function is never called.")
