@@ -1,0 +1,272 @@
+<!-- Lil racing game.
+    Created entirely by GPT o1 preview. Had to iterate a bit but yeah nice for starters.
+
+    2024-09-15
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accelerated Racing Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #333;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <script>
+        // Get canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Player object
+        const player = {
+            x: canvas.width / 2 - 15,
+            y: canvas.height - 100,
+            width: 30,
+            height: 50,
+            speed: 5,
+            dx: 0
+        };
+
+        // Game variables
+        let obstacles = [];
+        let obstacleTimer = 0;
+        let baseGameSpeed = 2;
+        let gameSpeed = baseGameSpeed;
+        let score = 0;
+        let gameOver = false;
+        let startTime = Date.now(); // Record the start time
+        let previousGapPosition = canvas.width / 2 - 50; // Start gap in the middle
+        let laneOffset = 0; // For moving lane stripes
+
+        // Acceleration variables
+        let isAccelerating = false;
+        let isDecelerating = false;
+        const accelerationAmount = 2; // Amount to increase speed
+        const decelerationAmount = 2; // Amount to decrease speed
+        const maxGameSpeed = 10;
+        const minGameSpeed = 1;
+
+        // Event listeners for key presses
+        document.addEventListener('keydown', keyDown);
+        document.addEventListener('keyup', keyUp);
+
+        function keyDown(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = -player.speed;
+            } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+                player.dx = player.speed;
+            } else if (e.key === 'ArrowUp' || e.key === 'Up') {
+                isAccelerating = true;
+            } else if (e.key === 'ArrowDown' || e.key === 'Down') {
+                isDecelerating = true;
+            }
+        }
+
+        function keyUp(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = 0;
+            } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+                player.dx = 0;
+            } else if (e.key === 'ArrowUp' || e.key === 'Up') {
+                isAccelerating = false;
+            } else if (e.key === 'ArrowDown' || e.key === 'Down') {
+                isDecelerating = false;
+            }
+        }
+
+        function update() {
+            if (gameOver) return;
+            requestAnimationFrame(update);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate elapsed time in seconds
+            const elapsedTime = (Date.now() - startTime) / 1000;
+
+            // Adjust game difficulty based on elapsed time
+            adjustDifficulty(elapsedTime);
+
+            // Apply acceleration or deceleration
+            if (isAccelerating) {
+                gameSpeed = Math.min(gameSpeed + accelerationAmount, maxGameSpeed);
+            } else if (isDecelerating) {
+                gameSpeed = Math.max(gameSpeed - decelerationAmount, minGameSpeed);
+            } else {
+                gameSpeed = baseGameSpeed; // Reset to base speed when no key is pressed
+            }
+
+            // Draw road background
+            ctx.fillStyle = '#444';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw moving lane markings
+            laneOffset += gameSpeed;
+            if (laneOffset > 35) { // Total length of dash and gap
+                laneOffset = 0;
+            }
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([20, 15]); // Dash length, gap length
+            ctx.lineDashOffset = -laneOffset;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.lineDashOffset = 0;
+
+            // Move player
+            player.x += player.dx;
+            // Prevent player from going out of bounds
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+
+            // Draw player
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+
+            // Handle obstacles
+            obstacleTimer += gameSpeed;
+            if (obstacleTimer >= getObstacleFrequency(elapsedTime)) {
+                obstacleTimer = 0;
+
+                // Create new obstacle with smooth gap transition
+                const gapSize = getGapSize(elapsedTime);
+                const maxGapShift = getMaxGapShift(elapsedTime);
+                const minGapPosition = Math.max(0, previousGapPosition - maxGapShift);
+                const maxGapPosition = Math.min(canvas.width - gapSize, previousGapPosition + maxGapShift);
+
+                const gapPosition = Math.random() * (maxGapPosition - minGapPosition) + minGapPosition;
+
+                previousGapPosition = gapPosition; // Update for next obstacle
+
+                // Left obstacle
+                if (gapPosition > 0) {
+                    obstacles.push({
+                        x: 0,
+                        y: -20,
+                        width: gapPosition,
+                        height: 20
+                    });
+                }
+                // Right obstacle
+                if (gapPosition + gapSize < canvas.width) {
+                    obstacles.push({
+                        x: gapPosition + gapSize,
+                        y: -20,
+                        width: canvas.width - (gapPosition + gapSize),
+                        height: 20
+                    });
+                }
+            }
+
+            // Move and draw obstacles
+            for (let i = 0; i < obstacles.length; i++) {
+                const obs = obstacles[i];
+                obs.y += gameSpeed;
+
+                // Check for collision
+                if (player.x < obs.x + obs.width &&
+                    player.x + player.width > obs.x &&
+                    player.y < obs.y + obs.height &&
+                    player.y + player.height > obs.y) {
+                    gameOver = true;
+                    alert('Game Over! Your score: ' + score);
+                    return;
+                }
+
+                // Remove obstacles that are off-screen and increment score
+                if (obs.y > canvas.height) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    score++;
+                } else {
+                    // Draw obstacle
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                }
+            }
+
+            // Draw score
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText('Score: ' + score, 10, 30);
+        }
+
+        function adjustDifficulty(elapsedTime) {
+            // Difficulty parameters
+            const initialSpeed = 2;
+            const maxSpeed = 6;
+            const difficultyRampUpTime = 90; // Time in seconds over which difficulty increases
+
+            // Calculate progression factor (0 to 1)
+            const progression = Math.min(elapsedTime / difficultyRampUpTime, 1);
+
+            // Adjust base game speed
+            baseGameSpeed = initialSpeed + (maxSpeed - initialSpeed) * progression;
+
+            // Ensure baseGameSpeed does not exceed maxSpeed
+            if (baseGameSpeed > maxSpeed) {
+                baseGameSpeed = maxSpeed;
+            }
+        }
+
+        function getObstacleFrequency(elapsedTime) {
+            // Frequency parameters
+            const initialFrequency = 200;
+            const minFrequency = 80;
+            const difficultyRampUpTime = 90; // Time in seconds over which difficulty increases
+
+            // Calculate progression factor (0 to 1)
+            const progression = Math.min(elapsedTime / difficultyRampUpTime, 1);
+
+            // Calculate current obstacle frequency
+            const frequency = initialFrequency - (initialFrequency - minFrequency) * progression;
+
+            return frequency;
+        }
+
+        function getGapSize(elapsedTime) {
+            // Gap size parameters
+            const initialGapSize = 120;
+            const minGapSize = 60;
+            const difficultyRampUpTime = 90; // Time in seconds over which difficulty increases
+
+            // Calculate progression factor (0 to 1)
+            const progression = Math.min(elapsedTime / difficultyRampUpTime, 1);
+
+            // Calculate current gap size
+            const gapSize = initialGapSize - (initialGapSize - minGapSize) * progression;
+
+            return gapSize;
+        }
+
+        function getMaxGapShift(elapsedTime) {
+            // Max gap shift parameters
+            const initialMaxShift = 40;
+            const maxShift = 100;
+            const difficultyRampUpTime = 90; // Time in seconds over which difficulty increases
+
+            // Calculate progression factor (0 to 1)
+            const progression = Math.min(elapsedTime / difficultyRampUpTime, 1);
+
+            // Calculate current max gap shift
+            const maxGapShift = initialMaxShift + (maxShift - initialMaxShift) * progression;
+
+            return maxGapShift;
+        }
+
+        // Start the game
+        update();
+    </script>
+</body>
+</html>
