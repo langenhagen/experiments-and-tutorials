@@ -3,11 +3,12 @@
 
     2024-09-16
 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple 3D Shooter Game</title>
+    <title>3D Shooter Game with Weapon and Laser Beams</title>
     <style>
         body { margin: 0; overflow: hidden; }
         #overlay {
@@ -22,11 +23,24 @@
         #crosshair {
             position: absolute;
             left: 50%; top: 50%;
-            width: 10px; height: 10px;
-            margin-left: -5px; margin-top: -5px;
+            width: 4px; height: 4px;
+            margin-left: -2px; margin-top: -2px;
             background-color: white;
             border-radius: 50%;
             z-index: 1;
+        }
+        #score, #health {
+            position: absolute;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            z-index: 1;
+        }
+        #score {
+            top: 10px; left: 10px;
+        }
+        #health {
+            top: 10px; right: 10px;
         }
     </style>
 </head>
@@ -35,11 +49,15 @@
     <div id="crosshair"></div>
     <!-- Overlay -->
     <div id="overlay">Click to Play</div>
+    <!-- Score and Health Display -->
+    <div id="score">Score: 0</div>
+    <div id="health">Health: 100</div>
 
     <!-- Game Script -->
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
         import { PointerLockControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/PointerLockControls.js';
+        import { ImprovedNoise } from 'https://unpkg.com/three@0.127.0/examples/jsm/math/ImprovedNoise.js';
 
         let scene, camera, renderer, controls;
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
@@ -47,9 +65,26 @@
         let bullets = [];
         let enemies = [];
         let objects = [];
-        let raycaster;
         let prevTime = performance.now();
         let velocity = new THREE.Vector3();
+        let direction = new THREE.Vector3();
+        let verticalVelocity = 0;
+        const gravity = 9.8 * 10; // Adjust gravity as needed
+        let score = 0;
+        let health = 100;
+        let canJump = false;
+        let isRunning = false;
+
+        const areaSize = 1000; // The area over which assets are spread
+        const terrainSize = areaSize; // Terrain size should match the area size
+        const worldWidth = 256, worldDepth = 256; // Number of segments in terrain
+        let terrainMesh;
+
+        const scoreElement = document.getElementById('score');
+        const healthElement = document.getElementById('health');
+
+        let weapon; // Variable to hold the weapon object
+        let weaponBarrel; // Variable to hold the weapon barrel
 
         init();
         animate();
@@ -57,19 +92,33 @@
         function init() {
             // Scene Setup
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x202025);
-            scene.fog = new THREE.Fog(0x202025, 0, 750);
+            scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
             // Camera Setup
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
-            // Set Initial Camera Position
-            camera.position.y = 10;
+            // Gradient Background
+            const canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = window.innerHeight;
+
+            const context = canvas.getContext('2d');
+            const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB'); // Sky blue
+            gradient.addColorStop(1, '#ffffff'); // White
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            const backgroundTexture = new THREE.CanvasTexture(canvas);
+            scene.background = backgroundTexture;
 
             // Lighting
-            const light = new THREE.HemisphereLight(0xffffff, 0x444444);
-            light.position.set(0, 200, 0);
-            scene.add(light);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 0.5).normalize();
+            scene.add(directionalLight);
 
             // Controls
             controls = new PointerLockControls(camera, document.body);
@@ -89,6 +138,9 @@
 
             scene.add(controls.getObject());
 
+            // Create Weapon
+            createWeapon();
+
             // Event Listeners
             const onKeyDown = function (event) {
                 switch (event.code) {
@@ -107,6 +159,14 @@
                     case 'ArrowRight':
                     case 'KeyD':
                         moveRight = true;
+                        break;
+                    case 'Space':
+                        if (canJump === true) verticalVelocity += 200; // Adjust jump strength
+                        canJump = false;
+                        break;
+                    case 'ShiftLeft':
+                    case 'ShiftRight':
+                        isRunning = true;
                         break;
                 }
             };
@@ -129,6 +189,10 @@
                     case 'KeyD':
                         moveRight = false;
                         break;
+                    case 'ShiftLeft':
+                    case 'ShiftRight':
+                        isRunning = false;
+                        break;
                 }
             };
 
@@ -136,28 +200,63 @@
             document.addEventListener('keyup', onKeyUp);
             document.addEventListener('click', shoot);
 
-            // Floor
-            const floorGeometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
-            floorGeometry.rotateX(-Math.PI / 2);
-            const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
-            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-            scene.add(floor);
+            // Terrain
+            generateTerrain();
+
+            // Add Environment Objects
+            addEnvironmentObjects();
 
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // Raycaster for shooting
-            raycaster = new THREE.Raycaster();
-
             // Spawn Enemies
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 100; i++) {
                 spawnEnemy();
             }
 
+            // Set initial position
+            const initialY = getHeightAt(0, 0) + 10;
+            controls.getObject().position.set(0, initialY, 0);
+
             // Window Resize
             window.addEventListener('resize', onWindowResize);
+        }
+
+        function createWeapon() {
+            weapon = new THREE.Group();
+
+            // Weapon Body
+            const bodyGeometry = new THREE.BoxGeometry(1, 0.5, 3);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x555555 });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.set(0.5, -0.5, -1.5);
+            weapon.add(body);
+
+            // Barrel
+            const barrelGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 8);
+            const barrelMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const barrel = new THREE.Mesh(barrelGeometry, barrelMaterial);
+            barrel.rotation.x = Math.PI / 2;
+            barrel.position.set(0.5, -0.5, -3);
+            weapon.add(barrel);
+
+            weaponBarrel = barrel; // Save reference to barrel
+
+            // Sight
+            const sightGeometry = new THREE.BoxGeometry(0.2, 0.1, 0.5);
+            const sightMaterial = new THREE.MeshPhongMaterial({ color: 0x777777 });
+            const sight = new THREE.Mesh(sightGeometry, sightMaterial);
+            sight.position.set(0.5, 0, -2);
+            weapon.add(sight);
+
+            // Adjust weapon position and scale
+            weapon.position.set(0.5, -0.5, -0.5);
+            weapon.scale.set(0.5, 0.5, 0.5);
+
+            // Attach weapon to camera
+            camera.add(weapon);
         }
 
         function onWindowResize() {
@@ -176,13 +275,42 @@
                 velocity.x -= velocity.x * 10.0 * delta;
                 velocity.z -= velocity.z * 10.0 * delta;
 
-                const speed = 200.0; // Reduced speed for smoother movement
+                direction.z = Number(moveForward) - Number(moveBackward);
+                direction.x = Number(moveRight) - Number(moveLeft);
+                direction.normalize(); // ensures consistent movement in all directions
 
-                if (moveForward) velocity.z -= speed * delta;
-                if (moveBackward) velocity.z += speed * delta;
-                if (moveLeft) velocity.x -= speed * delta;
-                if (moveRight) velocity.x += speed * delta;
+                let speed = 400.0;
 
+                if (isRunning) {
+                    speed *= 1.5; // Increase speed when running
+                }
+
+                if (moveForward || moveBackward) velocity.z -= direction.z * speed * delta;
+                if (moveLeft || moveRight) velocity.x -= direction.x * speed * delta;
+
+                // Apply gravity
+                verticalVelocity -= gravity * delta;
+
+                // Get the terrain height below the player
+                const playerX = controls.getObject().position.x;
+                const playerZ = controls.getObject().position.z;
+                const terrainHeight = getHeightAt(playerX, playerZ) + 10; // Player height above terrain
+
+                // Update the player's Y position
+                const newY = controls.getObject().position.y + verticalVelocity * delta;
+
+                if (newY < terrainHeight) {
+                    // Player is on or below the terrain
+                    controls.getObject().position.y = terrainHeight;
+                    verticalVelocity = 0;
+                    canJump = true;
+                } else {
+                    // Player is in the air
+                    controls.getObject().position.y = newY;
+                    canJump = false;
+                }
+
+                // Movement controls
                 controls.moveRight(-velocity.x * delta);
                 controls.moveForward(-velocity.z * delta);
 
@@ -190,7 +318,7 @@
                 bullets.forEach((bullet, index) => {
                     bullet.position.add(bullet.velocity.clone().multiplyScalar(delta));
                     // Remove bullets out of range
-                    if (bullet.position.length() > 1000) {
+                    if (bullet.position.distanceTo(controls.getObject().position) > 2000) {
                         scene.remove(bullet);
                         bullets.splice(index, 1);
                     }
@@ -198,14 +326,28 @@
 
                 // Update enemies
                 enemies.forEach((enemy, index) => {
-                    enemy.lookAt(controls.getObject().position);
-                    enemy.translateZ(1 * delta * 10); // Reduced enemy speed
+                    // Adjust enemy height based on terrain
+                    const enemyX = enemy.position.x;
+                    const enemyZ = enemy.position.z;
+                    const enemyHeight = getHeightAt(enemyX, enemyZ);
+                    enemy.position.y = enemyHeight;
+
+                    enemy.lookAt(controls.getObject().position.x, enemy.position.y, controls.getObject().position.z);
+                    enemy.translateZ(1 * delta * 10);
                     // Check collision with player
                     const distance = enemy.position.distanceTo(controls.getObject().position);
-                    if (distance < 5) { // Reduced collision threshold
-                        // Game Over Logic
-                        alert('Game Over!');
-                        location.reload();
+                    if (distance < 5) {
+                        health -= 10;
+                        healthElement.textContent = 'Health: ' + health;
+                        if (health <= 0) {
+                            alert('Game Over! Your score: ' + score);
+                            location.reload();
+                        } else {
+                            // Reset enemy position
+                            scene.remove(enemy);
+                            enemies.splice(index, 1);
+                            spawnEnemy();
+                        }
                     }
                 });
 
@@ -219,6 +361,9 @@
                             scene.remove(bullet);
                             enemies.splice(enemyIndex, 1);
                             bullets.splice(bulletIndex, 1);
+                            // Update score
+                            score += 10;
+                            scoreElement.textContent = 'Score: ' + score;
                             // Spawn new enemy
                             spawnEnemy();
                         }
@@ -238,36 +383,321 @@
 
             // Bullet
             const bulletGeometry = new THREE.SphereGeometry(0.5, 8, 8);
-            const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color
             const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 
-            bullet.position.copy(controls.getObject().position);
-            bullet.position.y += 1.5; // Adjust bullet height
+            // Calculate bullet position offset to match weapon's position
+            const bulletOffset = new THREE.Vector3(0.5, -0.5, -1); // Adjust these values to match the weapon's position
+            bulletOffset.applyQuaternion(camera.quaternion);
+
+            // Set bullet's initial position and orientation
+            bullet.position.copy(controls.getObject().position).add(bulletOffset);
             bullet.quaternion.copy(camera.quaternion);
 
-            bullet.velocity = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).multiplyScalar(200);
+            // Increase bullet speed
+            bullet.velocity = new THREE.Vector3(0, 0, -1)
+                .applyQuaternion(camera.quaternion)
+                .multiplyScalar(400); // Faster speed
+
             bullets.push(bullet);
             scene.add(bullet);
         }
 
-        function spawnEnemy() {
-            const enemyGeometry = new THREE.BoxGeometry(5, 5, 5);
-            const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
 
+
+
+        function spawnEnemy() {
+            const enemy = new THREE.Group();
+
+            // Body
+            const bodyGeometry = new THREE.BoxGeometry(3, 5, 1.5);
+            const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 2.5;
+            enemy.add(body);
+
+            // Head
+            const headGeometry = new THREE.BoxGeometry(2, 2, 2);
+            const headMaterial = new THREE.MeshLambertMaterial({ color: 0xffcccc });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 5.5;
+            enemy.add(head);
+
+            // Left Arm
+            const armGeometry = new THREE.BoxGeometry(1, 4, 1);
+            const armMaterial = bodyMaterial;
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-2.5, 3.5, 0);
+            leftArm.rotation.z = Math.PI / 8;
+            enemy.add(leftArm);
+
+            // Right Arm
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(2.5, 3.5, 0);
+            rightArm.rotation.z = -Math.PI / 8;
+            enemy.add(rightArm);
+
+            // Left Leg
+            const legGeometry = new THREE.BoxGeometry(1, 4, 1);
+            const legMaterial = new THREE.MeshLambertMaterial({ color: 0x800000 });
+            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+            leftLeg.position.set(-0.75, 0, 0);
+            enemy.add(leftLeg);
+
+            // Right Leg
+            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+            rightLeg.position.set(0.75, 0, 0);
+            enemy.add(rightLeg);
+
+            // Positioning
             let x, z, distance;
             do {
-                x = (Math.random() - 0.5) * 800;
-                z = (Math.random() - 0.5) * 800;
+                x = (Math.random() - 0.5) * terrainSize;
+                z = (Math.random() - 0.5) * terrainSize;
                 const dx = x - controls.getObject().position.x;
                 const dz = z - controls.getObject().position.z;
                 distance = Math.sqrt(dx * dx + dz * dz);
-            } while (distance < 100); // Ensure enemy spawns at least 100 units away from player
+            } while (distance < 50);
 
-            enemy.position.set(x, 2.5, z);
+            const enemyHeight = getHeightAt(x, z);
+            enemy.position.set(x, enemyHeight, z);
 
             enemies.push(enemy);
             scene.add(enemy);
+        }
+
+        function addEnvironmentObjects() {
+            // Tree Types with more sophisticated geometries
+            const treeTypes = [
+                {
+                    trunkGeometry: new THREE.CylinderGeometry(1, 1.5, 10, 8),
+                    trunkMaterial: new THREE.MeshLambertMaterial({ color: 0x8B4513 }),
+                    leavesGeometry: new THREE.DodecahedronGeometry(5),
+                    leavesMaterial: new THREE.MeshLambertMaterial({ color: 0x006400 }),
+                },
+                {
+                    trunkGeometry: new THREE.CylinderGeometry(0.8, 1, 12, 6),
+                    trunkMaterial: new THREE.MeshLambertMaterial({ color: 0x8B4513 }),
+                    leavesGeometry: new THREE.OctahedronGeometry(4),
+                    leavesMaterial: new THREE.MeshLambertMaterial({ color: 0x228B22 }),
+                },
+                // New tree type
+                {
+                    trunkGeometry: new THREE.CylinderGeometry(0.5, 0.5, 15, 8),
+                    trunkMaterial: new THREE.MeshLambertMaterial({ color: 0x8B4513 }),
+                    leavesGeometry: new THREE.SphereGeometry(4, 16, 16),
+                    leavesMaterial: new THREE.MeshLambertMaterial({ color: 0x32CD32 }),
+                },
+            ];
+
+            // Add trees
+            for (let i = 0; i < 600; i++) {
+                const type = treeTypes[Math.floor(Math.random() * treeTypes.length)];
+
+                const trunk = new THREE.Mesh(type.trunkGeometry, type.trunkMaterial);
+                const leaves = new THREE.Mesh(type.leavesGeometry, type.leavesMaterial);
+
+                const x = (Math.random() - 0.5) * areaSize;
+                const z = (Math.random() - 0.5) * areaSize;
+
+                // Reduce minimum distance from player
+                const dx = x - controls.getObject().position.x;
+                const dz = z - controls.getObject().position.z;
+                const distance = Math.sqrt(dx * dx + dz * dz);
+                if (distance < 20) continue;
+
+                const treeHeight = getHeightAt(x, z);
+
+                trunk.position.set(x, treeHeight + type.trunkGeometry.parameters.height / 2, z);
+                leaves.position.set(
+                    x,
+                    treeHeight + type.trunkGeometry.parameters.height + (type.leavesGeometry.parameters.radius || 0) / 2,
+                    z
+                );
+
+                scene.add(trunk);
+                scene.add(leaves);
+            }
+
+            // Add bushes with variety
+            const bushTypes = [
+                {
+                    geometry: new THREE.SphereGeometry(2, 8, 8),
+                    material: new THREE.MeshLambertMaterial({ color: 0x228B22 }),
+                },
+                {
+                    geometry: new THREE.BoxGeometry(3, 2, 3),
+                    material: new THREE.MeshLambertMaterial({ color: 0x2E8B57 }),
+                },
+            ];
+
+            for (let i = 0; i < 400; i++) {
+                const type = bushTypes[Math.floor(Math.random() * bushTypes.length)];
+                const bush = new THREE.Mesh(type.geometry, type.material);
+
+                const x = (Math.random() - 0.5) * areaSize;
+                const z = (Math.random() - 0.5) * areaSize;
+
+                const bushHeight = getHeightAt(x, z);
+
+                bush.position.set(x, bushHeight + 1, z);
+
+                scene.add(bush);
+            }
+
+            // Add rocks with variety
+            const rockTypes = [
+                {
+                    geometry: new THREE.DodecahedronGeometry(2),
+                    material: new THREE.MeshLambertMaterial({ color: 0x808080 }),
+                },
+                {
+                    geometry: new THREE.TetrahedronGeometry(2),
+                    material: new THREE.MeshLambertMaterial({ color: 0x696969 }),
+                },
+            ];
+
+            for (let i = 0; i < 300; i++) {
+                const type = rockTypes[Math.floor(Math.random() * rockTypes.length)];
+                const rock = new THREE.Mesh(type.geometry, type.material);
+
+                const x = (Math.random() - 0.5) * areaSize;
+                const z = (Math.random() - 0.5) * areaSize;
+
+                // Reduce minimum distance from player
+                const dx = x - controls.getObject().position.x;
+                const dz = z - controls.getObject().position.z;
+                const distance = Math.sqrt(dx * dx + dz * dz);
+                if (distance < 10) continue;
+
+                const rockHeight = getHeightAt(x, z);
+
+                rock.position.set(x, rockHeight + 1, z);
+
+                scene.add(rock);
+            }
+
+            // Add mushrooms as new asset type
+            const mushroomGeometry = new THREE.Group();
+            const stemGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1);
+            const stemMaterial = new THREE.MeshLambertMaterial({ color: 0xDEB887 });
+            const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+            stem.position.y = 0.5;
+            mushroomGeometry.add(stem);
+
+            const capGeometry = new THREE.SphereGeometry(0.5, 8, 8, 0, Math.PI);
+            const capMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6347 });
+            const cap = new THREE.Mesh(capGeometry, capMaterial);
+            cap.position.y = 1;
+            cap.rotation.x = Math.PI / 2;
+            mushroomGeometry.add(cap);
+
+            for (let i = 0; i < 500; i++) {
+                const mushroom = mushroomGeometry.clone();
+
+                const x = (Math.random() - 0.5) * areaSize;
+                const z = (Math.random() - 0.5) * areaSize;
+
+                const mushroomHeight = getHeightAt(x, z);
+
+                mushroom.position.set(x, mushroomHeight, z);
+
+                scene.add(mushroom);
+            }
+        }
+
+        function generateTerrain() {
+            const size = worldWidth * worldDepth;
+            const data = generateHeight(worldWidth, worldDepth);
+            const geometry = new THREE.PlaneGeometry(terrainSize, terrainSize, worldWidth - 1, worldDepth - 1);
+            geometry.rotateX(-Math.PI / 2);
+
+            // Apply the height data to the vertices
+            const vertices = geometry.attributes.position.array;
+            const colors = new Float32Array(vertices.length);
+            const color = new THREE.Color();
+
+            for (let i = 0, j = 0; i < size; i++, j += 3) {
+                vertices[j + 1] = data[i];
+
+                // Compute color based on height
+                const height = data[i];
+
+                // Normalize height to 0..1
+                const maxHeight = 50;
+                const minHeight = -10;
+                const normalizedHeight = (height - minHeight) / (maxHeight - minHeight);
+
+                // Map normalized height to color gradient
+                if (normalizedHeight < 0.3) {
+                    // Low areas - dark green
+                    color.setRGB(0.0, 0.5, 0.0);
+                } else if (normalizedHeight < 0.6) {
+                    // Mid areas - green
+                    color.setRGB(0.0, 0.7, 0.0);
+                } else {
+                    // High areas - light green
+                    color.setRGB(0.5, 1.0, 0.5);
+                }
+
+                // Assign color to colors array
+                colors[j] = color.r;
+                colors[j + 1] = color.g;
+                colors[j + 2] = color.b;
+            }
+
+            // Add color attribute to geometry
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            // Recompute normals
+            geometry.computeVertexNormals();
+
+            const material = new THREE.MeshLambertMaterial({ vertexColors: true });
+            terrainMesh = new THREE.Mesh(geometry, material);
+            scene.add(terrainMesh);
+        }
+
+        function generateHeight(width, height) {
+            const size = width * height;
+            const data = new Float32Array(size);
+            const perlin = new ImprovedNoise();
+            let quality = 2;
+            const z = Math.random() * 100;
+
+            for (let j = 0; j < 4; j++) {
+                for (let i = 0; i < size; i++) {
+                    const x = i % width;
+                    const y = ~~(i / width);
+                    data[i] += perlin.noise(x / quality, y / quality, z) * quality * 1.75;
+                }
+                quality *= 5;
+            }
+
+            return data;
+        }
+
+        function getHeightAt(x, z) {
+            // Convert world coordinates to terrain data indices
+            const terrainWidth = worldWidth;
+            const terrainDepth = worldDepth;
+
+            // Map x and z from world coordinates to [0, terrainSize]
+            const halfSize = terrainSize / 2;
+            const mapX = ((x + halfSize) / terrainSize) * (terrainWidth - 1);
+            const mapZ = ((z + halfSize) / terrainSize) * (terrainDepth - 1);
+
+            const ix = Math.floor(mapX);
+            const iz = Math.floor(mapZ);
+
+            if (ix < 0 || ix >= terrainWidth || iz < 0 || iz >= terrainDepth) {
+                return 0; // Outside the terrain
+            }
+
+            const data = terrainMesh.geometry.attributes.position.array;
+            const stride = 3; // x, y, z
+            const index = (ix + iz * terrainWidth) * stride;
+
+            return data[index + 1]; // y-coordinate
         }
     </script>
 </body>
