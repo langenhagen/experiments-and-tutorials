@@ -1,0 +1,274 @@
+<!-- Lil shooter game.
+    Created entirely by GPT o1 preview. Had to iterate for 5 minutes but yeah nice for starters.
+
+    2024-09-16
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple 3D Shooter Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; background-color: rgba(0, 0, 0, 0.75);
+            font-family: Arial, sans-serif; font-size: 24px;
+            z-index: 1;
+        }
+        #crosshair {
+            position: absolute;
+            left: 50%; top: 50%;
+            width: 10px; height: 10px;
+            margin-left: -5px; margin-top: -5px;
+            background-color: white;
+            border-radius: 50%;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Crosshair -->
+    <div id="crosshair"></div>
+    <!-- Overlay -->
+    <div id="overlay">Click to Play</div>
+
+    <!-- Game Script -->
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
+        import { PointerLockControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/PointerLockControls.js';
+
+        let scene, camera, renderer, controls;
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+        let canShoot = true;
+        let bullets = [];
+        let enemies = [];
+        let objects = [];
+        let raycaster;
+        let prevTime = performance.now();
+        let velocity = new THREE.Vector3();
+
+        init();
+        animate();
+
+        function init() {
+            // Scene Setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x202025);
+            scene.fog = new THREE.Fog(0x202025, 0, 750);
+
+            // Camera Setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+
+            // Set Initial Camera Position
+            camera.position.y = 10;
+
+            // Lighting
+            const light = new THREE.HemisphereLight(0xffffff, 0x444444);
+            light.position.set(0, 200, 0);
+            scene.add(light);
+
+            // Controls
+            controls = new PointerLockControls(camera, document.body);
+
+            const blocker = document.getElementById('overlay');
+            blocker.addEventListener('click', function () {
+                controls.lock();
+            });
+
+            controls.addEventListener('lock', function () {
+                blocker.style.display = 'none';
+            });
+
+            controls.addEventListener('unlock', function () {
+                blocker.style.display = 'flex';
+            });
+
+            scene.add(controls.getObject());
+
+            // Event Listeners
+            const onKeyDown = function (event) {
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'KeyW':
+                        moveForward = true;
+                        break;
+                    case 'ArrowLeft':
+                    case 'KeyA':
+                        moveLeft = true;
+                        break;
+                    case 'ArrowDown':
+                    case 'KeyS':
+                        moveBackward = true;
+                        break;
+                    case 'ArrowRight':
+                    case 'KeyD':
+                        moveRight = true;
+                        break;
+                }
+            };
+
+            const onKeyUp = function (event) {
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'KeyW':
+                        moveForward = false;
+                        break;
+                    case 'ArrowLeft':
+                    case 'KeyA':
+                        moveLeft = false;
+                        break;
+                    case 'ArrowDown':
+                    case 'KeyS':
+                        moveBackward = false;
+                        break;
+                    case 'ArrowRight':
+                    case 'KeyD':
+                        moveRight = false;
+                        break;
+                }
+            };
+
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+            document.addEventListener('click', shoot);
+
+            // Floor
+            const floorGeometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
+            floorGeometry.rotateX(-Math.PI / 2);
+            const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            scene.add(floor);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Raycaster for shooting
+            raycaster = new THREE.Raycaster();
+
+            // Spawn Enemies
+            for (let i = 0; i < 10; i++) {
+                spawnEnemy();
+            }
+
+            // Window Resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (controls.isLocked === true) {
+                const time = performance.now();
+                const delta = (time - prevTime) / 1000;
+
+                velocity.x -= velocity.x * 10.0 * delta;
+                velocity.z -= velocity.z * 10.0 * delta;
+
+                const speed = 200.0; // Reduced speed for smoother movement
+
+                if (moveForward) velocity.z -= speed * delta;
+                if (moveBackward) velocity.z += speed * delta;
+                if (moveLeft) velocity.x -= speed * delta;
+                if (moveRight) velocity.x += speed * delta;
+
+                controls.moveRight(-velocity.x * delta);
+                controls.moveForward(-velocity.z * delta);
+
+                // Update bullets
+                bullets.forEach((bullet, index) => {
+                    bullet.position.add(bullet.velocity.clone().multiplyScalar(delta));
+                    // Remove bullets out of range
+                    if (bullet.position.length() > 1000) {
+                        scene.remove(bullet);
+                        bullets.splice(index, 1);
+                    }
+                });
+
+                // Update enemies
+                enemies.forEach((enemy, index) => {
+                    enemy.lookAt(controls.getObject().position);
+                    enemy.translateZ(1 * delta * 10); // Reduced enemy speed
+                    // Check collision with player
+                    const distance = enemy.position.distanceTo(controls.getObject().position);
+                    if (distance < 5) { // Reduced collision threshold
+                        // Game Over Logic
+                        alert('Game Over!');
+                        location.reload();
+                    }
+                });
+
+                // Bullet-Enemy Collision
+                bullets.forEach((bullet, bulletIndex) => {
+                    enemies.forEach((enemy, enemyIndex) => {
+                        const distance = bullet.position.distanceTo(enemy.position);
+                        if (distance < 5) {
+                            // Remove enemy and bullet
+                            scene.remove(enemy);
+                            scene.remove(bullet);
+                            enemies.splice(enemyIndex, 1);
+                            bullets.splice(bulletIndex, 1);
+                            // Spawn new enemy
+                            spawnEnemy();
+                        }
+                    });
+                });
+
+                prevTime = time;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function shoot() {
+            if (!canShoot || !controls.isLocked) return;
+            canShoot = false;
+            setTimeout(() => canShoot = true, 200); // Fire rate
+
+            // Bullet
+            const bulletGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+            const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+            bullet.position.copy(controls.getObject().position);
+            bullet.position.y += 1.5; // Adjust bullet height
+            bullet.quaternion.copy(camera.quaternion);
+
+            bullet.velocity = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).multiplyScalar(200);
+            bullets.push(bullet);
+            scene.add(bullet);
+        }
+
+        function spawnEnemy() {
+            const enemyGeometry = new THREE.BoxGeometry(5, 5, 5);
+            const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
+
+            let x, z, distance;
+            do {
+                x = (Math.random() - 0.5) * 800;
+                z = (Math.random() - 0.5) * 800;
+                const dx = x - controls.getObject().position.x;
+                const dz = z - controls.getObject().position.z;
+                distance = Math.sqrt(dx * dx + dz * dz);
+            } while (distance < 100); // Ensure enemy spawns at least 100 units away from player
+
+            enemy.position.set(x, 2.5, z);
+
+            enemies.push(enemy);
+            scene.add(enemy);
+        }
+    </script>
+</body>
+</html>
