@@ -1,6 +1,7 @@
 """
 Showcase the usage of of the package `random`.
 """
+
 import random
 import string
 
@@ -9,18 +10,18 @@ import string
 # random.seed(None) happens implicitly.
 # random.seed()
 
-print("--- 1 random floats ---")
+print("--- 1 random floats ---\n")
 
 for _ in range(10):
     print(random.random())  #  ]0,1[
 
-print("\n--- 2 random integers ---")
+print("\n--- 2 random integers ---\n")
 
 for _ in range(10):
     print(random.randint(1, 10))  # (min, max) aka including min and INCLUDING max
 
 
-print("\n--- 3 random strings ---")
+print("\n--- 3 random strings ---\n")
 
 s1 = "".join(random.choices(string.ascii_letters, k=5))
 print(s1)
@@ -35,7 +36,7 @@ s4 = "".join(random.choices(["a", "b", "c", "1", "2", "3"], k=8))
 print(s4)
 
 
-print("\n--- 4 shuffle lists ---")
+print("\n--- 4 shuffle lists ---\n")
 
 l = [1, 2, 3, 4]
 print(f"{l=}")
