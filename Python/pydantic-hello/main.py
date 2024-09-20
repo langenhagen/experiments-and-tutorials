@@ -5,6 +5,7 @@ and parsing using Python type annotations.
 author: andreasl
 """
 import json
+from enum import Enum
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -28,7 +29,7 @@ class Person(BaseModel):
     hobbies: list[str] = Field(default_factory=list)
 
 
-alice = Person(
+a = Person(
     name="Alice",
     age=30,
     hobbies=["reading", "hiking"],
@@ -38,12 +39,12 @@ alice = Person(
         zip_code="12345",
     ),
 )
-print(alice)
+print(a)
 
 print("\n--- 2 invalid models ---\n")
 
 try:
-    bob = Person(
+    b = Person(
         name="Bob",
         age="thirty",  # error: this should be an int or int-parseable
         address=Address(
@@ -57,7 +58,7 @@ except ValidationError as e:
 
 print("\n--- 3 Pydantic can automatically validate and parse inputs ---\n")
 
-charlie = Person(
+c = Person(
     name="Charlie",
     age="40",  # hand in age number as a string, gets parsed automatically
     hobbies=["gaming", "coding"],
@@ -67,18 +68,50 @@ charlie = Person(
         zip_code="67890",
     ),
 )
-print(charlie)
+print(c)
 
 print("\n--- 4 recursive JSON serialization of individual models---\n")
 
-aj = alice.model_dump_json()
+aj = a.model_dump_json()
 
 print(f"{type(aj)=}\n")
 print(aj)
 
 print("\n--- 5 recursive to dict ---\n")
 
-ad = alice.model_dump()
+ad = a.model_dump()
 
 print(f"{type(ad)=}\n")
 print(json.dumps(ad, indent=4))
+
+print("\n--- 6 take care when dumping objects with Enum values ---\n")
+
+
+class Status(str, Enum):
+    """Enum representing various statuses."""
+
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+
+
+class Worker(BaseModel):
+    """A model with an enum field."""
+
+    name: str
+    status: Status
+    tasks_completed: int
+
+
+w = Worker(
+    name="Dave",
+    status=Status.ACTIVE,
+    tasks_completed=15,
+)
+
+print(f"{w=}")
+
+wd1 = w.model_dump()
+print(f"{wd1=}")  # retains the enum; not JSON serializable
+
+wd2 = w.model_dump(mode="json")
+print(f"{wd2=}")  # serializes the enum as well
