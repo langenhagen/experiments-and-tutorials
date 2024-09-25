@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Katzespiel</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.153.0/build/three.module.js"
+            }
+        }
+    </script>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'https://unpkg.com/three@0.153.0/examples/jsm/controls/OrbitControls.js';
+
+        let scene, camera, renderer, controls, player;
+        let houses = [];
+        let enemies = [];
+        let cars = [];
+        let explosions = [];
+        let clouds = [];
+        let helicopter;
+        let enemyRespawnTime = 5; // seconds
+
+        let moveForward = false;
+        let moveBackward = false;
+        let moveLeft = false;
+        let moveRight = false;
+        let rotateLeft = false;
+        let rotateRight = false;
+        let isSpinning = false;
+        let isSprinting = false;
+        let isJumping = false;
+        let jumpVelocity = 0;
+        let spinDuration = 0.3; // seconds
+        let spinElapsed = 0;
+
+        let prevTime = performance.now();
+        let velocity = new THREE.Vector3();
+        const worldSize = 2000; // World size
+
+        init();
+        animate();
+
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+            sunLight.position.set(1000, 2000, 1000);
+            sunLight.castShadow = true;
+            sunLight.shadow.mapSize.width = 2048;
+            sunLight.shadow.mapSize.height = 2048;
+            scene.add(sunLight);
+
+            // Sun with glare effect
+            createSunWithGlare(sunLight.position);
+
+            // Sky
+            const skyGeometry = new THREE.SphereGeometry(4000, 32, 32);
+            const skyMaterial = new THREE.MeshBasicMaterial({
+                color: 0x87CEEB,
+                side: THREE.BackSide
+            });
+            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+            scene.add(sky);
+
+            // Clouds
+            createClouds();
+
+            // Helicopter
+            helicopter = createHelicopter();
+            helicopter.position.y = 600; // Position below clouds
+            scene.add(helicopter);
+
+            // Controls
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableKeys = false;
+            controls.enablePan = false;
+            controls.enableZoom = false;
+
+            // Ground with improved streets
+            createGroundWithStreets();
+
+            // Player (Cat)
+            player = createCat(0x888888); // Gray color
+            player.position.y = 0; // Adjusted to stand on ground
+            scene.add(player);
+
+            // Houses
+            createHouses();
+
+            // Enemy Cats
+            spawnEnemies();
+
+            // Enemy Cars
+            spawnCars();
+
+            // Camera initial position
+            camera.position.set(0, 20, -40);
+            camera.lookAt(player.position);
+
+            // Event Listeners
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createSunWithGlare(position) {
+            // Create a bright sphere to represent the sun
+            const sunGeometry = new THREE.SphereGeometry(100, 32, 32);
+            const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffffaa });
+            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+            sun.position.copy(position);
+            scene.add(sun);
+
+            // Create a lens flare effect using sprites
+            const flareColor = new THREE.Color(0xffffaa);
+            const lensflare = new THREE.Group();
+
+            for (let i = 0; i < 4; i++) {
+                const flareGeometry = new THREE.PlaneGeometry(400 * (4 - i), 400 * (4 - i));
+                const flareMaterial = new THREE.MeshBasicMaterial({
+                    color: flareColor,
+                    transparent: true,
+                    opacity: 0.1 * (4 - i),
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                const flareMesh = new THREE.Mesh(flareGeometry, flareMaterial);
+                flareMesh.position.copy(position);
+                lensflare.add(flareMesh);
+            }
+
+            scene.add(lensflare);
+        }
+
+        function createGroundWithStreets() {
+            const gridSize = 2000;
+            const streetWidth = 20;
+            const streetCount = 10;
+
+            // Create ground plane
+            const groundGeometry = new THREE.PlaneGeometry(gridSize, gridSize);
+            groundGeometry.rotateX(-Math.PI / 2);
+            const groundMaterial = new THREE.MeshPhongMaterial({ color: 0x228B22 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Create streets
+            const streetMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            for (let i = -streetCount / 2; i <= streetCount / 2; i++) {
+                // Vertical streets
+                const streetGeometryV = new THREE.PlaneGeometry(streetWidth, gridSize);
+                streetGeometryV.rotateX(-Math.PI / 2);
+                const streetV = new THREE.Mesh(streetGeometryV, streetMaterial);
+                streetV.position.x = (i * gridSize) / streetCount;
+                streetV.position.y = 0.01; // Slightly above ground to prevent z-fighting
+                streetV.receiveShadow = true;
+                scene.add(streetV);
+
+                // Horizontal streets
+                const streetGeometryH = new THREE.PlaneGeometry(gridSize, streetWidth);
+                streetGeometryH.rotateX(-Math.PI / 2);
+                const streetH = new THREE.Mesh(streetGeometryH, streetMaterial);
+                streetH.position.z = (i * gridSize) / streetCount;
+                streetH.position.y = 0.01; // Slightly above ground
+                streetH.receiveShadow = true;
+                scene.add(streetH);
+
+                // Add white stripes to vertical streets
+                const stripeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                const stripeGeometryV = new THREE.PlaneGeometry(2, gridSize);
+                stripeGeometryV.rotateX(-Math.PI / 2);
+                const stripeV = new THREE.Mesh(stripeGeometryV, stripeMaterial);
+                stripeV.position.x = streetV.position.x;
+                stripeV.position.y = 0.02; // Slightly above street to prevent z-fighting
+                stripeV.receiveShadow = false;
+                scene.add(stripeV);
+
+                // Add white stripes to horizontal streets
+                const stripeGeometryH = new THREE.PlaneGeometry(gridSize, 2);
+                stripeGeometryH.rotateX(-Math.PI / 2);
+                const stripeH = new THREE.Mesh(stripeGeometryH, stripeMaterial);
+                stripeH.position.z = streetH.position.z;
+                stripeH.position.y = 0.02; // Slightly above street
+                stripeH.receiveShadow = false;
+                scene.add(stripeH);
+            }
+        }
+
+        function createHouses() {
+            const houseCount = 20;
+            const gridSize = 2000;
+            const streetCount = 10;
+            const cellSize = gridSize / streetCount;
+            const halfGridSize = gridSize / 2;
+            const housePositions = [];
+
+            for (let i = -streetCount / 2; i < streetCount / 2; i++) {
+                for (let j = -streetCount / 2; j < streetCount / 2; j++) {
+                    // Calculate the center position of each cell
+                    const x = (i + 0.5) * cellSize;
+                    const z = (j + 0.5) * cellSize;
+                    housePositions.push({ x, z });
+                }
+            }
+
+            // Randomly select positions for houses
+            for (let i = 0; i < houseCount; i++) {
+                if (housePositions.length === 0) break;
+
+                const index = Math.floor(Math.random() * housePositions.length);
+                const position = housePositions.splice(index, 1)[0];
+
+                const house = createHouse();
+                // Slight random offset within the cell to avoid uniformity
+                house.position.set(
+                    position.x + (Math.random() - 0.5) * (cellSize / 2 - 20),
+                    0,
+                    position.z + (Math.random() - 0.5) * (cellSize / 2 - 20)
+                );
+                scene.add(house);
+                houses.push(house);
+            }
+        }
+
+        function createCat(color) {
+            const cat = new THREE.Group();
+
+            // Body
+            const bodyGeometry = new THREE.SphereGeometry(2, 32, 32);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: color, shininess: 30 });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 3;
+            body.castShadow = true;
+            cat.add(body);
+            cat.userData.body = body; // Store reference for animation
+
+            // Head
+            const headGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+            const headMaterial = new THREE.MeshPhongMaterial({ color: color, shininess: 30 });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.set(0, 5, 1);
+            head.castShadow = true;
+            cat.add(head);
+
+            // Ears
+            const earGeometry = new THREE.ConeGeometry(0.5, 1, 32);
+            const earMaterial = new THREE.MeshPhongMaterial({ color: color, shininess: 30 });
+            const ear1 = new THREE.Mesh(earGeometry, earMaterial);
+            ear1.position.set(-0.7, 6.5, 1);
+            ear1.rotation.z = Math.PI / 8;
+            ear1.castShadow = true;
+            cat.add(ear1);
+
+            const ear2 = ear1.clone();
+            ear2.position.x = 0.7;
+            ear2.rotation.z = -Math.PI / 8;
+            cat.add(ear2);
+
+            // Eyes with Pupils
+            const eyeGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const eyeWhiteMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 30 });
+            const eye1 = new THREE.Mesh(eyeGeometry, eyeWhiteMaterial);
+            eye1.position.set(-0.4, 5.3, 2.2);
+            cat.add(eye1);
+
+            const eye2 = eye1.clone();
+            eye2.position.x = 0.4;
+            cat.add(eye2);
+
+            // Pupils
+            const pupilGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+            const pupilMaterial = new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 30 });
+            const pupil1 = new THREE.Mesh(pupilGeometry, pupilMaterial);
+            pupil1.position.set(-0.4, 5.3, 2.4);
+            cat.add(pupil1);
+
+            const pupil2 = pupil1.clone();
+            pupil2.position.x = 0.4;
+            cat.add(pupil2);
+
+            // Whiskers
+            const whiskerMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+            const whiskerPointsLeft = [
+                new THREE.Vector3(-0.2, 5, 2.5),
+                new THREE.Vector3(-1.0, 5, 2.5)
+            ];
+            const whiskerGeometryLeft = new THREE.BufferGeometry().setFromPoints(whiskerPointsLeft);
+            const whiskerLeft = new THREE.Line(whiskerGeometryLeft, whiskerMaterial);
+            cat.add(whiskerLeft);
+
+            const whiskerPointsRight = [
+                new THREE.Vector3(0.2, 5, 2.5),
+                new THREE.Vector3(1.0, 5, 2.5)
+            ];
+            const whiskerGeometryRight = new THREE.BufferGeometry().setFromPoints(whiskerPointsRight);
+            const whiskerRight = new THREE.Line(whiskerGeometryRight, whiskerMaterial);
+            cat.add(whiskerRight);
+
+            // Legs
+            const legGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 16);
+            const legMaterial = new THREE.MeshPhongMaterial({ color: color, shininess: 30 });
+            const legPositions = [
+                [-0.8, 1, -0.5],
+                [0.8, 1, -0.5],
+                [-0.8, 1, 0.5],
+                [0.8, 1, 0.5]
+            ];
+            cat.userData.legs = [];
+            for (let i = 0; i < legPositions.length; i++) {
+                const leg = new THREE.Mesh(legGeometry, legMaterial);
+                leg.position.set(legPositions[i][0], legPositions[i][1], legPositions[i][2]);
+                leg.castShadow = true;
+                cat.add(leg);
+                cat.userData.legs.push(leg);
+            }
+
+            // Tail
+            const tailGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3, 16);
+            const tailMaterial = new THREE.MeshPhongMaterial({ color: color, shininess: 30 });
+            const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+            tail.position.set(0, 3, -1.5);
+            tail.rotation.x = Math.PI / 4;
+            tail.castShadow = true;
+            cat.add(tail);
+
+            // Stripes (for more detail)
+            const stripeGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.5, 16);
+            const stripeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 30 });
+            for (let i = -1; i <= 1; i++) {
+                const stripe = new THREE.Mesh(stripeGeometry, stripeMaterial);
+                stripe.position.set(i * 0.7, 3 + i, 0);
+                stripe.rotation.z = Math.PI / 2;
+                stripe.castShadow = true;
+                cat.add(stripe);
+            }
+
+            cat.castShadow = true;
+            cat.receiveShadow = true;
+
+            cat.userData.walkTime = 0;
+            cat.userData.sitProgress = 0; // Initialize sit progress
+
+            return cat;
+        }
+
+        function createHouse() {
+            const houseGroup = new THREE.Group();
+
+            // Randomize house dimensions
+            const houseWidth = 30 + Math.random() * 20;
+            const houseHeight = 20 + Math.random() * 20;
+            const houseDepth = 20 + Math.random() * 20;
+
+            // Randomize colors
+            const wallColors = [0xffffff, 0xffe4b5, 0xffdab9, 0xfffacd];
+            const roofColors = [0xcd5c5c, 0x8b4513, 0x708090];
+            const wallColor = wallColors[Math.floor(Math.random() * wallColors.length)];
+            const roofColor = roofColors[Math.floor(Math.random() * roofColors.length)];
+
+            // Base
+            const baseGeometry = new THREE.BoxGeometry(houseWidth, 2, houseDepth);
+            const baseMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            base.position.y = 1;
+            base.castShadow = true;
+            base.receiveShadow = true;
+            houseGroup.add(base);
+
+            // Walls
+            const wallGeometry = new THREE.BoxGeometry(houseWidth, houseHeight, houseDepth);
+            const wallMaterial = new THREE.MeshPhongMaterial({ color: wallColor });
+            const walls = new THREE.Mesh(wallGeometry, wallMaterial);
+            walls.position.y = houseHeight / 2 + 2;
+            walls.castShadow = true;
+            walls.receiveShadow = true;
+            houseGroup.add(walls);
+
+            // Windows with frames
+            const windowGeometry = new THREE.BoxGeometry(5, 5, 0.5);
+            const windowMaterial = new THREE.MeshPhongMaterial({ color: 0x87CEEB, transparent: true, opacity: 0.6 });
+            const frameMaterial = new THREE.MeshPhongMaterial({ color: 0x654321 });
+
+            const windowPositions = [
+                [-houseWidth / 4, houseHeight / 2, houseDepth / 2 + 0.26],
+                [houseWidth / 4, houseHeight / 2, houseDepth / 2 + 0.26],
+                [-houseWidth / 4, houseHeight / 2, -houseDepth / 2 - 0.26],
+                [houseWidth / 4, houseHeight / 2, -houseDepth / 2 - 0.26]
+            ];
+
+            windowPositions.forEach(pos => {
+                const windowFrame = new THREE.Mesh(new THREE.BoxGeometry(6, 6, 0.5), frameMaterial);
+                windowFrame.position.set(pos[0], pos[1], pos[2]);
+                houseGroup.add(windowFrame);
+
+                const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
+                windowMesh.position.set(pos[0], pos[1], pos[2] + (pos[2] > 0 ? -0.01 : 0.01));
+                houseGroup.add(windowMesh);
+            });
+
+            // Door with knob
+            const doorGeometry = new THREE.BoxGeometry(6, 10, 1);
+            const doorMaterial = new THREE.MeshPhongMaterial({ color: 0x654321 });
+            const door = new THREE.Mesh(doorGeometry, doorMaterial);
+            door.position.set(0, 5, houseDepth / 2 + 0.51);
+            door.castShadow = true;
+            door.receiveShadow = true;
+            houseGroup.add(door);
+
+            const doorKnob = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), new THREE.MeshPhongMaterial({ color: 0xDAA520 }));
+            doorKnob.position.set(2, 5, houseDepth / 2 + 1);
+            houseGroup.add(doorKnob);
+
+            // Roof with chimney
+            const roofGeometry = new THREE.ConeGeometry(houseWidth / 1.5, 15, 4);
+            const roofMaterial = new THREE.MeshPhongMaterial({ color: roofColor });
+            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+            roof.position.y = houseHeight + 10;
+            roof.rotation.y = Math.PI / 4;
+            roof.castShadow = true;
+            roof.receiveShadow = true;
+            houseGroup.add(roof);
+
+            const chimneyGeometry = new THREE.BoxGeometry(5, 15, 5);
+            const chimneyMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
+            const chimney = new THREE.Mesh(chimneyGeometry, chimneyMaterial);
+            chimney.position.set(-houseWidth / 4, houseHeight + 15, 0);
+            chimney.castShadow = true;
+            chimney.receiveShadow = true;
+            houseGroup.add(chimney);
+
+            // Bounding Box for Walls
+            const houseBox = new THREE.Box3().setFromObject(walls);
+            houseGroup.userData.boundingBox = houseBox;
+
+            houseGroup.castShadow = true;
+            houseGroup.receiveShadow = true;
+
+            return houseGroup;
+        }
+
+        function createCar() {
+        const carGroup = new THREE.Group();
+
+        // Randomize car type
+        const carTypes = ['sedan', 'pickup', 'sportsCar', 'limousine', 'bus', 'sportyCoupe'];
+        const carType = carTypes[Math.floor(Math.random() * carTypes.length)];
+
+        // Randomize car colors
+        const carColors = [0xff0000, 0x0000ff, 0xffff00, 0x00ff00, 0xff00ff, 0xffa500, 0x8B0000, 0x00008B];
+        const carColor = carColors[Math.floor(Math.random() * carColors.length)];
+        const bodyMaterial = new THREE.MeshPhongMaterial({ color: carColor, shininess: 100 });
+
+        let carWidth, carHeight, carLength;
+
+        switch (carType) {
+            case 'sedan':
+                carWidth = 12;
+                carHeight = 4;
+                carLength = 28;
+                break;
+            case 'pickup':
+                carWidth = 14;
+                carHeight = 5;
+                carLength = 32;
+                break;
+            case 'sportsCar':
+                carWidth = 10;
+                carHeight = 3;
+                carLength = 26;
+                break;
+            case 'sportyCoupe':
+                carWidth = 10;
+                carHeight = 3.5;
+                carLength = 24;
+                break;
+            case 'limousine':
+                carWidth = 12;
+                carHeight = 4;
+                carLength = 50;
+                break;
+            case 'bus':
+                carWidth = 16;
+                carHeight = 8;
+                carLength = 50;
+                break;
+        }
+
+        // Body
+        let body;
+        if (carType === 'sportsCar' || carType === 'sportyCoupe') {
+            // Rounded, aerodynamic body for sports cars
+            const bodyGeometry = new THREE.BoxGeometry(carWidth, carHeight, carLength);
+            body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.rotation.z = Math.PI / 2;
+            body.position.y = carHeight / 2 + 2;
+        } else {
+            // Standard boxy body for other cars
+            const bodyGeometry = new THREE.BoxGeometry(carWidth, carHeight, carLength);
+            body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = carHeight / 2 + 2;
+        }
+        body.castShadow = true;
+        body.receiveShadow = true;
+        carGroup.add(body);
+
+        // Additional features based on car type
+        switch (carType) {
+            case 'sportsCar':
+            case 'sportyCoupe':
+                // Spoiler
+                const spoilerGeometry = new THREE.BoxGeometry(carWidth / 2, 0.5, 2);
+                const spoilerMaterial = new THREE.MeshPhongMaterial({ color: carColor });
+                const spoiler = new THREE.Mesh(spoilerGeometry, spoilerMaterial);
+                spoiler.position.set(0, carHeight + 2.5, -carLength / 2 + 2);
+                spoiler.castShadow = true;
+                carGroup.add(spoiler);
+                break;
+            case 'pickup':
+                // Cargo Bed
+                const bedGeometry = new THREE.BoxGeometry(carWidth - 2, carHeight - 1, carLength / 2 - 2);
+                const bedMaterial = new THREE.MeshPhongMaterial({ color: 0x654321 });
+                const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+                bed.position.set(0, carHeight / 2 + 2, carLength / 4);
+                bed.castShadow = true;
+                carGroup.add(bed);
+                break;
+            case 'limousine':
+                // Additional Windows
+                const windowGeometry = new THREE.BoxGeometry(1, 2, carLength - 10);
+                const windowMaterial = new THREE.MeshPhongMaterial({ color: 0x87CEEB, transparent: true, opacity: 0.6 });
+                const windows = new THREE.Mesh(windowGeometry, windowMaterial);
+                windows.position.set(0, carHeight + 2.5, 0);
+                windows.castShadow = true;
+                carGroup.add(windows);
+                break;
+        }
+
+        // Cabin (skipped for sports cars to maintain rounded shape)
+        if (carType !== 'sportsCar' && carType !== 'sportyCoupe') {
+            const cabinGeometry = new THREE.BoxGeometry(carWidth - 2, carHeight + 2, carLength / 2);
+            const cabinMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 });
+            const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
+            cabin.position.set(0, carHeight + 3, -carLength / 4);
+            cabin.castShadow = true;
+            cabin.receiveShadow = true;
+            carGroup.add(cabin);
+        }
+
+        // Headlights
+        const headlightGeometry = new THREE.CircleGeometry(1, 16);
+        const headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe0 });
+        const headlight1 = new THREE.Mesh(headlightGeometry, headlightMaterial);
+        headlight1.position.set(-carWidth / 2 + 1, carHeight / 2 + 2, carLength / 2 + 0.1);
+        headlight1.rotation.x = -Math.PI / 2;
+        carGroup.add(headlight1);
+
+        const headlight2 = headlight1.clone();
+        headlight2.position.x = carWidth / 2 - 1;
+        carGroup.add(headlight2);
+
+        // Taillights
+        const taillightMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const taillight1 = new THREE.Mesh(headlightGeometry, taillightMaterial);
+        taillight1.position.set(-carWidth / 2 + 1, carHeight / 2 + 2, -carLength / 2 - 0.1);
+        taillight1.rotation.x = Math.PI / 2;
+        carGroup.add(taillight1);
+
+        const taillight2 = taillight1.clone();
+        taillight2.position.x = carWidth / 2 - 1;
+        carGroup.add(taillight2);
+
+        // Wheels with rims
+        const wheelGeometry = new THREE.CylinderGeometry(2, 2, 1, 16);
+        const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+        const rimGeometry = new THREE.CylinderGeometry(1.5, 1.5, 1.2, 16);
+        const rimMaterial = new THREE.MeshPhongMaterial({ color: 0xC0C0C0 });
+
+        const wheelPositions = [
+            [-carWidth / 2 + 1.5, 2, -carLength / 2 + 5],
+            [carWidth / 2 - 1.5, 2, -carLength / 2 + 5],
+            [-carWidth / 2 + 1.5, 2, carLength / 2 - 5],
+            [carWidth / 2 - 1.5, 2, carLength / 2 - 5]
+        ];
+
+        for (let i = 0; i < wheelPositions.length; i++) {
+            const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            wheel.position.set(wheelPositions[i][0], wheelPositions[i][1], wheelPositions[i][2]);
+            wheel.rotation.z = Math.PI / 2;
+            wheel.castShadow = true;
+            wheel.receiveShadow = true;
+            carGroup.add(wheel);
+
+            const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+            rim.position.copy(wheel.position);
+            rim.rotation.copy(wheel.rotation);
+            rim.castShadow = true;
+            rim.receiveShadow = true;
+            carGroup.add(rim);
+        }
+
+        // Bumpers (Adjust position for rounded cars)
+        const bumperGeometry = new THREE.BoxGeometry(carWidth, 2, 2);
+        const bumperMaterial = new THREE.MeshPhongMaterial({ color: 0x555555 });
+
+        const frontBumper = new THREE.Mesh(bumperGeometry, bumperMaterial);
+        frontBumper.position.set(0, 2.5, carLength / 2 + 1);
+        frontBumper.castShadow = true;
+        carGroup.add(frontBumper);
+
+        const rearBumper = frontBumper.clone();
+        rearBumper.position.z = -carLength / 2 - 1;
+        carGroup.add(rearBumper);
+
+        // Side Mirrors (Skip for sports cars)
+        if (carType !== 'sportsCar' && carType !== 'sportyCoupe') {
+            const mirrorGeometry = new THREE.BoxGeometry(0.5, 1, 2);
+            const mirrorMaterial = new THREE.MeshPhongMaterial({ color: carColor });
+            const mirror1 = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+            mirror1.position.set(-carWidth / 2 - 0.5, carHeight + 1, -carLength / 4);
+            carGroup.add(mirror1);
+
+            const mirror2 = mirror1.clone();
+            mirror2.position.x = carWidth / 2 + 0.5;
+            carGroup.add(mirror2);
+        }
+
+        carGroup.castShadow = true;
+        carGroup.receiveShadow = true;
+
+        return carGroup;
+    }
+
+        function spawnCars() {
+            const carCount = 40; // Increased number of cars
+            const streetCount = 10;
+            const gridSize = 2000;
+            const streetSpacing = gridSize / streetCount;
+
+            for (let i = 0; i < carCount; i++) {
+                const car = createCar();
+
+                // Randomly choose vertical or horizontal street
+                const isVertical = Math.random() < 0.5;
+
+                // Randomly choose a street index
+                const streetIndex = Math.floor(Math.random() * streetCount) - streetCount / 2;
+
+                // Position the car on the street
+                const position = new THREE.Vector3();
+                const velocity = new THREE.Vector3();
+
+                if (isVertical) {
+                    // Vertical street (along Z-axis)
+                    position.x = streetIndex * streetSpacing;
+                    position.y = 0; // Adjusted for car height
+                    position.z = -gridSize / 2 - Math.random() * 1000; // Start off-screen
+                    velocity.z = 100 + Math.random() * 100; // Move along Z-axis
+                    car.rotation.y = 0; // Face forward along Z-axis
+                } else {
+                    // Horizontal street (along X-axis)
+                    position.x = -gridSize / 2 - Math.random() * 1000; // Start off-screen
+                    position.y = 0;
+                    position.z = streetIndex * streetSpacing;
+                    velocity.x = 100 + Math.random() * 100; // Move along X-axis
+                    car.rotation.y = Math.PI / 2; // Face forward along X-axis
+                }
+
+                car.position.copy(position);
+                car.userData = {
+                    velocity: velocity,
+                    exploding: false,
+                    explodeTime: 0,
+                    isVertical: isVertical
+                };
+                scene.add(car);
+                cars.push(car);
+            }
+        }
+
+        function createClouds() {
+            const cloudCount = 50;
+            for (let i = 0; i < cloudCount; i++) {
+                const cloud = createCloud();
+                cloud.position.set(
+                    (Math.random() - 0.5) * 4000,
+                    800 + Math.random() * 500,
+                    (Math.random() - 0.5) * 4000
+                );
+                cloud.rotation.y = Math.random() * Math.PI * 2;
+                scene.add(cloud);
+                clouds.push(cloud);
+            }
+        }
+
+        function createCloud() {
+            const cloud = new THREE.Group();
+            const cloudMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                flatShading: false,
+                opacity: 0.9,
+                transparent: true
+            });
+
+            const puffCount = 5 + Math.floor(Math.random() * 5);
+            for (let i = 0; i < puffCount; i++) {
+                const puffGeometry = new THREE.SphereGeometry(50, 16, 16);
+                const puff = new THREE.Mesh(puffGeometry, cloudMaterial);
+                puff.position.set(
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 50,
+                    (Math.random() - 0.5) * 100
+                );
+                puff.castShadow = true;
+                puff.receiveShadow = true;
+                cloud.add(puff);
+            }
+
+            // Make the cloud face down
+            cloud.rotation.x = Math.PI / 2;
+
+            return cloud;
+        }
+
+        function createHelicopter() {
+            const helicopter = new THREE.Group();
+
+            // Body
+            const bodyGeometry = new THREE.CylinderGeometry(5, 5, 40, 16);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x555555 });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.rotation.z = Math.PI / 2;
+            body.castShadow = true;
+            helicopter.add(body);
+
+            // Tail Boom
+            const tailGeometry = new THREE.BoxGeometry(3, 3, 30);
+            const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
+            tail.position.set(-35, 0, 0);
+            tail.castShadow = true;
+            helicopter.add(tail);
+
+            // Tail Rotor
+            const tailRotorGeometry = new THREE.BoxGeometry(1, 15, 1);
+            const tailRotorMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const tailRotor = new THREE.Mesh(tailRotorGeometry, tailRotorMaterial);
+            tailRotor.position.set(-50, 0, 0);
+            tailRotor.rotation.z = Math.PI / 2;
+            tailRotor.castShadow = true;
+            helicopter.add(tailRotor);
+
+            // Main Rotor
+            const rotorGeometry = new THREE.BoxGeometry(1, 100, 2);
+            const rotor = new THREE.Mesh(rotorGeometry, tailRotorMaterial);
+            rotor.position.y = 5;
+            rotor.rotation.y = Math.PI / 2;
+            rotor.castShadow = true;
+            helicopter.add(rotor);
+
+            // Cockpit
+            const cockpitGeometry = new THREE.SphereGeometry(8, 16, 16);
+            const cockpitMaterial = new THREE.MeshPhongMaterial({ color: 0x777777 });
+            const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
+            cockpit.position.set(15, 0, 0);
+            cockpit.castShadow = true;
+            helicopter.add(cockpit);
+
+            // Landing Skids
+            const skidGeometry = new THREE.CylinderGeometry(1, 1, 30, 8);
+            const skidMaterial = new THREE.MeshPhongMaterial({ color: 0x444444 });
+            const skid1 = new THREE.Mesh(skidGeometry, skidMaterial);
+            skid1.position.set(0, -5, 10);
+            skid1.rotation.z = Math.PI / 2;
+            skid1.castShadow = true;
+            helicopter.add(skid1);
+
+            const skid2 = skid1.clone();
+            skid2.position.z = -10;
+            helicopter.add(skid2);
+
+            // Store rotor and tail rotor for animation
+            helicopter.userData.rotor = rotor;
+            helicopter.userData.tailRotor = tailRotor;
+
+            // Initial parameters for movement
+            helicopter.userData.angle = 0;
+
+            helicopter.castShadow = true;
+            helicopter.receiveShadow = true;
+
+            return helicopter;
+        }
+
+        function onKeyDown(event) {
+            switch (event.code) {
+                case 'ArrowUp':
+                case 'KeyW':
+                    moveForward = true;
+                    break;
+
+                case 'ArrowLeft':
+                case 'KeyA':
+                    moveLeft = true;
+                    break;
+
+                case 'ArrowDown':
+                case 'KeyS':
+                    moveBackward = true;
+                    break;
+
+                case 'ArrowRight':
+                case 'KeyD':
+                    moveRight = true;
+                    break;
+
+                case 'PageUp':
+                case 'KeyQ':
+                    rotateLeft = true;
+                    break;
+
+                case 'PageDown':
+                case 'KeyE':
+                    rotateRight = true;
+                    break;
+
+                case 'ShiftLeft':
+                case 'ShiftRight':
+                    isSprinting = true;
+                    break;
+
+                case 'ControlLeft':
+                case 'ControlRight':
+                    if (!isJumping && player.position.y <= 0.1) {
+                        isJumping = true;
+                        jumpVelocity = 300;
+                    }
+                    break;
+
+                case 'Space':
+                    if (!isSpinning) {
+                        isSpinning = true;
+                        spinElapsed = 0;
+                    }
+                    break;
+            }
+        }
+
+        function onKeyUp(event) {
+            switch (event.code) {
+                case 'ArrowUp':
+                case 'KeyW':
+                    moveForward = false;
+                    break;
+
+                case 'ArrowLeft':
+                case 'KeyA':
+                    moveLeft = false;
+                    break;
+
+                case 'ArrowDown':
+                case 'KeyS':
+                    moveBackward = false;
+                    break;
+
+                case 'ArrowRight':
+                case 'KeyD':
+                    moveRight = false;
+                    break;
+
+                case 'PageUp':
+                case 'KeyQ':
+                    rotateLeft = false;
+                    break;
+
+                case 'PageDown':
+                case 'KeyE':
+                    rotateRight = false;
+                    break;
+
+                case 'ShiftLeft':
+                case 'ShiftRight':
+                    isSprinting = false;
+                    break;
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = performance.now();
+            const delta = (time - prevTime) / 1000;
+
+            velocity.set(0, 0, 0);
+
+            let speed = 100;
+            if (isSprinting) speed = 200; // Increase speed when sprinting
+
+            const rotationSpeed = Math.PI * 2 * delta; // Faster rotation
+
+            if (moveForward) velocity.z += speed * delta;
+            if (moveBackward) velocity.z -= speed * delta;
+            if (moveLeft) velocity.x += speed * delta;
+            if (moveRight) velocity.x -= speed * delta;
+
+            if (rotateLeft) player.rotation.y += rotationSpeed;
+            if (rotateRight) player.rotation.y -= rotationSpeed;
+
+            // Spin Attack
+            if (isSpinning) {
+                const spinSpeed = (2 * Math.PI) / spinDuration;
+                spinElapsed += delta;
+                player.rotation.y += spinSpeed * delta;
+
+                // Animate legs during spin
+                player.userData.walkTime += delta;
+                animateLegs(player, delta);
+
+                // Check for nearby enemies and cars
+                checkSpinCollision();
+
+                if (spinElapsed >= spinDuration) {
+                    isSpinning = false;
+                }
+            }
+
+            // Jumping
+            if (isJumping) {
+                player.position.y += jumpVelocity * delta;
+                jumpVelocity -= 600 * delta; // Gravity
+
+                if (player.position.y <= 0) {
+                    player.position.y = 0;
+                    isJumping = false;
+                    jumpVelocity = 0;
+                }
+            }
+
+            // Move in the direction the player is facing
+            const direction = new THREE.Vector3(velocity.x, 0, velocity.z);
+            direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), player.rotation.y);
+
+            player.position.add(direction);
+
+            // Determine if the player is moving
+            const isMoving = direction.length() > 0;
+
+            // Animate legs when moving (and not spinning)
+            if (!isSpinning) {
+                if (isMoving) {
+                    player.userData.walkTime += delta;
+                    animateLegs(player, delta);
+                    if(!isJumping) {
+                        animateSitting(player, delta, false); // Stand up
+                    }
+                } else {
+                    resetLegs(player);
+                    if(!isJumping) {
+                        animateSitting(player, delta, true); // Sit down
+                    }
+                }
+            }
+
+            // Collision detection with houses
+            houses.forEach((house) => {
+                const playerBox = new THREE.Box3().setFromObject(player);
+                const houseBox = house.userData.boundingBox.clone();
+                houseBox.translate(house.position);
+
+                if (playerBox.intersectsBox(houseBox)) {
+                    // Collided with house, move back
+                    player.position.sub(direction);
+                }
+            });
+
+            // Update camera position to follow the player
+            const relativeCameraOffset = new THREE.Vector3(0, 10, -20);
+            let cameraOffset;
+
+            if (isSpinning) {
+                // Keep camera steady during spin attack
+                const playerPosition = player.position.clone();
+                cameraOffset = playerPosition.add(relativeCameraOffset);
+            } else {
+                // Follow player rotation
+                cameraOffset = relativeCameraOffset.applyMatrix4(player.matrixWorld);
+            }
+
+            camera.position.lerp(cameraOffset, 0.1);
+            camera.lookAt(player.position);
+
+            // Enemy Cats Behavior
+            enemies.forEach((enemy, index) => {
+                const dirToPlayer = new THREE.Vector3();
+                dirToPlayer.subVectors(player.position, enemy.position).normalize();
+
+                enemy.position.addScaledVector(dirToPlayer, 50 * delta);
+
+                // Rotate enemy to face the player
+                const enemyDirection = dirToPlayer.clone();
+                const angle = Math.atan2(enemyDirection.x, enemyDirection.z);
+                enemy.rotation.y = angle;
+
+                // Animate enemy legs
+                enemy.userData.walkTime += delta;
+                animateLegs(enemy, delta);
+
+                // Collision detection with player
+                const enemyBox = new THREE.Box3().setFromObject(enemy);
+                const playerBox = new THREE.Box3().setFromObject(player);
+
+                if (enemyBox.intersectsBox(playerBox)) {
+                    // Enemy cat is hit
+                    createExplosion(enemy.position);
+                    scene.remove(enemy);
+                    enemies.splice(index, 1);
+
+                    // Schedule respawn
+                    setTimeout(() => {
+                        const newEnemy = createCat(0xff0000);
+                        newEnemy.position.set(
+                            player.position.x + (Math.random() - 0.5) * 500,
+                            0,
+                            player.position.z + (Math.random() - 0.5) * 500
+                        );
+                        scene.add(newEnemy);
+                        enemies.push(newEnemy);
+                    }, enemyRespawnTime * 1000);
+                }
+            });
+
+            // Move enemy cars
+            cars.forEach((car, index) => {
+                if (!car.userData.exploding) {
+                    const velocity = car.userData.velocity.clone();
+                    car.position.addScaledVector(velocity, delta);
+
+                    // Rotate car to face movement direction
+                    if (velocity.length() > 0) {
+                        const angle = Math.atan2(velocity.x, velocity.z);
+                        car.rotation.y = angle;
+                    }
+
+                    // Loop cars back to start
+                    if (car.userData.isVertical) {
+                        if (car.position.z > worldSize / 2 + 100) {
+                            car.position.z = -worldSize / 2 - Math.random() * 1000;
+                        }
+                    } else {
+                        if (car.position.x > worldSize / 2 + 100) {
+                            car.position.x = -worldSize / 2 - Math.random() * 1000;
+                        }
+                    }
+
+                    // Collision detection with player
+                    const carBox = new THREE.Box3().setFromObject(car);
+                    const playerBox = new THREE.Box3().setFromObject(player);
+
+                    if (carBox.intersectsBox(playerBox)) {
+                        // Car "explodes"
+                        car.userData.exploding = true;
+                        car.userData.explodeTime = 0;
+                        car.userData.velocity.set(0, 300, 0); // Jump up
+                        createExplosion(car.position);
+                    }
+                } else {
+                    // Explosion animation: car jumps up and falls down
+                    car.userData.velocity.y -= 600 * delta; // Gravity effect
+                    car.position.addScaledVector(car.userData.velocity, delta);
+                    car.userData.explodeTime += delta;
+
+                    if (car.position.y <= 2.5) {
+                        car.position.y = 2.5;
+                        scene.remove(car);
+                        cars.splice(index, 1);
+                    }
+                }
+            });
+
+            // Update explosions
+            updateExplosions(delta);
+
+            // Move clouds
+            clouds.forEach(cloud => {
+                cloud.position.x += 10 * delta; // Move clouds horizontally
+                if (cloud.position.x > 4000) {
+                    cloud.position.x = -4000;
+                }
+            });
+
+            // Animate helicopter
+            animateHelicopter(delta);
+
+            prevTime = time;
+
+            renderer.render(scene, camera);
+        }
+
+        function animateSitting(cat, delta, isSitting) {
+            // Animate between standing and sitting positions
+            const sitDuration = 0.5; // Duration to complete the sitting/standing animation
+            const sitSpeed = delta / sitDuration;
+
+            if (isSitting) {
+                // Animate to sitting position
+                cat.userData.sitProgress = Math.min((cat.userData.sitProgress || 0) + sitSpeed, 1);
+
+                // Lower the body
+                cat.position.y = THREE.MathUtils.lerp(-0.5, -2, cat.userData.sitProgress);
+
+            } else {
+                // Animate to standing position
+                cat.userData.sitProgress = Math.max((cat.userData.sitProgress || 0) - 3*sitSpeed, 0);
+
+                // Raise the body
+                cat.position.y = THREE.MathUtils.lerp(-0.5, -2, cat.userData.sitProgress);
+            }
+        }
+
+        function animateHelicopter(delta) {
+            // Update helicopter position with complex movement
+            helicopter.userData.angle += delta * 0.2;
+            const radius = 800;
+            const x = Math.sin(helicopter.userData.angle) * radius;
+            const z = Math.sin(2 * helicopter.userData.angle) * radius / 2;
+            const y = 600 + Math.sin(helicopter.userData.angle * 2) * 50;
+            helicopter.position.set(x, y, z);
+
+            // Rotate helicopter to face movement direction
+            const dx = Math.cos(helicopter.userData.angle) * radius;
+            const dz = Math.cos(2 * helicopter.userData.angle) * radius;
+            const angle = Math.atan2(dx, dz);
+            helicopter.rotation.y = angle;
+
+            // Rotate rotors
+            helicopter.userData.rotor.rotation.y += delta * 20;
+            helicopter.userData.tailRotor.rotation.x += delta * 30;
+        }
+
+        function animateLegs(cat, delta) {
+            const speed = 10;
+            const angle = Math.sin(cat.userData.walkTime * speed) * 0.5;
+
+            if (cat.userData.legs && cat.userData.legs.length === 4) {
+                cat.userData.legs[0].rotation.x = angle;
+                cat.userData.legs[1].rotation.x = -angle;
+                cat.userData.legs[2].rotation.x = -angle;
+                cat.userData.legs[3].rotation.x = angle;
+            }
+        }
+
+        function resetLegs(cat) {
+            if (cat.userData.legs && cat.userData.legs.length === 4) {
+                cat.userData.legs.forEach(leg => {
+                    leg.rotation.x = 0;
+                });
+            }
+        }
+
+        function spawnEnemies() {
+            const enemyCount = 10;
+            for (let i = 0; i < enemyCount; i++) {
+                const enemyCat = createCat(0xff0000); // Red color
+                enemyCat.position.set(
+                    player.position.x + (Math.random() - 0.5) * 500,
+                    0,
+                    player.position.z + (Math.random() - 0.5) * 500
+                );
+                scene.add(enemyCat);
+                enemies.push(enemyCat);
+            }
+        }
+
+        function checkSpinCollision() {
+            // Check for collisions with enemies and cars during spin attack
+            enemies.forEach((enemy, index) => {
+                const distance = player.position.distanceTo(enemy.position);
+                if (distance < 20) {
+                    // Enemy cat is hit
+                    createExplosion(enemy.position);
+                    scene.remove(enemy);
+                    enemies.splice(index, 1);
+
+                    // Schedule respawn
+                    setTimeout(() => {
+                        const newEnemy = createCat(0xff0000);
+                        newEnemy.position.set(
+                            player.position.x + (Math.random() - 0.5) * 500,
+                            0,
+                            player.position.z + (Math.random() - 0.5) * 500
+                        );
+                        scene.add(newEnemy);
+                        enemies.push(newEnemy);
+                    }, enemyRespawnTime * 1000);
+                }
+            });
+
+            cars.forEach((car, index) => {
+                const distance = player.position.distanceTo(car.position);
+                if (distance < 20 && !car.userData.exploding) {
+                    // Car "explodes"
+                    car.userData.exploding = true;
+                    car.userData.explodeTime = 0;
+                    car.userData.velocity.set(0, 300, 0); // Jump up
+                    createExplosion(car.position);
+                }
+            });
+        }
+
+        // Explosion effect
+        function createExplosion(position) {
+            const explosionGroup = new THREE.Group();
+            const particleCount = 300 * Math.random() + 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particleGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+                const particleMaterial = new THREE.MeshBasicMaterial({ color: 0xffa500 });
+                const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+
+                particle.position.copy(position);
+                particle.userData = {
+                    velocity: new THREE.Vector3(
+                        (Math.random() - 0.5) * 100,
+                        (Math.random() - 0.5) * 100,
+                        (Math.random() - 0.5) * 100
+                    ),
+                    life: 1.0
+                };
+
+                explosionGroup.add(particle);
+            }
+
+            explosions.push(explosionGroup);
+            scene.add(explosionGroup);
+        }
+
+        function updateExplosions(delta) {
+            explosions.forEach((explosionGroup, index) => {
+                explosionGroup.children.forEach((particle) => {
+                    particle.userData.life -= delta;
+                    if (particle.userData.life <= 0) {
+                        explosionGroup.remove(particle);
+                    } else {
+                        particle.position.addScaledVector(particle.userData.velocity, delta);
+                        particle.material.opacity = particle.userData.life;
+                        particle.material.transparent = true;
+                    }
+                });
+
+                if (explosionGroup.children.length === 0) {
+                    scene.remove(explosionGroup);
+                    explosions.splice(index, 1);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
