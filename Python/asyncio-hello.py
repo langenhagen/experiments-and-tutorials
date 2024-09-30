@@ -88,7 +88,7 @@ async def foo():
 
 asyncio.run(foo())
 
-print("\n--- 5 as_completed() - act on tasks like in first-done-first-serve fashion ---\n")
+print("\n--- 5 as_completed() - act on tasks in first-done-first-serve fashion ---\n")
 
 
 async def foo():
@@ -108,3 +108,87 @@ async def foo():
 
 
 asyncio.run(foo())
+
+print("\n--- 6 not handling exceptions: Task exception was never retrieved  ---\n")
+
+
+async def failing_task():
+    """A task that raises an exception."""
+    print("Hello from failing_task(), before failure!")
+    await asyncio.sleep(1)
+    raise ValueError("Something went wrong!")
+    print("Hello from failing_task(), after failure!")  # never gets here
+
+
+async def bar():
+    """Create the task but do not await or handle it.
+
+    We don't await or gather the task, causing the "Task exception was never retrieved"
+    error.
+
+    Unhandled exceptions like this are also commonly called "unhandled rejection".
+    """
+    asyncio.create_task(failing_task())
+    # Add a delay to give the unhandled exception time to be raised.
+    # This ensures that the task has time to run before the program exits
+    await asyncio.sleep(1)
+
+
+asyncio.run(bar())
+
+
+print("\n--- 7 handling exceptions ---\n")
+
+
+async def foo():
+    """Don't handle the exception of `failing_task` inside the coroutine."""
+    try:
+        task = asyncio.create_task(failing_task())
+        await task  # Exception will propagate
+        await asyncio.sleep(2)
+    except Exception as e:
+        print(f"Caught exception: {e}")
+
+
+asyncio.run(foo())
+
+print("\n--- 8 handling exceptions with gather() ---\n")
+
+
+async def foo():
+    """Use gather(return_exceptions=True) to avoid raising exceptions from failed tasks."""
+
+    task1 = asyncio.create_task(failing_task())
+    task2 = asyncio.create_task(say_after(1, "This task works fine"))
+
+    await asyncio.sleep(2)
+    results = await asyncio.gather(task1, task2, return_exceptions=True)
+
+    for i, result in enumerate(results):
+        if isinstance(result, Exception):
+            print(f"Task {i} raised an exception: {result}")
+        else:
+            print(f"Task {i} completed with result: {result}")
+
+
+asyncio.run(foo())
+
+print("\n--- 9 exception handler functions ---\n")
+
+
+def handle_exception(loop, context):
+    """Custom exception handler for the asyncio event loop."""
+
+    print(f"Hello from handle_exception()!")
+    print(f"  param `loop` of type {type(loop)}\n{loop}\n")
+    print(f"  param `context` of type {type(context)}\n{context}\n")
+
+    msg = context.get("exception", context["message"])
+    print(f"\n  Caught exception in custom handler: {msg}")
+    print("---")
+
+
+loop = asyncio.new_event_loop()
+loop.set_exception_handler(handle_exception)
+asyncio.set_event_loop(loop)
+loop.run_until_complete(bar())
