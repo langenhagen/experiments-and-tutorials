@@ -1,13 +1,12 @@
 """
 Showcase usage with exceptions.
 """
-import pathlib
+
 import re
 import sys
 import traceback
 
-print("---")
-print("Print an exception and a stack trace")
+print("--- 1 print an exception and a stack trace ---\n")
 
 
 def foo():
@@ -35,7 +34,9 @@ except re.error as err:
     print(err.colno)  # == pos + !
 
 print("---")
-print('Get the exception without specifying "except as ...:"')
+
+print('\n--- 2 get the exception without specifying "except as ...:" ---\n')
+
 try:
     raise IOError("miaaaauuu")
 except:
@@ -45,8 +46,7 @@ except:
     print("exception_obj: {}".format(exc_obj))
     print("traceback: {}".format(traceback))
 
-print("---")
-print("Excepthook")
+print("\n--- 3 Excepthook ---\n")
 
 
 def patched_excepthook(type, value, traceback):
@@ -72,4 +72,12 @@ except:
 sys.excepthook = sys.__excepthook__  # reset excepthook again to the original
 
 
-print("<< UND ENDE >>")
+print("\n--- 4 - Catching a set of exceptions ---\n")
+
+try:
+    raise ValueError("hahaha")
+except (KeyError, ValueError) as e:
+    print(f"Caught {type(e).__name__}: {e}")
+
+
+print("\n<< UND ENDE >>\n")
