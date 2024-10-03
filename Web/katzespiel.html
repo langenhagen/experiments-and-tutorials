@@ -1003,6 +1003,18 @@
                 }
             });
 
+            // Collision detection with houses
+            houses.forEach((house) => {
+                const playerBox = new THREE.Box3().setFromObject(player);
+                const houseBox = house.userData.boundingBox.clone();
+                houseBox.translate(house.position);
+
+                if (playerBox.intersectsBox(houseBox)) {
+                    // Collided with house, move back
+                    player.position.sub(direction);
+                }
+            });
+
             // Update camera position to follow the player
             const relativeCameraOffset = new THREE.Vector3(0, 10, -20);
             let cameraOffset;
