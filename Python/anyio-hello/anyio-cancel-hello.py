@@ -2,7 +2,8 @@
 """Showcase the usage of anyio's `cancel_scope.cancel()` function to cancel task
 groups.
 
-See: https://anyio.readthedocs.io/en/stable/cancellation.html
+See:
+- https://anyio.readthedocs.io/en/stable/cancellation.html
 
 author: andreasl
 """
@@ -50,16 +51,16 @@ async def task2():
     except anyio.get_cancelled_exc_class():
         print("Task was cancelled after shielded section")
         raise
-    # except ValueError as e:
-    #     print(f"Caught ValueError: {e}")  # Will not be reached
+    except ValueError as e:
+        print(f"Caught ValueError: {e}")
 
-async def main():
+async def bar():
     async with anyio.create_task_group() as tg:
         tg.start_soon(task2)
         await anyio.sleep(1)
         tg.cancel_scope.cancel()
     await asyncio.sleep(1)
-    print("fooo")
+    print("Bye from bar!")
 
 
-anyio.run(main)
+anyio.run(bar)
