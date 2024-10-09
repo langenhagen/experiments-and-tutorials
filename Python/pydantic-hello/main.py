@@ -101,6 +101,11 @@ class Worker(BaseModel):
     status: Status
     tasks_completed: int
 
+    # Won't be included
+    @property
+    def myprop(self) -> float:
+        return 42
+
 
 w = Worker(
     name="Dave",
@@ -115,3 +120,11 @@ print(f"{wd1=}")  # retains the enum; not JSON serializable
 
 wd2 = w.model_dump(mode="json")
 print(f"{wd2=}")  # serializes the enum as well
+
+
+print("\n--- 7 model_dump(include=...) omits everything not included ---\n")
+
+print(f"{w=}")
+
+wd3 = w.model_dump(mode="json", include={"name", "myprop"})
+print(f"{wd3=}")
