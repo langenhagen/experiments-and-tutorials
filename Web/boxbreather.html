@@ -1,0 +1,198 @@
+<!--
+A simple Box Breathing Webapp.
+
+author: andreasl
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Box Breathing App</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIHN0cm9rZT0iIzI3NDY5MCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWxsPSJub25lIi8+CiAgPHBhdGggZD0iTTE2IDMyYzAtOCA4LTggMTYgMHMxNi04IDE2IDBzMTYgOCAxNiAwIiBzdHJva2U9IiMyNzQ2OTAiIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==" />
+    <style>
+        /* Reset default margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Set body to full viewport height and center content */
+        body, html {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            cursor: pointer; /* Change cursor to indicate clickable area */
+
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-size: 400% 400%;
+            animation: moveBackground 16s infinite ease-in-out;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Container for the circles and text */
+        .breathing-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            cursor: inherit;
+        }
+
+        /* Outer Circle */
+        .outer-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(173, 216, 230, 0.6); /* Light blue with transparency */
+            animation: pulse 16s infinite ease-in-out;
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+        }
+
+        /* Inner Circle */
+        .inner-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(135, 206, 250, 0.6); /* Sky blue with transparency */
+            animation: breathe 16s infinite ease-in-out;
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+        }
+
+        /* Central Text Container */
+        .central-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #274690; /* Darker blue for contrast */
+            font-size: 2em;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+
+        .phase {
+            font-size: 1.0em;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Breathing animation keyframes */
+        @keyframes breathe {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            25% {
+                transform: translate(-50%, -50%) scale(1.5); /* Inhale */
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5); /* Hold after inhale */
+            }
+            75% {
+                transform: translate(-50%, -50%) scale(1); /* Exhale */
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1); /* Hold after exhale */
+            }
+        }
+
+        /* Pulsing outer circle for elegance */
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.2;
+            }
+        }
+
+        /* Hide text when .hidden-text class is added */
+        .hidden-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="breathing-container" id="breathing-container">
+        <div class="outer-circle"></div>
+        <div class="inner-circle"></div>
+        <div class="central-text" id="central-text">
+            <div class="phase">Breathe In</div>
+            <div class="timer">4</div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code remains the same as before
+        // Define the breathing phases and their durations in seconds
+        const phases = [
+            { name: 'Breathe In', duration: 4 },
+            { name: 'Hold', duration: 4 },
+            { name: 'Breathe Out', duration: 4 },
+            { name: 'Hold', duration: 4 }
+        ];
+
+        let currentPhase = 0;
+        let timeLeft = phases[currentPhase].duration;
+        const phaseElement = document.querySelector('.phase');
+        const timerElement = document.querySelector('.timer');
+
+        // Update the central text and timer
+        function updateDisplay() {
+            phaseElement.textContent = phases[currentPhase].name;
+            timerElement.textContent = timeLeft;
+        }
+
+        // Initialize display
+        updateDisplay();
+
+        // Start the timer
+        let timerInterval = setInterval(() => {
+            if (timeLeft > 1) {
+                timeLeft--;
+                updateDisplay();
+            } else {
+                // Move to the next phase
+                currentPhase = (currentPhase + 1) % phases.length;
+                timeLeft = phases[currentPhase].duration;
+                updateDisplay();
+            }
+        }, 1000);
+
+        // Toggle text visibility on click
+        const centralText = document.getElementById('central-text');
+        const breathingContainer = document.getElementById('breathing-container');
+
+        breathingContainer.addEventListener('click', () => {
+            centralText.classList.toggle('hidden-text');
+        });
+    </script>
+</body>
+</html>
