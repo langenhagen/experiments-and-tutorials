@@ -1,1 +1,4 @@
+bpython
 pygame
+PyOpenGL
+# PyOpenGL_accelerate  # 2024-10-20 failed to install on my Python 3.12 system
