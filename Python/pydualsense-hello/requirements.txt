@@ -4,3 +4,4 @@ isort
 pydualsense
 pygame
 PyOpenGL
+wat-inspector

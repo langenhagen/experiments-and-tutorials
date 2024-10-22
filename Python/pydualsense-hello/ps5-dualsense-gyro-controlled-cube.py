@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""Showcase a 3D cube that can be controlled via your PS5 Dualsense controller's gyro."""
+"""Showcase a 3D cube that can be controlled via your PS5 DualSense controller's
+gyro or keyboard arrow keys.
+"""
+from contextlib import suppress
+
 import pygame
-from pygame.locals import *
+import wat
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from pydualsense import pydualsense
-from contextlib import suppress
+from pygame.locals import *
 
 # Global variables for gyro data
 gyro_roll = 0
 gyro_pitch = 0
 gyro_yaw = 0
+
 
 def gyro_changed(pitch, yaw, roll):
     global gyro_roll, gyro_pitch, gyro_yaw
@@ -18,15 +23,18 @@ def gyro_changed(pitch, yaw, roll):
     gyro_pitch = pitch
     gyro_yaw = yaw
 
-# Define the cube vertices, edges, and surfaces (unchanged)
+
+# Define the cube vertices, edges, and surfaces
+
+# fmt: off
 vertices = [
-    [1, 1, -1],
-    [1, -1, -1],
-    [-1, -1, -1],
-    [-1, 1, -1],
-    [1, 1, 1],
-    [1, -1, 1],
-    [-1, -1, 1],
+    [ 1, 1,-1],
+    [ 1,-1,-1],
+    [-1,-1,-1],
+    [-1, 1,-1],
+    [ 1, 1, 1],
+    [ 1,-1, 1],
+    [-1,-1, 1],
     [-1, 1, 1],
 ]
 
@@ -62,6 +70,8 @@ colors = (
     (1,0,1),
     (0,1,1),
 )
+# fmt: on
+
 
 def Cube():
     glBegin(GL_QUADS)
@@ -71,12 +81,13 @@ def Cube():
             glVertex3fv(vertices[vertex])
     glEnd()
 
-    glColor3fv((1,1,1))
+    glColor3fv((1, 1, 1))
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
             glVertex3fv(vertices[vertex])
     glEnd()
+
 
 def draw_hud(width, height):
     # Save the current projection and modelview matrices
@@ -110,10 +121,11 @@ def draw_hud(width, height):
     center_y = height / 2
 
     # Positions for the bars
+    # fmt: off
     positions = [
-        (10, center_y),               # Left side (Roll)
-        (width - 30, center_y),       # Right side (Yaw)
-        (center_x, 20)                # Bottom center (Pitch)
+        (10,         center_y),  # Left side (Roll)
+        (width - 30, center_y),  # Right side (Yaw)
+        (center_x,         20),  # Bottom center (Pitch)
     ]
 
     # Colors for the bars
@@ -122,6 +134,7 @@ def draw_hud(width, height):
         (0, 1, 0),  # Green for Yaw
         (0, 0, 1),  # Blue for Roll
     ]
+    # fmt: on
 
     # Gyro normalized values
     norms = [roll_norm, yaw_norm, pitch_norm]
@@ -162,27 +175,41 @@ def draw_hud(width, height):
 
     glMatrixMode(GL_MODELVIEW)
 
-def main():
-    pygame.init()
-    display = (800,600)
-    screen = pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
 
-    # Set the viewport
-    glViewport(0, 0, display[0], display[1])
-
-    # Initialize projection matrix
+def resize_window(width, height):
+    if height == 0:
+        height = 1
+    glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+    gluPerspective(45, (width / height), 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
 
-    # Enable depth testing
+
+def main():
+    pygame.init()
+    display = (800, 600)
+
+    # Antialiasing
+    pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
+    pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLESAMPLES, 8)
+
+    pygame.display.set_mode(display, DOUBLEBUF | OPENGL | RESIZABLE)
+
+    resize_window(display[0], display[1])
+
     glEnable(GL_DEPTH_TEST)
 
     # Initialize DualSense controller
-    dualsense = pydualsense()
-    dualsense.init()
-    dualsense.gyro_changed += gyro_changed
+    try:
+        dualsense = pydualsense()
+        dualsense.init()
+        dualsense.gyro_changed += gyro_changed
+        controller_connected = True
+    except Exception as e:
+        print(f"Warning: Caught Exception: {e}\n  Proceeding without controller.")
+        controller_connected = False
+        dualsense = None  # Ensure dualsense variable exists
 
     clock = pygame.time.Clock()
 
@@ -193,28 +220,66 @@ def main():
 
     alpha = 0.1  # Smoothing factor between 0 and 1
 
+    # Initialize keyboard movement variables
+    keyboard_pitch = 0.0
+    keyboard_roll = 0.0
+
     # Main loop
     with suppress(KeyboardInterrupt):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    dualsense.close()
+                    if controller_connected:
+                        dualsense.close()
                     pygame.quit()
                     quit()
+                elif event.type == pygame.VIDEORESIZE:
+                    display = (event.w, event.h)
+                    resize_window(display[0], display[1])
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_F11:
+                        pygame.display.toggle_fullscreen()
+                    elif event.key == pygame.K_LEFT:
+                        keyboard_roll = 1
+                    elif event.key == pygame.K_RIGHT:
+                        keyboard_roll = -1
+                    elif event.key == pygame.K_UP:
+                        keyboard_pitch = -1
+                    elif event.key == pygame.K_DOWN:
+                        keyboard_pitch = 1
+                elif event.type == pygame.KEYUP:
+                    if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
+                        keyboard_roll = 0
+                    elif event.key in [pygame.K_UP, pygame.K_DOWN]:
+                        keyboard_pitch = 0
 
             # Map gyro values to rotation angles
             SENSITIVITY = 100
-            pitch_angle = gyro_roll / SENSITIVITY
-            roll_angle = gyro_pitch / SENSITIVITY
-            yaw_angle = gyro_yaw / SENSITIVITY
+
+            # Gyro inputs (if controller connected)
+            if controller_connected:
+                pitch_angle = gyro_roll / SENSITIVITY
+                roll_angle = gyro_pitch / SENSITIVITY
+                yaw_angle = gyro_yaw / SENSITIVITY
+            else:
+                pitch_angle = 0.0
+                roll_angle = 0.0
+                yaw_angle = 0.0
+
+            # Combine keyboard inputs
+            keyboard_sensitivity = 50  # Adjust the multiplier to set speed
+            pitch_angle += keyboard_pitch * keyboard_sensitivity
+            roll_angle += keyboard_roll * keyboard_sensitivity
 
             # Apply exponential smoothing to the angles
-            smoothed_pitch_angle = alpha * pitch_angle + (1 - alpha) * smoothed_pitch_angle
+            smoothed_pitch_angle = (
+                alpha * pitch_angle + (1 - alpha) * smoothed_pitch_angle
+            )
             smoothed_roll_angle = alpha * roll_angle + (1 - alpha) * smoothed_roll_angle
             smoothed_yaw_angle = alpha * yaw_angle + (1 - alpha) * smoothed_yaw_angle
 
             # Clear buffers
-            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
             # Reset transformations
             glLoadIdentity()
@@ -223,21 +288,23 @@ def main():
             glTranslatef(0.0, 0.0, -5)
 
             # Apply rotations with smoothed angles
-            glRotatef(smoothed_roll_angle, 0, 0, 1)     # Roll
-            glRotatef(-smoothed_pitch_angle, 1, 0, 0)   # Pitch
+            glRotatef(smoothed_roll_angle, 0, 0, 1)  # Roll
+            glRotatef(-smoothed_pitch_angle, 1, 0, 0)  # Pitch
             # glRotatef(smoothed_yaw_angle, 0, 0, 1)    # Yaw (if needed); not really yaw but an indicator whether the controller looks forward or backward?
 
-            # Draw the cube
             Cube()
 
-            # Draw the HUD
-            draw_hud(display[0], display[1])
+            # Draw the HUD (only if controller is connected)
+            if controller_connected:
+                draw_hud(display[0], display[1])
 
             pygame.display.flip()
             clock.tick(60)
 
     # Close DualSense controller
-    dualsense.close()
+    if controller_connected:
+        dualsense.close()
+
 
 if __name__ == "__main__":
     main()
