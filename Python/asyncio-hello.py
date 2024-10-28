@@ -19,11 +19,12 @@ async def foo():
     print("Hello from foo!")
     await asyncio.sleep(0.5)
     print("Goodbye from foo!")
+    return 42
 
 
 print("Go program")
-asyncio.run(foo())
-print("Goodbye program")
+result = asyncio.run(foo())
+print(f"Goodbye program {result=}")
 
 
 print("\n--- 2 nested await ---\n")
