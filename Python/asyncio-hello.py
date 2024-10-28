@@ -17,7 +17,7 @@ print("--- 1 simple call to asyncio.run() ---\n")
 async def foo():
     """A coroutine."""
     print("Hello from foo!")
-    await asyncio.sleep(1)
+    await asyncio.sleep(0.5)
     print("Goodbye from foo!")
 
 
@@ -159,9 +159,9 @@ async def foo():
     """Use gather(return_exceptions=True) to avoid raising exceptions from failed tasks."""
 
     task1 = asyncio.create_task(failing_task())
-    task2 = asyncio.create_task(say_after(1, "This task works fine"))
+    task2 = asyncio.create_task(say_after(0.5, "This task works fine"))
 
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     results = await asyncio.gather(task1, task2, return_exceptions=True)
 
     for i, result in enumerate(results):
