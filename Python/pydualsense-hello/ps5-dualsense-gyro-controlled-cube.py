@@ -218,7 +218,7 @@ def main():
     smoothed_roll_angle = 0.0
     smoothed_yaw_angle = 0.0
 
-    alpha = 0.1  # Smoothing factor between 0 and 1
+    alpha = 0.15  # Smoothing factor between 0 and 1
 
     # Initialize keyboard movement variables
     keyboard_pitch = 0.0
