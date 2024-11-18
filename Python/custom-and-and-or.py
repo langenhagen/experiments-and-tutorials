@@ -16,12 +16,16 @@ assert (b and a) == a
 assert (a or b) == a
 assert (b or a) == b
 
+class D:
+    pass
 
 class WithCustomBool:
     def __init__(self, v):
         self.v = v
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
+        """This guy has to return bool, otherwise the Python interpreter complains."""
+        return D()
         return bool(self.v)
 
 
