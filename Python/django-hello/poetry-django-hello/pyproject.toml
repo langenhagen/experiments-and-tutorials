@@ -6,7 +6,7 @@ authors = ["Andreas Langenhagen <andreas.langenhagen@celeraone.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^3.0.8"
+django = "^3.1.14"
 pyyaml = "^5.3.1"
 
 [tool.poetry.dev-dependencies]
