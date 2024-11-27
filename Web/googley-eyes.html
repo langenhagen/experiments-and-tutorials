@@ -1,0 +1,106 @@
+<!--
+Googley Eyes.
+
+Invented by me, andreasl, inspired by LocoRoco, code written by ChatGPT o1-preview.
+
+2024-11-27
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Googly Eyes</title>
+    <style>
+        :root {
+            --eye-size: 50px;       /* Adjust the size of the eyes here */
+            --pupil-size: 30px;      /* Adjust the size of the pupils here */
+            --background-color: #f6cb4a;  /* Background color */
+            --mouth-width: 200px;    /* Width of the mouth */
+            --mouth-height: 100px;   /* Height of the mouth */
+            --mouth-stroke: 3px;     /* Thickness of the mouth stroke */
+        }
+        body {
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .face {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .eyes {
+            display: flex;
+        }
+        .eye {
+            width: var(--eye-size);
+            height: var(--eye-size);
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .pupil {
+            width: var(--pupil-size);
+            height: var(--pupil-size);
+            background-color: black;
+            border-radius: 50%;
+            position: absolute;
+            top: calc((var(--eye-size) - var(--pupil-size)) / 2);
+            left: calc((var(--eye-size) - var(--pupil-size)) / 2);
+            transition: transform 0.1s;
+        }
+        .mouth {
+            margin-top: 20px;
+        }
+        .mouth svg {
+            width: var(--mouth-width);
+            height: var(--mouth-height);
+        }
+        .mouth path {
+            fill: none;
+            stroke: black;
+            stroke-width: var(--mouth-stroke);
+        }
+    </style>
+</head>
+<body>
+    <div class="face">
+        <div class="eyes">
+            <div class="eye">
+                <div class="pupil"></div>
+            </div>
+            <div class="eye">
+                <div class="pupil"></div>
+            </div>
+        </div>
+        <div class="mouth">
+            <svg viewBox="0 0 100 50">
+                <path d="M10,10 Q50,60 90,10" />
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        const eyes = document.querySelectorAll('.eye');
+        document.addEventListener('mousemove', (event) => {
+            eyes.forEach(eye => {
+                const pupil = eye.querySelector('.pupil');
+                const rect = eye.getBoundingClientRect();
+                const eyeCenterX = rect.left + rect.width / 2;
+                const eyeCenterY = rect.top + rect.height / 2;
+                const angle = Math.atan2(event.clientY - eyeCenterY, event.clientX - eyeCenterX);
+                const maxDistanceX = (rect.width - pupil.offsetWidth) / 2;
+                const maxDistanceY = (rect.height - pupil.offsetHeight) / 2;
+                const pupilX = Math.cos(angle) * maxDistanceX;
+                const pupilY = Math.sin(angle) * maxDistanceY;
+                pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
