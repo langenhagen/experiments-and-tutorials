@@ -71,7 +71,7 @@ async def async_main():
 try:
     asyncio.run(async_main())
 except ExceptionGroup as eg:
-    print(f"Caught ExceptionGroup with {len(eg.exceptions)} exceptions:")
+    print(f"Caught ExceptionGroup with {type(eg.exceptions)=} and {len(eg.exceptions)=} exceptions:")
     for exc in eg.exceptions:
         print(f" - {exc.__class__.__name__}: {exc}")
 
