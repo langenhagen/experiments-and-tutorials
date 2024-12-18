@@ -1,23 +1,15 @@
-<!--
-Googley Eyes.
-
-Invented by me, andreasl, inspired by LocoRoco, code written by ChatGPT o1-preview.
-
-2024-11-27
--->
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Googly Eyes</title>
     <style>
         :root {
-            --eye-size: 50px;       /* Adjust the size of the eyes here */
-            --pupil-size: 30px;      /* Adjust the size of the pupils here */
-            --background-color: #f6cb4a;  /* Background color */
-            --mouth-width: 200px;    /* Width of the mouth */
-            --mouth-height: 100px;   /* Height of the mouth */
-            --mouth-stroke: 3px;     /* Thickness of the mouth stroke */
+            --eye-size: 50px;
+            --pupil-size: 30px;
+            --background-color: #f6cb4a;
+            --mouth-width: 200px;
+            --mouth-height: 100px;
+            --mouth-stroke: 3px;
         }
         body {
             background-color: var(--background-color);
@@ -71,20 +63,15 @@ Invented by me, andreasl, inspired by LocoRoco, code written by ChatGPT o1-previ
 <body>
     <div class="face">
         <div class="eyes">
-            <div class="eye">
-                <div class="pupil"></div>
-            </div>
-            <div class="eye">
-                <div class="pupil"></div>
-            </div>
+            <div class="eye"><div class="pupil"></div></div>
+            <div class="eye"><div class="pupil"></div></div>
         </div>
         <div class="mouth">
             <svg viewBox="0 0 100 50">
-                <path d="M10,10 Q50,60 90,10" />
+                <path id="mouthPath" d="M10,10 Q50,60 90,10" />
             </svg>
         </div>
     </div>
-
     <script>
         const eyes = document.querySelectorAll('.eye');
         document.addEventListener('mousemove', (event) => {
@@ -101,6 +88,77 @@ Invented by me, andreasl, inspired by LocoRoco, code written by ChatGPT o1-previ
                 pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
             });
         });
+
+        // Combined Parameters
+        const wiggleIntervalSecs = 5;
+        const wiggleDurationSecs = 3;
+
+        // "Initial wiggle" parameters
+        const wiggleFrequency = 5;
+        const wiggleAmplitude = 10;
+
+        // "Wave along path" parameters
+        const waveAmplitude = 5;
+        const numHumps = 2;
+        const steps = 200;
+
+        const mouthPath = document.getElementById('mouthPath');
+        let wiggleStart = null;
+
+        const P0 = {x:10, y:10};
+        const P1Base = {x:50, y:60}; // base control point
+        const P2 = {x:90, y:10};
+
+        function bezier(t, p0, p1, p2) {
+            const u = 1 - t;
+            const x = u*u*p0.x + 2*u*t*p1.x + t*t*p2.x;
+            const y = u*u*p0.y + 2*u*t*p1.y + t*t*p2.y;
+            return {x, y};
+        }
+
+        function getFadeFactor(elapsed, total) {
+            const half = total / 2;
+            return (elapsed < half) ? (elapsed / half) : ((total - elapsed) / half);
+        }
+
+        function generateWavePath(mainProgress, fadeFactor, tForMainWiggle) {
+            // First, compute yControl from initial wiggle (single Q-based wiggle)
+            const t = tForMainWiggle * wiggleFrequency * 2 * Math.PI;
+            const yControl = P1Base.y + Math.sin(t) * wiggleAmplitude * fadeFactor;
+
+            // Adjust P1 dynamically
+            const P1 = {x: P1Base.x, y: yControl};
+
+            let d = "";
+            for (let i = 0; i <= steps; i++) {
+                const bt = i / steps;
+                let {x, y} = bezier(bt, P0, P1, P2);
+                // Add the wave along the path
+                y += Math.sin(bt * numHumps * 2.4 * Math.PI + mainProgress) * waveAmplitude * fadeFactor;
+                d += (i === 0) ? `M${x},${y}` : ` L${x},${y}`;
+            }
+            return d;
+        }
+
+        function animateWiggle(timestamp) {
+            if (!wiggleStart) wiggleStart = timestamp;
+            const elapsed = (timestamp - wiggleStart) / 1000;
+            if (elapsed < wiggleDurationSecs) {
+                const fadeFactor = getFadeFactor(elapsed, wiggleDurationSecs);
+                // mainProgress for the wave along path
+                const mainProgress = elapsed * 2 * Math.PI * 4;
+                // tForMainWiggle for initial Q wiggle
+                const tForMainWiggle = elapsed;
+                mouthPath.setAttribute('d', generateWavePath(mainProgress, fadeFactor, tForMainWiggle));
+                requestAnimationFrame(animateWiggle);
+            } else {
+                mouthPath.setAttribute('d', "M10,10 Q50,60 90,10");
+                wiggleStart = null;
+                setTimeout(() => requestAnimationFrame(animateWiggle), wiggleIntervalSecs * 1000);
+            }
+        }
+
+        setTimeout(() => requestAnimationFrame(animateWiggle), wiggleIntervalSecs * 1000);
     </script>
 </body>
 </html>
