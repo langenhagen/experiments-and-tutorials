@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;overflow:hidden;background-color:black;">
+<img id="dvd" src="image.png" style="position:absolute;top:0;left:0;filter:hue-rotate(0deg);transform-origin:top left;"/>
+<script>
+let scale = 0.5
+let x = 0, y = 0
+let dx = 2, dy = 2
+let hue = 0
+let radius = 500 // bounding circle radius
+const speed = Math.sqrt(dx*dx + dy*dy)
+
+const img = document.getElementById('dvd')
+img.style.transform = `scale(${scale})`
+
+window.addEventListener('mousemove', e => {
+  let imgWidth = img.naturalWidth * scale
+  let imgHeight = img.naturalHeight * scale
+  let centerX = x + imgWidth/2
+  let centerY = y + imgHeight/2
+  let dist = Math.sqrt((e.clientX - centerX)**2 + (e.clientY - centerY)**2)
+  if (dist <= radius) {
+    let nx = (e.clientX - centerX) / dist
+    let ny = (e.clientY - centerY) / dist
+    dx = nx * speed
+    dy = ny * speed
+    changeColor()
+  }
+})
+
+function move() {
+  x += dx; y += dy
+  let imgWidth = img.naturalWidth * scale
+  let imgHeight = img.naturalHeight * scale
+
+  if (x + imgWidth > window.innerWidth || x < 0) {
+    dx = -dx
+    changeColor()
+  }
+  if (y + imgHeight > window.innerHeight || y < 0) {
+    dy = -dy
+    changeColor()
+  }
+
+  img.style.transform = `translate(${x}px,${y}px) scale(${scale})`
+  requestAnimationFrame(move)
+}
+
+function changeColor() {
+  hue = (hue + 60) % 360
+  img.style.filter = `hue-rotate(${hue}deg)`
+}
+
+move()
+</script>
+</body>
+</html>
