@@ -82,10 +82,10 @@ print("\n--- 3 except* syntax ---\n")
 def raise_combined_exceptions():
     """Raise an ExceptionGroup with a mix of different exceptions."""
     exceptions = [
-        ZeroDivisionError("ZeroDivision"),
+        ZeroDivisionError("My ZeroDivision"),
         ZeroDivisionError("Other ZeroDivision"),
-        KeyError("KeyError"),
-        ValueError("ValueError"),
+        KeyError("My KeyError"),
+        ValueError("My ValueError"),
     ]
     raise ExceptionGroup("Combined exception group", exceptions)
 
