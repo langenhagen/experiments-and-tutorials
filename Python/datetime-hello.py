@@ -27,3 +27,9 @@ except TypeError:  # can't subtract offset-naive and offset-aware datetimes
         "Exception: can't subtract offset-naive and offset-aware datetimes"
         f"{utcnow=} and {utcnow2=}"
     )
+
+print("\n--- 4 string from time ---\n")
+
+now_str = now.strftime("%Y-%m-%d--%H-%M-%S")
+print(f'{now.strftime("%Y-%m-%d--%H-%M-%S") = }')
+print(now_str)
