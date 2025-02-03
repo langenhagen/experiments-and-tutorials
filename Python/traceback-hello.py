@@ -8,7 +8,6 @@ See: https://docs.python.org/3.6/library/traceback.html
 """
 import sys
 import traceback
-from typing import List
 
 print("--- 1 print a traceback ---")
 
@@ -25,8 +24,8 @@ def bar(i):
     # short recipe:
     # import traceback
     # "".join(traceback.format_list(traceback.extract_stack()))
-    stack: List[traceback.FrameSummary] = traceback.extract_stack()
-    formatted: List[str] = traceback.format_list(stack)
+    stack: list[traceback.FrameSummary] = traceback.extract_stack()
+    formatted: list[str] = traceback.format_list(stack)
     print("formatted:")
     print("".join(formatted))
     print('END manually print stack trace via "".join(format_list(extract_stack()))\n')
