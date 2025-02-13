@@ -12,9 +12,11 @@
 #   bash setup.sh --clean   # clean already existing artifacts and set up the project
 set -e
 
+sudo apt update && sudo apt install --yes ffmpeg
+
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-[[ "$*" =~ '--clean' ]] && rm -fr '.venv/'
+[[ "$*" =~ '--clean' ]] && rm -fr '.venv/' && rm 'voices.json'
 
 python -m venv .venv
 # shellcheck disable=SC1091
