@@ -21,6 +21,6 @@
 set -x
 
 ebook_file="${1:-myebook.epub}"
-voice='af_sky'
+voice="${2:-af_sky}"
 
 audiblez "$ebook_file" -l en-gb -v "$voice"
