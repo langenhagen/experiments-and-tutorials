@@ -19,6 +19,6 @@
 set -x
 
 ebook_file="${1:-myebook.epub}"
-voice="${2:-af_sky}"
+voice="${2:-af_heart}"
 
 time audiblez "$ebook_file" -v "$voice"
