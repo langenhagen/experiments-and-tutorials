@@ -39,15 +39,18 @@ else:
     [Kokoro](/kˈOkəɹO/) is an open-weight TTS model with 82 million parameters. Despite its lightweight architecture, it delivers comparable quality to larger models while being significantly faster and more cost-efficient. With Apache-licensed weights, [Kokoro](/kˈOkəɹO/) can be deployed anywhere from production environments to personal projects.
     """
 
-# 4️⃣ Generate, display, and save audio files in a loop.
+samplerate = 24000
 generator = pipeline(
     text,
     voice="af_heart",  # change voice here
     speed=1,
     split_pattern=r"\n+",
 )
-for i, (gs, ps, audio) in enumerate(generator):
-    print(i)  # i: index
-    print(gs)  # gs: graphemes/text
-    print(ps)  # ps: phonemes
-    sf.write(f"{filename}{i}.wav", audio, 24000)  # save each audio file
+
+with sf.SoundFile(f"{filename}-combined.wav", mode="w", channels=1, samplerate=samplerate) as outfile:
+    for i, (gs, ps, audio) in enumerate(generator):
+        print(i)  # i: index
+        print(gs)  # gs: graphemes/text
+        print(ps)  # ps: phonemes
+        sf.write(f"{filename}{i}.wav", audio, samplerate=samplerate)  # save each audio fragment
+        outfile.write(audio)  # concat all audio fragments to a big file
