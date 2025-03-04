@@ -1,3 +1,0 @@
-bpython
-mypy
-numpy==1.26.4

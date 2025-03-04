@@ -1,3 +1,4 @@
 bpython
-numpy
+mypy
+numpy==1.26.4
 opencv-python
