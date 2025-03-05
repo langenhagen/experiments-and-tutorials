@@ -52,5 +52,5 @@ with sf.SoundFile(f"{filename}-combined.wav", mode="w", channels=1, samplerate=s
         print(i)  # i: index
         print(gs)  # gs: graphemes/text
         print(ps)  # ps: phonemes
-        sf.write(f"{filename}{i}.wav", audio, samplerate=samplerate)  # save each audio fragment
+        # sf.write(f"{filename}{i}.wav", audio, samplerate=samplerate)  # save each audio fragment
         outfile.write(audio)  # concat all audio fragments to a big file
