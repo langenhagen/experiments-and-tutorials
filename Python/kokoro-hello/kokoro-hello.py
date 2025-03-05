@@ -2,7 +2,7 @@
 """Showcase the AI powered text-to-speech package Kokoro, famous for being
 comparably small and efficient while still having good quality.
 
-taken from: https://github.com/hexgrad/kokoro ; bit modified
+based on: https://github.com/hexgrad/kokoro
 
 Usage:
 
