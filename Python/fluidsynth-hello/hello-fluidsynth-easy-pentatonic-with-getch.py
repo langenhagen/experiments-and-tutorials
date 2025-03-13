@@ -42,7 +42,7 @@ note_names = [
     "G#",
     "A",
     "A#",
-    "B"
+    "B",
 ]
 pentatonic_offsets = [
     0,
@@ -70,7 +70,7 @@ def play_note():
     pentatonic_offset = pentatonic_offsets[note % len(pentatonic_offsets)]
     note = octave_offset + key_offset + pentatonic_offset
     note_name = note_names[(octave_offset + key_offset + pentatonic_offset) % 12]
-    print( f"{note_name}_{octave_offset // 12}  ({note})")
+    print(f"{note_name}_{octave_offset // 12}  ({note})")
     synth.noteon(0, note, 100)
 
 

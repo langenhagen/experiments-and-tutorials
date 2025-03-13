@@ -14,6 +14,7 @@ Install the 3rd party librariies `requests` and `aiohttp` via:
 See:
 https://towardsdatascience.com/fast-and-async-in-python-accelerate-your-requests-using-asyncio-62dafca83c33
 """
+
 import asyncio
 from timeit import default_timer as timer
 

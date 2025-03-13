@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Little showcase server for Websockets via FastAPI."""
+
 import logging
 
 import uvicorn

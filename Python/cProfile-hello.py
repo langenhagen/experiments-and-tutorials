@@ -19,6 +19,7 @@ See also `tuna`, an interactive visualizer for profile files: https://github.com
     tuna profile-results.prof
 
 """
+
 import cProfile
 import pstats
 from time import sleep

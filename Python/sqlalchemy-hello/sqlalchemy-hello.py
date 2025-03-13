@@ -24,6 +24,7 @@ Tutorial:
     - https://github.com/leportella/sqlalchemy-basics-post/
 
 Tested with sqlalchemy 1.3.20."""
+
 import datetime
 
 import sqlalchemy as db

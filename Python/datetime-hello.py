@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the use of date and time in Python."""
+
 import datetime as dt
 
 print("--- 1 - now ---\n")

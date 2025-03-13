@@ -5,6 +5,7 @@ import curses
 
 class LineView:
     """Draws consecutive Line objects in a curses textpad."""
+
     def __init__(self, lines):
         self._cursor_pos = 0
         self.lines = lines
@@ -16,7 +17,7 @@ class LineView:
             self.y,
             0,
             self.view_rows,
-            self.view_cols
+            self.view_cols,
         )
 
     @property
@@ -35,7 +36,7 @@ class LineView:
             self.y_offset = value - self.view_rows + self.y
 
         self.lines[self._cursor_pos].draw(self.pad, self._cursor_pos, False)
-        self.lines[value].draw(self.pad, value, True, ' ')
+        self.lines[value].draw(self.pad, value, True, " ")
         self._cursor_pos = value
         self._refresh()
 
@@ -50,7 +51,7 @@ class LineView:
         self.pad = curses.newpad(rows, cols)
 
         for i, line in enumerate(self.lines):
-            line.draw(self.pad, i, i == self._cursor_pos, ' ')
+            line.draw(self.pad, i, i == self._cursor_pos, " ")
             i += 1
 
         self._refresh()

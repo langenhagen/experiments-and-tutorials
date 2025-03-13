@@ -10,6 +10,7 @@ found here:
 http://people.csail.mit.edu/hubert/pyaudio/#wire-callback-example
 
 """
+
 import time
 
 import pyaudio

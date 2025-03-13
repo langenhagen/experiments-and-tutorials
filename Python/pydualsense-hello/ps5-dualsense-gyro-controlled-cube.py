@@ -2,6 +2,7 @@
 """Showcase a 3D cube that can be controlled via your PS5 DualSense controller's
 gyro or keyboard arrow keys.
 """
+
 from contextlib import suppress
 
 import pygame

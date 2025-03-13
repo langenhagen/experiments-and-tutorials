@@ -12,6 +12,7 @@ Tested with pynput 1.7.1.
 
 author: andreasl
 """
+
 import pynput
 
 KeyboardListener = pynput.keyboard.Listener

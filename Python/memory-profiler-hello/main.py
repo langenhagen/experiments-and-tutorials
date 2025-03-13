@@ -19,6 +19,7 @@ Works, though.
 
 See: https://pypi.org/project/memory-profiler/
 """
+
 import time
 
 from memory_profiler import profile

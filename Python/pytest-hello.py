@@ -8,12 +8,13 @@ Based on:
 - https://www.oreilly.com/library/view/python-testing-with/9781680502848/f_0046.xhtml
 - https://docs.pytest.org/en/6.2.x/parametrize.html
 """
+
 import pytest
 
 
 def greet(name):
     """A sample function."""
-    print("Hi, {}".format(name))
+    print(f"Hi, {name}")
 
 
 def raise_exc():

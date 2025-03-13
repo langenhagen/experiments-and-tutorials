@@ -7,11 +7,13 @@ See:
 
 author: andreasl
 """
+
 import asyncio
 
 import anyio
 
 print("--- 1 simple cancel ---\n")
+
 
 async def task1():
     print("Starting task...")
@@ -29,13 +31,14 @@ async def task1():
 
     print("Finished task")  # doesn't get called
 
+
 async def foo():
     async with anyio.create_task_group() as tg:
-
         tg.start_soon(task1)
 
         await anyio.sleep(1)
         tg.cancel_scope.cancel()
+
 
 anyio.run(foo)
 
@@ -53,6 +56,7 @@ async def task2():
         raise
     except ValueError as e:
         print(f"Caught ValueError: {e}")
+
 
 async def bar():
     async with anyio.create_task_group() as tg:

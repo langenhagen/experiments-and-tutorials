@@ -4,6 +4,7 @@ Showcase the usage of a Python3 ThreadPoolExecutor.
 
 Based on: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
 """
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.request import urlopen
 
@@ -34,7 +35,7 @@ for future in as_completed(future_to_url):
     try:
         data = future.result()
     except Exception as exc:
-        print("{!r} generated an exception: {}".format(url, exc))
+        print(f"{url!r} generated an exception: {exc}")
     else:
         print("%r page is %d bytes" % (url, len(data)))
 

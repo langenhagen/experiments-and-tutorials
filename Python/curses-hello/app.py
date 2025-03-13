@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Contains a scaffold for my typical Curses-based application."""
+
 import curses
 
 import common
@@ -27,7 +28,6 @@ class CursesApp:
         self.redraw()
         self.keep_running = True
         while self.keep_running:
-
             key = screen.getch()
             if key == curses.KEY_RESIZE:
                 self.handle_key_resize_event()

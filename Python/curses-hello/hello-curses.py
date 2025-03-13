@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Curses Hello World Playground."""
+
 import curses
 import time
 

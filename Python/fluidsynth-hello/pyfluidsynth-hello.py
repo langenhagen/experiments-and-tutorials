@@ -3,6 +3,7 @@
 See:
 https://github.com/nwhitehead/pyfluidsynth
 """
+
 import time
 
 import fluidsynth

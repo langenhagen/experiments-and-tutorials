@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Get a random names by querying behindthename.com/random."""
+
 import io
 import random
 
@@ -54,7 +55,6 @@ def get_random_names(n_names: int = 1) -> str | list[str] | None:
         response.raise_for_status()
     except (HTTPError, ReadTimeout):
         return None
-
 
     tree = lxml.etree.parse(io.StringIO(response.text), lxml.etree.HTMLParser())
     result_elements: list[lxml.etree.Element] = tree.xpath(

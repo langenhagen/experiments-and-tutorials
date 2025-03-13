@@ -8,7 +8,7 @@ DeprecationWarning: distutils Version classes are deprecated. Use packaging.vers
 
 from distutils.version import LooseVersion
 
-print ("=== 1 > greater than ===")
+print("=== 1 > greater than ===")
 
 v1 = "1.0.0"
 v2 = "1.0.1"

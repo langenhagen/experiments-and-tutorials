@@ -1,4 +1,5 @@
 """Rename several files in a directory."""
+
 # Muss in das Verzeichnis kopiert werden, in der sie arbeiten soll
 import math
 import os

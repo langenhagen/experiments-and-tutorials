@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Showcase the usage of pandas.merge()"""
+
 import pandas as pd
 
 print(

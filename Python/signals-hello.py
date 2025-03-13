@@ -11,6 +11,7 @@ message:
 
     "signal only works in main thread"
 """
+
 import signal
 import time
 from contextlib import suppress
@@ -23,7 +24,7 @@ class SIGALRMException(Exception):
 def timeout_handler(num, stack):
     """Handler when receiving SIGALRM."""
     print(f"\n*** Received SIGALRM ***\n{num=}\n{stack=}\n---\n")
-    raise SIGALRMException()
+    raise SIGALRMException
 
 
 def long_running_function(seconds: int):

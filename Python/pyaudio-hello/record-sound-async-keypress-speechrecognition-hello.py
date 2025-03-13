@@ -3,6 +3,7 @@ Record a sound via pyyaudio on keypress,
 then send it to Google for speech recognition
 and use the resulting text as a search query for google.com.
 """
+
 import functools
 import io
 import subprocess
@@ -17,14 +18,16 @@ KeyboardListener = pynput.keyboard.Listener
 
 class AudioRecognitionClient:
     """An audio recorder that records as long as you press a button."""
+
     SAMPLE_FORMAT: int = pyaudio.paInt16  # 16 bits per sample
     TRIGGER_KEY = pynput.keyboard.Key.enter
 
     def __init__(
-            self,
-            channels: int = 1,
-            chunk_size: int = 1024,
-            framerate: int = 44100):
+        self,
+        channels: int = 1,
+        chunk_size: int = 1024,
+        framerate: int = 44100,
+    ):
         """Initialize the audio recorder."""
         self.audio_interface = pyaudio.PyAudio()
         self.do_record: bool = False
@@ -39,8 +42,9 @@ class AudioRecognitionClient:
     def recognize(self):
         """Do record audio."""
         with KeyboardListener(
-                on_press=self._on_key_press,
-                on_release=self._on_key_release) as listener:
+            on_press=self._on_key_press,
+            on_release=self._on_key_release,
+        ) as listener:
             while True:
                 if self.do_record:
                     frames = self._record_audio()
@@ -53,7 +57,8 @@ class AudioRecognitionClient:
                         subprocess.run(
                             "/opt/google/chrome/chrome "
                             f"https://www.google.com/search?q={slug}",
-                            shell=True,)
+                            shell=True,
+                        )
 
                 time.sleep(0.1)  # reduce the amount of cpu load like a lot
 
@@ -72,12 +77,13 @@ class AudioRecognitionClient:
             self.do_record = False
 
     def _fill_audio_buffer(
-            self,
-            frames: io.BytesIO,
-            in_data,
-            frame_count,
-            time_info,
-            status_flags):
+        self,
+        frames: io.BytesIO,
+        in_data,
+        frame_count,
+        time_info,
+        status_flags,
+    ):
         """Continuously collect from the audio stream, into the buffer."""
         if self.do_record:
             frames.write(in_data)
@@ -95,7 +101,9 @@ class AudioRecognitionClient:
             rate=self.framerate,
             stream_callback=functools.partial(
                 self._fill_audio_buffer,
-                frames))
+                frames,
+            ),
+        )
 
         while audio_stream.is_active():
             pass
@@ -110,7 +118,8 @@ class AudioRecognitionClient:
         audio = sr.AudioData(
             frames.getvalue(),
             self.framerate,
-            pyaudio.get_sample_size(self.SAMPLE_FORMAT))
+            pyaudio.get_sample_size(self.SAMPLE_FORMAT),
+        )
 
         recognizer = sr.Recognizer()
         response = None

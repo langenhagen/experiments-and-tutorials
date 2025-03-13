@@ -11,6 +11,7 @@ Spoiler:
 
 author: andreasl
 """
+
 import array
 from time import perf_counter
 

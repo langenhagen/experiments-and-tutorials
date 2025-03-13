@@ -5,9 +5,10 @@ The experiment can show that a process spawned by `subprocess.Popen()` does not
 require initially as much RAM as the mother process. I suppose this is due to
 the copy-on-write behavior on Linux.
 """
-import subprocess
+
 import math
 import os
+import subprocess
 
 import psutil
 

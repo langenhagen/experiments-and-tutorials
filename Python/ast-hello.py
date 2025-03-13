@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the usage of the Abstract Syntax Tree module ast."""
+
 import ast
 import sys
 from dataclasses import dataclass

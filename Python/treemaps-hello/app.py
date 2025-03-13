@@ -2,6 +2,7 @@
 Test the treemap module.
 author: andreasl
 """
+
 import random
 import tkinter
 import tkinter.font
@@ -74,8 +75,8 @@ class Application:
         self.canvas.delete("all")
         self.rectangles = []
         for i in items_and_layouts:
-            blue = "0x{:02x}".format(int((100 - i[0].value) / 100 * 255))[2:]
-            red = "0x{:02x}".format(int(i[0].value / 100 * 255))[2:]
+            blue = f"0x{int((100 - i[0].value) / 100 * 255):02x}"[2:]
+            red = f"0x{int(i[0].value / 100 * 255):02x}"[2:]
             color = f"#{red}00{blue}"
 
             r = Rectangle(i[0], self.canvas, f"<TEXT>", i[1], color)

@@ -43,7 +43,6 @@ c._C__private_method()
 print("\n--- 4 calling __private_method() in a child class breaks ---\n")
 
 
-
 try:
     d.bar()
 except AttributeError as e:

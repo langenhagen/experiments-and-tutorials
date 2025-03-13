@@ -6,6 +6,7 @@ in relationships.
 According to SQLAlchemy docs, better use `back_populates` as opposed to the
 legacy `backref`.
 """
+
 from bpython import embed
 from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base

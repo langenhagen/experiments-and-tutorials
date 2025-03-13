@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase simple usage of Python's standard library INI config parser."""
+
 from configparser import ConfigParser
 
 ini_file = "myconfig.ini"

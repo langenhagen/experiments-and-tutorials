@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Showcases the usage of a Flaks app served via Gunicorn."""
+
 import time
 
 from flask import Flask

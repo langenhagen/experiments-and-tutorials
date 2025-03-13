@@ -3,6 +3,7 @@
 
 Simple but flawed. Also scrapes the javascript-scripts.
 """
+
 import re
 
 import bs4

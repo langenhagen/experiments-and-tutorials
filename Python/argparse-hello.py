@@ -8,6 +8,7 @@ https://pymotw.com/3/argparse/index.html
 https://docs.python.org/3/library/argparse.html#nargs
 https://stackoverflow.com/questions/15753701/how-can-i-pass-a-list-as-a-command-line-argument-with-argparse
 """
+
 import argparse
 import pathlib
 from argparse import ArgumentParser, Namespace
@@ -101,6 +102,7 @@ group.add_argument(
     action="store_true",
     help="A flag",
 )
+
 
 # custom typechecks - cause a nice crash with the look and feel of argparse
 def __check_unsigned_int(arg: str) -> int:

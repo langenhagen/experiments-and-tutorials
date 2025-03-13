@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the usage of the package harvesters to get images from a GenICam
 standard camera."""
+
 import datetime as dt
 import logging
 import sys

@@ -6,6 +6,7 @@ See:
 https://github.com/nwhitehead/pyfluidsynth
 https://github.com/nwhitehead/pyfluidsynth/blob/master/fluidsynth.py
 """
+
 import fluidsynth
 import numpy
 import pyaudio

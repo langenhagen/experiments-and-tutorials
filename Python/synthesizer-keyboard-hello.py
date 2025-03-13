@@ -3,6 +3,7 @@
 """Showcase the usage of the package synthesizer and pynput by making
 a sound by hitting any key on the keyboard.
 """
+
 import pynput
 import synthesizer
 

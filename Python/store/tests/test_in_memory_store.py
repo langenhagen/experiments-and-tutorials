@@ -1,4 +1,5 @@
 """Tests for `in_memory_store.py`."""
+
 from dataclasses import dataclass, field
 from typing import Generator
 

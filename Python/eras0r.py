@@ -17,6 +17,7 @@ EXAMPLE:
 eras0r.py -r "C:\Crunch it\" -i .\_Lib -i .\Liepham *.tlog ipch *.pdb
 """
 
+
 def main(argv):
 
     # get command line arguments
@@ -43,40 +44,36 @@ def main(argv):
     if input("About to delete files. Proceed? (y): ") != "y":
         sys.exit(2)
 
-
     # transform glob patterns to regular expressions
-    deletes = r'|'.join([fnmatch.translate(x) for x in deletes]) or r'$.'
-
+    deletes = r"|".join([fnmatch.translate(x) for x in deletes]) or r"$."
 
     # walk through directory tree
-    for root, dirs, files in os.walk( root_dir):
+    for root, dirs, files in os.walk(root_dir):
 
         # ignore dirs
         dirs[:] = [d for d in dirs if os.path.join(root, d) not in ignores]
         del_dirs = [d for d in dirs if re.match(deletes, d)]
         dirs[:] = [d for d in dirs if d not in del_dirs]
 
-
         # exclude/include files
         files = [f for f in files if re.match(deletes, f)]
         files = [f for f in files if f not in ignores]
 
-        #delete files
+        # delete files
         for file in files:
             print("REMOVING:     ", os.path.join(root, file))
             try:
-                os.remove( os.path.join(root, file))
+                os.remove(os.path.join(root, file))
             except OSError as error:
-                print( error)
+                print(error)
 
-        #delete directories
+        # delete directories
         for dir in del_dirs:
-            print("REMOVING DIR: ", os.path.join(root,dir))
+            print("REMOVING DIR: ", os.path.join(root, dir))
             try:
                 shutil.rmtree(os.path.join(root, dir))
             except OSError as error:
-                print( error)
-
+                print(error)
 
     print("Done.")
 

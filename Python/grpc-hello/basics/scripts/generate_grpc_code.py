@@ -9,6 +9,7 @@ Usage:
 
     python3 generate_grpc_code.py
 """
+
 from os import chdir
 from pathlib import Path
 

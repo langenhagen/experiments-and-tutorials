@@ -9,6 +9,7 @@ Use an external tool to measure the memory usage of sorted().
 
 author: andreasl
 """
+
 from os import getpid
 from sys import getsizeof
 

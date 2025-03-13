@@ -9,6 +9,7 @@ It can monitor application performance and system resource usage in real-time.
 
 author: andreasl
 """
+
 import os
 
 import psutil

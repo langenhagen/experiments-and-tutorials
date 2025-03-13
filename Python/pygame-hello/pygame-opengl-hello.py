@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """A simple rotating cube."""
+
 import pygame
-from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from pygame.locals import *
 
 # Define the vertices, edges, and surfaces of the cube
 vertices = (
@@ -14,7 +15,7 @@ vertices = (
     (1, -1, 1),
     (1, 1, 1),
     (-1, -1, 1),
-    (-1, 1, 1)
+    (-1, 1, 1),
 )
 
 edges = (
@@ -29,7 +30,7 @@ edges = (
     (0, 4),
     (1, 5),
     (2, 7),
-    (3, 6)
+    (3, 6),
 )
 
 surfaces = (
@@ -38,7 +39,7 @@ surfaces = (
     (6, 7, 5, 4),
     (2, 7, 6, 3),
     (1, 5, 7, 2),
-    (4, 0, 3, 6)
+    (4, 0, 3, 6),
 )
 
 colors = (
@@ -47,8 +48,9 @@ colors = (
     (0, 0, 1),  # Blue
     (1, 1, 0),  # Yellow
     (1, 0, 1),  # Magenta
-    (0, 1, 1)   # Cyan
+    (0, 1, 1),  # Cyan
 )
+
 
 def Cube():
     glBegin(GL_QUADS)
@@ -65,6 +67,7 @@ def Cube():
         for vertex in edge:
             glVertex3fv(vertices[vertex])
     glEnd()
+
 
 def main():
     pygame.init()
@@ -104,6 +107,7 @@ def main():
         glPopMatrix()
 
         pygame.display.flip()
+
 
 if __name__ == "__main__":
     main()

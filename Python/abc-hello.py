@@ -1,4 +1,5 @@
 """Showcase usage of the module Abstract Base Class."""
+
 import abc
 
 # @abc.abstractstaticmethod is deprecated

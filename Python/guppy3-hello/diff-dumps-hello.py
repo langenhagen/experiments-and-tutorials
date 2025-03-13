@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Compare 2 guppy3/heapy heap dumps."""
+
 from pathlib import Path
 
 from guppy import hpy
@@ -10,7 +11,7 @@ dir = max([d for d in memdumps_root.iterdir() if d.is_dir()])
 
 print(dir)
 
-files = [f for f in dir.glob('*.out')]
+files = [f for f in dir.glob("*.out")]
 oldest_dump = min(files)
 youngest_dump = max(files)
 

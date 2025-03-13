@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Record sound via pyyaudio on keypress."""
+
 import functools
 import time
 import wave

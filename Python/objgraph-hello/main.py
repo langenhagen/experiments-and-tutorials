@@ -8,6 +8,7 @@ See: https://mg.pov.lt/objgraph/
 
 author: andreasl
 """
+
 import objgraph
 
 print("--- 1 display growth of object types ---\n")

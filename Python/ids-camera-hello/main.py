@@ -4,6 +4,7 @@
 Based on the product's sample under
 `/opt/ids-peak_2.1.0.0-14251_amd64/local/src/ids/samples/peak/python/simple_live_qtwidgets/`.
 """
+
 import logging
 import sys
 from typing import Any
@@ -35,6 +36,7 @@ def _get_device() -> Any:
     assert device is not None, "Oh no! Device is None!"
 
     return device
+
 
 def _something_something_datastream(device: Any) -> Any:
     """TODO doc"""
@@ -85,6 +87,7 @@ def main():
     datastream = _something_something_datastream(device)
 
     _start_aquisition()
+
 
 if __name__ == "__main__":
     sys.exit(main())

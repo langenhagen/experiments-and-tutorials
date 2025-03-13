@@ -18,7 +18,6 @@ def main():
         if key == 27:
             running = False
             break
-        pass
 
     curses.endwin()
 

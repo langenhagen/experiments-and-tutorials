@@ -4,7 +4,8 @@
 Fyi, ndarray is not a Sequence: https://stackoverflow.com/questions/76082807/why-numpy-array-is-not-of-sequence-type.
 """
 
-from typing import Sequence, TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence
+
 import numpy as np
 
 if TYPE_CHECKING:

@@ -4,6 +4,7 @@ Based on `GxSingleCamColor.py` version:1.0.1905.9051
 
 author: andreasl
 """
+
 import traceback
 
 import cv2
@@ -13,15 +14,15 @@ import numpy as np
 
 def main():
     # print the demo information
-    print("")
+    print()
     print("-------------------------------------------------------------")
     print(
         "Modified sample to show how to acquire color image continuously and show image."
     )
     print("-------------------------------------------------------------")
-    print("")
+    print()
     print("Initializing......")
-    print("")
+    print()
 
     # create a device manager
     device_manager = gx.DeviceManager()
@@ -112,11 +113,9 @@ def main():
         elif key == 82:  # up key
             color_correction_param += 1
             print(f"{color_correction_param=}")
-            pass
         elif key == 84:  # down key
             color_correction_param -= 1
             print(f"{color_correction_param=}")
-            pass
 
         # convert BGR to RGB bc OpenCV deals in BGR
         image: cv2.Mat = cv2.cvtColor(numpy_image, cv2.COLOR_BGR2RGB)

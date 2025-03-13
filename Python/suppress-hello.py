@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the context manager contextlib.suppress() that allows for convenient
 ignoring of exceptions"""
+
 import time
 from contextlib import suppress
 
@@ -40,7 +41,7 @@ def foo():
     i = 10
     while True:
         print(f"{i} Press <CTRL + C> or wait")
-        print(f"1/{i} = {1/i}")
+        print(f"1/{i} = {1 / i}")
         i -= 1
         time.sleep(1)
 

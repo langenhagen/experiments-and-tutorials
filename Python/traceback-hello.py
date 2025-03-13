@@ -6,6 +6,7 @@ There are different approaches when exceptions are involved.
 
 See: https://docs.python.org/3.6/library/traceback.html
 """
+
 import sys
 import traceback
 

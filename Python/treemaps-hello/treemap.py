@@ -15,6 +15,7 @@ author: andreasl
 
 TODO make docs with c1 standards compliant.
 """
+
 from dataclasses import dataclass
 from typing import List
 

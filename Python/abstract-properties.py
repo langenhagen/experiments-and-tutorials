@@ -1,4 +1,5 @@
 """Showcase properties in Python, especially defined in an abstract base class."""
+
 from abc import ABC, abstractmethod
 
 

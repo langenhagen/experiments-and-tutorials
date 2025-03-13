@@ -10,6 +10,7 @@ key-value pairs for configuration.
 
 See: https://pypi.org/project/python-decouple/
 """
+
 from decouple import Config, Csv, RepositoryEnv, UndefinedValueError, config
 
 print("--- 1 basic usage ---\n")

@@ -26,7 +26,7 @@ note_names = [
     "G#",
     "A",
     "A#",
-    "B"
+    "B",
 ]
 pentatonic_offsets = [
     0,
@@ -37,6 +37,7 @@ pentatonic_offsets = [
 ]
 key_offset = random.randrange(0, 11)
 counter = 0
+
 
 def on_press(key):
     """Play a note."""
@@ -58,7 +59,7 @@ def on_press(key):
     pentatonic_offset = pentatonic_offsets[note % len(pentatonic_offsets)]
     note = octave_offset + key_offset + pentatonic_offset
     note_name = note_names[(octave_offset + key_offset + pentatonic_offset) % 12]
-    print( f"{note_name}_{octave_offset // 12}  ({note})")
+    print(f"{note_name}_{octave_offset // 12}  ({note})")
     synth.noteon(0, note, 100)
 
 

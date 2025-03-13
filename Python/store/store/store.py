@@ -1,4 +1,5 @@
 """Store interface definition."""
+
 from abc import ABC, abstractmethod
 from typing import Any, Generator, Generic, TypeVar
 

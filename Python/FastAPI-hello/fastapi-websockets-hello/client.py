@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Little showcase client for Websockets in Python."""
+
 import asyncio
 import logging
 from contextlib import suppress
@@ -21,7 +22,6 @@ async def main() -> None:
     uri = "ws://localhost:8000/ws"
 
     async with websockets.connect(uri) as websocket:
-
         try:
             response = await websocket.recv()
             logger.info("Received: %s", response)

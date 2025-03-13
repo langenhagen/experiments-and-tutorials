@@ -18,6 +18,7 @@ Run via e.g.:
 See: https://stackoverflow.com/questions/4673373/logging-within-pytest-tests
 and: https://stackoverflow.com/questions/16337511/log-all-requests-from-the-python-requests-module
 """
+
 import logging
 
 import requests

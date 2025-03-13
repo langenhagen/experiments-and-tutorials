@@ -3,6 +3,7 @@ Showcase the builtin flexible logging module in Python.
 
 Apparently, the kwargument stack_info does not work with Python 2.
 """
+
 import logging
 import sys
 
@@ -63,7 +64,7 @@ def foo():
 
     print("\n--- 8 dynamic severity levels ---")
     logger.log(logging.DEBUG, "mickey")
-    logger.log(logging.WARN, "mouse")
+    logger.log(logging.WARNING, "mouse")
 
     print("\n--- 9 variable logging ---")
 

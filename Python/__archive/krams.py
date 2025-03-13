@@ -1,15 +1,21 @@
-def call_process( name, args):
+def call_process(name, args):
     """Call subprocess.check_call(name, args) and then checks if it was killed
     by the operating system - which is what we want :)
     """
     try:
         subprocess.check_call([name, args])
     except subprocess.CalledProcessError as e:
-        if (e.returncode != -9):
-            log('ERROR: The given process "' + name + '" with args: "' + args + '" was not killed by the operating system!')
+        if e.returncode != -9:
+            log(
+                'ERROR: The given process "'
+                + name
+                + '" with args: "'
+                + args
+                + '" was not killed by the operating system!'
+            )
             raise
     except Exception as err:
-        log( 'Unhandled exception:\n' + str(err) )
+        log("Unhandled exception:\n" + str(err))
 
 
 def kill_process(name):

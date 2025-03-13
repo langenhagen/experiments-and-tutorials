@@ -4,9 +4,11 @@ Showcase that Python seamlessly writes tracebacks of exception that it raises fr
 Showcase that this looks like impossible call stacks.
 """
 
+
 def outer():
     print("outer()")
     inner()
+
 
 def inner():
     print("inner()")

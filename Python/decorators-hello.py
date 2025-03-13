@@ -1,4 +1,5 @@
 """Showcase Python's decorators"""
+
 from typing import Callable
 
 

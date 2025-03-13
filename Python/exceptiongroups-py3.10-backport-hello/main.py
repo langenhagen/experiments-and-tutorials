@@ -9,9 +9,11 @@ See: https://github.com/agronholm/exceptiongroup
 
 author: andreasl
 """
+
 from exceptiongroup import ExceptionGroup
 
 print("--- 1 catching ExceptionGroups ---\n")
+
 
 def raise_exceptions():
     """Raise and handle 2 exceptions and return/raise them late as an

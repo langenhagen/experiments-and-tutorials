@@ -5,6 +5,7 @@ The types module allows one to inspect and handle specific object types, like
 checking if an object is a function or creating functions dynamically. It is
 useful for dynamic type checking and meta-programming.
 """
+
 import types
 
 print("--- 1 check types of things ---\n")

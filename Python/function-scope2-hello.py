@@ -1,4 +1,5 @@
-""" Showcase that inner functions can see outer params."""
+"""Showcase that inner functions can see outer params."""
+
 import requests
 
 
@@ -12,4 +13,4 @@ def foo(param1):
         bar()
 
 
-foo('Hello')
+foo("Hello")

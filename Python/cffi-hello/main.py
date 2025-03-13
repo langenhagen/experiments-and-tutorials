@@ -3,6 +3,7 @@ Showcase the usage of the cffi module
 
 author: andreasl
 """
+
 import uuid
 
 from _my_cffi_uuid_module import ffi, lib

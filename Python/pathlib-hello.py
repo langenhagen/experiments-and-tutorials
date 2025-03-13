@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Tests and experiments with pathlib."""
+
 from pathlib import Path
 
 print("--- 1  CWD ---\n")

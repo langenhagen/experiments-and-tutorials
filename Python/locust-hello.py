@@ -13,6 +13,7 @@ based on: https://www.youtube.com/watch?v=SOu6hgklQRA
 
 author: andreasl
 """
+
 from locust import HttpUser, between, task
 
 

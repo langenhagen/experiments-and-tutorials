@@ -3,6 +3,7 @@
 
 Tested with selenium==4.16.0 and webdriver-manager==4.0.1.
 """
+
 import time
 
 from selenium.webdriver import Chrome, ChromeService

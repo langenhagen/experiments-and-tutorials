@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Showcase anyio's blocking off-thread stuff."""
-import anyio
+
 import time
+
+import anyio
 
 
 def blocking_fibonacci(n):

@@ -3,6 +3,7 @@ Builds the custom cffi module that we need to interface with the C code.
 
 author: andreasl
 """
+
 from setuptools import setup
 
 setup(

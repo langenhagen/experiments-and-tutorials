@@ -1,4 +1,5 @@
 """Showcase the behavior of nested SQLAlchemy sessions."""
+
 from contextlib import contextmanager
 
 from sqlalchemy import Column, Integer, String, create_engine

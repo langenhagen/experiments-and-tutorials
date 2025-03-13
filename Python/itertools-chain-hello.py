@@ -3,6 +3,7 @@ Fun with itertools.
 itertools.chain() is apparently able to chain even iterator objects.
 
 """
+
 import itertools
 
 import requests

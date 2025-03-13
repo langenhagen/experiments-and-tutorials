@@ -8,6 +8,6 @@ for i in range(1, 100):
     elif i % 5 == 0:
         result = "buzz"
     else:
-        result = "{0}".format(i)
+        result = f"{i}"
 
     print(result)

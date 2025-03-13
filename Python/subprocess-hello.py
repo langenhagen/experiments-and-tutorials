@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Call a shell command from within Python."""
+
 import os
 import subprocess
 

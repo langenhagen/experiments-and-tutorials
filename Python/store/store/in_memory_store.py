@@ -1,4 +1,5 @@
 """A simple deepcopy-based in-memory implementation of the `Store` interface."""
+
 from copy import deepcopy
 from typing import Any, Generator, Iterable, TypeVar
 
@@ -63,7 +64,7 @@ class InMemoryStore(Store[T]):
         """Update all objects matching the query to deep copies of the given
         fields."""
 
-        if any(k in self.__unique_keys for k in fields.keys()):
+        if any(k in self.__unique_keys for k in fields):
             raise NotImplementedError("Updating unique keys is currently not supported")
 
         count = 0

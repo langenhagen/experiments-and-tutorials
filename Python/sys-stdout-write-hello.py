@@ -1,4 +1,5 @@
 """Showcase an acceptable way to write stuff to stdout that is not `print()`."""
+
 import sys
 
 print("--- 1 write() ---\n")

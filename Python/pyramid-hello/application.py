@@ -22,7 +22,7 @@ def view3(request):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 
-    return Response("<h1>hey there! It is: {} </h2>".format(dt_string))
+    return Response(f"<h1>hey there! It is: {dt_string} </h2>")
 
 
 def view_from_template(request):

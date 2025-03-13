@@ -1,4 +1,5 @@
 """Showcase that access via member vars is slower than acces by local references."""
+
 from timeit import timeit
 
 n_repetitions = 10000000

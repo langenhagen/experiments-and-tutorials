@@ -8,6 +8,7 @@ See: https://github.com/igrek51/wat
 
 author: andreasl
 """
+
 from wat import wat
 
 print("--- 1 inspect simple data structures ---\n")

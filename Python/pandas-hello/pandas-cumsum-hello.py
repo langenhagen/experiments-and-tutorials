@@ -2,6 +2,7 @@
 """Showcase the usage of pandas.Series.cumsum().
 
 Also showcase that logging a dataframe prints it nicely."""
+
 import logging
 
 import pandas as pd

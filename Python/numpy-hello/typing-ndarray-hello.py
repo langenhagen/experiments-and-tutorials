@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase np.asarray with numpy.typing.NDArray."""
+
 import numpy as np
 from numpy.typing import NDArray
 

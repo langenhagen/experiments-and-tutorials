@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase simple keyboard input."""
+
 import logging
 import threading
 import time
@@ -11,11 +12,10 @@ def wait_for_event(event):
     starttime = time.time()
     event_is_set = event.wait()
     endtime = time.time()
-    print(f"Thread End: Time: {endtime-starttime}")
+    print(f"Thread End: Time: {endtime - starttime}")
 
 
 if __name__ == "__main__":
-
     print("Wait for key press ENTER to start...")
     input()
 

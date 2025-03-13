@@ -5,6 +5,7 @@ Allows for monitoring memory allocation over time, useful for identifying memory
 
 See docs: https://docs.python.org/3/library/tracemalloc.html
 """
+
 import tracemalloc
 
 print("--- 1 track memory allocations grouped by line number ---\n")
@@ -104,6 +105,6 @@ for index, stat in enumerate(top_stats[:10]):
     print(f"Group {index + 1}:")
     for line in stat.traceback.format():
         print(line)
-    print(f"Total allocated size: {stat.size / 1024 ** 2:.1f} MiB")
+    print(f"Total allocated size: {stat.size / 1024**2:.1f} MiB")
 
 tracemalloc.stop()

@@ -4,6 +4,7 @@ standard camera via stream.
 
 Tested with a Baumer VCXG.2-15C.I.
 """
+
 import datetime as dt
 import logging
 import sys

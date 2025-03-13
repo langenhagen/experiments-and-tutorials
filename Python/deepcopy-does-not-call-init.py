@@ -1,13 +1,14 @@
 """Showcase that deepcopy() appears to not call a class's `__init__()`"""
+
 from copy import deepcopy
 
 
 class C:
     my_class_var = 0
+
     def __init__(self):
         print("Hi!")
-        C.my_class_var +=1
-
+        C.my_class_var += 1
 
 
 assert C.my_class_var == 0

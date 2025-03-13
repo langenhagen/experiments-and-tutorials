@@ -14,8 +14,8 @@ author: andreasl
 """
 
 import threading
-import tracemalloc
 import time
+import tracemalloc
 
 
 def hog_memory(n: int):

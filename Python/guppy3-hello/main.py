@@ -8,6 +8,7 @@ See: https://pypi.org/project/guppy3/
 
 author: andreasl
 """
+
 from guppy import hpy
 
 print("\n--- 1 inspect current memory heap ---\n")

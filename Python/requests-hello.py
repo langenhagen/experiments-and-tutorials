@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Showcase the usage of the common 3rd party Python library `requests`."""
+
 import json
 
 import requests

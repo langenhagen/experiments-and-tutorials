@@ -9,6 +9,7 @@ see:
 
 author: andreasl
 """
+
 from cffi import FFI
 
 # functions that we want to include in our new module

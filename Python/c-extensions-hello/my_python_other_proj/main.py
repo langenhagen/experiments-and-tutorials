@@ -5,6 +5,7 @@ The .so should be in the path of the module
 
 author: andreasl
 """
+
 import myModule
 
 if __name__ == "__main__":

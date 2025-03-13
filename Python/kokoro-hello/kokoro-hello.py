@@ -47,7 +47,12 @@ generator = pipeline(
     split_pattern=r"\n+",
 )
 
-with sf.SoundFile(f"{filename}-combined.wav", mode="w", channels=1, samplerate=samplerate) as outfile:
+with sf.SoundFile(
+    f"{filename}-combined.wav",
+    mode="w",
+    channels=1,
+    samplerate=samplerate,
+) as outfile:
     for i, (gs, ps, audio) in enumerate(generator):
         print(i)  # i: index
         print(gs)  # gs: graphemes/text

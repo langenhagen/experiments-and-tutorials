@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Showcase usage of the 3rd party package `yfinance`."""
+
 import datetime as dt
 
 import forex_python.converter

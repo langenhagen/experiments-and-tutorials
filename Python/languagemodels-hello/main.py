@@ -5,11 +5,12 @@
 
 See: https://github.com/jncraton/languagemodels
 """
+
 import languagemodels as lm
 import wikipedia as wiki
 
 print("\n--- 1 more RAM more smart ---")
-lm.set_max_ram('8gb')  # 512mb should be the default
+lm.set_max_ram("8gb")  # 512mb should be the default
 
 print("\n--- 2 do() - respond to an input ---")
 
@@ -69,11 +70,11 @@ lm.store_doc("Mars is a planet")
 lm.store_doc("The sun is hot")
 
 q = "What is Mars?"
-a=lm.load_doc(q)
+a = lm.load_doc(q)
 print(f"q: {q}\na: {a}.")  # "Mars is a planet"
 
 q = "What is Dandala?"
-a=lm.load_doc(q)
+a = lm.load_doc(q)
 print(f"q: {q}\na: {a}.")  # "The sun is hot." Thanks, I guess
 
 
@@ -81,9 +82,9 @@ print("\n--- 7 store and retrieve semantic info more more realworld scenario ---
 
 context = wiki.page("A Midsummer Night's Dream", auto_suggest=False).content
 for i in range(0, len(context), 1000):
-    part = context[i:i+1000]
+    part = context[i : i + 1000]
     lm.store_doc(part)
 
-q="tell me about Fairies"
-a=lm.get_doc_context(q)
+q = "tell me about Fairies"
+a = lm.get_doc_context(q)
 print(f"q: {q}\na: {a}.")

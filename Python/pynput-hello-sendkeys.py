@@ -7,6 +7,7 @@ Taken from: https://nitratine.net/blog/post/simulate-keypresses-in-python/
 
 author: andreasl
 """
+
 import random
 import time
 

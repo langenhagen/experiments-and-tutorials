@@ -14,6 +14,7 @@ Based on:
 
 Tested with sqlalchemy 1.4.26.
 """
+
 from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine, select
 
 print("\n--- 1 setting up an sqlite db ---\n")

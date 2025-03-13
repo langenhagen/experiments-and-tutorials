@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the use of the standard library module `gc` (garbage collector).
 `gc` can help seeing object references."""
+
 import gc
 
 

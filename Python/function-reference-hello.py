@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Showcase the behavior of function references.
-"""
+"""Showcase the behavior of function references."""
+
 import inspect
 
 print("---1---")
@@ -16,7 +16,6 @@ print(f"Signature of foo() as a function: {inspect.signature(foo)}")
 class C:
     def __init__(self, function_reference):
         self.function_reference = function_reference
-
 
     def method(self, b: bool):
         print(f" C.method() b={b}")

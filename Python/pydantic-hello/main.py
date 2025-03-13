@@ -4,6 +4,7 @@ and parsing using Python type annotations.
 
 author: andreasl
 """
+
 import json
 from enum import Enum
 

@@ -4,6 +4,7 @@
 Contains a simple type and functions for working with generic directed graphs
 and n-ary trees.
 """
+
 import dataclasses
 from typing import Callable, Iterable, List, Type
 

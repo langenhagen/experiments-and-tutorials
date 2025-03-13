@@ -2,6 +2,7 @@
 """Record sound via pyyaudio.
 Simple, blocking andpredefined duration.
 """
+
 import wave
 
 import pyaudio
@@ -27,7 +28,7 @@ stream = audio_interface.open(
 
 # read and store store data in chunks for 3 seconds
 frames = []  # Initialize array to store frames
-for i in range(0, int(FRAMERATE / CHUNK_SIZE * DURATION_SECONDS)):
+for i in range(int(FRAMERATE / CHUNK_SIZE * DURATION_SECONDS)):
     data = stream.read(CHUNK_SIZE)
     frames.append(data)
 

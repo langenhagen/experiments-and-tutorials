@@ -8,6 +8,7 @@ Revises: 99e2064da4b1
 Create Date: 2022-03-16 14:09:52.277473
 
 """
+
 from enum import Enum
 
 import sqlalchemy as sa

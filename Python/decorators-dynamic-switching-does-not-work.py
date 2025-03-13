@@ -10,6 +10,7 @@ later.
 See also:
 https://stackoverflow.com/questions/642762/is-it-possible-to-replace-a-python-function-method-decorator-at-runtime
 """
+
 import functools
 from typing import Callable
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the usage of Python's standard library object `defaultdict`."""
+
 import datetime as dt
 import time
 from collections import defaultdict

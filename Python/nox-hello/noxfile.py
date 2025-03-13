@@ -2,6 +2,7 @@
 Nox is configured via a noxfile.py file in your project's directory. Here's a
 simple noxfile that runs lint and some tests.
 """
+
 import nox
 
 # optionally, you can specify the default sessions;
@@ -40,10 +41,12 @@ def black(session):
     session.install("black")
     session.run("black", "my_package")
 
+
 @nox.session(tags=["style", "fix"])
 def isort(session):
     session.install("isort")
     session.run("isort", "my_package")
+
 
 @nox.session(tags=["style"])
 def flake8(session):

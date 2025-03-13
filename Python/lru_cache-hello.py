@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase that Python's `lru_cache` works on methods."""
+
 from functools import lru_cache
 
 print("--- 1 LRU cache size considers `self` parameter in methods ---")

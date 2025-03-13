@@ -1,4 +1,5 @@
 """Showcase some dict to JSON things in Python."""
+
 import json
 
 print("--- 1 to minified JSON ---")

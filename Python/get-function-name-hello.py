@@ -1,6 +1,7 @@
 """
 Implement a function that safely retrieves the calling function name.
 """
+
 import sys
 
 
@@ -15,7 +16,7 @@ def get_function_name():
 def some_free_function():
     i = 42
     j = 12.3
-    print("Hello from some_free_function()! {} {}".format(i, j))
+    print(f"Hello from some_free_function()! {i} {j}")
     print(get_function_name())
     return "miau"
 

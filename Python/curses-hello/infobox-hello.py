@@ -6,9 +6,9 @@ from infobox import Infobox, WideInfobox
 
 def draw_key_info(screen, key):
     screen.move(3, 0)
-    screen.addstr(3, 0, f'Key Code: {key}    ')
+    screen.addstr(3, 0, f"Key Code: {key}    ")
     screen.move(4, 0)
-    screen.addstr(4, 0, f'chr({key}): {chr(key)}    ')
+    screen.addstr(4, 0, f"chr({key}): {chr(key)}    ")
 
 
 def draw_screen_dimensions(screen):
@@ -26,19 +26,21 @@ def draw_screen(screen, infobox, key, is_wide):
     else:
         infobox.draw(screen_rows, screen_cols, 5, 40)
 
+
 def create_normal_infobox():
     return Infobox(
         "Hi, very long headline there!",
         "Hello, World!\nWorld World world world :DDD\n"
-        "Hello, World!\nWorld World world world :DDD"
+        "Hello, World!\nWorld World world world :DDD",
     )
+
 
 def create_wide_infobox():
     return WideInfobox(
         "Hi, very long headline there!",
-        "Hello, World!\nWorld World world world :DDD\n"
-        "This is from a Wide info box."
+        "Hello, World!\nWorld World world world :DDD\nThis is from a Wide info box.",
     )
+
 
 def create_infobox(is_wide: bool) -> Infobox:
     if is_wide:
@@ -49,13 +51,13 @@ def create_infobox(is_wide: bool) -> Infobox:
 def main(screen):
     curses.curs_set(0)  # disable blinking cursor
 
-    is_wide=False
+    is_wide = False
 
     infobox = create_infobox(is_wide)
-    draw_screen(screen, infobox, ord('x'), is_wide)
+    draw_screen(screen, infobox, ord("x"), is_wide)
 
     key = None
-    while key != ord('q'):
+    while key != ord("q"):
         key = stdscr.getch()
 
         # screen_rows, screen_cols = getmaxyx(screen)
@@ -66,11 +68,11 @@ def main(screen):
         if key == curses.KEY_RESIZE:
             screen.clear()
             draw_screen(screen, infobox, key, is_wide)
-        elif key == ord('n'):
+        elif key == ord("n"):
             is_wide = False
             infobox = create_infobox(is_wide)
             draw_screen(screen, infobox, key, is_wide)
-        elif key == ord('w'):
+        elif key == ord("w"):
             is_wide = True
             infobox = create_infobox(is_wide)
             draw_screen(screen, infobox, key, is_wide)

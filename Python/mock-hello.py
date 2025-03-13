@@ -11,6 +11,7 @@ Run this file like:
 $ python mock-hello.py
 $ pytest -s mock-hello.py  # suppress capturing/hiding ouput
 """
+
 import abc
 import json
 import pprint
@@ -85,6 +86,8 @@ mock.bar.side_effect = None
 mock.bar("See some iterable sideeffects 3")  # works
 
 print("\n--- 4 @patch Decorator ---\n")
+
+
 # use a patch decorator when you mock something that lies outside the file
 # mock where you use it, not where it is defined!
 @unittest.mock.patch("json.loads")  # point to where it is used, not where it is defined
@@ -251,7 +254,7 @@ class C(abc.ABC):
     @abc.abstractmethod
     def foo(self):
         """Some random function."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 m = unittest.mock.Mock(spec=C)

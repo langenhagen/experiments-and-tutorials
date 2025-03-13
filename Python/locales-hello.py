@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the usage of Python's locale module."""
+
 import datetime
 import locale
 

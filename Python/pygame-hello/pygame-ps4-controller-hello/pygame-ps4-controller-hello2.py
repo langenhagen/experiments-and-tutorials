@@ -4,6 +4,7 @@ Maybe more correct and up to date with pygame==2.1.2.
 Also cleaner.
 
 """
+
 import json
 from pathlib import Path
 from typing import List
@@ -58,7 +59,6 @@ def main():
     keep_running = True
     while keep_running:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 keep_running = False
             if event.type == pygame.KEYDOWN:

@@ -16,6 +16,7 @@ Then call the task:
     python tasks.py
 
 """
+
 from celery import Celery
 
 BROKER_TRANSPORT = "redis"
@@ -24,8 +25,15 @@ BROKER_HOST = "localhost"  # Maps to redis host.
 BROKER_PORT = 6379         # Maps to redis port.
 BROKER_VHOST = "0"         # Maps to database number.
 
+
 # app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')
-app = Celery('tasks', backend='redis://localhost', broker='redis://localhost', task_always_eager=True)  # call tasks inline; doesn't need any backend
+# call tasks inline; doesn't need any backend
+app = Celery(
+    "tasks",
+    backend="redis://localhost",
+    broker="redis://localhost",
+    task_always_eager=True,
+)
 
 
 @app.task

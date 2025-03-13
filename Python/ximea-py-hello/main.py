@@ -7,6 +7,7 @@ shared libraries that the XIMEA_LINUX_SP.tgz brings to a system. I.e.,
 
 See: https://pypi.org/project/ximea-py
 """
+
 import datetime as dt
 import logging
 import sys
@@ -45,7 +46,7 @@ def main():
     print(f"{exposure=}")
 
     cam.set_gain(1.0)
-    cam.set_exposure(int(15000))
+    cam.set_exposure(15000)
 
     print(f"{gain=}")
     print(f"{exposure=}")

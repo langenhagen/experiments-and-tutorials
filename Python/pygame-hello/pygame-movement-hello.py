@@ -1,7 +1,9 @@
 """Hello world for basic movement w/ Pygame.
 
 taken from:
-https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/pygame-tutorial-movement/"""
+https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/pygame-tutorial-movement/
+"""
+
 import pygame
 
 pygame.init()

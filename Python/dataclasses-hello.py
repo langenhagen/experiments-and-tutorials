@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Hello Dataclasses."""
+
 from dataclasses import dataclass, field
 from typing import ClassVar
 

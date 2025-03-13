@@ -2,6 +2,7 @@
 
 author: andreasl
 """
+
 import numpy as np
 
 
@@ -10,7 +11,7 @@ class FullyConnectedLayer:
 
     def __init__(self, n_inputs, layer_size, activation_fn):
         self.weights = np.random.standard_normal((n_inputs, layer_size))
-        self.bias =  np.random.standard_normal(layer_size)
+        self.bias = np.random.standard_normal(layer_size)
         self.size = layer_size
         self.activation_fn = activation_fn
 
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     print(f"out2: {out2}")
 
     # the layer can handle single input vectors or stacked vectors, aka batches
-    x12 = np.concatenate((x1,x2))
+    x12 = np.concatenate((x1, x2))
     print(f"x12: {x12}")
     out12 = layer.forward(x12)
     print(f"out12: {out12}")

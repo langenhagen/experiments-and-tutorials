@@ -1,4 +1,5 @@
 """Common functionality."""
+
 import logging
 
 

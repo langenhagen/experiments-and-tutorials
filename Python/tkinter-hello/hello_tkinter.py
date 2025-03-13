@@ -44,7 +44,6 @@ class Rectangle:
 
 
 class Application:
-
     canvas = None
     red_rectangle = None
     yellow_rectangle = None

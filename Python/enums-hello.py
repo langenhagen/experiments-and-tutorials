@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the usage of Python enumerations."""
+
 import enum
 
 print("--- 1 simple enums ---\n")

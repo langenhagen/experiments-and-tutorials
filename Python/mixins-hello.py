@@ -33,8 +33,6 @@ class WrongMixinUsage(Mother, Mixin):
     Inheritance list in the wrong order.
     Mixin's implementation would not kick in."""
 
-    pass
-
 
 c = Child(1, 2)
 assert c.a == 1

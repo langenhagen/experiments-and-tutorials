@@ -14,22 +14,22 @@ def foo(s: str, i=0):
     print(f"{s} : {i}")
 
 
+foo("hey there", 42)
 
-foo('hey there', 42)
-
-print('---')
+print("---")
 print(inspect.signature(foo))
 
-print('---')
-foo_source = inspect.getsource(foo);  # only possible when not called exec on it(), i.e. only once possible
+print("---")
+foo_source = inspect.getsource(foo)
+# only possible when not called exec on it(), i.e. only once possible
 print(f"foo_source:\n{foo_source}\n[o]")
 
-modified_foo_source = foo_source.replace('{i}', 'cheap trick!');
+modified_foo_source = foo_source.replace("{i}", "cheap trick!")
 exec(modified_foo_source)  # redefine foo()
-foo('hey there', 43)
+foo("hey there", 43)
 
 # should raise OSError('could not get source code')
 # foo_source = inspect.getsource(foo);  # only possible when not called exec on it(), i.e. only once possible
-modified_foo_source = modified_foo_source.replace('{s}', 'very!');
+modified_foo_source = modified_foo_source.replace("{s}", "very!")
 exec(modified_foo_source)  # redefine foo()
-foo('hey there', 44)
+foo("hey there", 44)

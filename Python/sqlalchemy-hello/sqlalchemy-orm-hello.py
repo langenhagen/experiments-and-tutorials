@@ -14,6 +14,7 @@ Based on:
 
 Tested with sqlalchemy 1.4.26.
 """
+
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -127,5 +128,5 @@ print("\n--- 9 delete all rows in a table ---\n")
 session.query(Customer).delete()
 session.commit()
 
-n_customers = (session.query(Customer).count())  # = 0
+n_customers = session.query(Customer).count()  # = 0
 print(f"{n_customers=}")

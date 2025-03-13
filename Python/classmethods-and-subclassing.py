@@ -5,7 +5,7 @@ Basically straightforward & what I hoped for.
 """
 
 
-class C(object):
+class C:
     @classmethod
     def foo(cls, a, b):
         print("C " + str(cls.__name__) + " a=" + str(a) + " b=" + str(b))

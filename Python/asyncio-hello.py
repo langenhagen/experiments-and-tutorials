@@ -7,6 +7,7 @@ See docs: https://docs.python.org/3/library/asyncio-task.html
 
 Also partially inspired by: https://guicommits.com/effective-python-async-like-a-pro/
 """
+
 import asyncio
 import random
 import time

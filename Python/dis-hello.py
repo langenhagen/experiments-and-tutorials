@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Showcase the usage od th python bytecode disassembly package `dis` in the
 standard library."""
+
 import dis
 
 print("--- 1 - simple disassembly ---")

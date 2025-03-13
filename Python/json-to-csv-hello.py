@@ -5,6 +5,7 @@ Works in python2 with pandas 0.24.2.
 
 author: andreasl
 """
+
 import json
 
 import pandas

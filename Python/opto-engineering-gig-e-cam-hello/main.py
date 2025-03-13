@@ -2,6 +2,7 @@
 
 Based on the product's sample under `/opt/MVS/Samples/64/Python/GrabImage/`.
 """
+
 import datetime as dt
 import logging
 import sys

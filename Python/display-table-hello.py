@@ -5,6 +5,7 @@ Python.
 
 author: andreasl
 """
+
 from dataclasses import dataclass, fields
 from typing import Iterable, Union
 
@@ -29,7 +30,7 @@ def display_table(items: Iterable[Item]) -> None:
     ]
 
     # Determine the width of each column
-    col_widths = [max(len(str(getattr(item, "name"))) for item in items)] + [
+    col_widths = [max(len(str(item.name)) for item in items)] + [
         max(
             [
                 len(str(getattr(item, field)))
@@ -57,7 +58,7 @@ def display_table(items: Iterable[Item]) -> None:
 
     # Create the rows for each item and calculate sums
     for item in items:
-        row_values = [getattr(item, "name")]
+        row_values = [item.name]
         for field in item_fields:
             value = getattr(item, field)
             if value is not None:

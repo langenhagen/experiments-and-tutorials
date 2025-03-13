@@ -16,8 +16,10 @@ assert (b and a) == a
 assert (a or b) == a
 assert (b or a) == b
 
+
 class D:
     pass
+
 
 class WithCustomBool:
     def __init__(self, v):

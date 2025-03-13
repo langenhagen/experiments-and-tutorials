@@ -2,12 +2,13 @@ import curses
 import curses.textpad
 
 
-class Screen(object):
+class Screen:
     UP = -1
     DOWN = 1
 
     def __init__(self, items):
-        """ Initialize the screen window
+        """Initialize the screen window.
+
         Attributes
             window: A full curses screen window
             width: The width of `window`
@@ -107,7 +108,11 @@ class Screen(object):
             return
         # Down direction scroll overflow
         # next cursor position touch the max lines, but absolute position of max lines could not touch the bottom
-        if (direction == self.DOWN) and (next_line == self.max_lines) and (self.top + self.max_lines < self.bottom):
+        if (
+            (direction == self.DOWN)
+            and (next_line == self.max_lines)
+            and (self.top + self.max_lines < self.bottom)
+        ):
             self.top += direction
             return
         # Scroll up
@@ -117,7 +122,11 @@ class Screen(object):
             return
         # Scroll down
         # next cursor position is above max lines, and absolute position of next cursor could not touch the bottom
-        if (direction == self.DOWN) and (next_line < self.max_lines) and (self.top + next_line < self.bottom):
+        if (
+            (direction == self.DOWN)
+            and (next_line < self.max_lines)
+            and (self.top + next_line < self.bottom)
+        ):
             self.current = next_line
             return
 
@@ -145,7 +154,7 @@ class Screen(object):
     def display(self):
         """Display the items on window"""
         self.window.erase()
-        for idx, item in enumerate(self.items[self.top:self.top + self.max_lines]):
+        for idx, item in enumerate(self.items[self.top : self.top + self.max_lines]):
             # Highlight the current cursor line
             if idx == self.current:
                 self.window.addstr(idx, 0, item, curses.color_pair(2))
@@ -155,7 +164,7 @@ class Screen(object):
 
 
 def main():
-    items = [f'{num + 1}. Item' for num in range(1000)]
+    items = [f"{num + 1}. Item" for num in range(1000)]
     Screen(items)
 
 

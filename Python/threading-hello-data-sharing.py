@@ -5,6 +5,7 @@ Naive approach but works in simple scenarios.
 
 based on: https://www.pythonforthelab.com/blog/handling-and-sharing-data-between-threads/
 """
+
 from threading import Event, Thread
 from time import sleep
 

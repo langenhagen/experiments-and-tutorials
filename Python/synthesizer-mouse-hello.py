@@ -3,6 +3,7 @@
 """Showcase the usage of the package synthesizer and pynput by making
 a sound by moving the mouse.
 """
+
 import pynput
 import synthesizer
 
@@ -22,7 +23,7 @@ def on_move(x, y):
 
 
 def on_click(x, y, button, pressed):
-    print(f"{button} {'pressed' if pressed else 'released'} at {(x,y)}")
+    print(f"{button} {'pressed' if pressed else 'released'} at {(x, y)}")
     # if not pressed:
     #     # Stop listener
     #     return False

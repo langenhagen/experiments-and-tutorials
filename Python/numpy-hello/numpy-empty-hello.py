@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fun and games with random uninitialized values."""
+
 import sys
 from itertools import count
 
@@ -22,7 +23,7 @@ def main() -> int:
         elif key == 84:  # down key
             pass
 
-        data = np.empty(shape=(30,30,3), dtype=float)
+        data = np.empty(shape=(30, 30, 3), dtype=float)
         cv2.imshow("image", data)
 
     return 0
@@ -30,4 +31,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

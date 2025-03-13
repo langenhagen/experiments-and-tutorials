@@ -1,5 +1,7 @@
 """A basic treeview example."""
+
 import tkinter
+
 # from PIL import ImageTk, Image
 from tkinter import ttk
 
@@ -15,12 +17,10 @@ class Application:
         # logo = ImageTk.PhotoImage(Image.open('res/DLR-square.gif'))
         # treeview = self.treeview
 
-        self.treeview = ttk.Treeview(window, columns=('size', 'modified'))
+        self.treeview = ttk.Treeview(window, columns=("size", "modified"))
         # self.treeview['columns'] = ('size', 'modified', 'owner')
-        self.treeview.heading('size', text='Size')
-        self.treeview.heading('modified', text='Modified')
-
-
+        self.treeview.heading("size", text="Size")
+        self.treeview.heading("modified", text="Modified")
 
         self.treeview.pack()
         # tree.view insert be like <parentID>, <position>, <id>, [<text>]
@@ -49,16 +49,15 @@ class Application:
 
         self.treeview.bind("<Button-1>", self.on_click)
         self.treeview.bind("<Button-3>", self.on_right_click)
-        self.treeview.bind('<Double-Button-1>', self.on_double_click)
-
+        self.treeview.bind("<Double-Button-1>", self.on_double_click)
 
     def on_click(self, event):
         item_id = self.treeview.identify_row(event.y)
         if item_id:
             # mouse pointer over item
             # self.treeview.selection_set(item_id)
-            print(f'Clicked on {item_id}')
-            self.treeview.item(item_id, open = True)
+            print(f"Clicked on {item_id}")
+            self.treeview.item(item_id, open=True)
         else:
             # mouse pointer not over item
             # occurs when items do not fill frame
@@ -68,13 +67,12 @@ class Application:
     def on_right_click(self, event):
         item_id = self.treeview.identify_row(event.y)
         if item_id:
-            print(f'Right clicked on {item_id}')
-
+            print(f"Right clicked on {item_id}")
 
     def on_double_click(self, event):
         item_id = self.treeview.identify_row(event.y)
         if item_id:
-            print(f'Double clicked on {item_id}')
+            print(f"Double clicked on {item_id}")
 
     def run(self):
         window = tkinter.Tk()

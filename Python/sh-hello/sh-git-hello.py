@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Showcase the usage of the git subpackage of the 3rd party package `sh`."""
+
 from sh import git
 
 
@@ -20,6 +21,7 @@ def main():
 
     print("--- 2 diffs can be problematic with diff-so-fancy - would hang ---")
     # git.diff("HEAD..HEAD~1")
+
 
 if __name__ == "__main__":
     main()

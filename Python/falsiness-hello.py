@@ -16,7 +16,6 @@ print("--- 1 falsiness of None ---")
 cond2 = None
 
 if not cond2:  # triggers
-
     print("not cond")
 
 if cond2 is False:  # doesn't trigger

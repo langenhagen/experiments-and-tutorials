@@ -2,6 +2,7 @@
 """
 Showcase how events work with Python's multithreading.
 """
+
 import logging
 import threading
 import time

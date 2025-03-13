@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Showcase the standard library package `base64` to convert data from and to
 base64-encoded strings."""
+
 import base64
 
 print("--- 1 - encode strings ---\n")
