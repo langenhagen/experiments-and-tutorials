@@ -2,6 +2,9 @@
 """Showcase the use of the 3rd party logging library `structlog`.
 
 based on: https://betterstack.com/community/guides/logging/structlog/
+
+See also:
+- https://www.structlog.org/en/stable/api.html
 """
 
 import asyncio
@@ -259,14 +262,14 @@ logging.config.dictConfig(
 
 structlog.configure(
     processors=[
-        structlog.contextvars.merge_contextvars,  # no clue
-        structlog.stdlib.filter_by_level,  # no clue
+        structlog.contextvars.merge_contextvars, # use this as your first processor to ensure context-local context is included in all log calls
+        structlog.stdlib.filter_by_level,  # check whether logging is configured to accept messages from this log level, abort otherwise for efficency
         structlog.stdlib.add_logger_name,  # [__main__]
-        structlog.stdlib.PositionalArgumentsFormatter(),  # no clue
-        structlog.processors.StackInfoRenderer(),  # no clue
+        structlog.stdlib.PositionalArgumentsFormatter(),  # "Apply stdlib-like string formatting to the event `key`."
+        structlog.processors.StackInfoRenderer(),  # "Add stack information with key stack if stack_info is True."
         structlog.processors.format_exc_info,  # for "exception"-info in JSON renderer
-        structlog.processors.UnicodeDecoder(),  # no clue
-        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,  # no clue but necessary
+        structlog.processors.UnicodeDecoder(),  # "Decode byte string values in event_dict."
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,  # Use this as the renderer aka final processor if you want to use ProcessorFormatter in your logging configuration
     ],
     logger_factory=structlog.stdlib.LoggerFactory(),
     cache_logger_on_first_use=True,  # no clue
