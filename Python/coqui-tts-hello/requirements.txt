@@ -1,0 +1,2 @@
+bpython
+coqui-tts[server,noteboook]
