@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Curses info boxes on the middle of the screen."""
+
 import curses
 import curses.panel
 

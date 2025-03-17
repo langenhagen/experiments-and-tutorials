@@ -1,5 +1,6 @@
 """Implement the karate chop code kata."""
 
+
 def binary_search_1(n, arr):
     """Perform a binary search in order to find the integer n in the sorted array arr.
 
@@ -91,8 +92,8 @@ def binary_search_3(n, arr):
     lower_index = 0
     upper_index = range = len(arr)
 
-    while(range > 0):
-        range = upper_index-lower_index
+    while range > 0:
+        range = upper_index - lower_index
         pivot = lower_index + (range // 2)
 
         if pivot >= len(arr):
@@ -121,11 +122,10 @@ def binary_search_3(n, arr):
 
 
 if __name__ == "__main__":
-
-    test_arr = [ 1, 2, 3, 5, 6 ,7 , 9 ,11, 13 ,17 , 99]
-    print('test_arr: {}  length: {}'.format(test_arr, len(test_arr) ))
+    test_arr = [1, 2, 3, 5, 6, 7, 9, 11, 13, 17, 99]
+    print(f"test_arr: {test_arr}  length: {len(test_arr)}")
 
     while True:
-        n = int(input('which number?: '))
+        n = int(input("which number?: "))
         r = binary_search_3(n, test_arr)
-        print('result index: {}'.format(r))
+        print(f"result index: {r}")

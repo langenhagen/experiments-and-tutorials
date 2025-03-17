@@ -262,7 +262,7 @@ logging.config.dictConfig(
 
 structlog.configure(
     processors=[
-        structlog.contextvars.merge_contextvars, # use this as your first processor to ensure context-local context is included in all log calls
+        structlog.contextvars.merge_contextvars,  # use this as your first processor to ensure context-local context is included in all log calls
         structlog.stdlib.filter_by_level,  # check whether logging is configured to accept messages from this log level, abort otherwise for efficency
         structlog.stdlib.add_logger_name,  # [__main__]
         structlog.stdlib.PositionalArgumentsFormatter(),  # "Apply stdlib-like string formatting to the event `key`."

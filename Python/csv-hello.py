@@ -5,6 +5,7 @@ Code based on: https://pymotw.com/3/csv/
 
 author: andreasl
 """
+
 import csv
 
 print("--- 1 write CSV ---")
@@ -20,7 +21,7 @@ with open(filename, "w") as file:
         row = (
             i + 1,
             chr(ord("a") + i),
-            "08/{:02d}/07".format(i + 1),
+            f"08/{i + 1:02d}/07",
             unicode_chars[i],
         )
         writer.writerow(row)

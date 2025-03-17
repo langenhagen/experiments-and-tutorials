@@ -6,6 +6,7 @@ Usage:
 
     python3 client.py
 """
+
 import datetime as dt
 import logging
 from contextlib import suppress
@@ -13,11 +14,10 @@ from pathlib import Path
 from random import randint
 from typing import Generator
 
-from grpc import RpcError, StatusCode, insecure_channel
-
 from common import read_in_chunks
 from generated.my_service_pb2 import FileMetaData, Nested, Point, UploadFileRequest
 from generated.my_service_pb2_grpc import MyServiceStub
+from grpc import RpcError, StatusCode, insecure_channel
 
 logger = logging.getLogger(__name__)
 

@@ -14,4 +14,4 @@ dirs = [
 dir = random.choice(dirs)
 dir = os.path.realpath(dir)
 print(dir)
-subprocess.Popen(r'explorer "{0}"'.format(dir))
+subprocess.Popen(rf'explorer "{dir}"')

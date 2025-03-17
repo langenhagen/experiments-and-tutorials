@@ -3,6 +3,7 @@
 See:
 https://github.com/nwhitehead/pyfluidsynth
 """
+
 import math
 import random
 import sys

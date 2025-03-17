@@ -8,6 +8,7 @@ pip install SpeechRecognition
 sudo apt-get install portaudio19-dev python-pyaudio python3-pyaudio
 pip install pyaudio  # for microphones
 """
+
 # Sample code for speech recognition
 # Uses google speech engine API
 # Network should be connected to the system

@@ -7,8 +7,8 @@ PyPi-package.
 
 author: andreasl
 """
-import asyncio
 
+import asyncio
 
 print("--- 1 multiple exceptions ---\n")
 

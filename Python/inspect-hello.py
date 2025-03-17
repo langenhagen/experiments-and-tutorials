@@ -6,11 +6,11 @@ to redefine source code at run time.
 author: andreasl
 version: 19-07-02
 """
+
 import inspect
 
 
 def foo(s: str, i=0):
-
     print(f"{s} : {i}")
 
 

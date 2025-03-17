@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Implement the codekata carate chop."""
+
 import unittest
 
 import codekata_karate_chop
 
 
 class EmptyArray(unittest.TestCase):
-
     test_arr = []
 
     known_values = (
@@ -48,7 +48,6 @@ class EmptyArray(unittest.TestCase):
 
 
 class KnownValues(unittest.TestCase):
-
     test_arr = [1, 2, 3, 5, 6, 7, 9, 11, 13, 17, 99]
 
     known_values = (

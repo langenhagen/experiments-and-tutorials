@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """TODO."""
+
 import curses
 
 import infobox as infobox
@@ -9,7 +10,6 @@ import infobox as infobox
 
 
 class App:
-
     text_y = 13
     text_x = 15
 
