@@ -8,6 +8,7 @@ author: andreasl
 import json
 from enum import Enum
 
+from bpython import embed
 from pydantic import BaseModel, Field, ValidationError
 
 print("--- 1 simple model ---\n")
@@ -129,3 +130,10 @@ print(f"{w=}")
 
 wd3 = w.model_dump(mode="json", include={"name", "myprop"})
 print(f"{wd3=}")
+
+print("\n--- 8 introspection ---\n")
+
+print(f"{Person.model_fields=}")
+
+print("\n--- 9 interactive playground ---\n")
+embed(locals_=locals(), banner="\nDropping to interactive shell\n")
