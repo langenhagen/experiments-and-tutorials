@@ -9,9 +9,8 @@ https://docs.python.org/3/library/argparse.html#nargs
 https://stackoverflow.com/questions/15753701/how-can-i-pass-a-list-as-a-command-line-argument-with-argparse
 """
 
-import argparse
 import pathlib
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, FileType, Namespace
 
 # add_help=True is the default; consider setting it to false for a custom option `-h`
 parser = ArgumentParser(description="Short sample app", add_help=True)
@@ -110,9 +109,9 @@ def __check_unsigned_int(arg: str) -> int:
     try:
         i = int(arg)
     except ValueError:
-        raise argparse.ArgumentTypeError(f"{arg} is not an unsigned int value")
+        raise ArgumentTypeError(f"{arg} is not an unsigned int value")
     if i < 0:
-        raise argparse.ArgumentTypeError(f"{arg} is not an unsigned int value")
+        raise ArgumentTypeError(f"{arg} is not an unsigned int value")
     return i
 
 
@@ -125,7 +124,7 @@ parser.add_argument(
 )
 
 
-def __print_namespace(ns: Namespace):
+def _print_namespace(ns: Namespace):
     """A helper function to print a name space."""
     print(ns)
     print(f"{ns.a=}")
@@ -159,19 +158,19 @@ namespace = parser.parse_args(
     ]
 )
 # fmt: on
-__print_namespace(namespace)
+_print_namespace(namespace)
 
 print("\n--- 2 another parsing---")
 namespace = parser.parse_args(["-a", "kaaatz", "--othergroup"])
-__print_namespace(namespace)
+_print_namespace(namespace)
 
 print("\n--- 3 with only one argument---")
 namespace = parser.parse_args(["just one argument works"])
-__print_namespace(namespace)
+_print_namespace(namespace)
 
 print("\n--- 4 yet another parsiong---")
 namespace = parser.parse_args(["optional", "required"])  # order is important
-__print_namespace(namespace)
+_print_namespace(namespace)
 
 print("\n--- 5 empty argument list might break ---")
 # breaks since my_required_positional_arg is required
@@ -195,12 +194,12 @@ print("\n--- 9 print version and exit ---")
 
 print("\n--- 10 file IO ---")
 # first, write
-parser = argparse.ArgumentParser(description="Argparser for file IO writing")
-parser.add_argument("-o", metavar="out-file", type=argparse.FileType("wt"))
+parser = ArgumentParser(description="Argparser for file IO writing")
+parser.add_argument("-o", metavar="out-file", type=FileType("wt"))
 
 try:
     results = parser.parse_args(["-o", "my-argparse-file.txt"])
-except IOError as msg:
+except OSError as msg:
     parser.error(str(msg))
 
 print("Output file:", results.o)  # returns an io.TextIOWrapper or None
@@ -208,12 +207,12 @@ print("Output file:", results.o)  # returns an io.TextIOWrapper or None
 results.o.write("Hi there!")  # caution: writes to file
 
 # then read
-parser = argparse.ArgumentParser(description="Argparser for file IO reading")
-parser.add_argument("-i", metavar="in-file", type=argparse.FileType("rt"))
+parser = ArgumentParser(description="Argparser for file IO reading")
+parser.add_argument("-i", metavar="in-file", type=FileType("rt"))
 
 try:
     results = parser.parse_args(["-i", "my-argparse-file.txt"])
-except IOError as msg:
+except OSError as msg:
     parser.error(str(msg))
 
 print("Input file:", results.i)  # returns an io.TextIOWrapper or None
