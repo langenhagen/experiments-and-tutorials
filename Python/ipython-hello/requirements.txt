@@ -1,0 +1,5 @@
+bpython
+fastapi
+ipython
+pydantic
+uvicorn
