@@ -2,7 +2,7 @@
 Showcase inheritance.
 """
 
-print("---1---")
+print("--- 1 simple inheritance ---\n")
 
 
 class C:
