@@ -1,11 +1,15 @@
+#!/usr/bin/env python3
+"""Showcase a simple FastAPI program."""
+
 import time
 
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 
 class MySchema(BaseModel):
-    pass
+    value: int
 
 
 app = FastAPI(
@@ -20,4 +24,8 @@ def post_foo():
     print("In post_foo()")
     time.sleep(3)
     print("Returning from post_foo()")
-    return None
+    return MySchema(value=123)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=8000)

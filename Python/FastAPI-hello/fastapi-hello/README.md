@@ -2,5 +2,7 @@
 
 Setup and activate the Python virtual environment, then start via:
 ```bash
-uvicorn my_app.main:app --reload
+python myapp
+
+curl -X POST http://localhost:8000/foo -H "Content-Type: application/json" -d '{}'
 ```
