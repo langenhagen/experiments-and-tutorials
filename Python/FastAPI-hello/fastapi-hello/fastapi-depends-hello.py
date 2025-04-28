@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Showcase that we cannot use `Depends` in deeper level functions.
 
-curl -L http://localhost:8000/foo
+Call the server e.g. via:
 
-curl -L http://localhost:8000/bar  # will fail
+    curl -L http://localhost:8000/foo
+    curl -L http://localhost:8000/bar  # will fail
 
 author: andreasl
 """
 
+import inspect
 from typing import Annotated
 
 import uvicorn
@@ -26,7 +28,16 @@ async def other_dependency(q: str | None = None, value: float = 1.2):
 
 @app.get("/foo/")
 async def foo(params: Annotated[dict, Depends(dependency)]):
-    """Uses Depends directly"""
+    """Uses `Depends()` directly"""
+
+    # Showcase that both Depends depends and the FastAPI endpoint are benign and
+    # just what you expect in terms of runtime-function arguments. I.e., no
+    # arguments are extra or missing; would be quite the magic if it were, so
+    # but you never know until you test
+    print(f"{locals()=}")
+    print("---")
+    print(f"{inspect.getargvalues(inspect.currentframe())=}")
+    print("---")
     return params
 
 
