@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Showcase a simple FastAPI program."""
+"""Showcase a simple FastAPI program.
+
+Use like:
+
+    python myapp
+
+    curl http://localhost:8000/foo
+    curl -X POST http://localhost:8000/foo -H "Content-Type: application/json" -d '{}'
+"""
 
 import time
 
@@ -19,8 +27,14 @@ app = FastAPI(
 )
 
 
+@app.get("/foo", response_model=MySchema)
+def get_foo():
+    print("In get_foo()")
+    return MySchema(value=101)
+
+
 @app.post("/foo", response_model=MySchema)
-def post_foo():
+async def post_foo():  # stuff can be async
     print("In post_foo()")
     time.sleep(3)
     print("Returning from post_foo()")
