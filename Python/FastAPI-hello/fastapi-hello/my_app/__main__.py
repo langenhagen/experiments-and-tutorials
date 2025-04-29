@@ -27,6 +27,11 @@ app = FastAPI(
 )
 
 
+@app.get("/", status_code=200)
+async def root():
+    return {"status": "ok"}
+
+
 @app.get("/foo", response_model=MySchema)
 def get_foo():
     print("In get_foo()")
