@@ -19,4 +19,3 @@ collection = db.mynonexisting  # shortcut; works also for non-existing collectio
 collection = db["sso_page_template"]
 for doc in collection.find({}):
     print(doc["name"])
-

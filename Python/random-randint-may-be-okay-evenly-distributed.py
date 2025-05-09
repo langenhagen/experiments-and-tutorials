@@ -5,7 +5,7 @@ import random
 
 max_ = 10
 
-results: dict[int, int] = {i: 0 for i in range(1, max_ + 1)}
+results: dict[int, int] = dict.fromkeys(range(1, max_ + 1), 0)
 
 for _ in range(1_000_000):
     r = random.randint(1, max_)

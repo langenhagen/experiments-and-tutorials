@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Contains a class that can draw consecutive objects of type Line."""
+
 import curses
 
 

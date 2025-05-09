@@ -19,22 +19,23 @@ eras0r.py -r "C:\Crunch it\" -i .\_Lib -i .\Liepham *.tlog ipch *.pdb
 
 
 def main(argv):
-
     # get command line arguments
     try:
-        opts, deletes = getopt.getopt( argv, "r:i:")
+        opts, deletes = getopt.getopt(argv, "r:i:")
     except getopt.GetoptError:
-        print( "USAGE:\n" + \
-               "eras0r.py [-r <root-dir>] [-i <subdir to be ignored> ] [...] [<filetype-glob/foldername>] [...]\n" + \
-               "EXAMPLE:\n" + \
-               "eras0r.py -r \"C:\\Crunch it\\\" -i .\_Lib -i .\Liepham *.tlog ipch *.pdb\n")
-        sys.exit(1);
+        print(
+            "USAGE:\n"
+            + "eras0r.py [-r <root-dir>] [-i <subdir to be ignored> ] [...] [<filetype-glob/foldername>] [...]\n"
+            + "EXAMPLE:\n"
+            + 'eras0r.py -r "C:\\Crunch it\\" -i .\\_Lib -i .\\Liepham *.tlog ipch *.pdb\n'
+        )
+        sys.exit(1)
 
     # select root dir
     if [v for k, v in opts if k == "-r"]:
         root_dir = [v for k, v in opts if k == "-r"][0]
     else:
-        root_dir = '.'
+        root_dir = "."
 
     # get ignore files
     ignores = [v for k, v in opts if k == "-i"]
@@ -49,7 +50,6 @@ def main(argv):
 
     # walk through directory tree
     for root, dirs, files in os.walk(root_dir):
-
         # ignore dirs
         dirs[:] = [d for d in dirs if os.path.join(root, d) not in ignores]
         del_dirs = [d for d in dirs if re.match(deletes, d)]

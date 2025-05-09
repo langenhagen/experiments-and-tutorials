@@ -9,6 +9,7 @@ import yaml
 @dataclasses.dataclass
 class Bookmark:
     """A bookmark representation."""
+
     title: str
     url: str
     created: datetime.datetime
@@ -23,8 +24,8 @@ def load_bookmark(path: pathlib.Path) -> Bookmark:
     with open(path) as file:
         bookmark_yaml = yaml.load(file, Loader=yaml.FullLoader)
     bookmark = Bookmark(**bookmark_yaml)
-    bookmark.created =  datetime.datetime.strptime(bookmark.created, '%Y-%m-%d %H:%M')
-    bookmark.last_access =  datetime.datetime.strptime(bookmark.last_access, '%Y-%m-%d %H:%M')
+    bookmark.created = datetime.datetime.strptime(bookmark.created, "%Y-%m-%d %H:%M")
+    bookmark.last_access = datetime.datetime.strptime(bookmark.last_access, "%Y-%m-%d %H:%M")
     return bookmark
 
 
