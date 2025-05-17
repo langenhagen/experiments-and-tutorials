@@ -1,0 +1,27 @@
+[project]
+name = "uv-hello"
+version = "0.1.0"
+description = "Hello from uv-hello!"
+readme = "README.md"
+authors = [
+    { name = "Andreas Langenhagen", email = "andreas.langenhagen@wandelbots.com" }
+]
+requires-python = ">=3.13.3"
+dependencies = [
+    "fastapi>=0.115.12",
+    "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "pydantic>=2.11.4",
+    "uvicorn>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "bpython>=0.25",
+    "mypy>=1.15.0",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "ruff>=0.11.10",
+    "ty>=0.0.1a4",
+    "vulture>=2.14",
+]
