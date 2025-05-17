@@ -6,7 +6,7 @@ from copy import deepcopy
 class C:
     my_class_var = 0
 
-    def __init__(self):
+    def __init__(self) -> None:
         print("Hi!")
         C.my_class_var += 1
 

@@ -9,11 +9,12 @@ author: andreasl
 """
 
 import asyncio
+from typing import NoReturn
 
 print("--- 1 multiple exceptions ---\n")
 
 
-def raise_exceptions():
+def raise_exceptions() -> None:
     """Raise and handle 2 exceptions and return/raise them late as an
     ExceptionGroup."""
     exceptions: list[Exception] = []
@@ -42,17 +43,17 @@ except ExceptionGroup as eg:
 print("\n--- 2 in asyncio code ---\n")
 
 
-async def task_1():
+async def task_1() -> NoReturn:
     await asyncio.sleep(1)
     raise ValueError("Error in task 1")
 
 
-async def task_2():
+async def task_2() -> NoReturn:
     await asyncio.sleep(2)
     raise KeyError("Error in task 2")
 
 
-async def async_main():
+async def async_main() -> None:
     tasks = [asyncio.create_task(task_1()), asyncio.create_task(task_2())]
 
     exceptions = []
@@ -79,7 +80,7 @@ except ExceptionGroup as eg:
 print("\n--- 3 except* syntax ---\n")
 
 
-def raise_combined_exceptions():
+def raise_combined_exceptions() -> NoReturn:
     """Raise an ExceptionGroup with a mix of different exceptions."""
     exceptions = [
         ZeroDivisionError("My ZeroDivision"),

@@ -1,5 +1,5 @@
-def call_process(name, args):
-    """Call subprocess.check_call(name, args) and then checks if it was killed
+def call_process(name, args) -> None:
+    """Call subprocess.check_call(name, args) and then check if it was killed
     by the operating system - which is what we want :)
     """
     try:
@@ -18,7 +18,7 @@ def call_process(name, args):
         log("Unhandled exception:\n" + str(err))
 
 
-def kill_process(name):
+def kill_process(name) -> None:
     """Kill the process with the given name."""
     for process in psutil.process_iter():
         if process.name() == name:

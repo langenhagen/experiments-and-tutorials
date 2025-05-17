@@ -11,11 +11,12 @@ Also partially inspired by: https://guicommits.com/effective-python-async-like-a
 import asyncio
 import random
 import time
+from typing import NoReturn
 
 print("--- 1 simple call to asyncio.run() ---\n")
 
 
-async def foo():
+async def foo() -> int:
     """A coroutine."""
     print("Hello from foo!")
     await asyncio.sleep(0.5)
@@ -38,7 +39,7 @@ async def say_after(delay: float, what: str):
     return delay
 
 
-async def foo():
+async def foo() -> None:
     print(f"started at {time.strftime('%X')}")
 
     # Comes in as first "Hello" ... then "world"
@@ -61,7 +62,7 @@ class AsyncContextManager:
         print("exiting context")
 
 
-async def foo():
+async def foo() -> None:
     async with AsyncContextManager():
         print("in the with block")
 
@@ -72,7 +73,7 @@ asyncio.run(foo())
 print("\n--- 4 create_task() and gather() ---\n")
 
 
-async def foo():
+async def foo() -> None:
     tasks = set()
     for i in range(5):
         task = asyncio.create_task(say_after(delay=random.random(), what=f"Hello {i}"))
@@ -93,7 +94,7 @@ asyncio.run(foo())
 print("\n--- 5 as_completed() - act on tasks in first-done-first-serve fashion ---\n")
 
 
-async def foo():
+async def foo() -> None:
     tasks = set()
     for i in range(5):
         task = asyncio.create_task(say_after(delay=random.random(), what=f"Hello {i}"))
@@ -114,7 +115,7 @@ asyncio.run(foo())
 print("\n--- 6 not handling exceptions: Task exception was never retrieved  ---\n")
 
 
-async def failing_task():
+async def failing_task() -> NoReturn:
     """A task that raises an exception."""
     print("Hello from failing_task(), before failure!")
     await asyncio.sleep(1)
@@ -122,7 +123,7 @@ async def failing_task():
     print("Hello from failing_task(), after failure!")  # never gets here
 
 
-async def bar():
+async def bar() -> None:
     """Create the task but do not await or handle it.
 
     We don't await or gather the task, causing the "Task exception was never retrieved"
@@ -142,7 +143,7 @@ asyncio.run(bar())
 print("\n--- 7 handling exceptions ---\n")
 
 
-async def foo():
+async def foo() -> None:
     """Don't handle the exception of `failing_task` inside the coroutine."""
     try:
         task = asyncio.create_task(failing_task())
@@ -157,7 +158,7 @@ asyncio.run(foo())
 print("\n--- 8 handling exceptions with gather() ---\n")
 
 
-async def foo():
+async def foo() -> None:
     """Use gather(return_exceptions=True) to avoid raising exceptions from failed tasks."""
 
     task1 = asyncio.create_task(failing_task())
@@ -178,7 +179,7 @@ asyncio.run(foo())
 print("\n--- 9 exception handler functions ---\n")
 
 
-def handle_exception(loop, context):
+def handle_exception(loop, context) -> None:
     """Custom exception handler for the asyncio event loop."""
 
     print(f"Hello from handle_exception()!")

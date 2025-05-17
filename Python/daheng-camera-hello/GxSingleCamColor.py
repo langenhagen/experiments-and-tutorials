@@ -6,13 +6,16 @@ author: andreasl
 """
 
 import traceback
+from typing import TYPE_CHECKING
 
 import cv2
 import gxipy as gx
-import numpy as np
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
-def main():
+def main() -> None:
     # print the demo information
     print()
     print("-------------------------------------------------------------")

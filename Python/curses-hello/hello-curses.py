@@ -13,7 +13,7 @@ class App:
     text_y = 13
     text_x = 15
 
-    def draw_frame(self, stdscr):
+    def draw_frame(self, stdscr) -> None:
         screen_rows, screen_cols = stdscr.getmaxyx()
         stdscr.clear()
         for y in range(screen_rows):
@@ -23,7 +23,7 @@ class App:
         stdscr.insstr(0, 0, "1" * screen_cols, curses.A_REVERSE)
         stdscr.insstr(screen_rows - 1, 0, "2" * screen_cols, curses.A_REVERSE)
 
-    def main(self, stdscr):
+    def main(self, stdscr) -> None:
         curses.curs_set(0)  # disable blinking cursor
         stdscr.addstr(10, 5, "Hello")
 

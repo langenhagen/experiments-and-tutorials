@@ -7,13 +7,13 @@ Basically straightforward & what I hoped for.
 
 class C:
     @classmethod
-    def foo(cls, a, b):
+    def foo(cls, a, b) -> None:
         print("C " + str(cls.__name__) + " a=" + str(a) + " b=" + str(b))
 
 
 class D(C):
     @classmethod
-    def foo(cls, a, b):
+    def foo(cls, a, b) -> None:
         print("D " + str(cls.__name__) + " a=" + str(a) + " b=" + str(b))
 
 

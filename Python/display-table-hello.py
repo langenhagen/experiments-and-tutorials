@@ -7,7 +7,10 @@ author: andreasl
 """
 
 from dataclasses import dataclass, fields
-from typing import Iterable, Union
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 @dataclass

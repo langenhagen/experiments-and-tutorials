@@ -4,7 +4,7 @@
 from sh import git
 
 
-def main():
+def main() -> None:
     """Program entry point."""
 
     print("--- 1 git status ---")

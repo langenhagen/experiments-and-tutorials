@@ -30,7 +30,7 @@ def log_something() -> int:
     return 42
 
 
-def test_true():
+def test_true() -> None:
     """Showcase logging in tests."""
     logging.debug("This a debug msg")
     logging.info("This an info msg")
@@ -41,13 +41,13 @@ def test_true():
     assert True
 
 
-def test_log_something():
+def test_log_something() -> None:
     """Showscase indirect logging in tests."""
     r = log_something()
     assert r == 42
 
 
-def test_request():
+def test_request() -> None:
     """Showcase logging requests in tests."""
     r = requests.get("https://httpbin.org")
     assert r.ok

@@ -9,10 +9,10 @@ Usage:
 
 import datetime as dt
 import logging
+from collections.abc import Generator
 from contextlib import suppress
 from pathlib import Path
 from random import randint
-from typing import Generator
 
 from common import read_in_chunks
 from generated.my_service_pb2 import FileMetaData, Nested, Point, UploadFileRequest
@@ -43,7 +43,7 @@ def yield_upload_file_requests(
 
 def request_download_file(
     file_to_download: Path, target_file_path, stub: MyServiceStub
-):
+) -> None:
     metadata = FileMetaData(file_path=str(file_to_download))
     responses = stub.DownloadFile(metadata)
 
@@ -56,7 +56,7 @@ def request_download_file(
                 logger.exception(f"Unable to write to file {target_file_path}")
 
 
-def main():
+def main() -> None:
     """Fire some requests against the server."""
 
     with insecure_channel("localhost:50051") as channel:

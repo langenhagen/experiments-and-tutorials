@@ -8,5 +8,5 @@ import logging
 logger = logging.getLogger(name=__name__)  # uses the same global config as the main file
 
 
-def foo(msg=""):
+def foo(msg="") -> None:
     logger.info("hello from the otherfile! " + msg)

@@ -23,14 +23,14 @@ print("--- 2 - transform yaml data to a tree structure ---")
 class Label(tree.Node):
     """A label that can be attached to a transaction post."""
 
-    def __init__(self, name: str, regex: str = None):
+    def __init__(self, name: str, regex: str = None) -> None:
         """Create a new Label with the given name and regex."""
         super().__init__()
         self.name: str = name
         self.regex: str = regex
 
 
-def build_label_tree(dictionary: dict, root: Label = None):
+def build_label_tree(dictionary: dict, root: Label = None) -> None:
     """Build a tree from a given dictionary of dictionaries."""
     for key, value in dictionary.items():
         if key == "regex":
@@ -56,14 +56,14 @@ build_label_tree(data["Expense"], expense)
 
 print("--- 3 - write yaml data to file ---")
 
-data = dict(
-    A="a",
-    B=dict(
-        C="c",
-        D="d",
-        E="e",
-    ),
-)
+data = {
+    "A": "a",
+    "B": {
+        "C": "c",
+        "D": "d",
+        "E": "e",
+    },
+}
 
 with open("written.yml", "w") as file:
     yaml.dump(data, file, default_flow_style=False)

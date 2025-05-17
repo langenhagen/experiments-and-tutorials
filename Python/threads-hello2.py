@@ -13,14 +13,14 @@ logging.basicConfig(
 )
 
 
-def wait_for_event(event):
+def wait_for_event(event) -> None:
     """Simply wait for an event."""
     logging.debug("wait_for_event starting")
     event_is_set = event.wait()
     logging.debug("event set: %s", event_is_set)
 
 
-def wait_for_event_timeout(event, timeout):
+def wait_for_event_timeout(event, timeout) -> None:
     """Wait for an event until timeout runs out."""
     while not event.isSet():
         logging.debug("wait_for_event_timeout starting")

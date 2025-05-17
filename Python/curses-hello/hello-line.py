@@ -25,25 +25,25 @@ def create_lines():
 #     line.draw(screen, 0)
 
 
-def draw_top_line(screen):
+def draw_top_line(screen) -> None:
     line = Line("nte 0.1 - Use the arrow keys to navigate, press ? for help")
     line.draw(screen, 0, invert_color=True, fill_character=" ")
 
 
-def draw_path_line(screen, path):
+def draw_path_line(screen, path) -> None:
     _, cols = getmaxyx(screen)
     line = Line(elide_middle(f"--- {path} ---", cols))
     line.draw(screen, 1, invert_color=False, fill_character="-")
 
 
-def draw_bottom_line(screen, aggregated_total, n_items):
+def draw_bottom_line(screen, aggregated_total, n_items) -> None:
     rows, _ = getmaxyx(screen)
     footer_string = f"Total aggregated value: {aggregated_total}  Items: {n_items}"
     line = Line(footer_string)
     line.draw(screen, rows - 1, True, " ")
 
 
-def draw_screen(screen, line_view):
+def draw_screen(screen, line_view) -> None:
     # draw_screen_dimensions(screen)
     screen.refresh()
     draw_top_line(screen)
@@ -53,7 +53,7 @@ def draw_screen(screen, line_view):
     draw_bottom_line(screen, 123.4, 13)
 
 
-def main(screen):
+def main(screen) -> None:
     curses.curs_set(0)  # disable blinking cursor
     lines = create_lines()
     line_view = LineView(lines)

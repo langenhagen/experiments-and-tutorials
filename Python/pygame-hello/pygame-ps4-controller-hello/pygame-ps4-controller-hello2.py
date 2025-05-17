@@ -7,7 +7,6 @@ Also cleaner.
 
 import json
 from pathlib import Path
-from typing import List
 
 import pygame
 from pygame import Vector2
@@ -18,7 +17,7 @@ DISPLAY_W, DISPLAY_H = 480, 240
 
 def _init_joysticks() -> Joystick:
     """Initiaize the controller or Joystick."""
-    joysticks: List[Joystick] = []
+    joysticks: list[Joystick] = []
     for i in range(pygame.joystick.get_count()):
         joystick = pygame.joystick.Joystick(i)
         joystick.init()
@@ -27,7 +26,7 @@ def _init_joysticks() -> Joystick:
     return joysticks
 
 
-def main():
+def main() -> None:
     """Program main entry point."""
     pygame.init()
     canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))

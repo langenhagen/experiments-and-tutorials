@@ -22,7 +22,7 @@ class D:
 
 
 class WithCustomBool:
-    def __init__(self, v):
+    def __init__(self, v) -> None:
         self.v = v
 
     def __bool__(self) -> bool:

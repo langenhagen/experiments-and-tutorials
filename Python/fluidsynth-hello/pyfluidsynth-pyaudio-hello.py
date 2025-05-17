@@ -4,10 +4,9 @@ See:
 https://github.com/nwhitehead/pyfluidsynth
 """
 
-import time
 
 import fluidsynth
-import numpy
+import numpy as np
 import pyaudio
 
 pa = pyaudio.PyAudio()
@@ -18,7 +17,7 @@ s = []
 fl = fluidsynth.Synth()
 
 # Initial silence is 1 second
-s = numpy.append(s, fl.get_samples(44100 * 1))
+s = np.append(s, fl.get_samples(44100 * 1))
 
 sfid = fl.sfload("full-grand-piano.sf2")
 fl.program_select(0, sfid, 0, 0)
@@ -28,14 +27,14 @@ fl.noteon(0, 60, 30)
 # fl.noteon(0, 76, 30)
 
 # Chord is held for 2 seconds
-s = numpy.append(s, fl.get_samples(44100 * 2))
+s = np.append(s, fl.get_samples(44100 * 2))
 
 fl.noteoff(0, 60)
 # fl.noteoff(0, 67)
 # fl.noteoff(0, 76)
 
 # Decay of chord is held for 1 second
-s = numpy.append(s, fl.get_samples(44100 * 1))
+s = np.append(s, fl.get_samples(44100 * 1))
 
 fl.delete()
 

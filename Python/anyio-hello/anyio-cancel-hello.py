@@ -15,7 +15,7 @@ import anyio
 print("--- 1 simple cancel ---\n")
 
 
-async def task1():
+async def task1() -> None:
     print("Starting task...")
 
     try:
@@ -32,7 +32,7 @@ async def task1():
     print("Finished task")  # doesn't get called
 
 
-async def foo():
+async def foo() -> None:
     async with anyio.create_task_group() as tg:
         tg.start_soon(task1)
 
@@ -45,7 +45,7 @@ anyio.run(foo)
 print("\n--- 2 CancelScope with Shielding from Cancellation and Exception Eating ---\n")
 
 
-async def task2():
+async def task2() -> None:
     try:
         with anyio.CancelScope(shield=True):  # Protected from cancellation
             print("Hello from task's CancelScope!")
@@ -58,7 +58,7 @@ async def task2():
         print(f"Caught ValueError: {e}")
 
 
-async def bar():
+async def bar() -> None:
     async with anyio.create_task_group() as tg:
         tg.start_soon(task2)
         await anyio.sleep(1)

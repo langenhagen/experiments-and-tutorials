@@ -40,7 +40,7 @@ key_offset = random.randrange(0, 11)
 counter = 0
 
 
-def on_press(key):
+def on_press(key) -> None:
     """Play a note."""
     if isinstance(key, pynput.keyboard.KeyCode):
         note = key.vk % 72 + 24
@@ -64,7 +64,7 @@ def on_press(key):
     synth.noteon(0, note, 100)
 
 
-def on_release(key):
+def on_release(key) -> bool:
     """Always return true, i.e. keep listener running."""
     del key
     return True

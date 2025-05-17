@@ -2,13 +2,13 @@
 """Showcase the usage of args and kwargs."""
 
 
-def my_purely_args_function(*args):
+def my_purely_args_function(*args) -> None:
     """Showcase the implementation of a pure args function."""
     print(f"{args=}")
     print(f"{type(args)=}")
 
 
-def my_purely_kwargs_function(**kwargs):
+def my_purely_kwargs_function(**kwargs) -> None:
     """Showcase the implementation of a pure kwargs function."""
     print(f"{kwargs=}")
     print(f"{type(kwargs)=}")

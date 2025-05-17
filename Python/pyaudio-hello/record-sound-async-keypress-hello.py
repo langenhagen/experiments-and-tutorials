@@ -18,7 +18,7 @@ class AudioRecorder:
 
     def __init__(
         self, channels: int = 1, chunk_size: int = 1024, framerate: int = 44100
-    ):
+    ) -> None:
         """Initialize the audio recorder."""
         self.audio_interface = pyaudio.PyAudio()
         self.do_record: bool = False
@@ -26,11 +26,11 @@ class AudioRecorder:
         self.chunk_size: int = chunk_size
         self.framerate: int = framerate
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Destructor."""
         self.audio_interface.terminate()
 
-    def record(self):
+    def record(self) -> None:
         """Do record audio."""
         with KeyboardListener(
             on_press=self._on_key_press, on_release=self._on_key_release
@@ -43,13 +43,13 @@ class AudioRecorder:
 
             listener.join()
 
-    def _on_key_press(self, key):
+    def _on_key_press(self, key) -> None:
         """Trigger recording on key pess Enter."""
         if key is pynput.keyboard.Key.enter and not self.do_record:
             print("Start Recording...")
             self.do_record = True
 
-    def _on_key_release(self, key):
+    def _on_key_release(self, key) -> None:
         """Stop recording on key up Enter."""
         if key is pynput.keyboard.Key.enter:
             print("End Recording")
@@ -82,7 +82,7 @@ class AudioRecorder:
 
         return frames
 
-    def _write_to_file(self, frames):
+    def _write_to_file(self, frames) -> None:
         """Write the given frames to file."""
         with wave.open(f"output-{time.time()}.wav", "wb") as file:
             file.setnchannels(self.channels)

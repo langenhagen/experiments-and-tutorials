@@ -16,6 +16,7 @@ import abc
 import json
 import pprint
 import unittest.mock
+from typing import NoReturn
 
 import pytest
 
@@ -52,7 +53,7 @@ print(f"mock.foo('somearg')= {mock.foo('somearg')}")
 print("\n---5 Mock Side Effects ---\n")
 
 
-def test_mock_sideeffect():
+def test_mock_sideeffect() -> None:
     """Showcase example of  how to use side effects in tests."""
     mock = unittest.mock.Mock()
     mock.doo.side_effect = ValueError
@@ -61,7 +62,7 @@ def test_mock_sideeffect():
 
 
 # Also:
-def my_side_effect_fun(myarg):
+def my_side_effect_fun(myarg) -> None:
     """Implement another side effect."""
     print(f"> Hello from my_side_effect_fun({myarg})")
 
@@ -71,7 +72,7 @@ mock.bar("See some sideeffects!")
 
 
 # Also also with iterables
-def my_other_side_effect_fun(myarg):
+def my_other_side_effect_fun(myarg) -> None:
     """Implement another side effect."""
     print(f"> Hello from my_other_side_effect_fun({myarg})")
 
@@ -91,7 +92,7 @@ print("\n--- 4 @patch Decorator ---\n")
 # use a patch decorator when you mock something that lies outside the file
 # mock where you use it, not where it is defined!
 @unittest.mock.patch("json.loads")  # point to where it is used, not where it is defined
-def test_with_patch(mock_loads):  # param mock_loads comes from the decorator
+def test_with_patch(mock_loads) -> None:  # param mock_loads comes from the decorator
     """Test showcasing @patch decorator."""
     mock_loads.return_value = "My mocked return value"
     res = json.loads({"this": "works"})
@@ -105,7 +106,7 @@ def test_with_patch(mock_loads):  # param mock_loads comes from the decorator
 )  # also possible
 def test_with_two_patches(
     mock_loads, mock_dumps
-):  # upper/outer patch-decorator related params come later
+) -> None:  # upper/outer patch-decorator related params come later
     """Test showcasing @patch decorator."""
     mock_dumps.return_value = '{"a": "123"}'
     res = json.dumps("soeinquatsch")
@@ -120,7 +121,7 @@ def test_with_two_patches(
 print("\n--- 5 Alternative: Patch with a Context Manager ---\n")
 
 
-def test_with_contextmanager():
+def test_with_contextmanager() -> None:
     """Test showcasing @patch decorator."""
     res = json.loads('{"a":"1"}')
     print(f'json.loads(\'{{"a":"1"}}\')= {res}')
@@ -149,7 +150,7 @@ print("\n--- 6 @patch.object ---\n")
 
 
 @unittest.mock.patch.object(json, "loads", return_value="big quatsch")
-def test_with_partial_mock(mock_dumps):
+def test_with_partial_mock(mock_dumps) -> None:
     res = json.dumps({})
     print(f"json.dumps({{}})= {res}")
     assert res == "{}"
@@ -225,13 +226,13 @@ with unittest.mock.patch("json.loads", autospec=True) as mock_json_loads:
 print("\n--- 9 specify return value of function of mock object. ---\n")
 
 
-def my_side_effect(arg):
+def my_side_effect(arg) -> None:
     """A side effect."""
     print("Miau!")
     print(f"Original arg={arg}")
 
 
-def foo():
+def foo() -> None:
     """Show how to specify function return values of mock objects."""
     with unittest.mock.patch("pprint.PrettyPrinter") as mock_pretty_printer:
         mock_pretty_printer.return_value.pprint = unittest.mock.Mock(
@@ -239,7 +240,7 @@ def foo():
         )
 
         pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(dict(Hund="wuff!"))  # should print "Miau!"
+        pp.pprint({"Hund": "wuff!"})  # should print "Miau!"
 
 
 foo()
@@ -252,7 +253,7 @@ class C(abc.ABC):
     """Randam abstract class that I cannot instantiate."""
 
     @abc.abstractmethod
-    def foo(self):
+    def foo(self) -> NoReturn:
         """Some random function."""
         raise NotImplementedError
 

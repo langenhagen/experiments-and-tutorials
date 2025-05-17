@@ -68,7 +68,7 @@ def get_random_names(n_names: int = 1) -> str | list[str] | None:
     return names[0] if n_names == 1 else names
 
 
-def main():
+def main() -> None:
     """Program main entry point."""
     for name in get_random_names(5):
         print(name)

@@ -20,7 +20,7 @@ def worker(name: str) -> None:
     print(f"{name} worker finished in {worker_time} seconds")
 
 
-def hello_processes():
+def hello_processes() -> None:
     """Showcase the usage of Processes."""
     processes = []
     for i in range(5):
@@ -32,7 +32,7 @@ def hello_processes():
         proc.join()
 
 
-def worker2(d: dict, l: list):
+def worker2(d: dict, l: list) -> None:
     """Manipulate the given dict and list."""
     d[1] = "1"
     d["2"] = 2
@@ -40,7 +40,7 @@ def worker2(d: dict, l: list):
     l.reverse()
 
 
-def hello_managers():
+def hello_managers() -> None:
     """Showcases the usage of Managers."""
     with multiprocessing.Manager() as manager:
         d = manager.dict()
@@ -54,7 +54,7 @@ def hello_managers():
         print(f"\n{l=}\n{l}")
 
 
-def main():
+def main() -> None:
     """Main program."""
     print("--- 1 Processes ---")
     hello_processes()

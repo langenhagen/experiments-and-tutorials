@@ -10,7 +10,7 @@ from common import elide_end
 class Infobox:
     """A simple curses window that can contain text."""
 
-    def __init__(self, headline, text):
+    def __init__(self, headline, text) -> None:
         self.headline = headline
         self.text = text
 
@@ -26,7 +26,7 @@ class Infobox:
             (screen_cols - cols) // 2,
         )
 
-    def _create_frame(self, pos_y, pos_x, rows, cols):
+    def _create_frame(self, pos_y, pos_x, rows, cols) -> None:
         frame = curses.newwin(rows, cols, pos_y, pos_x)
         frame.box()
         frame.move(0, 4)
@@ -41,7 +41,7 @@ class Infobox:
             len(max(array, key=len)) + 1,
         )
 
-    def _create_textpad(self, pos_y, pos_x, rows, cols):
+    def _create_textpad(self, pos_y, pos_x, rows, cols) -> None:
         self.n_lines, self.n_columns = self._calculate_text_rows_and_columns()
         self.textpad = curses.newpad(self.n_lines, self.n_columns)
         self.textpad_pad_y, self.textpad_pad_x = 0, 0
@@ -49,7 +49,7 @@ class Infobox:
         self.textpad_rows, self.textpad_cols = rows, cols
         self.textpad.keypad(True)  # makes it understand s.KEY_UP & KEY_DOWN codes
 
-    def _refresh(self):
+    def _refresh(self) -> None:
         self.textpad.refresh(
             self.textpad_pad_y,
             self.textpad_pad_x,
@@ -59,7 +59,7 @@ class Infobox:
             self.textpad_pos_x + self.textpad_cols,
         )
 
-    def set_text(self, text):
+    def set_text(self, text) -> None:
         """Set the text."""
         self.text = text
         # TODO clear textpad
@@ -93,7 +93,7 @@ class Infobox:
             return True
         return False
 
-    def draw(self, screen_rows, screen_cols, rows, cols):
+    def draw(self, screen_rows, screen_cols, rows, cols) -> None:
         """Draw a simple infobox at the middle of the screen."""
         rows, cols = self._calculate_dimensions(
             screen_rows,
@@ -122,7 +122,7 @@ class Infobox:
 class WideInfobox(Infobox):
     """An info box that is pinned to the left and right sides of the screen."""
 
-    def draw(self, screen_rows, screen_cols, rows, pad_cols):
+    def draw(self, screen_rows, screen_cols, rows, pad_cols) -> None:
         """Draw a left and right anchored infobox at the middle of the screen."""
         super().draw(
             screen_rows,

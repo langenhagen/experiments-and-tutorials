@@ -15,19 +15,20 @@ message:
 import signal
 import time
 from contextlib import suppress
+from typing import NoReturn
 
 
 class SIGALRMException(Exception):
     """Custom Exception."""
 
 
-def timeout_handler(num, stack):
+def timeout_handler(num, stack) -> NoReturn:
     """Handler when receiving SIGALRM."""
     print(f"\n*** Received SIGALRM ***\n{num=}\n{stack=}\n---\n")
     raise SIGALRMException
 
 
-def long_running_function(seconds: int):
+def long_running_function(seconds: int) -> None:
     """A function that takes some time"""
     while seconds > 0:
         seconds -= 1

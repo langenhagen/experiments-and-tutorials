@@ -14,7 +14,7 @@ synth = synthesizer.Synthesizer(
 )
 
 
-def on_press(key):
+def on_press(key) -> None:
     """Play a note."""
     freq_Hz = hash(key) % 500 + 100.0
     duration_s = 30.0 / freq_Hz
@@ -22,7 +22,7 @@ def on_press(key):
     player.play_wave(wave)
 
 
-def on_release(key):
+def on_release(key) -> bool:
     """Always return true, i.e. keep listener running."""
     del key
     return True

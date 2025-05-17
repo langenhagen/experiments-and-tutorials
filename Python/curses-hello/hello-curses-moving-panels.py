@@ -8,7 +8,7 @@ from common import *
 
 
 class Box:
-    def __init__(self, text, h, w, y, x):
+    def __init__(self, text, h, w, y, x) -> None:
         self.coords = (y, x)
         self.win = curses.newwin(h, w, y, x)
         self.win.box()
@@ -17,27 +17,27 @@ class Box:
         self.panel = curses.panel.new_panel(self.win)
         Box.draw()
 
-    def move(self, y, x):
+    def move(self, y, x) -> None:
         self.coords = (y, x)
         self.panel.move(y, x)
         Box.draw()
 
     @staticmethod
-    def draw():
+    def draw() -> None:
         curses.panel.update_panels()
         curses.doupdate()
 
 
 class App:
     @staticmethod
-    def draw_key_info(screen, key):
+    def draw_key_info(screen, key) -> None:
         screen.move(3, 0)
         screen.addstr(3, 0, f"Key Code: {key}    ")
         screen.move(4, 0)
         screen.addstr(4, 0, f"chr({key}): {chr(key)}    ")
 
     @staticmethod
-    def draw_screen_dimensions(screen):
+    def draw_screen_dimensions(screen) -> None:
         screen_rows, screen_cols = getmaxyx(screen)
         addstr(
             screen,
@@ -46,7 +46,7 @@ class App:
             f"Screen Dimensions: h:{screen_rows}, w:{screen_cols}",
         )
 
-    def main(self, screen):
+    def main(self, screen) -> None:
         curses.curs_set(0)  # disable blinking cursor
         App.draw_screen_dimensions(screen)
 

@@ -8,7 +8,7 @@ from toga.style.pack import COLUMN, ROW
 
 
 class HelloWorld(toga.App):
-    def startup(self):
+    def startup(self) -> None:
         main_box = toga.Box(style=Pack(direction=COLUMN))
 
         name_label = toga.Label("Your name: ", style=Pack(padding=(0, 5)))
@@ -31,7 +31,7 @@ class HelloWorld(toga.App):
         self.main_window.content = main_box
         self.main_window.show()
 
-    def say_hello(self, widget):
+    def say_hello(self, widget) -> None:
         self.main_window.info_dialog(f"Hello, {self.name_input.value}", "Hi there!")
 
 

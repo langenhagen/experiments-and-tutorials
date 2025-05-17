@@ -1,6 +1,6 @@
 """Common general functionality."""
 
-from typing import Generator
+from collections.abc import Generator
 
 
 def read_in_chunks(file_object, chunk_size_bytes=4096) -> Generator[bytes, None, None]:

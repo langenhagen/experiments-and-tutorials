@@ -9,7 +9,7 @@ import common
 class CursesApp:
     """A scaffold for a general Curses application."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.keep_running = None
         self.min_screen_rows = 3
         self.min_screen_cols = 3
@@ -18,11 +18,11 @@ class CursesApp:
         self.screen = curses.initscr()
         curses.curs_set(0)  # disable blinking cursor
 
-    def run(self):
+    def run(self) -> None:
         """Call the draw_loop() function with the Curses context."""
         curses.wrapper(self.draw_loop)
 
-    def draw_loop(self, screen):
+    def draw_loop(self, screen) -> None:
         """Repeatedly draw and process input."""
         self.read_screen_size()
         self.redraw()
@@ -34,7 +34,7 @@ class CursesApp:
             else:
                 self.handle_key_event(key)
 
-    def draw_screen_dimensions(self):
+    def draw_screen_dimensions(self) -> None:
         """Draw the screen Dimensions to the screen."""
         message = f"h:{self.screen_rows}, w:{self.screen_cols}"
         common.addstr(
@@ -44,7 +44,7 @@ class CursesApp:
             message,
         )
 
-    def read_screen_size(self):
+    def read_screen_size(self) -> None:
         """Write the screen's rows and columns to member variables."""
         self.screen_rows, self.screen_cols = common.getmaxyx(self.screen)
 
@@ -56,7 +56,7 @@ class CursesApp:
             return common.prompt_screen_too_small(self.screen)
         return True
 
-    def handle_key_resize_event(self):
+    def handle_key_resize_event(self) -> None:
         """Call redraw or ask for action if the screen is too small."""
         self.read_screen_size()
         if self.prompt_for_screen_size():
@@ -64,12 +64,12 @@ class CursesApp:
         else:
             self.keep_running = False
 
-    def handle_key_event(self, key):
+    def handle_key_event(self, key) -> None:
         """Handle key events. Override this method."""
         if key == ord("q"):
             self.keep_running = False
 
-    def redraw(self):
+    def redraw(self) -> None:
         """Clear the screen and draw a frame. Override this method."""
         self.screen.clear()
         self.draw_screen_dimensions()

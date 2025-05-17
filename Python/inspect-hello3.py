@@ -11,7 +11,6 @@ author: andreasl
 import importlib
 import inspect
 import logging
-import os
 import pathlib
 import sys
 import types
@@ -19,12 +18,12 @@ import types
 log = logging.getLogger(name=__name__)
 
 
-def foo(s: str, i=0):
+def foo(s: str, i=0) -> None:
     print("Something")
 
     print(f"{s} : {i}")
 
-    def inner():
+    def inner() -> None:
         pass
 
     inner()
@@ -33,13 +32,13 @@ def foo(s: str, i=0):
 class SomeClass:
     """Show that the mechanism can also find methods."""
 
-    def bar(self):
+    def bar(self) -> float:
         return 3.14
 
-    def zaz():
+    def zaz() -> str:
         return "static"
 
-    def foo(self, s: str, i=0):
+    def foo(self, s: str, i=0) -> None:
         print(f"Method: {s} : {i}")
 
 
@@ -56,7 +55,7 @@ def load_module(path: pathlib.Path) -> types.ModuleType:
     return module
 
 
-def check_for_docstrings(n_function_lines_threshold, symbol):
+def check_for_docstrings(n_function_lines_threshold, symbol) -> None:
     """Check the given file for functions with more than the given lines of code
     that lack docstrings.
     """

@@ -15,7 +15,7 @@ from exceptiongroup import ExceptionGroup
 print("--- 1 catching ExceptionGroups ---\n")
 
 
-def raise_exceptions():
+def raise_exceptions() -> None:
     """Raise and handle 2 exceptions and return/raise them late as an
     ExceptionGroup."""
     exceptions: list[Exception] = []

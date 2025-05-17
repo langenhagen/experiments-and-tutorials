@@ -9,21 +9,21 @@ from dataclasses import dataclass
 # Test structures
 
 
-def foo():
+def foo() -> None:
     print("Hi!")
 
 
-def bar():
+def bar() -> None:
     """"""
 
-    def inner_fun():
+    def inner_fun() -> None:
         pass
 
     inner_fun()
 
 
 class MyTestClass:
-    def member_fun(self):
+    def member_fun(self) -> None:
         pass
 
 
@@ -42,8 +42,7 @@ class MyDataClass:
 def parse_python_file(filename: str):
     """Return the ast from a given python file."""
     with open(filename) as file:
-        root = ast.parse(file.read())
-    return root
+        return ast.parse(file.read())
 
 
 def get_last_deep_child(ast_node):
@@ -64,7 +63,7 @@ def find_all_function_nodes(ast_root):
     return fun_nodes
 
 
-def show_function_info(node):
+def show_function_info(node) -> None:
     argnames = [n.arg for n in node.args.args]
     lineno = node.lineno
     end_lineno = get_last_deep_child(node).lineno
@@ -72,7 +71,7 @@ def show_function_info(node):
     print(f'   """{ast.get_docstring(node)}"""')
 
 
-def run():
+def run() -> None:
     filename = sys.argv[1] if len(sys.argv) > 1 else __file__
     root = parse_python_file(filename)
 

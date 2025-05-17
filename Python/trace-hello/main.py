@@ -8,7 +8,7 @@ author: andreasl
 from hello import say_hello
 
 
-def main():
+def main() -> None:
     print("Starting the main program.")
     say_hello()
     say_hello()  # aaand a second time

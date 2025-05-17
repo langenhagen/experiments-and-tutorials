@@ -14,7 +14,7 @@ class App:
     text_x = 15
 
     @staticmethod
-    def draw_frame(stdscr):
+    def draw_frame(stdscr) -> None:
         screen_rows, screen_cols = stdscr.getmaxyx()
         stdscr.insstr(0, 0, " " * screen_cols, curses.A_REVERSE)
         HEADER_MESSAGE = "nfte 0.1 - Use the arrow keys to navigate, press ? for help"
@@ -24,25 +24,25 @@ class App:
         stdscr.insstr(screen_rows - 1, 0, FOOTER_MESSAGE, curses.A_REVERSE)
 
     @staticmethod
-    def draw_current_directory(stdscr, path):
+    def draw_current_directory(stdscr, path) -> None:
         _, screen_cols = stdscr.getmaxyx()
         stdscr.insstr(1, 0, "-" * screen_cols)
         stdscr.addstr(1, 3, f" {path} ")
 
     @staticmethod
-    def draw_content(stdscr):
+    def draw_content(stdscr) -> None:
         screen_rows, screen_cols = stdscr.getmaxyx()
         MESSAGE = f"Screen Dimensions: h:{screen_rows}, w:{screen_cols}"
         stdscr.addstr(screen_rows // 2, (screen_cols - len(MESSAGE)) // 2, MESSAGE)
 
     @staticmethod
-    def draw_window(stdscr):
+    def draw_window(stdscr) -> None:
         App.draw_frame(stdscr)
         App.draw_current_directory(stdscr, "my/fancy/path")
         App.draw_content(stdscr)
 
     @staticmethod
-    def draw_key_info(stdscr, key):
+    def draw_key_info(stdscr, key) -> None:
         stdscr.move(3, 0)
         stdscr.clrtoeol()
         stdscr.addstr(3, 0, f"Key Code: {key}")
@@ -51,7 +51,7 @@ class App:
         stdscr.addstr(4, 0, f"chr({key}): {chr(key)}")
 
     @staticmethod
-    def draw_info(stdscr):
+    def draw_info(stdscr) -> None:
         MESSAGE = (
             "This is my default veeeerrryyyy long text that I want to \n"
             "display with other stuff like the following. E.g., info for testing some stuff\n"
@@ -64,7 +64,7 @@ class App:
         )
         infobox.draw_infobox(stdscr, 10, 40, "example info", MESSAGE)
 
-    def main(self, stdscr):
+    def main(self, stdscr) -> None:
         curses.curs_set(0)  # disable blinking cursor
 
         App.draw_window(stdscr)

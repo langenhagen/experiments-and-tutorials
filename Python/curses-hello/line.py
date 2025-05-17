@@ -10,13 +10,13 @@ from node import ItemNode
 class Line:
     """Represents a line on the screen."""
 
-    def __init__(self, string):
+    def __init__(self, string) -> None:
         self.string = string
 
     def generate_string(self):
         return self.string
 
-    def draw(self, screen, y, invert_color=False, fill_character=None):
+    def draw(self, screen, y, invert_color=False, fill_character=None) -> None:
         """Draw the internally stored string representation of the line."""
         self.screen = screen
         string = self.generate_string()
@@ -34,7 +34,7 @@ class Line:
 class ItemLine(Line):
     """Represents an line depicting an ItemNode on the screen."""
 
-    def __init__(self, node: ItemNode, progress: int):
+    def __init__(self, node: ItemNode, progress: int) -> None:
         self.node = node
         self.progress = progress
 

@@ -3,7 +3,7 @@
 import logging
 
 
-def setup_logging():
+def setup_logging() -> None:
     """Setup a basic logging config."""
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

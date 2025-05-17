@@ -10,7 +10,7 @@ version: 19-07-02
 import inspect
 
 
-def foo(s: str, i=0):
+def foo(s: str, i=0) -> None:
     print(f"{s} : {i}")
 
 

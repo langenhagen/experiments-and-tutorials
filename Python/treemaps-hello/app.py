@@ -4,10 +4,8 @@ author: andreasl
 """
 
 import random
-import tkinter
-import tkinter.font
+import tkinter as tk
 from dataclasses import dataclass
-from typing import List
 
 import treemap
 
@@ -36,15 +34,15 @@ class Rectangle:
     tk_rect_id: int
     tk_text_id: int
     item: Item
-    font: tkinter.font.Font = None
+    font: tk.font.Font = None
 
     @staticmethod
-    def _lazy_init_class_vars():
+    def _lazy_init_class_vars() -> None:
         if Rectangle.font:
             return
-        Rectangle.font = tkinter.font.Font(family="FreeMono", size=12)
+        Rectangle.font = tk.font.Font(family="FreeMono", size=12)
 
-    def __init__(self, item, canvas, text, treemap_rect, fill_color):
+    def __init__(self, item, canvas, text, treemap_rect, fill_color) -> None:
         Rectangle._lazy_init_class_vars()
         self.item = item
         self.tk_rect_id = canvas.create_rectangle(
@@ -69,9 +67,9 @@ class Rectangle:
 
 class Application:
     canvas = None
-    rectangles: List[Rectangle] = None
+    rectangles: list[Rectangle] = None
 
-    def redraw_canvas(self):
+    def redraw_canvas(self) -> None:
         self.canvas.delete("all")
         self.rectangles = []
         for i in items_and_layouts:
@@ -86,27 +84,27 @@ class Application:
 
             self.rectangles.append(r)
 
-    def on_click(self, event):
+    def on_click(self, event) -> None:
         clicked_widget_id = event.widget.find_closest(event.x, event.y)[0]
         for r in self.rectangles:
             if clicked_widget_id in r.tk_ids():
                 print(r.item.id)
 
-    def on_right_click(self, event):
+    def on_right_click(self, event) -> None:
         print(f"You right clicked the canvas with args: {event}")
 
-    def on_resize(self, event):
+    def on_resize(self, event) -> None:
         self.redraw_canvas()
 
-    def setup_canvas(self, window):
-        self.canvas = tkinter.Canvas(window, bg="#0000ff")
+    def setup_canvas(self, window) -> None:
+        self.canvas = tk.Canvas(window, bg="#0000ff")
         self.canvas.bind("<Button-1>", self.on_click)
         self.canvas.bind("<Button-3>", self.on_right_click)
         self.canvas.bind("<Configure>", self.on_resize)
         self.canvas.pack(expand="yes", fill="both")
 
-    def run(self):
-        window = tkinter.Tk()
+    def run(self) -> None:
+        window = tk.Tk()
         # TODO change icon
         window.title("Hello Treemaps")
         window.geometry("600x600")

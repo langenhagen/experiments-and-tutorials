@@ -6,25 +6,25 @@ import gc
 
 
 class B:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
-    def __del__(self):
+    def __del__(self) -> None:
         print(f"{self} destroyed")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"B(name={self.name})"
 
 
 class C:
-    def __init__(self, name, b: B):
+    def __init__(self, name, b: B) -> None:
         self.name = name
         self.b = b
 
-    def __del__(self):
+    def __del__(self) -> None:
         print(f"{self} destroyed")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"C(name={self.name} b={self.b})"
 
 
@@ -57,7 +57,7 @@ print(f"{gc.get_referents(l)=}")
 print("\n--- 3 get_referrers(): get objects that refer to given objects ---\n")
 
 
-def print_referrers(o):
+def print_referrers(o) -> None:
     referrers = gc.get_referrers(o)
     print(f"Referrers to {o} ({len(referrers)=}):")
 

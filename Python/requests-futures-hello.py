@@ -17,7 +17,7 @@ Then test it out via:
 from requests_futures.sessions import FuturesSession
 
 
-def post():
+def post() -> None:
     """Make a POST call."""
     session = FuturesSession()
     print("Calling POST http://0.0.0.0:8000/foo ...")

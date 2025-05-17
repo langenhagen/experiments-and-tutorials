@@ -24,7 +24,7 @@ print(f"Initial memory usage: {mem_usage / 1024**2:.2f} MB")
 print("--- 2 memory usage after defining a function ---\n")
 
 
-def hello_world():
+def hello_world() -> str:
     return "Hello, World!"
 
 

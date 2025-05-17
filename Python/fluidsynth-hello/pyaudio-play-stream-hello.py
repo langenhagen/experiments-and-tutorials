@@ -8,7 +8,7 @@ https://github.com/nwhitehead/pyfluidsynth/blob/master/fluidsynth.py
 """
 
 import fluidsynth
-import numpy
+import numpy as np
 import pyaudio
 import pynput
 
@@ -16,7 +16,7 @@ audio = pyaudio.PyAudio()
 synth = fluidsynth.Synth()
 soundfont = synth.sfload("full-grand-piano.sf2")
 synth.program_select(0, soundfont, 0, 0)
-samples = numpy.append([], synth.get_samples(44100 * 1))
+samples = np.append([], synth.get_samples(44100 * 1))
 audio_string = fluidsynth.raw_audio_string(samples)
 
 
@@ -26,7 +26,7 @@ def pyaudio_callback(in_data, frame_count, time_info, status):
     next_slice = audio_string[:slice_size]
     audio_string = audio_string[slice_size:]
     if len(next_slice) < slice_size:
-        samples = numpy.append([], synth.get_samples(44100 * 10))
+        samples = np.append([], synth.get_samples(44100 * 10))
         audio_string = fluidsynth.raw_audio_string(samples)
         next_slice = audio_string[:slice_size]
     return (next_slice, pyaudio.paContinue)
@@ -42,7 +42,7 @@ strm = audio.open(
 strm.start_stream()
 
 
-def on_press(key):
+def on_press(key) -> None:
     """Play a note."""
     if isinstance(key, pynput.keyboard.KeyCode):
         note = key.vk
@@ -55,12 +55,12 @@ def on_press(key):
 
     synth.noteon(0, note, 100)
 
-    synth_samples = numpy.append([], synth.get_samples(44100 * 1))
+    synth_samples = np.append([], synth.get_samples(44100 * 1))
     global audio_string
     audio_string = fluidsynth.raw_audio_string(synth_samples)
 
 
-def on_release(key):
+def on_release(key) -> bool:
     """Always return true, i.e. keep listener running."""
     del key
     return True

@@ -23,7 +23,7 @@ import click
     default="My Default",
     help="This is an optional option",
 )
-def hello(myoption, myarg1, myarg2):
+def hello(myoption, myarg1, myarg2) -> None:
     """The docstring of the function may be used in the help string."""
     click.echo(f"myoption={myoption}\nmyarg1={myarg1}\nmyarg2={myarg2}")
 

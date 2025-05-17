@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def hello():
+def hello() -> str:
     """Serve an endpoint for test purposes."""
     request_time = time.asctime()
     # time.sleep(10)

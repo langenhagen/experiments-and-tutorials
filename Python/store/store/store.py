@@ -1,7 +1,8 @@
 """Store interface definition."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Generator, Generic, TypeVar
+from collections.abc import Generator
+from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
 
@@ -18,7 +19,7 @@ class Store(ABC, Generic[T]):
         """Retrieve all objects for which all given kwarg query field/value
         pairs match. If no kwarg was given, yield all objects."""
 
-    def save(self, obj: T):
+    def save(self, obj: T) -> None:
         """Update an object created by or retrieved from the store."""
 
     @abstractmethod

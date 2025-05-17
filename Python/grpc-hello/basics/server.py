@@ -10,11 +10,11 @@ Usage:
 import datetime as dt
 import logging
 import time
+from collections.abc import Generator
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import suppress
 from pathlib import Path
 from random import randint
-from typing import Generator
 
 import grpc
 from grpc import StatusCode
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
     """Provides methods that implement functionality of the server."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def LikeAFunction(self, request: Point, context) -> Point:
@@ -149,7 +149,7 @@ class MyServiceServicer(my_service_pb2_grpc.MyServiceServicer):
         return None
 
 
-def serve():
+def serve() -> None:
     """Start the server and blocking wait for termination."""
     server = grpc.server(ThreadPoolExecutor(max_workers=10))
     my_service_pb2_grpc.add_MyServiceServicer_to_server(

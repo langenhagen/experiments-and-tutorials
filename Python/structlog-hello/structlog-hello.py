@@ -26,7 +26,7 @@ from structlog.processors import (
 )
 
 
-def divide_by_zero():
+def divide_by_zero() -> None:
     """Throws an exception"""
     some_local_var = 42
     try:
@@ -154,11 +154,11 @@ logger_with_bound_field.info("Something smthng", name="Jane Foster", comment_id=
 print("\n--- 6 filter/drop messages ---\n")
 
 
-def foo():
+def foo() -> None:
     logger.info("Logging from foo()")
 
 
-def bar():
+def bar() -> None:
     logger.info("Logging from bar(); should be filtered")
 
 
@@ -193,7 +193,7 @@ print("\n--- 7 async logging with a<level>() ---\n")
 structlog.configure(processors=[JSONRenderer()])
 
 
-async def foo():
+async def foo() -> None:
     await logger.ainfo("This is an asynchronous log", name="file1.txt")
 
 

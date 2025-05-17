@@ -11,7 +11,7 @@ import nox
 
 
 @nox.session
-def test(session):
+def test(session) -> None:
     # Nox more or less passes session.install through to pip, so you can install
     # stuff in the usual way.
     # same as `pip install pytest requests>2.0.0`
@@ -25,30 +25,30 @@ def test(session):
 
 
 @nox.session(python=["3.9", "3.10", "3.11"])
-def lint(session):
+def lint(session) -> None:
     session.install("ruff")
     session.run("ruff", "--statistics", ".")
 
 
 @nox.session
-def coverage(session):
+def coverage(session) -> None:
     session.install("coverage")
     session.run("coverage")
 
 
 @nox.session(tags=["style", "fix"])
-def black(session):
+def black(session) -> None:
     session.install("black")
     session.run("black", "my_package")
 
 
 @nox.session(tags=["style", "fix"])
-def isort(session):
+def isort(session) -> None:
     session.install("isort")
     session.run("isort", "my_package")
 
 
 @nox.session(tags=["style"])
-def flake8(session):
+def flake8(session) -> None:
     session.install("flake8")
     session.run("flake8", "my_package")

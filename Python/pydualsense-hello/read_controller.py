@@ -4,23 +4,23 @@ from contextlib import suppress
 from pydualsense import pydualsense
 
 
-def cross_down(state):
+def cross_down(state) -> None:
     print(f"cross {state}")
 
 
-def circle_down(state):
+def circle_down(state) -> None:
     print(f"circle {state}")
 
 
-def dpad_down(state):
+def dpad_down(state) -> None:
     print(f"dpad {state}")
 
 
-def joystick(stateX, stateY):
+def joystick(stateX, stateY) -> None:
     print(f"lj {stateX} {stateY}")
 
 
-def gyro_changed(pitch, yaw, roll):
+def gyro_changed(pitch, yaw, roll) -> None:
     print(f"{roll}")
     print(f"{pitch}")
     print(f"{yaw}")

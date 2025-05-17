@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 class AbstractFlaskServer(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.value = value
         super().__init__()
 

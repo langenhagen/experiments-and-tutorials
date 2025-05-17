@@ -1,7 +1,8 @@
 """A simple deepcopy-based in-memory implementation of the `Store` interface."""
 
+from collections.abc import Generator, Iterable
 from copy import deepcopy
-from typing import Any, Generator, Iterable, TypeVar
+from typing import Any, TypeVar
 
 from store.exceptions import NotFromStoreException, NotUniqueException
 from store.store import Store
@@ -22,7 +23,7 @@ class InMemoryStore(Store[T]):
     of performance. Thus, this store is probably suitable only for tests.
     """
 
-    def __init__(self, unique_keys: Iterable = frozenset()):
+    def __init__(self, unique_keys: Iterable = frozenset()) -> None:
         """Initialize an empty store.
         Optionally specify the object attributes whose values shall be
         unique over all items in the store."""
@@ -74,7 +75,7 @@ class InMemoryStore(Store[T]):
                 setattr(o, name, deepcopy(value))
         return count
 
-    def save(self, obj: T):
+    def save(self, obj: T) -> None:
         """Throw away an the old store record and add the given updated item."""
         obj_id = getattr(obj, self.__store_marker, None)
         if obj_id is None:

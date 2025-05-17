@@ -9,7 +9,7 @@ import traceback
 print("--- 1 print an exception and a stack trace ---\n")
 
 
-def foo():
+def foo() -> None:
     try:
         raise ValueError("hahaha")
     except ValueError:
@@ -18,7 +18,7 @@ def foo():
         # traceback.print_exc()  # prints the same info directly
 
 
-def bar():
+def bar() -> None:
     foo()
 
 
@@ -38,13 +38,13 @@ print("---")
 print('\n--- 2 get the exception without specifying "except as ...:" ---\n')
 
 try:
-    raise IOError("miaaaauuu")
+    raise OSError("miaaaauuu")
 except:
     print(sys.exc_info())
     exc_class, exc_obj, traceback = sys.exc_info()
-    print("exception_class: {}".format(exc_class))  # == type(exc_obj)
-    print("exception_obj: {}".format(exc_obj))
-    print("traceback: {}".format(traceback))
+    print(f"exception_class: {exc_class}")  # == type(exc_obj)
+    print(f"exception_obj: {exc_obj}")
+    print(f"traceback: {traceback}")
 
 print("\n--- 3 Excepthook ---\n")
 
@@ -65,7 +65,7 @@ sys.excepthook = patched_excepthook
 try:
     raise ValueError("this one will be try/except-catched and not hooked")
 except:
-    print("Handled exception\n sys.ext_info()={}".format(sys.exc_info()))
+    print(f"Handled exception\n sys.ext_info()={sys.exc_info()}")
 
 # raise IOError('This one should be hooked')  # comment this out in order to step further
 

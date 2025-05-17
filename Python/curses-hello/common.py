@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Contains common curses helper functions and wrappers araund curses functions."""
+
 import curses
 
 import exceptions
@@ -16,7 +17,7 @@ def getmaxyx(screen):
     return screen_rows, screen_cols
 
 
-def addstr(screen, y, x, text):
+def addstr(screen, y, x, text) -> None:
     """Safely add a string and abbreviate and draw ellipses if necessary."""
     screen_rows, screen_cols = getmaxyx(screen)
     if not ((0 <= y < screen_rows) and (0 <= x < screen_cols)):
@@ -30,7 +31,7 @@ def addstr(screen, y, x, text):
     screen.addstr(y, x, text)
 
 
-def move(screen, y, x):
+def move(screen, y, x) -> None:
     """Move the cursor to the given position. Raise an exception if the position is out of bounds."""
     screen_rows, screen_cols = getmaxyx(screen)
     if (not 0 <= y < screen_rows) or (not 0 <= x < screen_cols):
@@ -64,10 +65,10 @@ def elide_end(text: str, max_n_chars: int) -> str:
     return f"{text[:n_first_chars]}..."
 
 
-def prompt_screen_too_small(screen):
+def prompt_screen_too_small(screen) -> bool:
     """Prompt that the screen is too small and ask for action."""
 
-    def show_message(screen):
+    def show_message(screen) -> None:
         screen.clear()
         screen.insstr(
             0,
@@ -84,4 +85,4 @@ def prompt_screen_too_small(screen):
         if char == curses.KEY_RESIZE:
             show_message(screen)
     screen.clear()
-    return True if char == ord("i") else False
+    return char == ord("i")

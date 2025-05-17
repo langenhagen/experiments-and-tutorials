@@ -14,11 +14,11 @@ import sys
 """USAGE:
 eras0r.py [-r <root-dir>] [-i <subdir to be ignored> ] [...] [<filetype-glob/foldername>] [...]
 EXAMPLE:
-eras0r.py -r "C:\Crunch it\" -i .\_Lib -i .\Liepham *.tlog ipch *.pdb
+eras0r.py -r "C:\\Crunch it\" -i .\\_Lib -i .\\Liepham *.tlog ipch *.pdb
 """
 
 
-def main(argv):
+def main(argv) -> None:
     # get command line arguments
     try:
         opts, deletes = getopt.getopt(argv, "r:i:")

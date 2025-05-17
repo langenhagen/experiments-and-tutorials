@@ -11,7 +11,7 @@ import types
 print("--- 1 check types of things ---\n")
 
 
-def foo():
+def foo() -> str:
     return "Hello, World!"
 
 

@@ -9,21 +9,23 @@ Based on:
 - https://docs.pytest.org/en/6.2.x/parametrize.html
 """
 
+from typing import NoReturn
+
 import pytest
 
 
-def greet(name):
+def greet(name) -> None:
     """A sample function."""
     print(f"Hi, {name}")
 
 
-def raise_exc():
+def raise_exc() -> NoReturn:
     """Raise an ValueError."""
     print("Foo")
     raise ValueError("This is an exception")
 
 
-def test_greet(capsys):
+def test_greet(capsys) -> None:
     """Test the stdout with capsys."""
     greet("Earthling")
     out, err = capsys.readouterr()
@@ -34,7 +36,7 @@ def test_greet(capsys):
     greet("Nerd")
 
 
-def test_raise_exc(capsys):
+def test_raise_exc(capsys) -> None:
     """Test raising an exception."""
     with pytest.raises(ValueError):
         raise_exc()
@@ -45,7 +47,7 @@ def test_raise_exc(capsys):
 
 @pytest.mark.parametrize("first_parameter", ["Jeff", "Jonas"])
 @pytest.mark.parametrize("test_input, expected", [("3+5", 8), ("2*4", 8)])
-def test_eval(first_parameter, test_input, expected):
+def test_eval(first_parameter, test_input, expected) -> None:
     """Showcase parameterized tests."""
     assert first_parameter[0] == "J"
     assert eval(test_input) == expected

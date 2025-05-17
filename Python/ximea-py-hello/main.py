@@ -24,7 +24,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def main():
+def main() -> None:
     """Connect and trigger a ximea camera and show the image."""
 
     n_devices = xiapi.Camera().get_number_devices()

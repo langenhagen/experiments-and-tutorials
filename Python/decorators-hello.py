@@ -1,6 +1,6 @@
 """Showcase Python's decorators"""
 
-from typing import Callable
+from collections.abc import Callable
 
 
 def my_decorator(function: Callable) -> Callable:
@@ -15,7 +15,7 @@ def my_decorator(function: Callable) -> Callable:
 
 class C:
     @my_decorator
-    def foo(self):
+    def foo(self) -> None:
         print("Hello there!")
 
 

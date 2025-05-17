@@ -11,7 +11,7 @@ dir = max([d for d in memdumps_root.iterdir() if d.is_dir()])
 
 print(dir)
 
-files = [f for f in dir.glob("*.out")]
+files = list(dir.glob("*.out"))
 oldest_dump = min(files)
 youngest_dump = max(files)
 

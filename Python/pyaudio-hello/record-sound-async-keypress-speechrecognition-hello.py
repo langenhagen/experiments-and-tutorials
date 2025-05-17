@@ -27,7 +27,7 @@ class AudioRecognitionClient:
         channels: int = 1,
         chunk_size: int = 1024,
         framerate: int = 44100,
-    ):
+    ) -> None:
         """Initialize the audio recorder."""
         self.audio_interface = pyaudio.PyAudio()
         self.do_record: bool = False
@@ -35,11 +35,11 @@ class AudioRecognitionClient:
         self.chunk_size: int = chunk_size
         self.framerate: int = framerate
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Destructor."""
         self.audio_interface.terminate()
 
-    def recognize(self):
+    def recognize(self) -> None:
         """Do record audio."""
         with KeyboardListener(
             on_press=self._on_key_press,
@@ -64,13 +64,13 @@ class AudioRecognitionClient:
 
             listener.join()
 
-    def _on_key_press(self, key):
+    def _on_key_press(self, key) -> None:
         """Trigger recording on trigger key pess."""
         if key is self.TRIGGER_KEY and not self.do_record:
             print("Start Recording...")
             self.do_record = True
 
-    def _on_key_release(self, key):
+    def _on_key_release(self, key) -> None:
         """Stop recording on key up trigger key."""
         if key is self.TRIGGER_KEY:
             print("End Recording")

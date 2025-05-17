@@ -10,14 +10,14 @@ Code based off: https://www.thedigitalcatonline.com/blog/2020/03/27/mixin-classe
 
 
 class Mother:
-    def __init__(self, a, b, c):
+    def __init__(self, a, b, c) -> None:
         self.a = a
         self.b = b
         self.c = c
 
 
 class Mixin:
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         """Calls to the Mother class of the class to which we add the Mixin to."""
         super().__init__(x, y, x + y)
 

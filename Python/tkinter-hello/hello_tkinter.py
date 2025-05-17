@@ -1,20 +1,19 @@
 import random
-import tkinter
-import tkinter.font
+import tkinter as tk
 
 
 class Rectangle:
     tk_rect_id: int
     tk_text_id: int
-    font: tkinter.font.Font = None
+    font: tk.font.Font = None
 
     @staticmethod
-    def _lazy_init_class_vars():
+    def _lazy_init_class_vars() -> None:
         if Rectangle.font:
             return
-        Rectangle.font = tkinter.font.Font(family="FreeMono", size=12)
+        Rectangle.font = tk.font.Font(family="FreeMono", size=12)
 
-    def __init__(self, canvas, fill_color):
+    def __init__(self, canvas, fill_color) -> None:
         Rectangle._lazy_init_class_vars()
 
         if canvas.winfo_height() > 50:
@@ -48,12 +47,12 @@ class Application:
     red_rectangle = None
     yellow_rectangle = None
 
-    def redraw_canvas(self):
+    def redraw_canvas(self) -> None:
         self.canvas.delete("all")
         self.red_rectangle = Rectangle(self.canvas, "#ff0000")
         self.yellow_rectangle = Rectangle(self.canvas, "#ffff00")
 
-    def on_click(self, event):
+    def on_click(self, event) -> None:
         # breakpoint()
         # print(f"You clicked a rectangle with args: {event}")
         # print(f"At: {event.x}, {event.y}")
@@ -75,21 +74,21 @@ class Application:
 
         self.redraw_canvas()
 
-    def on_right_click(self, event):
+    def on_right_click(self, event) -> None:
         print(f"You right clicked the canvas with args: {event}")
 
-    def on_resize(self, event):
+    def on_resize(self, event) -> None:
         self.redraw_canvas()
 
-    def setup_canvas(self, window):
-        self.canvas = tkinter.Canvas(window, bg="#0000ff")
+    def setup_canvas(self, window) -> None:
+        self.canvas = tk.Canvas(window, bg="#0000ff")
         self.canvas.bind("<Button-1>", self.on_click)
         self.canvas.bind("<Button-3>", self.on_right_click)
         self.canvas.bind("<Configure>", self.on_resize)
         self.canvas.pack(expand="yes", fill="both")
 
-    def run(self):
-        window = tkinter.Tk()
+    def run(self) -> None:
+        window = tk.Tk()
         # TODO change icon
         window.title("Hello TKinter")
         window.geometry("300x300")

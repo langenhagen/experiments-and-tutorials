@@ -74,11 +74,11 @@ def _something_something_datastream(device: Any) -> Any:
         datastream.QueueBuffer(buffer)
 
 
-def _start_aquisition():
+def _start_aquisition() -> None:
     """TODO doc"""
 
 
-def main():
+def main() -> None:
     """Main program function."""
 
     ids_peak.Library.Initialize()

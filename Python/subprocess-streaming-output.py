@@ -21,7 +21,7 @@ print(dir(asyncio))
 """
 
 
-def stream(pipe, out):
+def stream(pipe, out) -> None:
     for line in iter(pipe.readline, ""):
         out.write(f"{out.name}: {line}")
     pipe.close()

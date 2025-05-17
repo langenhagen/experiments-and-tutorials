@@ -17,22 +17,22 @@ def binary_search_1(n, arr):
     while(len(arr) > 0):
         pivot = len(arr) // 2
         value = arr[pivot]
-        if debug: print('arr:{}  result_index:{}  pivot:{}'.format(arr, result_index, pivot))
+        if debug: print(f'arr:{arr}  result_index:{result_index}  pivot:{pivot}')
 
         if value == n:
-            if debug: print('HIT = return result_index + pivot = {}\n'.format(result_index + pivot))
+            if debug: print(f'HIT = return result_index + pivot = {result_index + pivot}\n')
             return result_index + pivot
 
         elif value < n:
             # to right
             arr = arr[pivot+1:]
             result_index += pivot + 1
-            if debug: print('RIGHT value<n {} < {} pivot:{} and result_index={}\n'.format(value, n, pivot, result_index))
+            if debug: print(f'RIGHT value<n {value} < {n} pivot:{pivot} and result_index={result_index}\n')
 
         elif value > n:
             # to left
             arr = arr[:pivot]
-            if debug: print('LEFT value>n {} > {} pivot:{} and result_index={}\n'.format(value, n, pivot, result_index))
+            if debug: print(f'LEFT value>n {value} > {n} pivot:{pivot} and result_index={result_index}\n')
         else:
             #shd never happen
             raise Exception('something strange just happened...')

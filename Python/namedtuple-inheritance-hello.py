@@ -10,7 +10,6 @@ author: andreasl
 
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import NamedTuple, Optional
 
 
 class Event:

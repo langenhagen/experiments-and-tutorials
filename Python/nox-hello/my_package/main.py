@@ -2,7 +2,7 @@
 """A sample python program."""
 
 
-def main():
+def main() -> None:
     """Program main entry point."""
     print("Hello world!")
 

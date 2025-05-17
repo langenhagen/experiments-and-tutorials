@@ -4,19 +4,19 @@ from common import addstr, getmaxyx
 from infobox import Infobox, WideInfobox
 
 
-def draw_key_info(screen, key):
+def draw_key_info(screen, key) -> None:
     screen.move(3, 0)
     screen.addstr(3, 0, f"Key Code: {key}    ")
     screen.move(4, 0)
     screen.addstr(4, 0, f"chr({key}): {chr(key)}    ")
 
 
-def draw_screen_dimensions(screen):
+def draw_screen_dimensions(screen) -> None:
     screen_rows, screen_cols = getmaxyx(screen)
     addstr(screen, 0, 0, f"Screen Dimensions: h:{screen_rows}, w:{screen_cols}")
 
 
-def draw_screen(screen, infobox, key, is_wide):
+def draw_screen(screen, infobox, key, is_wide) -> None:
     draw_screen_dimensions(screen)
 
     draw_key_info(screen, key)
@@ -48,7 +48,7 @@ def create_infobox(is_wide: bool) -> Infobox:
     return create_normal_infobox()
 
 
-def main(screen):
+def main(screen) -> None:
     curses.curs_set(0)  # disable blinking cursor
 
     is_wide = False

@@ -9,7 +9,7 @@ import numpy as np
 class FullyConnectedLayer:
     """A simple fully connected neural network layer."""
 
-    def __init__(self, n_inputs, layer_size, activation_fn):
+    def __init__(self, n_inputs, layer_size, activation_fn) -> None:
         self.weights = np.random.standard_normal((n_inputs, layer_size))
         self.bias = np.random.standard_normal(layer_size)
         self.size = layer_size

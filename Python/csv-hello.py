@@ -26,4 +26,4 @@ with open(filename, "w") as file:
         )
         writer.writerow(row)
 
-print(open(filename, "r").read())
+print(open(filename).read())

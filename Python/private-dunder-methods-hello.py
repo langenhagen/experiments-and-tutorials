@@ -2,25 +2,25 @@
 
 
 class C:
-    def __private_method(self):
+    def __private_method(self) -> None:
         """A private function in python. Only visible inside the class, not
         outside and not to subclasses."""
         print("Hello from __private_method()")
 
-    def method(self):
+    def method(self) -> None:
         self.__private_method()  # works
 
     @staticmethod
-    def my_staticmethod():
+    def my_staticmethod() -> None:
         C.__private_staticmethod()
 
     @staticmethod
-    def __private_staticmethod():
+    def __private_staticmethod() -> None:
         print("Hello from __private_staticmethod()")
 
 
 class D(C):
-    def bar(self):
+    def bar(self) -> None:
         self.__private_method()
 
 

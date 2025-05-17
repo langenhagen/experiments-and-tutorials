@@ -8,7 +8,7 @@ author: andreasl
 
 import json
 
-import pandas
+import pandas as pd
 
 print("--- 1 flat json to csv")
 
@@ -17,10 +17,10 @@ json_data = [
     {"name": "Jimbo", "color": "red", "timestamp": 890},
 ]
 
-df1 = pandas.read_json(json.dumps(json_data))
+df1 = pd.read_json(json.dumps(json_data))
 df1.insert(1, "New Column", "XXX")
-df2 = pandas.read_json(json.dumps(json_data))
-df = pandas.concat([df1, df2], sort=False)
+df2 = pd.read_json(json.dumps(json_data))
+df = pd.concat([df1, df2], sort=False)
 df.sort_values(by="timestamp", inplace=True)
 # csv = df.to_csv(index=False, header=False)
 csv = df.to_csv(index=False)
@@ -29,7 +29,7 @@ print(csv)
 
 print("--- 2 flat json to csv with defined columns")
 
-df = pandas.read_json(json.dumps(json_data))
+df = pd.read_json(json.dumps(json_data))
 df = df.reindex(columns=["timestamp", "name", "age", "imaginary"])
 df.sort_values(by="timestamp", inplace=True)
 csv = df.to_csv(index=False)
@@ -52,7 +52,7 @@ json_data = [
     },
 ]
 
-df = pandas.io.json.json_normalize(json_data)
+df = pd.io.json.json_normalize(json_data)
 df.sort_values(by="timestamp", inplace=True)
 csv = df.to_csv(index=False)
 

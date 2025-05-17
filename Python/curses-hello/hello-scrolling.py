@@ -6,7 +6,7 @@ class Screen:
     UP = -1
     DOWN = 1
 
-    def __init__(self, items):
+    def __init__(self, items) -> None:
         """Initialize the screen window.
 
         Attributes
@@ -54,7 +54,7 @@ class Screen:
 
         self.run()
 
-    def init_curses(self):
+    def init_curses(self) -> None:
         """Setup the curses"""
         self.window = curses.initscr()
         self.window.keypad(True)
@@ -70,7 +70,7 @@ class Screen:
 
         self.height, self.width = self.window.getmaxyx()
 
-    def run(self):
+    def run(self) -> None:
         """Continue running the TUI until get interrupted"""
         try:
             self.input_stream()
@@ -79,7 +79,7 @@ class Screen:
         finally:
             curses.endwin()
 
-    def input_stream(self):
+    def input_stream(self) -> None:
         """Waiting an input and run a proper method according to type of input"""
         while True:
             self.display()
@@ -96,7 +96,7 @@ class Screen:
             elif ch == curses.ascii.ESC:
                 break
 
-    def scroll(self, direction):
+    def scroll(self, direction) -> None:
         """Scrolling the window when pressing up/down arrow keys"""
         # next cursor position after scrolling
         next_line = self.current + direction
@@ -130,7 +130,7 @@ class Screen:
             self.current = next_line
             return
 
-    def paging(self, direction):
+    def paging(self, direction) -> None:
         """Paging the window when pressing left/right arrow keys"""
         current_page = (self.top + self.current) // self.max_lines
         next_page = current_page + direction
@@ -151,7 +151,7 @@ class Screen:
             self.top += self.max_lines
             return
 
-    def display(self):
+    def display(self) -> None:
         """Display the items on window"""
         self.window.erase()
         for idx, item in enumerate(self.items[self.top : self.top + self.max_lines]):
@@ -163,7 +163,7 @@ class Screen:
         self.window.refresh()
 
 
-def main():
+def main() -> None:
     items = [f"{num + 1}. Item" for num in range(1000)]
     Screen(items)
 

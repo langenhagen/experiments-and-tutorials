@@ -15,7 +15,7 @@ def sigmoid(x):
 class SimpleNetwork:
     """Simple fully connected neural network."""
 
-    def __init__(self, n_inputs, n_outputs, hidden_layer_sizes=(64, 32)):
+    def __init__(self, n_inputs, n_outputs, hidden_layer_sizes=(64, 32)) -> None:
         sizes = [n_inputs, *hidden_layer_sizes, n_outputs]
         self.layers = []
         for i in range(len(sizes) - 1):

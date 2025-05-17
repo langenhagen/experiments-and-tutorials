@@ -38,7 +38,7 @@ class MyModel(Base):
         return f"MyModel(id={self.id}, my_column={self.my_column})"
 
 
-def do_nested_session(a: MyModel):
+def do_nested_session(a: MyModel) -> None:
     """Change an item from an outer session."""
     with session_scope() as session:
         # session.add(a)  # doesn't work, obviously
@@ -47,7 +47,7 @@ def do_nested_session(a: MyModel):
         print(f"after updating {a.my_column=}")
 
 
-def do_outer_session():
+def do_outer_session() -> None:
     """First DB session inception level."""
     with session_scope() as session:
         a = MyModel(my_column="foo")
@@ -56,7 +56,7 @@ def do_outer_session():
         do_nested_session(a)
 
 
-def show_db_contents():
+def show_db_contents() -> None:
     """Print the contents of mytable"""
     print(f"\nAll MyModel DB entries:")
     with session_scope() as session:
@@ -64,7 +64,7 @@ def show_db_contents():
             print(f"{i}: {m}")
 
 
-def main():
+def main() -> None:
     """Create a session via context manager, and inside this context, create
     another session via context manager. See how this works."""
     Base.metadata.create_all(bind=engine)

@@ -25,7 +25,7 @@ from time import sleep
 
 
 def hog_memory(n: int):
-    return [i for i in range(n)]
+    return list(range(n))
 
 
 @dataclass

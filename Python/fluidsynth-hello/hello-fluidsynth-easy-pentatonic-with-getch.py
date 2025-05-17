@@ -4,7 +4,6 @@ See:
 https://github.com/nwhitehead/pyfluidsynth
 """
 
-import math
 import random
 import sys
 import termios
@@ -56,7 +55,7 @@ key_offset = random.randrange(0, 11)
 counter = 0
 
 
-def play_note():
+def play_note() -> None:
     char = getch()  # blocks nicely
     note = ord(char) % 72 + 24
 

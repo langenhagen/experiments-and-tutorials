@@ -52,7 +52,7 @@ colors = (
 )
 
 
-def Cube():
+def Cube() -> None:
     glBegin(GL_QUADS)
     for i, surface in enumerate(surfaces):
         glColor3fv(colors[i])  # Set the color for each face
@@ -69,7 +69,7 @@ def Cube():
     glEnd()
 
 
-def main():
+def main() -> None:
     pygame.init()
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)

@@ -2,11 +2,11 @@
 """Showcase that working with different indentations in functions works."""
 
 
-def normal_indented():
+def normal_indented() -> None:
     print("This has a 4 characters indentation")
 
 
-def three_spaces_indented():
+def three_spaces_indented() -> None:
    print("This has a 3 characters indentation")
 
 

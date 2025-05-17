@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def foo():
+def foo() -> None:
     """Wraps calls to log in order to fill the stack info with stuff to show."""
     print("--- 1 debug ---")
     logger.debug("hello")
@@ -71,11 +71,11 @@ def foo():
     class C:
         """A custom class with custom __str__ function."""
 
-        def __init__(self, a, b):
+        def __init__(self, a, b) -> None:
             self.a = a
             self.b = b
 
-        def __str__(self):
+        def __str__(self) -> str:
             return f"C: {self.a} - {self.b}"
 
     obj = C(1, "andi")

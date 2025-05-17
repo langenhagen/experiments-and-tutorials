@@ -9,7 +9,7 @@ Usage:
 import sys
 
 
-def foo(some, params):
+def foo(some, params) -> None:
     print(sys.argv)  # finds the program's argv also from within a function
 
 

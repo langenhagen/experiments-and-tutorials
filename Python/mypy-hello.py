@@ -5,7 +5,10 @@ run via:
   mypy mypy-hello.py
 """
 
-from typing import Any, Iterable, Literal
+from typing import TYPE_CHECKING, Any, Literal
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 print("\n--- 1 Mypy is inconsistent about whether None is in `Any` or not ---\n")
 
@@ -25,7 +28,7 @@ l = [1, 2, 3]
 t = (1, 2, 3)
 
 
-def receive_lists(l: list[int]):
+def receive_lists(l: list[int]) -> None:
     print(f"{l=}")
 
 
@@ -35,7 +38,7 @@ receive_lists(l)  # ok
 receive_lists(t)
 
 
-def receive_iterables(l: Iterable[int]):
+def receive_iterables(l: Iterable[int]) -> None:
     print(f"{l=}")
 
 

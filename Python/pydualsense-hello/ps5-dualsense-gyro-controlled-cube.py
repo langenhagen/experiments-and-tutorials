@@ -18,7 +18,7 @@ gyro_pitch = 0
 gyro_yaw = 0
 
 
-def gyro_changed(pitch, yaw, roll):
+def gyro_changed(pitch, yaw, roll) -> None:
     global gyro_roll, gyro_pitch, gyro_yaw
     gyro_roll = roll
     gyro_pitch = pitch
@@ -74,7 +74,7 @@ colors = (
 # fmt: on
 
 
-def Cube():
+def Cube() -> None:
     glBegin(GL_QUADS)
     for i_surface, surface in enumerate(surfaces):
         glColor3fv(colors[i_surface])
@@ -90,7 +90,7 @@ def Cube():
     glEnd()
 
 
-def draw_hud(width, height):
+def draw_hud(width, height) -> None:
     # Save the current projection and modelview matrices
     glMatrixMode(GL_PROJECTION)
     glPushMatrix()
@@ -177,7 +177,7 @@ def draw_hud(width, height):
     glMatrixMode(GL_MODELVIEW)
 
 
-def resize_window(width, height):
+def resize_window(width, height) -> None:
     if height == 0:
         height = 1
     glViewport(0, 0, width, height)
@@ -187,7 +187,7 @@ def resize_window(width, height):
     glMatrixMode(GL_MODELVIEW)
 
 
-def main():
+def main() -> None:
     pygame.init()
     display = (800, 600)
 

@@ -16,7 +16,7 @@ from sys import getsizeof
 from psutil import Process
 
 
-def print_mem_usage():
+def print_mem_usage() -> None:
     """Report process memory usage."""
     process = Process(getpid())
     memory_usage = process.memory_info().rss
@@ -26,7 +26,7 @@ def print_mem_usage():
 class A:
     """A lil class."""
 
-    def __init__(self, i: int):
+    def __init__(self, i: int) -> None:
         self.i = i
 
 
@@ -39,7 +39,7 @@ class O:
         a: A,
         d: dict[str, A],
         b: bool,
-    ):
+    ) -> None:
         self.s: str = s
         self.a = a
         self.d = d

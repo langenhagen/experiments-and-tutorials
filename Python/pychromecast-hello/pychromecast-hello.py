@@ -15,7 +15,7 @@ from pychromecast import CastBrowser, Chromecast, get_listed_chromecasts
 from pytube import YouTube
 
 
-def main():
+def main() -> None:
     chromecasts: list[Chromecast]
     browser: CastBrowser
     # chromecasts, browser = get_listed_chromecasts(["doesn't exit"])

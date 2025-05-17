@@ -17,7 +17,7 @@ import sys
 from pychromecast import CastBrowser, Chromecast, get_listed_chromecasts
 
 
-def main():
+def main() -> None:
     room_nr = sys.argv[1]
     chromecast_name = f"Room_{room_nr}"
 

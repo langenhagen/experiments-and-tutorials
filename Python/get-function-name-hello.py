@@ -13,7 +13,7 @@ def get_function_name():
     return function_name
 
 
-def some_free_function():
+def some_free_function() -> str:
     i = 42
     j = 12.3
     print(f"Hello from some_free_function()! {i} {j}")
@@ -22,12 +22,12 @@ def some_free_function():
 
 
 class C:
-    def foo(self):
+    def foo(self) -> None:
         print("Hello C.foo()")
         print(get_function_name())
 
     @staticmethod
-    def bar():
+    def bar() -> None:
         print("Hello from staticmethod C.bar()")
         print(get_function_name())
 
@@ -37,7 +37,7 @@ class D(C):
 
 
 class E(C):
-    def foo(self):
+    def foo(self) -> None:
         print("Hello from a derived method E.foo()")
         print(get_function_name())
 

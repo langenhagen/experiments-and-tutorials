@@ -19,20 +19,20 @@ import tracemalloc
 
 
 def hog_memory(n: int):
-    return [i for i in range(n)]
+    return list(range(n))
 
 
-def bold(v):
+def bold(v) -> None:
     """Print bold."""
     print(f"\033[1m{v}\033[0m")
 
 
-def pink(v):
+def pink(v) -> None:
     """Print bold magenta."""
     print(f"\033[1;35m{v}\033[0m")
 
 
-def track_allocations():
+def track_allocations() -> None:
     """Monitor live allocations, intended for off-thread use.
 
     Track memory peaks and makes a snapshot as soon as a peak is registered.
@@ -86,7 +86,7 @@ def track_allocations():
 shutdown_event = threading.Event()  # Signal to stop the thread
 
 
-def main():
+def main() -> None:
     """Allocate a few short-lived/transient memory hogs and see if we can catch
     them."""
 

@@ -12,7 +12,7 @@ from time import sleep
 event = Event()
 
 
-def worker(var):
+def worker(var) -> None:
     while True:
         for i in range(len(var)):
             var[i] += 1

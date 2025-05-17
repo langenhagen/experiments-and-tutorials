@@ -1,11 +1,10 @@
-from typing import List, Optional
 
 from pydantic import BaseModel
 
 
 class ItemBase(BaseModel):
     title: str
-    description: Optional[str] = None
+    description: str | None = None
 
 
 class ItemCreate(ItemBase):
@@ -31,7 +30,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     is_active: bool
-    items: List[Item] = []
+    items: list[Item] = []
 
     class Config:
         orm_mode = True

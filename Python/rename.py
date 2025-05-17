@@ -31,12 +31,12 @@ for fname in flist:
 			os.rename(fname, preString + fname)
 		elif mode == 1:
 			# pre-number with leading zeros
-			num_digits_all = math.ceil(math.log(len(flist)+1,10)) # num of digits of the number
-			num_digits_cur = math.ceil(math.log(count+1,10)) # num of digits of current number
+			num_digits_all = math.ceil(math.log10(len(flist)+1)) # num of digits of the number
+			num_digits_cur = math.ceil(math.log10(count+1)) # num of digits of current number
 			num_of_zeros = num_digits_all - num_digits_cur
 			preString = "";
 
-			for z in range(0, num_of_zeros):
+			for z in range(num_of_zeros):
 				preString += "0"
 
 			preString += str(count) + " "

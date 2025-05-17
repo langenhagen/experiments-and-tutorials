@@ -25,13 +25,13 @@ def _pretty_memory_size(n_bytes: int) -> str:
     return f"{format(size, '.2f')} {units[unit_id]}"
 
 
-def _print_pretty_memory_size(n_bytes: int, prefix: str = "mem_usage = "):
+def _print_pretty_memory_size(n_bytes: int, prefix: str = "mem_usage = ") -> None:
     """Print the given number of bytes in a human-readable format."""
     mem_usage = _pretty_memory_size(n_bytes)
     print(f"{prefix}{mem_usage}")
 
 
-def _open_subprocess():
+def _open_subprocess() -> None:
     """Open and execute a simple subprocess."""
     command = 'echo "Hello, World! My PID is $$. echo My RAM usage is:"; ps -o rss= $$;'
     process = subprocess.Popen(
@@ -47,7 +47,7 @@ def _open_subprocess():
         print("Error:", error.decode("utf-8"))
 
 
-def main():
+def main() -> None:
     """Run the program"""
 
     # first, let's get some basics laid out

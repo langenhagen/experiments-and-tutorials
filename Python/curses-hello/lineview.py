@@ -7,11 +7,11 @@ import curses
 class LineView:
     """Draws consecutive Line objects in a curses textpad."""
 
-    def __init__(self, lines):
+    def __init__(self, lines) -> None:
         self._cursor_pos = 0
         self.lines = lines
 
-    def _refresh(self):
+    def _refresh(self) -> None:
         self.pad.refresh(
             self.y_offset,
             0,
@@ -26,7 +26,7 @@ class LineView:
         return self._cursor_pos
 
     @cursor_pos.setter
-    def cursor_pos(self, value):
+    def cursor_pos(self, value) -> None:
         """Set a certain selected line and draw it inverse color."""
         if not 0 <= value < len(self.lines):
             return
@@ -41,7 +41,7 @@ class LineView:
         self._cursor_pos = value
         self._refresh()
 
-    def draw(self, y, view_rows, view_cols):
+    def draw(self, y, view_rows, view_cols) -> None:
         """Draw or redraw the LineView."""
         rows = len(self.lines)
         cols = view_cols

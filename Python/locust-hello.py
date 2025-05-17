@@ -21,5 +21,5 @@ class WebsiteUser(HttpUser):
     wait_time = between(1, 5)
 
     @task
-    def live_stock(self):
+    def live_stock(self) -> None:
         self.client.get(url="/storage/live_stock")

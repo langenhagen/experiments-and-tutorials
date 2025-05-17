@@ -9,7 +9,7 @@ import numpy as np
 class Neuron:
     """A simpe feed-forward artificial Neuron."""
 
-    def __init__(self, n_inputs, activation_fn):
+    def __init__(self, n_inputs, activation_fn) -> None:
         self.weights = np.random.rand(n_inputs)
         self.bias = np.random.rand(1)
         self.activation_fn = activation_fn

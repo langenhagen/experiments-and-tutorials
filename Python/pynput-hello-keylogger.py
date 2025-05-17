@@ -18,19 +18,20 @@ import pynput
 KeyboardListener = pynput.keyboard.Listener
 
 
-def on_press(key):
+def on_press(key) -> None:
     """Do some action on keyboard key press."""
     print(f"Key {key} pressed")
     if key is pynput.keyboard.Key.enter:
         print("Moreover, key is also enter!")
 
 
-def on_release(key):
+def on_release(key) -> bool:
     """Do some action on keyboard key release."""
     print(f"Key {key} released")
     if key == pynput.keyboard.Key.esc:
         # Stop listener
         return False
+    return True
 
 
 with KeyboardListener(on_press=on_press, on_release=on_release) as listener:

@@ -11,7 +11,7 @@ import hydra
 
 
 @hydra.main()
-def my_app_1(cfg):
+def my_app_1(cfg) -> None:
     print(f"type(cfg)={type(cfg)}")
     print(cfg.pretty())
 

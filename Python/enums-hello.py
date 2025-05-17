@@ -61,5 +61,5 @@ for e in MyEnum:
 
 print()
 
-l = [e for e in MyEnum]
+l = list(MyEnum)  # same as: [e for e in MyEnum]
 print(l)

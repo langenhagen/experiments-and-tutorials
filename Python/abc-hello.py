@@ -8,7 +8,7 @@ import abc
 class C(abc.ABC):
     @staticmethod
     @abc.abstractmethod
-    def foo():
+    def foo() -> None:
         print("hello")
 
 
@@ -18,7 +18,7 @@ class D(C):
 
 class E(D):
     @staticmethod
-    def foo():
+    def foo() -> None:
         print("world")
 
 

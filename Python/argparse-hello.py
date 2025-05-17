@@ -124,7 +124,7 @@ parser.add_argument(
 )
 
 
-def _print_namespace(ns: Namespace):
+def _print_namespace(ns: Namespace) -> None:
     """A helper function to print a name space."""
     print(ns)
     print(f"{ns.a=}")

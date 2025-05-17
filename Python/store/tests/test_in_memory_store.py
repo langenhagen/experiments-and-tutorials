@@ -1,12 +1,15 @@
 """Tests for `in_memory_store.py`."""
 
 from dataclasses import dataclass, field
-from typing import Generator
+from typing import TYPE_CHECKING
 
 import pytest
 from pytest import fixture
 
 from store import InMemoryStore, NotFromStoreException, NotUniqueException
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 @dataclass
@@ -47,7 +50,7 @@ def fixture_test_store(andy, pandy, candy):
     yield store_
 
 
-def test_query_one(andy, pandy):
+def test_query_one(andy, pandy) -> None:
     """Assert that the store instantiates proper, that storing and simple
     retrieval of items works and that the store returns an item that is
     identical but deeply not the same as the initially entered item."""
@@ -66,7 +69,7 @@ def test_query_one(andy, pandy):
     assert andy == queried
 
 
-def test_query_with_no_matches_returns_nothing(test_store):
+def test_query_with_no_matches_returns_nothing(test_store) -> None:
     """Assert that the store instantiates proper, that storing and simple
     retrieval of items works."""
     items = list(test_store.get_by(name="Sugar"))
@@ -74,7 +77,7 @@ def test_query_with_no_matches_returns_nothing(test_store):
     assert len(items) == 0
 
 
-def test_query_multiple(test_store, andy, pandy):
+def test_query_multiple(test_store, andy, pandy) -> None:
     """Assert that querying multiple items works."""
     items = list(test_store.get_by(age=12))
     assert len(items) == 2
@@ -82,7 +85,7 @@ def test_query_multiple(test_store, andy, pandy):
     assert pandy in items
 
 
-def test_query_all(test_store, andy, pandy, candy):
+def test_query_all(test_store, andy, pandy, candy) -> None:
     """Assert that querying all items works."""
     items = list(test_store.get_by())
     assert len(items) == 3
@@ -91,7 +94,7 @@ def test_query_all(test_store, andy, pandy, candy):
     assert candy in items
 
 
-def test_consecutive_queries_yield_different_individual_items(test_store):
+def test_consecutive_queries_yield_different_individual_items(test_store) -> None:
     """Assert that different queries with the same arguments return distinct
     objects."""
     queried = next(test_store.get_by(name="Andy"))
@@ -101,7 +104,7 @@ def test_consecutive_queries_yield_different_individual_items(test_store):
     assert queried == other
 
 
-def test_query_for_unknown_attribute_raise(test_store):
+def test_query_for_unknown_attribute_raise(test_store) -> None:
     """Assert that queries for unknown attributes raise an `AttributeError`."""
     query: Generator[Person, None, None] = test_store.get_by(not_the_droids=9000)
 
@@ -109,7 +112,7 @@ def test_query_for_unknown_attribute_raise(test_store):
         next(query)
 
 
-def test_update_with_no_matches(test_store, andy, pandy, candy):
+def test_update_with_no_matches(test_store, andy, pandy, candy) -> None:
     """Assert that `InMemoryStore.update()` for unmatched queries works and does
     not mess up existing items."""
     n_updated = test_store.update(fields={"age": 15}, name="Mark")
@@ -122,7 +125,7 @@ def test_update_with_no_matches(test_store, andy, pandy, candy):
     assert candy in items
 
 
-def test_update(test_store, andy, pandy, candy):
+def test_update(test_store, andy, pandy, candy) -> None:
     """Assert that `InMemoryStore.update()` works for a single item."""
     n_updated = test_store.update(fields={"age": 15}, name="Candy")
     assert n_updated == 1
@@ -134,7 +137,7 @@ def test_update(test_store, andy, pandy, candy):
     assert candy in items
 
 
-def test_update_multiple(test_store, andy, pandy, candy):
+def test_update_multiple(test_store, andy, pandy, candy) -> None:
     """Assert that `InMemoryStore.update()` for multiple items works."""
     n_updated = test_store.update(fields={"age": 14}, age=12)
     assert n_updated == 2
@@ -146,7 +149,7 @@ def test_update_multiple(test_store, andy, pandy, candy):
     assert candy in items
 
 
-def test_update_all(test_store, andy, pandy, candy):
+def test_update_all(test_store, andy, pandy, candy) -> None:
     """Assert that `InMemoryStore.update()` for all items works."""
     n_updated = test_store.update(fields={"age": 13})
     assert n_updated == 3
@@ -160,7 +163,7 @@ def test_update_all(test_store, andy, pandy, candy):
 
 def test_add_item_with_duplicate_value_on_unique_field_raises(
     test_store, andy, pandy, candy
-):
+) -> None:
     """Assert that adding an item with a duplicate value on a "unique"-listed
     field raises a `NotUniqueException`."""
 
@@ -176,7 +179,7 @@ def test_add_item_with_duplicate_value_on_unique_field_raises(
     assert candy in items
 
 
-def test_update_on_unique_field_raises(test_store):
+def test_update_on_unique_field_raises(test_store) -> None:
     """Assert that updating on a unique field raises in order to avoid coming
     into hell's kitchen."""
 
@@ -184,7 +187,7 @@ def test_update_on_unique_field_raises(test_store):
         test_store.update(fields={"name": "Andy"})
 
 
-def test_save(test_store, pandy, candy):
+def test_save(test_store, pandy, candy) -> None:
     """Assert that changing and saving an object works."""
 
     person = next(test_store.get_by(name="Andy"))
@@ -200,7 +203,7 @@ def test_save(test_store, pandy, candy):
     assert candy in items
 
 
-def test_save_item_not_from_store_raises(test_store):
+def test_save_item_not_from_store_raises(test_store) -> None:
     """Assert that saving an item that the store did not create raises a
     `NotFromStoreException`."""
 
@@ -211,7 +214,7 @@ def test_save_item_not_from_store_raises(test_store):
 
 def test_save_item_with_duplicate_value_on_unique_field_raises(
     test_store, andy, pandy, candy
-):
+) -> None:
     """Assert that saving an item with a duplicate value on a "unique"-listed
     field raises a `NotUniqueException`."""
 
@@ -228,7 +231,7 @@ def test_save_item_with_duplicate_value_on_unique_field_raises(
     assert candy in items
 
 
-def test_items_from_different_stores_do_not_mingle():
+def test_items_from_different_stores_do_not_mingle() -> None:
     """Assert that saving an item from one store into another store raises."""
 
     my_store = InMemoryStore[Person]()

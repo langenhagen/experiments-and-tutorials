@@ -32,7 +32,7 @@ def foo():
     """A simple function to demonstrate memory profiling."""
     print("Hello from foo!")
     time.sleep(1)
-    data = [i for i in range(10000)]
+    data = list(range(10000))
     print("Goodbye from foo!")
     return data
 
@@ -63,17 +63,17 @@ print("\n--- 2 profiling class methods ---\n")
 
 
 class MyClass:
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = []
 
     @profile
-    def fill_data(self):
+    def fill_data(self) -> None:
         """Fills the data with large amounts of integers."""
         self.data = [i * i for i in range(100000)]
         print("Data filled in MyClass")
 
     @profile
-    def clear_data(self):
+    def clear_data(self) -> None:
         """Clears the data."""
         self.data = []
         print("Data cleared in MyClass")
@@ -87,10 +87,10 @@ print("\n--- 3 exceptions stop profiling ---\n")
 
 
 @profile
-def problematic_function():
+def problematic_function() -> None:
     """Function that allocates a lot of memory and raises an exception."""
     print("Entering problematic_function")
-    data = [i for i in range(100000)]
+    data = list(range(100000))
     if len(data) > 50000:
         raise MemoryError("Too much memory allocated!")
     print("Exiting problematic_function")
@@ -112,7 +112,7 @@ def qux():
     """A simple function to demonstrate memory profiling."""
     print("Hello from qux!")
     time.sleep(1)
-    data = [i for i in range(10000)]
+    data = list(range(10000))
     print("Goodbye from qux!")
     return data
 

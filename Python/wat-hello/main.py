@@ -20,11 +20,11 @@ print("\n--- 2 inspect class instances ---\n")
 
 
 class C:
-    def __init__(self):
+    def __init__(self) -> None:
         self.number = 42
         self.text = "example"
 
-    def greet(self):
+    def greet(self) -> str:
         return f"Hello from {self.text}!"
 
 
@@ -68,7 +68,7 @@ wat / C
 print("\n--- 10 inspect locals ---\n")
 
 
-def bar():
+def bar() -> None:
     my_local_var = "I am local"
     wat.locals
 

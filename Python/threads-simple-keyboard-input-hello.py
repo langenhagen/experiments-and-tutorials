@@ -6,7 +6,7 @@ import threading
 import time
 
 
-def wait_for_event(event):
+def wait_for_event(event) -> None:
     """Simply wait for an event."""
     print("Thread Start")
     starttime = time.time()

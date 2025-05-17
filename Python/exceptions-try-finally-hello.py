@@ -8,7 +8,7 @@ program crashing in places that you are interested in.
 print("--- 1 try-finally ---\n")
 
 
-def try_finally():
+def try_finally() -> None:
     # Does the following:
     #
     # This will happen before the exception crashes the program
@@ -27,7 +27,7 @@ def try_finally():
 print("\n--- 2 try-except-finally ---\n")
 
 
-def try_except_finally():
+def try_except_finally() -> None:
     try:
         raise ValueError("hahaha")
     except ValueError as e:
@@ -41,7 +41,7 @@ try_except_finally()
 print("\n--- 3 try-except-raise-finally - finally kicks in always ---\n")
 
 
-def try_except_finally():
+def try_except_finally() -> None:
     try:
         raise ValueError("hahaha")
     except ValueError as e:

@@ -38,14 +38,14 @@ def fast_add(x, y):
     return x + y
 
 
-def waste_time(n_seconds: float = 5):
+def waste_time(n_seconds: float = 5) -> None:
     """Sleep a bit."""
     print("Going to sleep...")
     sleep(n_seconds)
     print("I woke up")
 
 
-def main():
+def main() -> None:
     """Program main entry point."""
     print(slow_add(1, 2))
     print(fast_add(30, 40))

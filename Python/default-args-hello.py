@@ -6,7 +6,7 @@ import time
 print("--- 1 default ---\n")
 
 
-def foo(x, y=23):
+def foo(x, y=23) -> None:
     print(f"{locals()=}")
 
 
@@ -21,7 +21,7 @@ def get_time() -> float:
 
 
 # gets only evaluated once, intially!
-def bar(x, y=get_time()):
+def bar(x, y=get_time()) -> None:
     print(f"{locals()=}")
 
 

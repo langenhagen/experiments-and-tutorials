@@ -31,7 +31,7 @@ class SingletonMeta(type):
 
 
 class MySingleton(metaclass=SingletonMeta):
-    def __init__(self):
+    def __init__(self) -> None:
         self.value = 42
 
 
@@ -42,7 +42,7 @@ print(f"{a is b = }")
 
 
 class OtherSingleton(metaclass=SingletonMeta):
-    def __init__(self):
+    def __init__(self) -> None:
         self.other = 23
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Showcase exception tracing.
 
@@ -10,7 +10,9 @@ with sys.exc_info() one gets unhandled apparently only exceptions
 
 See: https://pymotw.com/2/sys/tracing.html
 """
+
 import sys
+from typing import NoReturn
 
 
 def trace_exceptions(frame, event, arg):
@@ -25,23 +27,21 @@ def trace_exceptions(frame, event, arg):
     filename = co.co_filename
     exc_type, exc_value, exc_traceback = arg
     print(
-        '!!! Trace: {} "{}" on line {} of function {}() in file {}'.format(
-            exc_type.__name__, exc_value, line_no, func_name, filename
-        )
+        f'!!! Trace: {exc_type.__name__} "{exc_value}" on line {line_no} of function {func_name}() in file {filename}'
     )
     # print('  sys.exc_info={}'.format(sys.exc_info()))  # would be (None, None, None)
-    return
+    return None
 
 
-def c():
+def c() -> NoReturn:
     raise RuntimeError("generating exception in c()")
 
 
-def b():
+def b() -> None:
     c()
 
 
-def a():
+def a() -> None:
     b()
 
 

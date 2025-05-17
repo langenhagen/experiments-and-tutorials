@@ -16,7 +16,7 @@ import array
 from time import perf_counter
 
 
-def long_operation(numbers):
+def long_operation(numbers) -> None:
     """Some busy function."""
     for i in range(50000):
         if i in numbers:
@@ -32,12 +32,12 @@ def do_and_measure_op(numbers) -> float:
     return perf_counter() - start
 
 
-def main():
+def main() -> None:
     """Main program entry point."""
     n_items = 10000000
 
     # list slow
-    l = [i for i in range(n_items)]
+    l = list(range(n_items))
     list_duration_s = do_and_measure_op(l)
 
     # tuples
@@ -45,13 +45,13 @@ def main():
     tuple_duration_s = do_and_measure_op(t)
 
     # orders of magnitude faster
-    s = {i for i in range(n_items)}
+    s = set(range(n_items))
     set_duration_s = do_and_measure_op(s)
 
-    la = array.array("l", [i for i in range(n_items)])
+    la = array.array("l", list(range(n_items)))
     long_array_duration_s = do_and_measure_op(la)
 
-    sa = array.array("i", [i for i in range(n_items)])
+    sa = array.array("i", list(range(n_items)))
     short_array_duration_s = do_and_measure_op(sa)
 
     print(f"Stuff with list took {list_duration_s} seconds.")

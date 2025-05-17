@@ -8,19 +8,19 @@ n_repetitions = 10000000
 class O:
     """Container object to do call by reference"""
 
-    def __init__(self, v):
+    def __init__(self, v) -> None:
         self.v = v
 
 
 class AccessViaLocalVar:
-    def __init__(self):
+    def __init__(self) -> None:
         for i in range(n_repetitions):
             o = self.o = O(i)
             o.v = o.v % 5
 
 
 class AccessViaMemberVar:
-    def __init__(self):
+    def __init__(self) -> None:
         for i in range(n_repetitions):
             o = self.o = O(i)
             self.o.v = self.o.v % 5

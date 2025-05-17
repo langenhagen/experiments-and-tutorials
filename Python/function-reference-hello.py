@@ -6,7 +6,7 @@ import inspect
 print("---1---")
 
 
-def foo(s: str, i=0):
+def foo(s: str, i=0) -> None:
     print(f"{s} : {i}")
 
 
@@ -14,10 +14,10 @@ print(f"Signature of foo() as a function: {inspect.signature(foo)}")
 
 
 class C:
-    def __init__(self, function_reference):
+    def __init__(self, function_reference) -> None:
         self.function_reference = function_reference
 
-    def method(self, b: bool):
+    def method(self, b: bool) -> None:
         print(f" C.method() b={b}")
 
 

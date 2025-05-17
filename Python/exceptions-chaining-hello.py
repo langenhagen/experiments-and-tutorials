@@ -4,13 +4,15 @@ Showcase that Python seamlessly writes tracebacks of exception that it raises fr
 Showcase that this looks like impossible call stacks.
 """
 
+from typing import NoReturn
 
-def outer():
+
+def outer() -> None:
     print("outer()")
     inner()
 
 
-def inner():
+def inner() -> NoReturn:
     print("inner()")
     raise ValueError("ohno!")
 
@@ -18,7 +20,7 @@ def inner():
 my_exception = None
 
 
-def outmost():
+def outmost() -> None:
     print("outmost()")
     try:
         outer()
@@ -27,7 +29,7 @@ def outmost():
         my_exception = err
 
 
-def other_outmost():
+def other_outmost() -> NoReturn:
     print("other_outmost()")
     print(f"{type(my_exception)=}")
 

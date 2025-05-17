@@ -26,13 +26,13 @@ n_requests = 10
 print("--- 1 calling requests synchronously ---\n")
 
 
-def make_request(i: int):
+def make_request(i: int) -> None:
     """Make 1 POST request to httpbin.org and post the given number."""
     response = requests.post("https://httpbin.org/post", json={"number": i})
     print(f"{i}: {response.status_code}")
 
 
-def run_sequentially(n: int):
+def run_sequentially(n: int) -> None:
     """Request n websites sequentially and print their response status."""
     for i in range(n):
         make_request(i)
@@ -47,13 +47,13 @@ print(f"Sequential experiment took {round(end_time - start_time, 3)} seconds")
 print("\n--- 2 calling requests asynchronously ---\n")
 
 
-async def make_async_request(i: int, session: ClientSession):
+async def make_async_request(i: int, session: ClientSession) -> None:
     """Make async 1 POST request to httpbin.org and post the given number."""
     response = await session.post("https://httpbin.org/post", json={"number": i})
     print(f"{i}: {response.status}")
 
 
-async def run_asynchronously(n: int):
+async def run_asynchronously(n: int) -> None:
     """Request n websites asynchronously and print their response status."""
     async with ClientSession() as session:
         futures = [make_async_request(i, session) for i in range(n)]

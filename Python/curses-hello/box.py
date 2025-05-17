@@ -1,7 +1,7 @@
 import curses
 
 
-def main():
+def main() -> None:
     stdscr = curses.initscr()
 
     curses.noecho()

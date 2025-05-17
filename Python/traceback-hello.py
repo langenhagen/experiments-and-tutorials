@@ -9,15 +9,16 @@ See: https://docs.python.org/3.6/library/traceback.html
 
 import sys
 import traceback
+from typing import NoReturn
 
 print("--- 1 print a traceback ---")
 
 
-def foo():
+def foo() -> None:
     bar(32)
 
 
-def bar(i):
+def bar(i) -> None:
     print("BEGIN print_stack()")
     traceback.print_stack()
     print("END print_stack()\n")
@@ -38,7 +39,7 @@ foo()
 print("\n--- 2 get a traceback object from an exception ---")
 
 
-def fail():
+def fail() -> NoReturn:
     raise ValueError("Please crash")
 
 

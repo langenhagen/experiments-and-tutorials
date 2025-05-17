@@ -22,7 +22,7 @@ with suppress(ZeroDivisionError):
 print("\n--- 2 suppress on KeyboardInterrupts e.g. <CTRL + C> ---")
 
 
-def foo():
+def foo() -> None:
     i = 0
     while True:
         print(f"{i} Press <CTRL + C>")
@@ -37,7 +37,7 @@ with suppress(KeyboardInterrupt):
 print("\n--- 3 suppress with several Exception types ---")
 
 
-def foo():
+def foo() -> None:
     i = 10
     while True:
         print(f"{i} Press <CTRL + C> or wait")

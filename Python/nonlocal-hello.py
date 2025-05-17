@@ -2,11 +2,11 @@
 """Showcase the usage of the statement `nonlocal`."""
 
 
-def my_fun():
+def my_fun() -> None:
     """Defines `myvar` in its outer scope."""
     myvar = 42
 
-    def my_inner_fun():
+    def my_inner_fun() -> None:
         """Re-binds `myvar` from the outer, but not global scope."""
         nonlocal myvar
         myvar = 10

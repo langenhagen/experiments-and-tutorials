@@ -17,7 +17,6 @@ TODO make docs with c1 standards compliant.
 """
 
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
@@ -30,10 +29,10 @@ class Rectangle:
     h: float  # height
 
 
-Layout = List[Rectangle]
+Layout = list[Rectangle]
 
 
-def _layout_row_wise(sizes: List[float], container: Rectangle) -> Layout:
+def _layout_row_wise(sizes: list[float], container: Rectangle) -> Layout:
     """Calculate a rectangle for each given size if the given container is rather tall."""
     covered_area = sum(sizes)
     width = covered_area / container.h
@@ -46,7 +45,7 @@ def _layout_row_wise(sizes: List[float], container: Rectangle) -> Layout:
     return rects
 
 
-def _layout_column_wise(sizes: List[float], container: Rectangle) -> Layout:
+def _layout_column_wise(sizes: list[float], container: Rectangle) -> Layout:
     """Calculate a rectangle for each given size if the the container is rather wide."""
     covered_area = sum(sizes)
     height = covered_area / container.w
@@ -59,7 +58,7 @@ def _layout_column_wise(sizes: List[float], container: Rectangle) -> Layout:
     return rects
 
 
-def _layout(sizes: List[float], container: Rectangle) -> Layout:
+def _layout(sizes: list[float], container: Rectangle) -> Layout:
     """Given a container, calculate a rectangle for each given size."""
     if container.w >= container.h:
         return _layout_row_wise(sizes, container)
@@ -74,7 +73,7 @@ def _get_max_ratio(layout: Layout) -> float:
     return worst_ratio
 
 
-def _layout_partially(sizes: List[float], container: Rectangle) -> Layout:
+def _layout_partially(sizes: list[float], container: Rectangle) -> Layout:
     """Given a container, calculate rectangles for an optimal sublist of given sizes."""
     layout = _layout(sizes[:1], container)
     worst_ratio = _get_max_ratio(layout)
@@ -90,14 +89,14 @@ def _layout_partially(sizes: List[float], container: Rectangle) -> Layout:
     return layout
 
 
-def _get_leftover_row(sizes: List[float], container: Rectangle) -> Rectangle:
+def _get_leftover_row(sizes: list[float], container: Rectangle) -> Rectangle:
     """Compute remaining area when container.w >= container.h."""
     covered_area = sum(sizes)
     width = covered_area / container.h
     return Rectangle(container.x + width, container.y, container.w - width, container.h)
 
 
-def _get_leftover_col(sizes: List[float], container: Rectangle) -> Rectangle:
+def _get_leftover_col(sizes: list[float], container: Rectangle) -> Rectangle:
     """Compute remaining area when container.w < container.h."""
     covered_area = sum(sizes)
     height = covered_area / container.w
@@ -106,14 +105,14 @@ def _get_leftover_col(sizes: List[float], container: Rectangle) -> Rectangle:
     )
 
 
-def _get_leftover_container(sizes: List[float], container: Rectangle) -> Rectangle:
+def _get_leftover_container(sizes: list[float], container: Rectangle) -> Rectangle:
     """Compute leftover."""
     if container.w >= container.h:
         return _get_leftover_row(sizes, container)
     return _get_leftover_col(sizes, container)
 
 
-def generate_treemap_layout(sizes: List[float], container: Rectangle) -> Layout:
+def generate_treemap_layout(sizes: list[float], container: Rectangle) -> Layout:
     """
     Compute a treemap representation of given sizes that fits the given container.
 
@@ -145,7 +144,7 @@ def generate_treemap_layout(sizes: List[float], container: Rectangle) -> Layout:
     return layout + generate_treemap_layout(sizes[len(layout) :], leftover_container)
 
 
-def get_normalized_sizes(sizes: List[float], area: float) -> List[float]:
+def get_normalized_sizes(sizes: list[float], area: float) -> list[float]:
     """
     Normalize a given list of float sizes so that they fit onto the given area.
 
@@ -161,4 +160,4 @@ def get_normalized_sizes(sizes: List[float], area: float) -> List[float]:
         The normalized sizes.
     """
     area_to_size_ratio = area / sum(sizes)
-    return list(map(lambda size: size * area_to_size_ratio, sizes))
+    return [size * area_to_size_ratio for size in sizes]

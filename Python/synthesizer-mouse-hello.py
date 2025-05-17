@@ -14,7 +14,7 @@ synth = synthesizer.Synthesizer(
 )
 
 
-def on_move(x, y):
+def on_move(x, y) -> None:
     """Play a note."""
     freq_Hz = x + y + 1.0
     duration_s = 30.0 / freq_Hz
@@ -22,14 +22,14 @@ def on_move(x, y):
     player.play_wave(wave)
 
 
-def on_click(x, y, button, pressed):
+def on_click(x, y, button, pressed) -> None:
     print(f"{button} {'pressed' if pressed else 'released'} at {(x, y)}")
     # if not pressed:
     #     # Stop listener
     #     return False
 
 
-def on_scroll(x, y, dx, dy):
+def on_scroll(x, y, dx, dy) -> None:
     print(f"Scrolled {(x, y, dx, dy)}")
 
 

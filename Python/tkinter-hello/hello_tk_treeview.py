@@ -1,6 +1,6 @@
 """A basic treeview example."""
 
-import tkinter
+import tkinter as tk
 
 # from PIL import ImageTk, Image
 from tkinter import ttk
@@ -9,7 +9,7 @@ from tkinter import ttk
 class Application:
     treeview = None
 
-    def setup_treeview(self, window):
+    def setup_treeview(self, window) -> None:
         # apparently, tkinter only supports GIFs - and even that fails
         # logo = tkinter.PhotoImage( file = 'res/DLR-square.gif').subsample(10,10)
         # also using PIL does not work
@@ -50,7 +50,7 @@ class Application:
         self.treeview.bind("<Button-3>", self.on_right_click)
         self.treeview.bind("<Double-Button-1>", self.on_double_click)
 
-    def on_click(self, event):
+    def on_click(self, event) -> None:
         item_id = self.treeview.identify_row(event.y)
         if item_id:
             # mouse pointer over item
@@ -63,18 +63,18 @@ class Application:
             # no action required
             pass
 
-    def on_right_click(self, event):
+    def on_right_click(self, event) -> None:
         item_id = self.treeview.identify_row(event.y)
         if item_id:
             print(f"Right clicked on {item_id}")
 
-    def on_double_click(self, event):
+    def on_double_click(self, event) -> None:
         item_id = self.treeview.identify_row(event.y)
         if item_id:
             print(f"Double clicked on {item_id}")
 
-    def run(self):
-        window = tkinter.Tk()
+    def run(self) -> None:
+        window = tk.Tk()
         # TODO change i  con
         window.title("Hello TKinter Treeview")
         window.geometry("600x600")

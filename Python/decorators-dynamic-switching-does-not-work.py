@@ -12,7 +12,7 @@ https://stackoverflow.com/questions/642762/is-it-possible-to-replace-a-python-fu
 """
 
 import functools
-from typing import Callable
+from collections.abc import Callable
 
 
 def my_decorate_function(f: Callable) -> Callable:
@@ -47,7 +47,7 @@ my_decorator = my_decorate_function
 
 
 @my_decorator
-def foo():
+def foo() -> None:
     print("    Hello from foo()!")
 
 

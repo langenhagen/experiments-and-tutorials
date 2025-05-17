@@ -20,7 +20,7 @@ from kokoro import KPipeline
 
 if len(sys.argv) > 1:
     filename = sys.argv[1]
-    with open(filename, "r", encoding="utf-8") as f:
+    with open(filename, encoding="utf-8") as f:
         text = f.read()
 else:
     filename = ""

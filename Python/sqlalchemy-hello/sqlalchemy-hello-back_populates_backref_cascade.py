@@ -87,7 +87,7 @@ class BackrefChild(Base):
         return f"id={self.id}  name={self.name}  parent={self.parent}"
 
 
-def main():
+def main() -> None:
     """Main program entry point."""
     engine = create_engine("sqlite:///database.db", echo=False)
     Base.metadata.create_all(engine)

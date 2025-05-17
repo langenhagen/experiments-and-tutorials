@@ -17,7 +17,7 @@ def get_function_arguments():
     return param_names_values
 
 
-def print_function_arguments():
+def print_function_arguments() -> None:
     """Print the calling function parameters."""
     frame = sys._getframe(1)
     argnames, args_name, kwargs_name, param_names_values = inspect.getargvalues(frame)
@@ -28,12 +28,12 @@ def print_function_arguments():
     print("kwargs_name:        " + str(kwargs_name))
 
 
-def foo(s, i=0, *myargs, **mykwargs):
+def foo(s, i=0, *myargs, **mykwargs) -> None:
     print_function_arguments()
 
 
 class C:
-    def foo(self, a, b=14, *yourargs, **yourkwargs):
+    def foo(self, a, b=14, *yourargs, **yourkwargs) -> None:
         print_function_arguments()
 
 

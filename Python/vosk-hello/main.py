@@ -17,7 +17,7 @@ import pyaudio
 from vosk import KaldiRecognizer, Model
 
 
-def main():
+def main() -> None:
     """Program main entry point."""
 
     # Ensure the model is downloaded
