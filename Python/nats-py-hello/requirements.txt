@@ -1,0 +1,2 @@
+bpython
+nats-py==2.10.0
