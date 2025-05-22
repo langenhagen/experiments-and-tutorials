@@ -1,11 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Showcase the usage of pandas.merge()"""
 
 import pandas as pd
 
-print(
-    "--- 1 pd.merge(...'inner'...) multiplexes dataframes with duplicate entries in in {left,right}_on ---"
-)
+print("--- 1 pd.merge(...'inner'...) multiplexes dataframes with duplicate entries in  {left,right}_on ---\n")
 
 df1 = pd.DataFrame({"a": [1, 2, 1], "b": ["a", "b", "c"]})
 df2 = pd.DataFrame({"x": [1, 2], "y": ["A", "B"]})

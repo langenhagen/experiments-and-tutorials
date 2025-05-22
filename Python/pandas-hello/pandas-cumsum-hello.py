@@ -1,21 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Showcase the usage of pandas.Series.cumsum().
 
-Also showcase that logging a dataframe prints it nicely."""
-
-import logging
+Also showcase that logging a dataframe prints it nicely.
+"""
 
 import pandas as pd
 
-logging.basicConfig(
-    format="[%(levelname)s]: %(filename)s:%(lineno)d: %(message)s",
-    level=logging.INFO,
-)
-
-logger = logging.getLogger(__name__)
-
 df = pd.DataFrame({"a": [1, 2, 1, 3]})
-logger.info("Dataframe:\n%s", df)
+print("Dataframe:\n", df)
 
 c = df["a"].cumsum()
-logger.info("Dataframe with cumsum on column 'a':\n%s", c)
+print("Dataframe with cumsum on column 'a':\n", c)

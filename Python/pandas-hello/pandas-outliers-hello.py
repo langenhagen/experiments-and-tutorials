@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Showcase how to filter outliers from a dataframe."""
 
 import numpy as np
@@ -8,7 +8,7 @@ import scipy.stats as stats
 df = pd.DataFrame(np.random.randn(100, 3))
 print(df)
 
-print("--- 1 use a z-score via scipy to filter outliers ---")
+print("--- 1 use a z-score via scipy to filter outliers ---\n")
 
 print(stats.zscore(df))
 
