@@ -18,7 +18,7 @@ Bootstrap the project via:
 uv python list
 # See `uv python --help` for more command line options
 
-uv venv --pytnon 3.13.3
+uv venv --python 3.13.3
 # See `uv venv --help` for more options; probably interesting: --index, --prompt
 
 # Set .python-version file; note: this is uv-managed, pyenv may not be able to resolve this
