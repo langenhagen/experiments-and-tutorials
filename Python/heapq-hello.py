@@ -89,3 +89,19 @@ sorted2 = (2, 5, 6)
 sorted3 = [0, 3, 8, 99]
 
 print(f"{list(heapq.merge(sorted1, sorted2, sorted3))=}")
+
+print("\n--- 7 adding info to the priorities works e.g. via tuples ---\n")
+
+i = (1, "hallo")  # (prio, data)
+j = (3, "mallo")
+k = (2, "krallo")
+
+myheap = []
+heapq.heappush(myheap, i)
+heapq.heappush(myheap, j)
+heapq.heappush(myheap, k)
+
+print(f"{myheap=}")
+print(f"{heapq.heappop(myheap)=}")
+print(f"{heapq.heappop(myheap)=}")
+print(f"{heapq.heappop(myheap)=}")
