@@ -12,8 +12,6 @@ inspired by:
 https://github.com/laserson/squarify
 
 author: andreasl
-
-TODO make docs with c1 standards compliant.
 """
 
 from dataclasses import dataclass
