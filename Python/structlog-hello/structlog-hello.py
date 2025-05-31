@@ -5,6 +5,7 @@ based on: https://betterstack.com/community/guides/logging/structlog/
 
 See also:
 - https://www.structlog.org/en/stable/api.html
+
 """
 
 import asyncio
@@ -71,7 +72,8 @@ def my_custom_processor(logger, method_name: str, event_dict: dict) -> dict:
     Structlog processors receive 3 arguments:
         1. the logger
         2. method name (such as info)
-        3. event dictionary."""
+        3. event dictionary.
+    """
     some_custom_message = randint(100, 999)
     event_dict["my custom msg"] = some_custom_message
     event_dict["my_severity"] = method_name

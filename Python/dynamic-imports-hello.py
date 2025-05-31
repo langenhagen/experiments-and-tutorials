@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Dynamically import the given module.
+"""Dynamically import the given module.
 
 should work via:
 

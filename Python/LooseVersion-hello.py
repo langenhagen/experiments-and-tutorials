@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""
-Showcase `distutils.LooseVersion()`.
+"""Showcase `distutils.LooseVersion()`.
 
 Note:
 DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+
 """
 
 from distutils.version import LooseVersion

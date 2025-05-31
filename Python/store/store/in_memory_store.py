@@ -26,7 +26,8 @@ class InMemoryStore(Store[T]):
     def __init__(self, unique_keys: Iterable = frozenset()) -> None:
         """Initialize an empty store.
         Optionally specify the object attributes whose values shall be
-        unique over all items in the store."""
+        unique over all items in the store.
+        """
 
         self.__store_marker = f"_in_memory_store_id{id(self)}"
         self.__unique_keys = frozenset(unique_keys)
@@ -40,7 +41,8 @@ class InMemoryStore(Store[T]):
 
     def get_by(self, **kwargs) -> Generator[T, None, None]:
         """Retrieve deep copies for all objects for which all given kwargs
-        match. If no kwarg was given, yield all objects."""
+        match. If no kwarg was given, yield all objects.
+        """
         for o in self.__get_by_orig(**kwargs):
             yield deepcopy(o)
 
@@ -49,7 +51,8 @@ class InMemoryStore(Store[T]):
         an updateable copy of it.
 
         Raise a `DatabaseInsertionException` in case the new item clashes with
-        any existing item on any unique key."""
+        any existing item on any unique key.
+        """
 
         for key in self.__unique_keys:
             for _ in self.__get_by_orig(**{key: getattr(new, key)}):
@@ -63,7 +66,8 @@ class InMemoryStore(Store[T]):
 
     def update(self, fields: dict[str, Any], **query) -> int:
         """Update all objects matching the query to deep copies of the given
-        fields."""
+        fields.
+        """
 
         if any(k in self.__unique_keys for k in fields):
             raise NotImplementedError("Updating unique keys is currently not supported")

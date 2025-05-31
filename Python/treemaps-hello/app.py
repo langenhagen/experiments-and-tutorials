@@ -1,5 +1,4 @@
-"""
-Test the treemap module.
+"""Test the treemap module.
 author: andreasl
 """
 
@@ -77,7 +76,7 @@ class Application:
             red = f"0x{int(i[0].value / 100 * 255):02x}"[2:]
             color = f"#{red}00{blue}"
 
-            r = Rectangle(i[0], self.canvas, f"<TEXT>", i[1], color)
+            r = Rectangle(i[0], self.canvas, "<TEXT>", i[1], color)
             self.canvas.itemconfig(
                 r.tk_text_id, text=f"ID: {i[0].id}\ntk IDs: {r.tk_ids()}"
             )

@@ -1,5 +1,4 @@
-"""
-apparently necessary for C/C++ extensions
+"""apparently necessary for C/C++ extensions
 
 author: andreasl
 see: https://www.youtube.com/watch?v=a65JdvOaygM&ab_channel=DrapsTV

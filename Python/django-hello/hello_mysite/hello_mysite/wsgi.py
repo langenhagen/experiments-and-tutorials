@@ -1,5 +1,4 @@
-"""
-WSGI config for hello_mysite project.
+"""WSGI config for hello_mysite project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

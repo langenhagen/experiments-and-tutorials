@@ -1,5 +1,4 @@
-"""
-found here:
+"""found here:
 https://elementztechblog.wordpress.com/2015/01/22/using-speech-to-text-in-ubuntu/
 
 Prior to that, I had to do:

@@ -58,7 +58,7 @@ def do_outer_session() -> None:
 
 def show_db_contents() -> None:
     """Print the contents of mytable"""
-    print(f"\nAll MyModel DB entries:")
+    print("\nAll MyModel DB entries:")
     with session_scope() as session:
         for i, m in enumerate(session.query(MyModel), 1):
             print(f"{i}: {m}")
@@ -66,7 +66,8 @@ def show_db_contents() -> None:
 
 def main() -> None:
     """Create a session via context manager, and inside this context, create
-    another session via context manager. See how this works."""
+    another session via context manager. See how this works.
+    """
     Base.metadata.create_all(bind=engine)
 
     do_outer_session()

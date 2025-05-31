@@ -1,6 +1,5 @@
 """Showcase the usage of the PS4 controller via pygame.
 
-
 based on: https://github.com/ChristianD37/YoutubeTutorials/tree/master/PS4%20Controller
 
 Configuration invalid against pygame==2.1.2.

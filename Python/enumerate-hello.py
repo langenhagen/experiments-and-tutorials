@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Experiments wth enumerate().
+"""Experiments wth enumerate().
 
 Showcase that nested enumerate() works as expected.
 

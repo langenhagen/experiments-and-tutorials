@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Plays a pyaudio asynchronous callback that is fed with synthesizer ouput from
+"""Plays a pyaudio asynchronous callback that is fed with synthesizer ouput from
 fluisynth when th user presses a key on the keyboard.
 See:
 https://github.com/nwhitehead/pyfluidsynth

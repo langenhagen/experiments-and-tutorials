@@ -1,5 +1,4 @@
-"""
-Showcase the usage of a for-else clause.
+"""Showcase the usage of a for-else clause.
 
 see: https://book.pythontips.com/en/latest/for_-_else.html
 

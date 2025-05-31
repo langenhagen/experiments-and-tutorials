@@ -93,7 +93,8 @@ print("\n--- 3 BFS with goal ---\n")
 
 def is_goal(node: Node, goal: Node) -> bool:
     """Process given node, return `True` if node fulfills goal condition,
-    otherwise return `False`."""
+    otherwise return `False`.
+    """
     print(f"{node=}")
     if node == goal:
         print("Yay!")
@@ -139,7 +140,8 @@ def bfs_with_path_to_goal(
 ) -> list[Node] | None:
     """Breadth-first search that stops at given goal. Return the first found
     path to the goal or `None` if no Node with matching the goal criterion
-    found."""
+    found.
+    """
     visited = set()
     queue: deque[tuple[Node, list[Node]]] = deque()
     queue.append((start, [start]))

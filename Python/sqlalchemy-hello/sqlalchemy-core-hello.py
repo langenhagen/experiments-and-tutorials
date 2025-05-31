@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the usage of the external package sqlalchemy with its core
+"""Showcase the usage of the external package sqlalchemy with its core
 functionality.
 
 Install like:

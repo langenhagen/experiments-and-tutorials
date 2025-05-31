@@ -1,5 +1,4 @@
-"""
-Record a sound via pyyaudio on keypress,
+"""Record a sound via pyyaudio on keypress,
 then send it to Google for speech recognition
 and use the resulting text as a search query for google.com.
 """

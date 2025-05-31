@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-The client implementation.
+"""The client implementation.
 
 Usage:
 

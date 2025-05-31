@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Show a line that is like I want it with ncursesTraitExplorer."""
+
 import curses
 
 from common import addstr, elide_middle, getmaxyx, move
@@ -83,3 +84,4 @@ def main(screen) -> None:
 
 stdscr = curses.initscr()
 curses.wrapper(main)
+

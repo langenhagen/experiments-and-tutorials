@@ -1,5 +1,4 @@
-"""
-WSGI config for django_poetry_hello project.
+"""WSGI config for django_poetry_hello project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

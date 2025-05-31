@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-Showcase how events work with Python's multithreading.
-"""
+"""Showcase how events work with Python's multithreading."""
 
 import logging
 import threading

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the usage of the 3rd party library `requests-futures` for async HTTP calls.
+"""Showcase the usage of the 3rd party library `requests-futures` for async HTTP calls.
 
 Get it via:
 

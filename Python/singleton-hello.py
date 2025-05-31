@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Showcase robuts and flexible Singleton impls in Python.
 
-
 See also: https://stackoverflow.com/questions/6760685/what-is-the-best-way-of-implementing-a-singleton-in-python
 """
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the NATS client `nats-py`.
+"""Showcase the NATS client `nats-py`.
 
 See: https://pypi.org/project/nats-py/
 """

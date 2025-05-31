@@ -7,4 +7,5 @@ class NotUniqueException(Exception):
 
 class NotFromStoreException(Exception):
     """To be raised when an operation expects an item created or retrieved by
-    the store but got another."""
+    the store but got another.
+    """

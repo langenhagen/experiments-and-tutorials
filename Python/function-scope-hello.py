@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the somewhat weird behaviour of function scopes in Python.
+"""Showcase the somewhat weird behaviour of function scopes in Python.
 
 Default arguments are evaluated when the function definition is
 encountered.

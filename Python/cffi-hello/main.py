@@ -1,5 +1,4 @@
-"""
-Showcase the usage of the cffi module
+"""Showcase the usage of the cffi module
 
 author: andreasl
 """

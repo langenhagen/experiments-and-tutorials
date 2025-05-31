@@ -1,6 +1,4 @@
-"""
-Showcase the usage of of the package `random`.
-"""
+"""Showcase the usage of of the package `random`."""
 
 import random
 import string

@@ -1,5 +1,4 @@
-"""
-Squarified Treemap Layout.
+"""Squarified Treemap Layout.
 
 Given a list of descending sorted float-values,
 compute a squarified treemap representation.
@@ -111,8 +110,7 @@ def _get_leftover_container(sizes: list[float], container: Rectangle) -> Rectang
 
 
 def generate_treemap_layout(sizes: list[float], container: Rectangle) -> Layout:
-    """
-    Compute a treemap representation of given sizes that fits the given container.
+    """Compute a treemap representation of given sizes that fits the given container.
 
     Implements an algorithm presented by Bruls, et al. in "Squarified Treemaps".
 
@@ -125,11 +123,13 @@ def generate_treemap_layout(sizes: list[float], container: Rectangle) -> Layout:
     container : Rectangle
         A Rectangle with the coordinates of the "origin"
         and the full width (`w`) and height (`h`) of the treemap.
+
     Returns
     -------
     Layout
         Each dict in the returned list represents a single rectangle in the
         treemap. The order corresponds to the input order.
+
     """
 
     if not sizes:
@@ -143,8 +143,7 @@ def generate_treemap_layout(sizes: list[float], container: Rectangle) -> Layout:
 
 
 def get_normalized_sizes(sizes: list[float], area: float) -> list[float]:
-    """
-    Normalize a given list of float sizes so that they fit onto the given area.
+    """Normalize a given list of float sizes so that they fit onto the given area.
 
     Parameters
     ----------
@@ -152,10 +151,12 @@ def get_normalized_sizes(sizes: list[float], area: float) -> list[float]:
         Input list of numeric values to normalize.
     area : float
         Surface area of a rectangle to which to normalize the sizes to.
+
     Returns
     -------
     List[float]
         The normalized sizes.
+
     """
     area_to_size_ratio = area / sum(sizes)
     return [size * area_to_size_ratio for size in sizes]

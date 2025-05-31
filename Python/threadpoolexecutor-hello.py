@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the usage of a Python3 ThreadPoolExecutor.
+"""Showcase the usage of a Python3 ThreadPoolExecutor.
 
 Based on: https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor-example
 """

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase traceback functionality without and with exceptions being involved.
+"""Showcase traceback functionality without and with exceptions being involved.
 
 There are different approaches when exceptions are involved.
 
@@ -46,7 +45,7 @@ def fail() -> NoReturn:
 def catch():
     try:
         fail()
-    except ValueError as err:
+    except ValueError:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         formatted = traceback.format_tb(exc_traceback)
         print(f"{type(exc_type)};  {type(exc_value)};  {type(exc_traceback)}\n")

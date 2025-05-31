@@ -1,5 +1,4 @@
-"""
-Showcase how getLogger() works and that it will use the same configuration
+"""Showcase how getLogger() works and that it will use the same configuration
 as defined in the main file.
 """
 

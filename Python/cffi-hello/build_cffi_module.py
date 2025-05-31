@@ -1,5 +1,4 @@
-"""
-Showcase the usage of the 3rd party library `cffi`
+"""Showcase the usage of the 3rd party library `cffi`
 
 This is a magical factory can build an ffi module for `uuids`.
 

@@ -5,7 +5,6 @@ Based on `GxSingleCamColor.py` version:1.0.1905.9051
 author: andreasl
 """
 
-import traceback
 from typing import TYPE_CHECKING
 
 import cv2
@@ -30,7 +29,7 @@ def main() -> None:
     # create a device manager
     device_manager = gx.DeviceManager()
     dev_num, dev_info_list = device_manager.update_device_list()
-    if dev_num is 0:
+    if dev_num == 0:
         print("Number of enumerated devices is 0")
         return
 

@@ -42,7 +42,8 @@ def fixture_candy():
 @fixture(name="test_store")
 def fixture_test_store(andy, pandy, candy):
     """A prepopulated store with a unique-key requirement on the field
-    "name"."""
+    "name".
+    """
     store_ = InMemoryStore[Person](unique_keys={"name"})
     store_.add(andy)
     store_.add(pandy)
@@ -53,7 +54,8 @@ def fixture_test_store(andy, pandy, candy):
 def test_query_one(andy, pandy) -> None:
     """Assert that the store instantiates proper, that storing and simple
     retrieval of items works and that the store returns an item that is
-    identical but deeply not the same as the initially entered item."""
+    identical but deeply not the same as the initially entered item.
+    """
     my_store = InMemoryStore[Person](unique_keys={"name"})
     my_store.add(andy)
     my_store.add(pandy)
@@ -71,7 +73,8 @@ def test_query_one(andy, pandy) -> None:
 
 def test_query_with_no_matches_returns_nothing(test_store) -> None:
     """Assert that the store instantiates proper, that storing and simple
-    retrieval of items works."""
+    retrieval of items works.
+    """
     items = list(test_store.get_by(name="Sugar"))
 
     assert len(items) == 0
@@ -96,7 +99,8 @@ def test_query_all(test_store, andy, pandy, candy) -> None:
 
 def test_consecutive_queries_yield_different_individual_items(test_store) -> None:
     """Assert that different queries with the same arguments return distinct
-    objects."""
+    objects.
+    """
     queried = next(test_store.get_by(name="Andy"))
     other = next(test_store.get_by(name="Andy"))
 
@@ -114,7 +118,8 @@ def test_query_for_unknown_attribute_raise(test_store) -> None:
 
 def test_update_with_no_matches(test_store, andy, pandy, candy) -> None:
     """Assert that `InMemoryStore.update()` for unmatched queries works and does
-    not mess up existing items."""
+    not mess up existing items.
+    """
     n_updated = test_store.update(fields={"age": 15}, name="Mark")
     assert n_updated == 0
 
@@ -165,7 +170,8 @@ def test_add_item_with_duplicate_value_on_unique_field_raises(
     test_store, andy, pandy, candy
 ) -> None:
     """Assert that adding an item with a duplicate value on a "unique"-listed
-    field raises a `NotUniqueException`."""
+    field raises a `NotUniqueException`.
+    """
 
     person_with_duplicate_name = Person(name="Andy", age=80)
 
@@ -181,7 +187,8 @@ def test_add_item_with_duplicate_value_on_unique_field_raises(
 
 def test_update_on_unique_field_raises(test_store) -> None:
     """Assert that updating on a unique field raises in order to avoid coming
-    into hell's kitchen."""
+    into hell's kitchen.
+    """
 
     with pytest.raises(NotImplementedError):
         test_store.update(fields={"name": "Andy"})
@@ -205,7 +212,8 @@ def test_save(test_store, pandy, candy) -> None:
 
 def test_save_item_not_from_store_raises(test_store) -> None:
     """Assert that saving an item that the store did not create raises a
-    `NotFromStoreException`."""
+    `NotFromStoreException`.
+    """
 
     sugar = Person("Sugar", age=15)
     with pytest.raises(NotFromStoreException):
@@ -216,7 +224,8 @@ def test_save_item_with_duplicate_value_on_unique_field_raises(
     test_store, andy, pandy, candy
 ) -> None:
     """Assert that saving an item with a duplicate value on a "unique"-listed
-    field raises a `NotUniqueException`."""
+    field raises a `NotUniqueException`.
+    """
 
     person = next(test_store.get_by(name="Andy"))
     person.name = "Pandy"

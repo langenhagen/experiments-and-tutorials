@@ -4,7 +4,8 @@
 class C:
     def __private_method(self) -> None:
         """A private function in python. Only visible inside the class, not
-        outside and not to subclasses."""
+        outside and not to subclasses.
+        """
         print("Hello from __private_method()")
 
     def method(self) -> None:

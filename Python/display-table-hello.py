@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase how to flexibly print nicely formatted tables just with standard
+"""Showcase how to flexibly print nicely formatted tables just with standard
 Python.
 
 author: andreasl

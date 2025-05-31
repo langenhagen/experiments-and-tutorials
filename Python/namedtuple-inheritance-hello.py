@@ -1,5 +1,4 @@
-"""
-collections.namedtuple  vs  typing.NamedTuple  vs dataclasses.dataclass
+"""collections.namedtuple  vs  typing.NamedTuple  vs dataclasses.dataclass
 
 namedtuples / Namedtuples are immutable.
 
@@ -15,9 +14,7 @@ from dataclasses import dataclass
 class Event:
     @abstractmethod
     def to_json(self) -> dict:
-        """
-        :return:
-        """
+        """:return:"""
 
 
 @dataclass
@@ -28,9 +25,8 @@ class CreateEvent(Event):
     # reseller_id: Optional[str]
 
     def to_json(self) -> dict:
-        """
-        :return: a json object to be sent to the engine. Object should have a certain structure
-                 See also Envelope docblock comment for more details
+        """:return: a json object to be sent to the engine. Object should have a certain structure
+        See also Envelope docblock comment for more details
         """
         return {
             "transid": self.purchase_id,

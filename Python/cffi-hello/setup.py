@@ -1,5 +1,4 @@
-"""
-Builds the custom cffi module that we need to interface with the C code.
+"""Builds the custom cffi module that we need to interface with the C code.
 
 author: andreasl
 """

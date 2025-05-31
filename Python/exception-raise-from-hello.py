@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Showcase the usage of raise ... from to raise sequences of exceptions.
+"""Showcase the usage of raise ... from to raise sequences of exceptions.
 
 However, `raise from` seems only necessary when you have several exceptions or
 causes you can choose from.

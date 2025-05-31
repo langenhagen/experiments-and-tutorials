@@ -182,7 +182,7 @@ print("\n--- 9 exception handler functions ---\n")
 def handle_exception(loop, context) -> None:
     """Custom exception handler for the asyncio event loop."""
 
-    print(f"Hello from handle_exception()!")
+    print("Hello from handle_exception()!")
     print(f"  param `loop` of type {type(loop)}\n{loop}\n")
     print(f"  param `context` of type {type(context)}\n{context}\n")
 

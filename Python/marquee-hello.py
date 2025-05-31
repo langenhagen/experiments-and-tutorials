@@ -1,5 +1,4 @@
-"""
-Playground for a marquee-like text effect.
+"""Playground for a marquee-like text effect.
 
 E.g.:
 

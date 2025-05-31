@@ -15,7 +15,8 @@ import psutil
 
 def _pretty_memory_size(n_bytes: int) -> str:
     """Return the given number of bytes in a human-readable format,
-    e.g. as MBs or GBs."""
+    e.g. as MBs or GBs.
+    """
     if n_bytes == 0:
         return "0 B"
 

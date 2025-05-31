@@ -1,6 +1,4 @@
-"""
-My first application
-"""
+"""My first application"""
 
 import toga
 from toga.style import Pack

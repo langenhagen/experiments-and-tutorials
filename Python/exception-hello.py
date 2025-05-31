@@ -1,6 +1,4 @@
-"""
-Showcase usage with exceptions.
-"""
+"""Showcase usage with exceptions."""
 
 import re
 import sys

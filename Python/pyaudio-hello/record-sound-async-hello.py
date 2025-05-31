@@ -1,5 +1,4 @@
-"""
-PyAudio Example: Make a wire between input and output (i.e., record a
+"""PyAudio Example: Make a wire between input and output (i.e., record a
 few samples and play them back immediately).
 
 This is the callback (non-blocking) version.

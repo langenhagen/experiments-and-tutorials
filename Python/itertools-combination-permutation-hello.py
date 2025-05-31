@@ -1,5 +1,4 @@
-"""
-Showcase getting combinations, permutations and alike from iterables.
+"""Showcase getting combinations, permutations and alike from iterables.
 
 See: https://docs.python.org/2/library/itertools.html
 """

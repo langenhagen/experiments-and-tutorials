@@ -12,6 +12,7 @@ See:
 - https://arrow.apache.org/docs/python/parquet.html
 - https://pypi.org/project/pyarrow/
 """
+
 import json
 
 import pyarrow as pa

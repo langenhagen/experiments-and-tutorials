@@ -10,6 +10,7 @@ the main thread and the main thread also receives the signal. Related error
 message:
 
     "signal only works in main thread"
+
 """
 
 import signal

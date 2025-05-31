@@ -88,7 +88,8 @@ shutdown_event = threading.Event()  # Signal to stop the thread
 
 def main() -> None:
     """Allocate a few short-lived/transient memory hogs and see if we can catch
-    them."""
+    them.
+    """
 
     # Start tracemalloc
     tracemalloc.start(2)  # 5: number of frames to save, defaults to 1

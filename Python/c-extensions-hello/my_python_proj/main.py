@@ -1,5 +1,4 @@
-"""
-Showcase of using a custom C-extension module.
+"""Showcase of using a custom C-extension module.
 
 The .so should be in the path of the module
 

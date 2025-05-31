@@ -23,7 +23,9 @@ Tutorial:
   - https://leportella.com/sqlalchemy-tutorial/
     - https://github.com/leportella/sqlalchemy-basics-post/
 
-Tested with sqlalchemy 1.3.20."""
+Tested with sqlalchemy 1.3.20.
+
+"""
 
 import datetime
 

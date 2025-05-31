@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""
-See:
-https://github.com/nwhitehead/pyfluidsynth
-"""
+"""SHowcase how pyfluidsynth can play along with the 3rd party library `pyaudio`.
 
+See: https://github.com/nwhitehead/pyfluidsynth
+"""
 
 import fluidsynth
 import numpy as np

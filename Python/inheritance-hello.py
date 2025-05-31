@@ -1,6 +1,4 @@
-"""
-Showcase inheritance.
-"""
+"""Showcase inheritance."""
 
 print("--- 1 simple inheritance ---\n")
 

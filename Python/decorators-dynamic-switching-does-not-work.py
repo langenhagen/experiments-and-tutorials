@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""
-Showcase Python's decorators can NOT easily be switched at runtime.
+"""Showcase Python's decorators can NOT easily be switched at runtime.
 
 You can replace the decorator with another function any point before the
 interpreter gets to that function declaration. However, once the decorator is
 applied to the function, there seems to be no easy way to change the decorator
 later.
 
-See also:
+See Also:
 https://stackoverflow.com/questions/642762/is-it-possible-to-replace-a-python-function-method-decorator-at-runtime
+
 """
 
 import functools

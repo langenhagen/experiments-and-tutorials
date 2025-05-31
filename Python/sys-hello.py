@@ -1,5 +1,4 @@
-"""
-Introspect the current function name and get a reference to the function.
+"""Introspect the current function name and get a reference to the function.
 
 See:
 https://stackoverflow.com/questions/990422/how-to-get-a-reference-to-current-modules-attributes-in-python

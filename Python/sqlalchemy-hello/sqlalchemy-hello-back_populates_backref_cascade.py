@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Experiment with the differences between `back_populates`, `backref` and cascade.
+"""Experiment with the differences between `back_populates`, `backref` and cascade.
 in relationships.
 
 According to SQLAlchemy docs, better use `back_populates` as opposed to the

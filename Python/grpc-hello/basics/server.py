@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-The server implementation.
+"""The server implementation.
 
 Usage:
 

@@ -29,7 +29,8 @@ class SimpleNetwork:
 
     def predict(self, x):
         """Compute the output corresponding to the given input vector and return
-        the index of the largest output value."""
+        the index of the largest output value.
+        """
         estimations = self.forward(x)
         best_class = np.argmax(estimations)
         return best_class

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Showcase the context manager contextlib.suppress() that allows for convenient
-ignoring of exceptions"""
+ignoring of exceptions
+"""
 
 import time
 from contextlib import suppress

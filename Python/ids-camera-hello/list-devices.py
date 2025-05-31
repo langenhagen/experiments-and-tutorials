@@ -1,5 +1,4 @@
-"""
-List connected devices.
+"""List connected devices.
 
 based on:
 /opt/ids-peak_2.1.0.0-14251_amd64/share/doc/ids-peak/ids_peak-1.4.2/html/index.html#Python

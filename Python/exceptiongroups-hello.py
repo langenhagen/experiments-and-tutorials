@@ -16,7 +16,8 @@ print("--- 1 multiple exceptions ---\n")
 
 def raise_exceptions() -> None:
     """Raise and handle 2 exceptions and return/raise them late as an
-    ExceptionGroup."""
+    ExceptionGroup.
+    """
     exceptions: list[Exception] = []
     try:
         1 / 0  # ZeroDivisionError

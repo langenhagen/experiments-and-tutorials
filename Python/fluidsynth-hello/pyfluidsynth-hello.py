@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""
-See:
-https://github.com/nwhitehead/pyfluidsynth
+"""Showcase the 3rd party library `pyfluidsynth` with which you can play music.
+
+See: https://github.com/nwhitehead/pyfluidsynth
 """
 
 import time

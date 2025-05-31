@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the usage of the 3rd party tool `memray` that can help track memory usage.
+"""Showcase the usage of the 3rd party tool `memray` that can help track memory usage.
 
 Note:
 When it comes to details, Memray seems to be somewhat unreliable, especially
@@ -18,6 +17,7 @@ Example usage:
     xdg-open *.html
 
 author: andreasl
+
 """
 
 from dataclasses import dataclass

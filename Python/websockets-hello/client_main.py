@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """Showcase a simple websockets client.
 
-Taken from: https://websockets.readthedocs.io/"""
+Taken from: https://websockets.readthedocs.io/
+"""
 
 import asyncio
 

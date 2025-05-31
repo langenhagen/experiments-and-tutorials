@@ -1,5 +1,4 @@
-"""
-Nox is configured via a noxfile.py file in your project's directory. Here's a
+"""Nox is configured via a noxfile.py file in your project's directory. Here's a
 simple noxfile that runs lint and some tests.
 """
 

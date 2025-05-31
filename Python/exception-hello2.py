@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase exception tracing.
+"""Showcase exception tracing.
 
 No silver bullet.
 

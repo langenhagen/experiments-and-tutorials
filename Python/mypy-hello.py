@@ -16,7 +16,8 @@ print("\n--- 1 Mypy is inconsistent about whether None is in `Any` or not ---\n"
 def mypy_is_inconsistent_about_any(i: Any | None, j: Any) -> Any:
     """Showcase that addition on `Optional[Any]` aka `Any | None` fails, but on
     Any works. Controversely, a function can return None as Any. However,
-    addition only works on Any, not on `Optional[Any]`."""
+    addition only works on Any, not on `Optional[Any]`.
+    """
     a = i + 1  #  error: Unsupported operand types for + ("None" and "int")
     b = j + 1
     return a + b

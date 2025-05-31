@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the allegedly fast and little memory consuming string builder StringIO
+"""Showcase the allegedly fast and little memory consuming string builder StringIO
 from the standard lib.
 """
 

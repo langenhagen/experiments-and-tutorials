@@ -60,6 +60,6 @@ try:
     with MyBorkedContextManager() as context:
         print("Inside the context")
         raise RuntimeError("i am borked")
-except RuntimeError as err:
+except RuntimeError:
     # won't be called
     logger.exception("Oh no!")

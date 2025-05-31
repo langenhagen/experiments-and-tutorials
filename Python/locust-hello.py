@@ -1,5 +1,4 @@
-"""
-Experimental locust https://locust.io/ test.
+"""Experimental locust https://locust.io/ test.
 
 Apparently, locust is a neat thing to load-test response times including graphs
 and stuff.

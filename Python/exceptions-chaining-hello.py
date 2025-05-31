@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase that Python seamlessly writes tracebacks of exception that it raises from.
+"""Showcase that Python seamlessly writes tracebacks of exception that it raises from.
 Showcase that this looks like impossible call stacks.
 """
 

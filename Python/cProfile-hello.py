@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the use of the Python standard library tool cProfile
+"""Showcase the use of the Python standard library tool cProfile
 
 E.g., run a program under cProfile via:
 

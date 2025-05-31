@@ -1,5 +1,4 @@
-"""
-Showcase the builtin flexible logging module in Python.
+"""Showcase the builtin flexible logging module in Python.
 
 Apparently, the kwargument stack_info does not work with Python 2.
 """

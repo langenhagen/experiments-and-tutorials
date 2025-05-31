@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Run protoc with the gRPC plugin to generate protobuf messages and gRPC code.
+"""Run protoc with the gRPC plugin to generate protobuf messages and gRPC code.
 
 Write the output to the subfolder `generated/`.
 Repeated calls to this script are OK. They will update the generated files.

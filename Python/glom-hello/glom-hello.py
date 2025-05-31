@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Showcase the usage of the external package `glom` for nested data transformation
+"""Showcase the usage of the external package `glom` for nested data transformation
 and extraction. It eases the usage of complex dicts.
 
 Install like:

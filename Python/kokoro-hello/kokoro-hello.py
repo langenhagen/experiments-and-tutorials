@@ -12,6 +12,7 @@ Examples:
 
     python kokoro-hello.py              # read standard text
     python kokoro-hello.py myfile.txt   # read text from given file
+
 """
 
 import sys

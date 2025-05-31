@@ -1,6 +1,4 @@
-"""
-Implement a function that safely retrieves the calling function name.
-"""
+"""Implement a function that safely retrieves the calling function name."""
 
 import sys
 

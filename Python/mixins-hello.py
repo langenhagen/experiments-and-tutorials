@@ -31,7 +31,8 @@ class Child(
 class WrongMixinUsage(Mother, Mixin):
     """Showcase wrong usage of Mixin.
     Inheritance list in the wrong order.
-    Mixin's implementation would not kick in."""
+    Mixin's implementation would not kick in.
+    """
 
 
 c = Child(1, 2)

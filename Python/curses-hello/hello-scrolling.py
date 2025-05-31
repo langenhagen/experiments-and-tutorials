@@ -10,6 +10,7 @@ class Screen:
         """Initialize the screen window.
 
         Attributes
+        ----------
             window: A full curses screen window
             width: The width of `window`
             height: The height of `window`
@@ -36,6 +37,7 @@ class Screen:
             └--------------------------------------┘
         Returns
             None
+
         """
         self.window = None
 

@@ -1,5 +1,4 @@
-"""
-A generic data store interface and implementation.
+"""A generic data store interface and implementation.
 
 author: andreasl
 """

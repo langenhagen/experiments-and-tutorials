@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Showcase simple threading in Python by creating and starting several threads
+"""Showcase simple threading in Python by creating and starting several threads
 that each print when they start, wait 1 second and then print when they end.
 Their output will be interleaved.
 """

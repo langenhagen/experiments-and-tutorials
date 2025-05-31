@@ -97,7 +97,8 @@ print("\n--- 3 DFS with goal ---\n")
 
 def is_goal(node: Node, goal: Node) -> bool:
     """Process given node, return `True` if node fulfills goal condition,
-    otherwise return `False`."""
+    otherwise return `False`.
+    """
     print(f"{node=}")
     if node == goal:
         print("Yay!")
@@ -112,7 +113,8 @@ def dfs_with_goal(
     visited: set[Node] | None = None,
 ) -> bool:
     """Depth-first search that stops at a given goal. Return `True` if the goal
-    was found, otherwise return `False`."""
+    was found, otherwise return `False`.
+    """
     visited = visited or set()
     if node in visited:
         return False
@@ -143,7 +145,8 @@ def dfs_with_path(
     path: list[Node] | None = None,
 ) -> list[Node] | None:
     """Depth-first search that stops at a given goal. Return the path to the
-    goal or `None` if no Node with matching the goal criterion found."""
+    goal or `None` if no Node with matching the goal criterion found.
+    """
     visited = visited or set()
     path = path or []
     if node in visited:

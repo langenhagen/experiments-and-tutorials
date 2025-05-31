@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Showcase the lookup performance for lists, tuples, sets and arrays.
+"""Showcase the lookup performance for lists, tuples, sets and arrays.
 
 In particular, showcase how much the constant-time lookup of set-items O(1) may
 be considerably faster than the linear lookup O(n) of lists.
