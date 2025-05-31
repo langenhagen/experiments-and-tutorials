@@ -10,7 +10,7 @@ from typing import Optional
 
 @dataclass
 class Node:
-    """A simple binary tree node representation."""
+    """A simple binary tree node representation to showcase tree rotations."""
 
     parent: Optional["Node"]
     value: str
@@ -21,6 +21,21 @@ class Node:
         """Supershitty but I can't be bothered."""
         return f"{self.value} l:({self.left}), {self.value} r:({self.right})"
 
+    def _fix_parent_relations(self, new_root: "Node") -> None:
+        """Connect the rotated tree with the upper tree structure
+        as well as fixing the parent-relations of the new new top node
+        and the rotated node.
+        """
+        # fix relations to the tree above current node
+        if self.parent:
+            if self.parent.left is self:
+                self.parent.left = new_root
+            else:
+                self.parent.right = new_root
+        # fix parent-relations for new_root and self
+        new_root.parent = self.parent
+        self.parent = new_root
+
     def rotate_left(self) -> "Node":
         """Rotate a tree at given node to the left and return the new root."""
         if not self.right:
@@ -30,11 +45,9 @@ class Node:
         self.right = new_root.left
         if self.right:
             self.right.parent = self
-
         new_root.left = self
 
-        new_root.parent = self.parent
-        self.parent = new_root
+        self._fix_parent_relations(new_root)
         return new_root
 
     def rotate_right(self) -> "Node":
@@ -48,8 +61,7 @@ class Node:
             self.left.parent = self
         new_root.right = self
 
-        new_root.parent = self.parent
-        self.parent = new_root
+        self._fix_parent_relations(new_root)
         return new_root
 
 
