@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Showcase the usage of raise ... from to raise sequences of exceptions.
 
 However, `raise from` seems only necessary when you have several exceptions or
 causes you can choose from.
 """
 
-print("--- 1 raise from catched ---\n")
+print("--- 1 raise from caught ---\n")
 try:
     try:
         raise ValueError("The first message")
