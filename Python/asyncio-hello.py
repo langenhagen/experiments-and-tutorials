@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-"""Showcase the usage of the python standard library `asyncio`.
+#!/usr/bin/env python3
+"""Showcase the usage of the Python standard library `asyncio`.
 
 Allows for single-threaded quasi-parallelism.
 
