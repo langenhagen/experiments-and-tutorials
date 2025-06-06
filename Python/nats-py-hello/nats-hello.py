@@ -7,6 +7,7 @@ See: https://pypi.org/project/nats-py/
 import asyncio
 
 import nats
+import nats.errors
 from nats.errors import ConnectionClosedError, NoServersError, TimeoutError
 
 
@@ -41,10 +42,12 @@ async def main() -> None:
 
     try:
         async for msg in sub.messages:
-            print(f"Received a message on '{msg.subject} {msg.reply}': {msg.data.decode()}")
+            print(f"Received msg on '{msg.subject} {msg.reply}': {msg.data.decode()}")
             await sub.unsubscribe()
-    except Exception as e:
-        print(f"Dios Mio! error with message {msg}:\n{e}")  # fails bc of sub.unsubscribe() above
+    except nats.errors.Error as e:
+        # will run in this exception
+        # fails bc of sub.unsubscribe() above
+        print(f"Dios Mio! error with message {msg}:\n{e}")
 
     async def help_request(msg) -> None:
         print(f"Received a message on '{msg.subject} {msg.reply}': {msg.data.decode()}")
