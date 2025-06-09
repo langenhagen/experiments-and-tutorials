@@ -1,0 +1,12 @@
+[project]
+name = "chatterbox-tts-hello"
+version = "0.1.0"
+description = "Showcase the 3rd party TTS library chatterbox"
+readme = "README.md"
+requires-python = ">=3.11.9"
+dependencies = [
+    "bpython>=0.25",
+    "chatterbox-tts>=0.1.1",
+    "gradio>=5.33.1",
+    "setuptools>=80.9.0,<81.0", # fixes an otherwise occuring `ModuleNotFoundError: No module named 'pkg_resources'` error
+]
