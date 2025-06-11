@@ -7,6 +7,10 @@ argument `map_location=torch.device('cpu')` in the files
 - .venv/lib/python3.11/site-packages/chatterbox/tts.py and
 - .venv/lib/python3.11/site-packages/chatterbox/vc.py
 
+Doesn't seem to show a progress bar.
+
+Audio file should be less than ~1:20 minutes otherwise tensor is too big or so.
+
 See:
 - https://github.com/resemble-ai/chatterbox
 """
@@ -28,6 +32,7 @@ print(f"Using device: {device}")
 
 AUDIO_PATH = "output-pretrained.wav"
 TARGET_VOICE_PATH = "input-voice.m4a"
+# TARGET_VOICE_PATH = "woozle.mp3"
 
 model = ChatterboxVC.from_pretrained(device)
 wav = model.generate(

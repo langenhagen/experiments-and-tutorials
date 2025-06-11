@@ -68,8 +68,8 @@ def main() -> None:
                 text = gr.Textbox(
                     value="""
 Wild jays flick past six quiet brown dogs on the foggy lawn.
-Jumping frogs vex bold quick wren by the pond’s edge.
-Glib nymphs dwarf jack’s cozy hut, vexing poor, quiet boy.
+Jumping frogs vex bold quick wren by the pond's edge.
+Glib nymphs dwarf jack's cozy hut, vexing poor, quiet boy.
 """,
                     label="Text to synthesize",
                     max_lines=20,
@@ -84,14 +84,14 @@ Glib nymphs dwarf jack’s cozy hut, vexing poor, quiet boy.
                     0.25,
                     2,
                     step=0.05,
-                    label="Exaggeration (Neutral = 0.5, extreme values can be unstable)",
+                    label="Exaggeration (Neutral = 0.5; low is calm, high is more excited; high values can be unstable)",
                     value=0.5,
                 )
                 cfg_weight = gr.Slider(
                     0.0,
                     1,
                     step=0.05,
-                    label="CFG/Pace",
+                    label="CFG/Pace (speed)",
                     value=0.5,
                 )
                 seed = gr.Number(
@@ -102,7 +102,7 @@ Glib nymphs dwarf jack’s cozy hut, vexing poor, quiet boy.
                     0.05,
                     5,
                     step=0.05,
-                    label="temperature",
+                    label="temperature (creativity; low values are good; high values become crazy and take long)",
                     value=0.8,
                 )
                 run_button = gr.Button(
