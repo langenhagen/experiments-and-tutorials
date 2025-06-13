@@ -1,3 +1,4 @@
 bpython
 pandas
+parquet-viewer
 pyarrow

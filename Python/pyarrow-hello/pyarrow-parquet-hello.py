@@ -8,12 +8,24 @@ Install with:
 
   pip install pyarrow
 
+
+To view parquet files, consider installing `parquet-viewer`:
+
+    pip install parquet-viewer
+
+Then, you can inspect the file via:
+
+    pqview view example.parquet
+
+
 See:
 - https://arrow.apache.org/docs/python/parquet.html
 - https://pypi.org/project/pyarrow/
+- https://pypi.org/project/parquet-viewer/
 """
 
 import json
+from io import BytesIO
 
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -29,9 +41,16 @@ data = {
 print(f"data=\n{json.dumps(data, indent=2)}")
 
 table: pa.Table = pa.table(data)
-pq.write_table(table, "example.parquet")
+pq.write_table(table=table, where="example.parquet")
 
-print("\n--- 2 read Parquet file ---\n")
+print("\n --- 2 create Parquet file in-memory ---\n")
+
+buffer = BytesIO()
+pq.write_table(table=table, where=buffer)
+with open("from-buffer.parquet", "wb") as file:
+    file.write(buffer.getvalue())
+
+print("\n--- 3 read Parquet file ---\n")
 
 in_table = pq.read_table("example.parquet")
 
@@ -40,12 +59,12 @@ print(f"in_table.to_pydict()=\n{in_table.to_pydict()}\n")
 print(f"in_table.to_pylist()=\n{in_table.to_pylist()}\n")
 print(f"in_table.to_pandas()=\n{in_table.to_pandas()}\n")  # pandas must be installed separately
 
-print("\n--- 3 select specific columns while reading ---\n")
+print("\n--- 4 select specific columns while reading ---\n")
 
 selective_in_table = pq.read_table("example.parquet", columns=["name", "score"])
 print(f"selective_in_table=\n{selective_in_table}\n")
 
-print("\n--- 4 nested data ---\n")
+print("\n--- 5 nested data ---\n")
 
 nested_data = {
     "user": [
