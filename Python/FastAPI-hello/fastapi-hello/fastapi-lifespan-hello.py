@@ -3,6 +3,8 @@
 anc end after the app ends, potentially good for preparing stuff, cleaning up or
 kicking off async tasks.
 
+Lifespans get executed for every worker.
+
 Call the server e.g. via:
 
     curl -L http://localhost:8000/start  # resume the coroutine
@@ -31,10 +33,12 @@ async def my_coroutine() -> None:
 
 
 async def my_lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    print(f"STARTING EEEET {app=}")
+    """Gets executed FOR EACH WORKER across its ...lifespan!"""
+    print(f"Starting lifespan... {app=}")
     task = asyncio.create_task(my_coroutine())
+    print("After starting lifespan, before yield")
     yield
-    print("ENDING IT")
+    print(f"Ending Lifespan... {app=}")
     task.cancel()
 
 
@@ -63,7 +67,9 @@ if __name__ == "__main__":
         loop="asyncio",
         host="localhost",
         port=8000,
-        reload=True,
+        reload=False,  # "workers" flag is ignored when reloading is enabled
         log_level="info",
         # log_level="debug",
+        # workers=1,
+        workers=4,  # workers are processes
     )

@@ -28,7 +28,7 @@ async def other_dependency(q: str | None = None, value: float = 1.2):
 
 @app.get("/foo/")
 async def foo(params: Annotated[dict, Depends(dependency)]):
-    """Uses `Depends()` directly"""
+    """Uses `Depends()` directly."""
 
     # Showcase that both Depends depends and the FastAPI endpoint are benign and
     # just what you expect in terms of runtime-function arguments. I.e., no
