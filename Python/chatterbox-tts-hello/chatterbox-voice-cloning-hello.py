@@ -15,6 +15,8 @@ See:
 - https://github.com/resemble-ai/chatterbox
 """
 
+from pathlib import Path
+
 import torch
 import torchaudio as ta
 from chatterbox.vc import ChatterboxVC
@@ -30,13 +32,16 @@ else:
 
 print(f"Using device: {device}")
 
-AUDIO_PATH = "output-pretrained.wav"
-TARGET_VOICE_PATH = "input-voice.m4a"
-# TARGET_VOICE_PATH = "woozle.mp3"
+audio_path = Path("output-synthesized-from-default.wav")
+target_voice_path = Path("input-voice.m4a")
 
 model = ChatterboxVC.from_pretrained(device)
 wav = model.generate(
-    audio=AUDIO_PATH,
-    target_voice_path=TARGET_VOICE_PATH,
+    audio=str(audio_path),
+    target_voice_path=str(target_voice_path),
 )
-ta.save("output-cloning.wav", wav, model.sr)
+ta.save(
+    f"output-cloning-of-{audio_path.name}-with-target-voice-{target_voice_path.name}.wav",
+    wav,
+    model.sr,
+)

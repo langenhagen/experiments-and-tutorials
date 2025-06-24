@@ -35,7 +35,7 @@ def generate(
     temperature,
     seed_num,
     cfgw,
-):
+) -> tuple:
     if model is None:
         model = ChatterboxTTS.from_pretrained(device=device)
 
@@ -60,7 +60,7 @@ def main() -> None:
     else:
         device = "cpu"
 
-    with gr.Blocks() as demo:
+    with gr.Blocks(title="Chatterbox Hello") as demo:
         model_state = gr.State(None)  # Loaded once per session/user
 
         with gr.Row():
