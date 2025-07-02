@@ -2,6 +2,12 @@
 """Showcase usage of the module multiprocessing that can create processes for
 multi-core programming.
 
+Comparison to the package `subprocess`:
+`multiprocessing` is for parallelizing Python, `subprocess` is for controlling non-Python system
+processes.  Use `multiprocessing` to run multiple Python processes in parallel and share Python
+objects between them. Use `subprocess` to execute external programs or shell commands and
+communicate via raw input/output streams.
+
 See:
 - https://www.blog.pythonlibrary.org/2020/07/15/python-101-creating-multiple-processes/
 - https://docs.python.org/3/library/multiprocessing.html
@@ -21,7 +27,10 @@ def worker(name: str) -> None:
 
 
 def hello_processes() -> None:
-    """Showcase the usage of Processes."""
+    """Showcase the usage of Processes.
+
+    Processes create a separate Python process to run a function in parallel.
+    """
     processes = []
     for i in range(5):
         process = multiprocessing.Process(target=worker, args=(f"job-{i}",))
@@ -41,7 +50,11 @@ def worker2(d: dict, l: list) -> None:
 
 
 def hello_managers() -> None:
-    """Showcases the usage of Managers."""
+    """Showcases the usage of Managers.
+
+    Managers provide shared objects (like dicts, lists) that multiple processes
+    can safely access and modify.
+    """
     with multiprocessing.Manager() as manager:
         d = manager.dict()
         l = manager.list(range(10))
@@ -55,7 +68,7 @@ def hello_managers() -> None:
 
 
 def main() -> None:
-    """Main program."""
+    """Run the  program."""
     print("--- 1 Processes ---")
     hello_processes()
 
