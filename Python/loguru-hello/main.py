@@ -33,7 +33,10 @@ print("\n--- 4 variable logging ---\n")
 
 
 class C:
+    """Exemplary simple class."""
+
     def __init__(self) -> None:
+        """Init."""
         self.val = 9
 
 
@@ -49,3 +52,40 @@ logger.info("appears twice")
 
 logger.remove(extra_sink)
 logger.info("only once now")
+
+print("\n--- 6 custom coloring and text formatting---\n")
+
+colors = [
+    "black",
+    "red",
+    "green",
+    "yellow",
+    "blue",
+    "magenta",
+    "cyan",
+    "white",
+]
+
+# <b>, <i>, <u> -> bold, italic, underline
+for color in colors:
+    logger.remove()
+    logger.add(
+        sys.stdout,
+        format=f"<{color}><u>{{time:HH:mm:ss}}</u> | <i>{{level}}</i> | <b>{{message}}</b></{color}>",
+        colorize=True,
+    )
+
+    logger.info(f"I'm {color}!")
+
+
+# custom color coded; doesn't work with <b>, <i>, <u>
+bright = "\033[1;97m"
+reset = "\033[0m"
+logger.remove()
+logger.add(
+    sys.stdout,
+    format=f"{bright}{{time:HH:mm:ss}} | {{level}} | {{message}}{reset}",
+    colorize=True,
+)
+
+logger.info(f"I'm custom color-coded: {bright=}!")
