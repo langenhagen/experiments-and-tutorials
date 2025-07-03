@@ -4,12 +4,15 @@
        
        author: andreasl
        """
+       
     1: from hello import say_hello
        
-    1: def main():
+       
+    1: def main() -> None:
     1:     print("Starting the main program.")
     1:     say_hello()
     1:     say_hello()  # aaand a second time
+       
        
     1: if __name__ == "__main__":
     1:     main()
