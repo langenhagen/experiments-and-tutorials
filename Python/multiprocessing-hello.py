@@ -67,13 +67,34 @@ def hello_managers() -> None:
         print(f"\n{l=}\n{l}")
 
 
+def my_endless_task() -> None:
+    """Do something forever."""
+    i = 0
+    while True:
+        print(f"my endless task says: {i}")
+        i += 1
+        time.sleep(1.0)
+
+
+def hello_terminate() -> None:
+    """Showcase the method `Process.terminate()` to SIGTERM to off-processes."""
+    p = multiprocessing.Process(target=my_endless_task)
+    p.start()
+    time.sleep(3)
+    p.terminate()  # this signals SIGTERM to the process
+    p.join()
+
+
 def main() -> None:
     """Run the  program."""
-    print("--- 1 Processes ---")
+    print("--- 1 Processes ---\n")
     hello_processes()
 
-    print("\n--- 2 Managers ---")
+    print("\n--- 2 Managers ---\n")
     hello_managers()
+
+    print("\n--- 3 termination signals for long/endless tasks ---\n")
+    hello_terminate()
 
 
 if __name__ == "__main__":
