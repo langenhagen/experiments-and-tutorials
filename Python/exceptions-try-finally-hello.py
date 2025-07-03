@@ -5,7 +5,21 @@ Comment out the functions you don't want to see crashing, so you can see the
 program crashing in places that you are interested in.
 """
 
-print("--- 1 try-finally ---\n")
+print("--- 1 finally happens also without exceptions ---\n")
+
+
+def try_finally_without_exceptions() -> None:
+    try:
+        print("Nothing raises")
+    except ValueError:
+        print("Ohno")
+    finally:
+        print("Finally happens anyway")
+
+
+try_finally_without_exceptions()
+
+print("\n--- 2 try-finally ---\n")
 
 
 def try_finally() -> None:
@@ -24,7 +38,7 @@ def try_finally() -> None:
 
 # try_finally()
 
-print("\n--- 2 try-except-finally ---\n")
+print("\n--- 3 try-except-finally ---\n")
 
 
 def try_except_finally() -> None:
@@ -38,7 +52,7 @@ def try_except_finally() -> None:
 
 try_except_finally()
 
-print("\n--- 3 try-except-raise-finally - finally kicks in always ---\n")
+print("\n--- 4 try-except-raise-finally - finally kicks in last ---\n")
 
 
 def try_except_finally() -> None:
