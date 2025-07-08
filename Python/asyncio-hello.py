@@ -84,7 +84,23 @@ async def foo() -> None:
 asyncio.run(foo())
 
 
-print("\n--- 5 create_task() and gather() ---\n")
+print("\n--- 5 create_task() ---\n")
+
+
+async def foo() -> None:
+    task = asyncio.create_task(say_after(delay=random.random(), what="Hello from the task!"))
+
+    print("I come after create_task()")
+
+    result = await task
+
+    print(f"{result=}")
+
+
+asyncio.run(foo())
+
+
+print("\n--- 6 create_task() and gather() ---\n")
 
 
 async def foo() -> None:
@@ -105,7 +121,7 @@ async def foo() -> None:
 
 asyncio.run(foo())
 
-print("\n--- 6 as_completed() - act on tasks in first-done-first-serve fashion ---\n")
+print("\n--- 7 as_completed() - act on tasks in first-done-first-serve fashion ---\n")
 
 
 async def foo() -> None:
@@ -126,7 +142,7 @@ async def foo() -> None:
 
 asyncio.run(foo())
 
-print("\n--- 7 not handling exceptions: Task exception was never retrieved  ---\n")
+print("\n--- 8 not handling exceptions: Task exception was never retrieved  ---\n")
 
 
 async def failing_task() -> NoReturn:
@@ -154,7 +170,7 @@ async def bar() -> None:
 asyncio.run(bar())
 
 
-print("\n--- 8 handling exceptions ---\n")
+print("\n--- 9 handling exceptions ---\n")
 
 
 async def foo() -> None:
@@ -169,7 +185,7 @@ async def foo() -> None:
 
 asyncio.run(foo())
 
-print("\n--- 9 handling exceptions with gather() ---\n")
+print("\n--- 10 handling exceptions with gather() ---\n")
 
 
 async def foo() -> None:
@@ -190,7 +206,7 @@ async def foo() -> None:
 
 asyncio.run(foo())
 
-print("\n--- 10 exception handler functions ---\n")
+print("\n--- 11 exception handler functions ---\n")
 
 
 def handle_exception(loop, context) -> None:
