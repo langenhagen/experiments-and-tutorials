@@ -11,6 +11,8 @@ key-value pairs for configuration.
 See: https://pypi.org/project/python-decouple/
 """
 
+import json
+
 from decouple import Config, Csv, RepositoryEnv, UndefinedValueError, config
 
 print("--- 1 basic usage ---\n")
@@ -21,10 +23,13 @@ port = config("PORT", cast=int, default=5000)
 # `Csv` parses comma-separated values into a list
 allowed_hosts = config("ALLOWED_HOSTS", cast=Csv(), default="localhost")
 
+dict_config = config("MY_DICT", cast=json.loads, default='{"default":123}')
+
 print(f"{hello=}")
 print(f"{debug=}")
 print(f"{port=}")
 print(f"{allowed_hosts=}")
+print(f"{type(dict_config)=}  {dict_config=}")
 
 print("\n--- 2 Config class ---\n")
 
