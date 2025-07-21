@@ -44,20 +44,18 @@ except:
     print(f"exception_obj: {exc_obj}")
     print(f"traceback: {traceback}")
 
-print("\n--- 3 Excepthook ---\n")
+print("\n--- 3 sys.excepthook to add a handler to exceptions ---\n")
 
 
 def patched_excepthook(type, value, traceback):
     print(
-        "Gotcha, unhandled exception:\n {}\n {!r}\n {}\n sys.exc_info()={}\n".format(
-            type, value, traceback, sys.exc_info()
-        )
+        f"Gotcha, unhandled exception:\n {type}\n {value!r}\n {traceback}\n sys.exc_info()={sys.exc_info()}\n"
     )
 
 
-sys.__excepthook__ = (
-    sys.excepthook
-)  # weird, but apparently,__excepthook__ wasn't stored automatically with my python
+assert sys.excepthook is not None
+# weird, but apparently,__excepthook__ wasn't stored automatically with my python
+sys.__excepthook__ = sys.excepthook
 sys.excepthook = patched_excepthook
 
 try:
