@@ -95,6 +95,9 @@ async def main_page() -> None:
     def greet() -> None:
         result.set_text(f"Hello, {name.value or 'stranger'} {num.value}!")
 
+    def something_wrong() -> None:
+        ui.notify("Dios mio!", type="negative")
+
     async def show_notification() -> None:
         """Show notifications. Notifications are like notify() but finer
         control.
@@ -113,7 +116,7 @@ async def main_page() -> None:
         result = ui.label()
         with ui.row():
             ui.button("Greet", on_click=greet)
-            ui.button("In The Same Row", on_click=greet)
+            ui.button("In The Same Row", on_click=something_wrong)
         ui.button("Start notification", on_click=show_notification)
 
     def show_number() -> None:
