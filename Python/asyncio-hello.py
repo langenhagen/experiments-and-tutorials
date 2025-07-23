@@ -225,3 +225,42 @@ loop = asyncio.new_event_loop()
 loop.set_exception_handler(handle_exception)
 asyncio.set_event_loop(loop)
 loop.run_until_complete(bar())
+
+print("\n--- 12 global/shared objects ---\n")
+
+_my_global_dict = {"mykey": 1}
+
+
+def get_global_dict() -> dict[str, int]:
+    return _my_global_dict
+
+
+async def read_global_dict() -> None:
+    """Keep a reference to a global var."""
+    d = get_global_dict()
+    print(f"read_global_dict: Before sleep: {d=}")
+    await asyncio.sleep(1)
+    print(f"read_global_dict: After sleep: {d=}")
+
+
+async def write_global_dict() -> None:
+    """Write to a global var."""
+    d = get_global_dict()
+    await asyncio.sleep(0.2)
+    print("write_global_dict: Clearing dict now...")
+    d.clear()
+    await asyncio.sleep(0.2)
+    print("write_global_dict: Adding key now...")
+    d["this is new"] = 23
+
+
+async def foo() -> None:
+    """Run 2 tasks that both access and refer to a global variable."""
+
+    task1 = asyncio.create_task(read_global_dict())
+    task2 = asyncio.create_task(write_global_dict())
+
+    await asyncio.gather(task1, task2)
+
+
+asyncio.run(foo())
