@@ -90,12 +90,11 @@ print(c)
 
 print("\n--- 4 recursive JSON serialization of individual models---\n")
 
-aj = (
-    a.model_dump_json()
-)  # same as `.model_dump(mode="json")`; can also json-serialize nested enums
+aj = (a.model_dump_json())  # string!
+print(f"{type(aj)=}\n{aj=}")
 
-print(f"{type(aj)=}\n")
-print(aj)
+amj = a.model_dump(mode="json")  # dict
+print(f"{type(amj)=}\n{amj=}")
 
 print("\n--- 5 recursive to dict ---\n")
 
