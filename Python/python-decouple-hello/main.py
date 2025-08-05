@@ -12,6 +12,7 @@ See: https://pypi.org/project/python-decouple/
 """
 
 import json
+from pathlib import Path
 
 from decouple import Config, Csv, RepositoryEnv, UndefinedValueError, config
 
@@ -22,14 +23,15 @@ debug = config("DEBUG", cast=bool, default=False)
 port = config("PORT", cast=int, default=5000)
 # `Csv` parses comma-separated values into a list
 allowed_hosts = config("ALLOWED_HOSTS", cast=Csv(), default="localhost")
-
-dict_config = config("MY_DICT", cast=json.loads, default='{"default":123}')
+my_dict = config("MY_DICT", cast=json.loads, default='{"default":123}')
+my_path = config("MY_PATH", cast=Path, default="/home/default")
 
 print(f"{hello=}")
 print(f"{debug=}")
 print(f"{port=}")
 print(f"{allowed_hosts=}")
-print(f"{type(dict_config)=}  {dict_config=}")
+print(f"{type(my_dict)=}  {my_dict=}")
+print(f"{type(my_path)=}  {my_path=}")
 
 print("\n--- 2 Config class ---\n")
 
