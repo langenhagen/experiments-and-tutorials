@@ -3,6 +3,10 @@
 ## Steps
 
 ```bash
+pnpm env use --global 22.18.0  # tells pnpm to set --global: global Node.js version to 22.18.0 using its built-in env manager
+```
+
+```bash
 pnpm init  # creates `package.json`
 
 pnpm add typescript ts-node @types/node chalk
