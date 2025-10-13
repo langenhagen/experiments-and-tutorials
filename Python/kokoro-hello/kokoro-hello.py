@@ -49,7 +49,7 @@ generator = pipeline(
 )
 
 with sf.SoundFile(
-    f"{filename}-combined.wav",
+    f"{filename}.wav",
     mode="w",
     channels=1,
     samplerate=samplerate,
