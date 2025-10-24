@@ -16,6 +16,7 @@ Examples:
 """
 
 import sys
+from pathlib import Path
 
 import soundfile as sf
 from kokoro import KPipeline
@@ -25,11 +26,11 @@ from kokoro import KPipeline
 pipeline = KPipeline(lang_code="a")  # make sure lang_code matches voice
 
 if len(sys.argv) > 1:
-    filename = sys.argv[1]
+    filename = Path(sys.argv[1])
     with open(filename, encoding="utf-8") as f:
         text = f.read()
 else:
-    filename = ""
+    filename = Path("default")
     text = """
     The sky above the port was the color of television, tuned to a dead channel.
     "It's not like I'm using," Case heard someone say, as he shouldered his way through the crowd around the door of the Chat. "It's like my body's developed this massive drug deficiency."
@@ -49,7 +50,7 @@ generator = pipeline(
 )
 
 with sf.SoundFile(
-    f"{filename}.wav",
+    f"{filename.stem}.wav",
     mode="w",
     channels=1,
     samplerate=samplerate,
