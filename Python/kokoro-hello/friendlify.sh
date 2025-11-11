@@ -23,6 +23,9 @@ The text is:
 
 msg+="$content"
 
+# time codex exec "$msg" --skip-git-repo-check --json
+# exit 99
+
 result="$(codex exec "$msg" --skip-git-repo-check --json | jq -r 'select(.type=="item.completed" and .item.type=="agent_message") | .item.text')"
 echo "$result"
 
