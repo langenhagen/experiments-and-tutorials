@@ -2,7 +2,6 @@
 """Showcase the AI powered speech-to-text package Vosk.
 
 Vosk is apparently rather reliable and friendly on the CPU.
-
 Not the fastest on the CPU of course.
 
 author: andreasl
