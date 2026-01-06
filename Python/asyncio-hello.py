@@ -264,3 +264,22 @@ async def foo() -> None:
 
 
 asyncio.run(foo())
+
+print("\n--- 13 wait for / timeout ---\n")
+
+
+async def foo() -> None:
+    """Sleep a tiny bit too long."""
+    await asyncio.sleep(4)
+
+
+async def bar() -> None:
+    """Call an async function an time out on it."""
+    try:
+        await asyncio.wait_for(foo(), timeout=1.0)
+        print("Gets never called")
+    except TimeoutError as e:
+        print(f"Caught exception: {e=}")
+
+
+asyncio.run(bar())
