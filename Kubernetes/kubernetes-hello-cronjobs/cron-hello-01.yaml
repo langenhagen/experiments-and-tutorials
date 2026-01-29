@@ -1,0 +1,50 @@
+# hello-cron.yaml
+#
+# Kubernetes CronJob manifest
+# Can be applied with:
+#   kubectl apply -n demo -f hello-cron.yaml
+
+# apiVersion:
+# Tells Kubernetes which API group and version this resource belongs to.
+# "batch/v1" is the stable API for run-to-completion workloads like Jobs and CronJobs.
+# (Older tutorials may mention batch/v1beta1 — that is deprecated and no longer accepted.)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  # Name of the CronJob resource
+  name: hello-cron
+spec:
+  # Cron schedule:
+  # "*/1 * * * *" = run once every minute
+  schedule: "*/1 * * * *"
+
+  # Prevent overlapping runs:
+  # if a previous Job is still running, the next one is skipped
+  concurrencyPolicy: Forbid
+
+  # How many finished Jobs Kubernetes keeps
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 10
+
+  # Template for each Job created by the CronJob
+  jobTemplate:
+    spec:
+      # Number of retries before marking the Job as failed
+      backoffLimit: 0
+
+      # Pod template used by the Job
+      template:
+        spec:
+          # Jobs usually do not restart containers
+          restartPolicy: Never
+          containers:
+            - name: hello
+              # Small image with basic Unix tools
+              image: busybox:1.36
+              # Override entrypoint to run a shell command
+              command:
+                - sh
+                - -lc
+                - |
+                  date
+                  echo hello from cronjob
