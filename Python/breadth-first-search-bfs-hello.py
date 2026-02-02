@@ -5,7 +5,7 @@ author: andreasl
 """
 
 from collections import deque
-from typing import Generator
+from typing import Iterator
 
 Node = str
 AdjacencyList = dict[Node, list[Node]]
@@ -71,7 +71,7 @@ bfs("A", graph)
 print("\n--- 2 BFS as Generator ---\n")
 
 
-def bfs_generator(start: Node, graph: AdjacencyList) -> Generator[str, None, None]:
+def bfs_generator(start: Node, graph: AdjacencyList) -> Iterator[Node]:
     """Breadth-first search as a Generator."""
     visited = set()
     queue: deque[Node] = deque()
@@ -102,9 +102,7 @@ def is_goal(node: Node, goal: Node) -> bool:
     return False
 
 
-def bfs_with_goal(
-    start: Node, graph: AdjacencyList, goal: Node
-) -> Generator[str, None, None]:
+def bfs_with_goal(start: Node, graph: AdjacencyList, goal: Node) -> Iterator[Node]:
     """Breadth-first search that stops at given goal as a Generator."""
     visited = set()
     queue: deque[Node] = deque()
