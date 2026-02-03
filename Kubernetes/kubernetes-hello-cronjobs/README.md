@@ -2,7 +2,7 @@
 
 ```bash
 # Create a local Kubernetes cluster named "cronjobs-hello" inside Docker containers
-# k3d cluster create lab : create + name the cluster "lab"
+# k3d cluster create cronjobs-hello : create + name the cluster "cronjobs-hello"
 # --agents 2           : add 2 worker nodes (k3s "agents") in addition to the server node(s)
 # --servers 1          : create 1 control-plane node (k3s "server"); this runs the API server, scheduler, etc.
 # --k3s-arg ...        : pass raw arguments through to the underlying k3s process
@@ -17,9 +17,9 @@ k3d cluster create cronjobs-hello \
 
 
 # write da kubeconfig
-k3d kubeconfig write cronjobs-hello --output ~/wandel/stuff/local-kubeconfig
+k3d kubeconfig write cronjobs-hello --output ./cronjobs-hello.kubeconfig.yaml
 
-set -x KUBECONFIG ~/wandel/stuff/local-kubeconfig  # fish syntax
+set -x KUBECONFIG ./cronjobs-hello.kubeconfig.yaml  # fish syntax
 
 # list ze clusters
 k3d cluster list

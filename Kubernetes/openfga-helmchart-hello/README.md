@@ -18,10 +18,10 @@ k3d cluster create openfga-hello \
   --kubeconfig-update-default=false
 
 # Persist kubeconfig to a stable location and export it (adjust the path if desired)
-k3d kubeconfig write openfga-hello --output ./openfga-hello.kubeconfig
+k3d kubeconfig write openfga-hello --output ./openfga-hello.kubeconfig.yaml
 
-set -x KUBECONFIG openfga-hello.kubeconfig  # fish
-# export KUBECONFIG=./openfga-hello.kubeconfig
+set -x KUBECONFIG openfga-hello.kubeconfig.yaml  # fish
+# export KUBECONFIG=./openfga-hello.kubeconfig.yaml
 
 # Smoke test
 kubectl cluster-info
