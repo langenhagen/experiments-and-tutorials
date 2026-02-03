@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Showcase how to stop long-running python functions with the standard library
 module `signal`.
 
