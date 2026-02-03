@@ -5,7 +5,7 @@ standard library.
 
 import dis
 
-print("--- 1 - simple disassembly ---")
+print("--- 1 - simple disassembly ---\n")
 
 
 def foo(i: int):

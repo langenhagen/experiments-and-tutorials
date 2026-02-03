@@ -8,7 +8,7 @@ author: andreasl
 
 import csv
 
-print("--- 1 write CSV ---")
+print("--- 1 write CSV ---\n")
 
 unicode_chars = "å∫ç"
 
