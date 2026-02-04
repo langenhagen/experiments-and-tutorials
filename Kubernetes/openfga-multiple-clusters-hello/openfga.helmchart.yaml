@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/openfga/openfga
+  tag: ""
+  pullPolicy: IfNotPresent
+
+datastore:
+  # Use in-memory datastore so the chart works without provisioning Postgres.
+  engine: memory
+  applyMigrations: true
+  waitForMigrations: true
+
+serviceAccount:
+  # ServiceAccounts are the Kubernetes identities for pods; keeping this true lets Helm
+  # create one that is unique to OpenFGA so you can reason about its permissions later.
+  create: true  # chart uses that dedicated identity instead of the namespace default
+
+playground:
+  enabled: true  # expose the bundled Playground UI on the same Service
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+
+service:
+  type: ClusterIP
+
+autoscaling:
+  enabled: false

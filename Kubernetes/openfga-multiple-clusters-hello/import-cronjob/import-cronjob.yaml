@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-fga
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: import-fga
+              image: import-fga:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: CLOUD_API_URL
+                  value: http://host.k3d.internal:8080
+                - name: OS_API_URL
+                  value: http://openfga:8080
+                - name: STORE_NAME
+                  value: mystore
