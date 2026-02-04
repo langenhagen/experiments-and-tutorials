@@ -1,0 +1,23 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: os
+# Expose OpenFGA to the host for local access
+servers: 1
+agents: 0
+ports:
+  # Map the k3d loadbalancer ports to the host
+  # nodeFilters limits the mapping to specific node roles; loadbalancer means only the lb node binds the host port
+  - port: 9090:8080
+    nodeFilters:
+      - loadbalancer
+  - port: 3001:3000
+    nodeFilters:
+      - loadbalancer
+options:
+  k3d:
+    wait: true
+  kubeconfig:
+    # Keep the default kubeconfig and current context unchanged
+    updateDefaultKubeconfig: false
+    switchCurrentContext: false

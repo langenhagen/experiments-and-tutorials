@@ -1,0 +1,23 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: cloud
+# This cluster exposes OpenFGA to the host so other clusters can reach it
+servers: 1
+agents: 0
+ports:
+  # Map the k3d loadbalancer ports to the host for cross-cluster access
+  # nodeFilters limits the mapping to specific node roles; loadbalancer means only the lb node binds the host port
+  - port: 8080:8080
+    nodeFilters:
+      - loadbalancer
+  - port: 3000:3000
+    nodeFilters:
+      - loadbalancer
+options:
+  k3d:
+    wait: true
+  kubeconfig:
+    # Keep the default kubeconfig and current context unchanged
+    updateDefaultKubeconfig: false
+    switchCurrentContext: false

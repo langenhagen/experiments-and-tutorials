@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-fga
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          # restartPolicy controls Pod restarts on container exit.
+          # For CronJob Pods the valid values are Never or OnFailure (Always is not allowed).
+          # Never: do not restart; the Job will finish based on the first run.
+          # OnFailure: restart failed containers within the Pod until Job backoffLimit is reached.
+          restartPolicy: Never
+          containers:
+            - name: import-fga
+              image: import-fga:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: CLOUD_API_URL
+                  value: http://host.k3d.internal:8080
+                - name: OS_API_URL
+                  value: http://openfga:8080
+                - name: STORE_NAME
+                  value: mystore

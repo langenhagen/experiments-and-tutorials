@@ -1,0 +1,50 @@
+name: mystore
+model: |+
+    model
+      schema 1.1
+
+    type user
+
+    type organization
+      relations
+        define admin: [user]
+        define can_create_physical_cell: admin
+        define can_create_virtual_cell: admin or developer
+        define can_delete_cell: admin
+        define can_register_cell: admin or developer
+        define developer: [user]
+        define operator: [user]
+
+    type cell
+      relations
+        define admin: admin from organization
+        define can_access: admin or member
+        define can_manage: admin
+        define developer: developer from organization
+        define member: [user]
+        define operator: operator from organization
+        define organization: [organization]
+
+tuples:
+    - user: user:charlie
+      relation: operator
+      object: organization:myorg
+    - user: organization:myorg
+      relation: organization
+      object: cell:cell2
+    - user: user:bob
+      relation: developer
+      object: organization:myorg
+    - user: user:alice
+      relation: admin
+      object: organization:myorg
+    - user: organization:myorg
+      relation: organization
+      object: cell:cell1
+    - user: user:bob
+      relation: member
+      object: cell:cell1
+tests:
+    - name: Tests
+      check: []
+
