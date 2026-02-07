@@ -16,7 +16,7 @@ print("--- 1 homegrown heapify() ---\n")
 
 
 def min_heapify(arr: list, index: int) -> None:
-    """Make sure the subtree at index i is a max-heap by checking if left or
+    """Make sure the subtree at index i is a min-heap by checking if left or
     right child are smaller than parent. If so, swap parent with the smaller
     child. Recursively do the same for for the child's new position, to keep
     fixing downwards.
