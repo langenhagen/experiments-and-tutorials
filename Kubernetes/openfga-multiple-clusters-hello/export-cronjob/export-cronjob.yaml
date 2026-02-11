@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: export-fga
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: export-fga
+              image: export-fga:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: CLOUD_API_URL
+                  value: http://openfga:8080
+                - name: STORE_NAME
+                  value: mystore
+                - name: DUMP_FILE
+                  value: /dump/store-dump.fga.yaml
+              volumeMounts:
+                - name: dump
+                  mountPath: /dump
+          volumes:
+            - name: dump
+              persistentVolumeClaim:
+                claimName: openfga-dump

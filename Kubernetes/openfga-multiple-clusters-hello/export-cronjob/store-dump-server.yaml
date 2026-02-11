@@ -1,0 +1,56 @@
+# Persistent storage shared between exporter and web server
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openfga-dump
+spec:
+  # One node writes (export CronJob) and one node reads (nginx)
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# nginx serves the dump file over HTTP
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openfga-store-dump-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openfga-store-dump-server
+  template:
+    metadata:
+      labels:
+        app: openfga-store-dump-server
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: dump
+              # nginx serves files from /usr/share/nginx/html by default
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: dump
+          persistentVolumeClaim:
+            claimName: openfga-dump
+---
+# Expose nginx so other clusters can fetch the dump
+apiVersion: v1
+kind: Service
+metadata:
+  name: openfga-dump
+spec:
+  # k3d maps this LoadBalancer port to the host
+  type: LoadBalancer
+  selector:
+    app: openfga-store-dump-server
+  ports:
+    - name: http
+      port: 8082
+      targetPort: 80

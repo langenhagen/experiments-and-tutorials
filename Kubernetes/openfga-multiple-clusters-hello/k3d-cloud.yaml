@@ -11,7 +11,11 @@ ports:
   - port: 8080:8080
     nodeFilters:
       - loadbalancer
+  # 8081 is used by OpenFGA gRPC; use 8082 for the dump server HTTP
   - port: 3000:3000
+    nodeFilters:
+      - loadbalancer
+  - port: 8082:8082
     nodeFilters:
       - loadbalancer
 options:

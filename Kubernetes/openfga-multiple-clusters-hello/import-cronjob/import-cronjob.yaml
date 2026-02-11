@@ -22,8 +22,8 @@ spec:
               image: import-fga:latest
               imagePullPolicy: IfNotPresent
               env:
-                - name: CLOUD_API_URL
-                  value: http://host.k3d.internal:8080
+                - name: STORE_DUMP_URL
+                  value: http://host.k3d.internal:8082/store-dump.fga.yaml
                 - name: OS_API_URL
                   value: http://openfga:8080
                 - name: STORE_NAME
