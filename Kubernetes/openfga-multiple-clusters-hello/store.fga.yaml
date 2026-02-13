@@ -29,21 +29,12 @@ tuples:
     - user: user:charlie
       relation: operator
       object: organization:myorg
-    - user: organization:myorg
-      relation: organization
-      object: cell:cell2
     - user: user:bob
       relation: developer
       object: organization:myorg
     - user: user:alice
       relation: admin
       object: organization:myorg
-    - user: organization:myorg
-      relation: organization
-      object: cell:cell1
-    - user: user:bob
-      relation: member
-      object: cell:cell1
 tests:
     - name: Tests
       check: []

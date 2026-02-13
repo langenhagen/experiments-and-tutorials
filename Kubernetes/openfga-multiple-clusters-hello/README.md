@@ -47,7 +47,7 @@ fga tuple read --api-url "$cloud_url" --store-id "$fga_store_id"  # just checkin
 # build & make the cloud export CronJob image available inside the cluster
 # then apply the dump file server and then apply the CronJob
 docker build -t export-fga:latest export-cronjob/
-k3d image import -c cloud export-fga:latest
+k3d image import -c "$context" export-fga:latest
 kubectl -n "ns-$context" apply -f export-cronjob/store-dump-server.yaml
 kubectl -n "ns-$context" apply -f export-cronjob/export-cronjob.yaml
 
@@ -84,7 +84,7 @@ curl -sS -X GET "$os_url/stores"
 # then apply the import-cronjob.yaml
 # Note: the CronJob expects the cloud dump file at http://host.k3d.internal:8082/store-dump.fga.yaml
 docker build -t import-fga:latest import-cronjob/
-k3d image import -c os import-fga:latest
+k3d image import -c "$context" import-fga:latest
 kubectl -n "ns-$context" apply -f import-cronjob/import-cronjob.yaml
 ```
 
@@ -184,9 +184,8 @@ kubectl -n ns-os get jobs --sort-by=.metadata.creationTimestamp
 # Get the pods
 kubectl -n ns-cloud get pods --sort-by=.metadata.creationTimestamp
 
-# get logs  (or use k9s like a human being)
+# get logs (or use k9s like a human being)
 kubectl -n ns-cloud log pod/MYPOD
-
 
 # locate the dump file on the pod of the openfga-store-dump-server
 kubectl -n ns-cloud exec -it MYPOD -- ls -l /usr/share/nginx/html
@@ -194,7 +193,6 @@ kubectl -n ns-cloud exec -it MYPOD -- ls -l /usr/share/nginx/html
 # wget the file from the store dump server
 kubectl -n ns-cloud exec -it MYPOD -- wget -qO- http://localhost/store-dump.fga.yaml
 ```
-
 
 ## Teardown:
 ```bash
