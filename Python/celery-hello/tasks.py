@@ -22,8 +22,8 @@ from celery import Celery
 BROKER_TRANSPORT = "redis"
 
 BROKER_HOST = "localhost"  # Maps to redis host.
-BROKER_PORT = 6379         # Maps to redis port.
-BROKER_VHOST = "0"         # Maps to database number.
+BROKER_PORT = 6379  # Maps to redis port.
+BROKER_VHOST = "0"  # Maps to database number.
 
 
 # app = Celery('tasks', backend='redis://localhost', broker='redis://localhost')

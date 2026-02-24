@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Convert a bunchof ndjson files to .parquet files."""
 
-from io import BytesIO
 import json
+from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
@@ -13,7 +13,6 @@ from flatten_json import flatten
 indir = Path.home() / "Desktop/foo/2025-10-21-andreasl-infinite/relay-all"
 outdir = Path.home() / "Desktop/bar"
 outdir.mkdir(exist_ok=True)
-
 
 
 def _to_columnar(dict_list: list[dict], separator: str = ".") -> dict:
@@ -34,10 +33,12 @@ def _sanitize_columnar(d: dict[str, list]) -> dict[str, list]:
 
     "Cannot write struct type 'data.global_limits' with no child field to Parquet. Consider adding a dummy child field."
     """
+
     def _fix(v):
         if isinstance(v, dict) and not v:  # {}
             return None
         return v
+
     return {k: [_fix(v) for v in vals] for k, vals in d.items()}
 
 

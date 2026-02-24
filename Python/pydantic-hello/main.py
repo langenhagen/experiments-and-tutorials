@@ -90,7 +90,7 @@ print(c)
 
 print("\n--- 4 recursive JSON serialization of individual models---\n")
 
-aj = (a.model_dump_json())  # string!
+aj = a.model_dump_json()  # string!
 print(f"{type(aj)=}\n{aj=}")
 
 amj = a.model_dump(mode="json")  # dict
