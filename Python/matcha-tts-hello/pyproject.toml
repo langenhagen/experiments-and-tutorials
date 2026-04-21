@@ -1,0 +1,11 @@
+[project]
+name = "matcha-tts-hello"
+version = "0.1.0"
+description = "Text-to-speech hello with matcha-tts."
+readme = "README.md"
+requires-python = ">3.10,<3.12"
+dependencies = [
+    "bpython>=0.26",
+    "matcha-tts>=0.0.7",
+    "numpy >1.24.3",
+]
