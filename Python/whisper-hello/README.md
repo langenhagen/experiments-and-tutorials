@@ -1,6 +1,6 @@
 # Whisper Hello / Faster-Whisper Hello
 
-Showcase `faster-whisper` for microphone speech-to-text
+Showcase `faster-whisper` for microphone speech-to-text.
 
 This script records from the microphone, runs local Whisper inference, and
 copies the recognized text to the system clipboard. It can transcribe in the
