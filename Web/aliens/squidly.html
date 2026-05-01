@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="only light" />
+    <title>Squidly</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      html {
+        color-scheme: only light;
+      }
+      body {
+        background-color: #ffffff;
+        overflow: hidden;
+      }
+      svg.monster {
+        display: block;
+        width: 100vw;
+        height: 100dvh;
+        background-color: #ffffff;
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+        overflow: visible;
+      }
+
+      #monster-root {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: sway 7s ease-in-out infinite;
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-1.5deg);
+        }
+        50% {
+          transform: rotate(1.5deg);
+        }
+      }
+
+      #body-anim {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: breathe 3.5s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.025, 1.02);
+        }
+      }
+
+      #monster-root.twitch {
+        animation:
+          sway 7s ease-in-out infinite,
+          shake 0.25s linear;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        20% {
+          translate: -3px 1px;
+        }
+        40% {
+          translate: 3px -2px;
+        }
+        60% {
+          translate: -2px 2px;
+        }
+        80% {
+          translate: 2px -1px;
+        }
+      }
+
+      .eye-sclera,
+      .pupil {
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      class="monster"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="bodyClip">
+          <path id="bodyClipPath" />
+        </clipPath>
+      </defs>
+
+      <g id="monster-root">
+        <g id="body-anim">
+          <!-- Squidly: tall narrow pink body with antenna on top and three
+                     droopy tentacles below. The body, antenna, and tentacles are
+                     all part of one continuous closed path that is rebuilt per
+                     frame from procedural Bezier segments + animated centerlines. -->
+          <path
+            id="bodyPath"
+            fill="#e84aa6"
+            stroke="#000"
+            stroke-width="5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+
+          <!-- green spots distributed across the body, clipped to silhouette -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#7ed957">
+            <circle cx="450" cy="280" r="9" />
+            <circle cx="540" cy="320" r="14" />
+            <circle cx="465" cy="380" r="7" />
+            <circle cx="525" cy="420" r="18" />
+            <circle cx="445" cy="470" r="11" />
+            <circle cx="540" cy="510" r="9" />
+            <circle cx="460" cy="560" r="15" />
+            <circle cx="530" cy="600" r="8" />
+            <circle cx="475" cy="650" r="12" />
+            <circle cx="525" cy="700" r="16" />
+            <circle cx="455" cy="740" r="9" />
+            <circle cx="535" cy="780" r="11" />
+            <circle cx="475" cy="820" r="13" />
+          </g>
+
+          <!-- tentacle dots: positioned per-frame -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#7ed957">
+            <circle id="t0-dot-0" r="6" />
+            <circle id="t0-dot-1" r="8" />
+            <circle id="t1-dot-0" r="6" />
+            <circle id="t1-dot-1" r="8" />
+            <circle id="t2-dot-0" r="6" />
+            <circle id="t2-dot-1" r="8" />
+            <circle id="ant-dot-0" r="5" />
+          </g>
+
+          <!-- Eyes are CHILDREN of #body-anim so they breathe + sway with the body -->
+          <g
+            id="eyes"
+            stroke="#000"
+            stroke-width="4.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            fill="none"
+          >
+            <!-- 3 eyes stacked vertically along the upper body, each on a base/socket -->
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 470 235
+                        C 462 215, 472 188, 495 188
+                        C 520 188, 532 212, 526 234
+                        C 520 252, 498 258, 480 252
+                        C 472 248, 470 240, 470 235
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 470 252 C 484 264, 514 264, 528 248" />
+              <circle class="pupil" cx="498" cy="216" r="7" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 462 350
+                        C 454 328, 466 302, 490 302
+                        C 516 302, 528 328, 522 350
+                        C 516 368, 492 374, 474 368
+                        C 466 364, 462 356, 462 350
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 462 368 C 478 380, 510 380, 524 364" />
+              <circle class="pupil" cx="495" cy="332" r="7.5" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 470 462
+                        C 462 442, 472 416, 495 416
+                        C 520 416, 532 440, 526 462
+                        C 520 480, 498 486, 480 480
+                        C 472 476, 470 468, 470 462
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 470 480 C 484 492, 514 492, 528 476" />
+              <circle class="pupil" cx="498" cy="446" r="7" fill="#000" stroke="none" />
+            </g>
+          </g>
+
+          <!-- mouth: a small wavy curve below the lowest eye -->
+          <path
+            id="mouthPath"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+      </g>
+    </svg>
+
+    <script>
+      // -------------------------------------------------------------
+      // Squidly body: tall narrow pill with antenna up top and three
+      // droopy tentacles below. One closed path; antenna and tentacles
+      // are spliced in via procedural centerline-driven rope geometry.
+      // -------------------------------------------------------------
+
+      // Helper: cubic Bezier segment
+      function S(c1x, c1y, c2x, c2y, px, py) {
+        return { c1: { x: c1x, y: c1y }, c2: { x: c2x, y: c2y }, p: { x: px, y: py } };
+      }
+
+      // Path starts at top of antenna base on the body, goes around antenna,
+      // down right side of body, around right tentacle, middle tentacle,
+      // left tentacle, up left side, back to start.
+      const startPoint = { x: 460, y: 165 };
+
+      // Body silhouette segments (no antenna or tentacles - those are spliced in).
+      // Body is a tall vertical pill: x ∈ [440, 560] roughly, y ∈ [165, 800].
+      // Antenna base at top: entry (460, 165) → exit (540, 165).
+      // Bottom tentacles attach across the bottom: y ≈ 800.
+      //   right tentacle entry (560, 770), exit (540, 800)
+      //   middle tentacle entry (530, 805), exit (470, 805)
+      //   left  tentacle entry (460, 800), exit (440, 770)
+
+      // After antenna exit (540, 165), down right side to right tentacle entry
+      const segmentsAfterAntennaToRightTentacle = [
+        S(560, 175, 575, 250, 575, 350),
+        S(575, 460, 575, 580, 570, 700),
+        S(568, 730, 565, 755, 560, 770),
+      ];
+      // After right tentacle exit (540, 800), curve to middle tentacle entry (530, 805)
+      const segmentsBetweenRightAndMiddle = [S(538, 802, 534, 804, 530, 805)];
+      // After middle tentacle exit (470, 805), curve to left tentacle entry (460, 800)
+      const segmentsBetweenMiddleAndLeft = [S(466, 804, 462, 802, 460, 800)];
+      // After left tentacle exit (440, 770), up left side back to antenna entry (460, 165)
+      const segmentsAfterLeftTentacleToAntenna = [
+        S(435, 755, 432, 730, 430, 700),
+        S(425, 580, 425, 460, 425, 350),
+        S(425, 250, 440, 175, 460, 165),
+      ];
+
+      function emitSegments(arr, d) {
+        for (const seg of arr) {
+          d += ` C${seg.c1.x.toFixed(2)},${seg.c1.y.toFixed(2)} ${seg.c2.x.toFixed(2)},${seg.c2.y.toFixed(2)} ${seg.p.x.toFixed(2)},${seg.p.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      // -------------------------------------------------------------
+      // Tentacle/antenna definitions (centerline-driven rope geometry).
+      // entry/exit are points on the body where the appendage attaches.
+      // axis = unit direction OUT from body along the appendage's length.
+      // points = list of (distance along axis, thickness, lateral bias) along
+      //          the centerline from base to tip.
+      // wave = sine-wave animation params.
+      // -------------------------------------------------------------
+      const appendageDefs = {
+        // Antenna: short skinny appendage pointing UP from top of body.
+        //   entry (460, 165) → exit (540, 165). axis -y (up).
+        // entry-exit gap = 80, but antenna base thickness = 80 to match
+        // (so first edge points sit flush with entry/exit).
+        antenna: {
+          entry: { x: 460, y: 165 },
+          exit: { x: 540, y: 165 },
+          axis: { x: 0, y: -1 },
+          points: [
+            { d: 20, th: 80, lat: 0 },
+            { d: 55, th: 60, lat: 3 },
+            { d: 90, th: 44, lat: -4 },
+            { d: 125, th: 32, lat: 4 },
+            { d: 155, th: 22, lat: -3 },
+            { d: 175, th: 14, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.6,
+            amp: 12,
+            phaseDelay: 0.95,
+            rampStart: 0.05,
+          },
+        },
+        // Right tentacle: droops DOWN-RIGHT.
+        // entry (560, 770) → exit (540, 800). axis (0.6, 0.8) (down-right).
+        // entry-exit distance ≈ 36, base thickness 36 to match.
+        t0: {
+          entry: { x: 560, y: 770 },
+          exit: { x: 540, y: 800 },
+          axis: { x: 0.6, y: 0.8 },
+          points: [
+            { d: 18, th: 36, lat: 0 },
+            { d: 50, th: 32, lat: 4 },
+            { d: 85, th: 26, lat: -5 },
+            { d: 120, th: 20, lat: 4 },
+            { d: 150, th: 14, lat: -3 },
+            { d: 175, th: 10, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.5,
+            amp: 14,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+        // Middle tentacle: hangs straight DOWN.
+        // entry (530, 805) → exit (470, 805). axis (0, 1).
+        // entry-exit gap = 60, base thickness 60.
+        t1: {
+          entry: { x: 530, y: 805 },
+          exit: { x: 470, y: 805 },
+          axis: { x: 0, y: 1 },
+          points: [
+            { d: 20, th: 60, lat: 0 },
+            { d: 55, th: 50, lat: -3 },
+            { d: 95, th: 40, lat: 5 },
+            { d: 135, th: 30, lat: -3 },
+            { d: 170, th: 22, lat: 4 },
+            { d: 195, th: 14, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.45,
+            amp: 16,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+        // Left tentacle: droops DOWN-LEFT.
+        // entry (460, 800) → exit (440, 770). axis (-0.6, 0.8).
+        t2: {
+          entry: { x: 460, y: 800 },
+          exit: { x: 440, y: 770 },
+          axis: { x: -0.6, y: 0.8 },
+          points: [
+            { d: 18, th: 36, lat: 0 },
+            { d: 50, th: 32, lat: -4 },
+            { d: 85, th: 26, lat: 5 },
+            { d: 120, th: 20, lat: -4 },
+            { d: 150, th: 14, lat: 3 },
+            { d: 175, th: 10, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.55,
+            amp: 14,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+      };
+
+      // Catmull-Rom-to-Bezier smoothing of a polyline. Returns a sequence of
+      // cubic 'C' commands (no leading 'M'), continuing from the current
+      // path point which must already equal points[0].
+      function smoothPathSuffix(points) {
+        let d = "";
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i - 1] || points[i];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = points[i + 2] || p2;
+          const c1x = p1.x + (p2.x - p0.x) / 6;
+          const c1y = p1.y + (p2.y - p0.y) / 6;
+          const c2x = p2.x - (p3.x - p1.x) / 6;
+          const c2y = p2.y - (p3.y - p1.y) / 6;
+          d += ` C${c1x.toFixed(2)},${c1y.toFixed(2)} ${c2x.toFixed(2)},${c2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      function buildAppendageSuffix(name, nowSec) {
+        const def = appendageDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        // perpendicular: (-ay, ax) — math 90° CCW from axis (in SVG's
+        // y-down coord system this appears as 90° CW visually).
+        const px = -ay,
+          py = ax;
+
+        const cl = def.points.map((p, i) => {
+          const ramp =
+            def.wave.rampStart + (1 - def.wave.rampStart) * (i / (def.points.length - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+            th: p.th,
+          };
+        });
+
+        function tangentAt(i) {
+          const a = cl[Math.max(0, i - 1)];
+          const b = cl[Math.min(cl.length - 1, i + 1)];
+          const tx = b.x - a.x;
+          const ty = b.y - a.y;
+          const len = Math.hypot(tx, ty) || 1;
+          return { x: tx / len, y: ty / len };
+        }
+
+        // Normal rotated 90° CW from tangent: (t.y, -t.x). This makes the
+        // "top edge" sit on the side of entry (which we walk to FIRST in
+        // clockwise traversal of the body silhouette).
+        const topEdge = [def.entry];
+        for (let i = 0; i < cl.length; i++) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          topEdge.push({
+            x: cl[i].x + nx * (cl[i].th / 2),
+            y: cl[i].y + ny * (cl[i].th / 2),
+          });
+        }
+        const bottomEdge = [];
+        for (let i = cl.length - 1; i >= 0; i--) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          bottomEdge.push({
+            x: cl[i].x - nx * (cl[i].th / 2),
+            y: cl[i].y - ny * (cl[i].th / 2),
+          });
+        }
+        bottomEdge.push(def.exit);
+
+        const tipPt = cl[cl.length - 1];
+        const tipT = tangentAt(cl.length - 1);
+        const capPt = {
+          x: tipPt.x + tipT.x * (tipPt.th / 2),
+          y: tipPt.y + tipT.y * (tipPt.th / 2),
+        };
+
+        const polyline = [...topEdge, capPt, ...bottomEdge];
+        return smoothPathSuffix(polyline);
+      }
+
+      function buildBodyD(nowSec) {
+        // Path starts at antenna entry point (top-left of antenna base on body)
+        let d = `M${startPoint.x},${startPoint.y}`;
+        d += buildAppendageSuffix("antenna", nowSec); // up around antenna, down to (540, 165)
+        d = emitSegments(segmentsAfterAntennaToRightTentacle, d); // down right side to (560, 770)
+        d += buildAppendageSuffix("t0", nowSec); // around right tentacle to (540, 800)
+        d = emitSegments(segmentsBetweenRightAndMiddle, d); // to (530, 805)
+        d += buildAppendageSuffix("t1", nowSec); // around middle tentacle to (470, 805)
+        d = emitSegments(segmentsBetweenMiddleAndLeft, d); // to (460, 800)
+        d += buildAppendageSuffix("t2", nowSec); // around left tentacle to (440, 770)
+        d = emitSegments(segmentsAfterLeftTentacleToAntenna, d); // up left side to (460, 165)
+        d += " Z";
+        return d;
+      }
+
+      const bodyPath = document.getElementById("bodyPath");
+      const bodyClipPath = document.getElementById("bodyClipPath");
+
+      // Tentacle/antenna dots: positioned along animated centerlines per frame.
+      const dotDefs = [
+        { id: "t0-dot-0", tentacle: "t0", frac: 0.3 },
+        { id: "t0-dot-1", tentacle: "t0", frac: 0.65 },
+        { id: "t1-dot-0", tentacle: "t1", frac: 0.3 },
+        { id: "t1-dot-1", tentacle: "t1", frac: 0.65 },
+        { id: "t2-dot-0", tentacle: "t2", frac: 0.3 },
+        { id: "t2-dot-1", tentacle: "t2", frac: 0.65 },
+        { id: "ant-dot-0", tentacle: "antenna", frac: 0.55 },
+      ];
+      const dotEls = dotDefs.map((def) => ({ ...def, el: document.getElementById(def.id) }));
+
+      function centerlineAt(name, frac, nowSec) {
+        const def = appendageDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+        const n = def.points.length;
+        const idxF = frac * (n - 1);
+        const i0 = Math.floor(idxF);
+        const i1 = Math.min(n - 1, i0 + 1);
+        const t = idxF - i0;
+        function pointAt(i) {
+          const p = def.points[i];
+          const ramp = def.wave.rampStart + (1 - def.wave.rampStart) * (i / (n - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+          };
+        }
+        const a = pointAt(i0);
+        const b = pointAt(i1);
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+      }
+
+      function animateBody(timestamp) {
+        const nowSec = timestamp / 1000;
+        const d = buildBodyD(nowSec);
+        bodyPath.setAttribute("d", d);
+        bodyClipPath.setAttribute("d", d);
+        for (const dot of dotEls) {
+          const p = centerlineAt(dot.tentacle, dot.frac, nowSec);
+          dot.el.setAttribute("cx", p.x.toFixed(2));
+          dot.el.setAttribute("cy", p.y.toFixed(2));
+        }
+        requestAnimationFrame(animateBody);
+      }
+      requestAnimationFrame(animateBody);
+
+      // -------------------------------------------------------------
+      // Eyes: per-eye independent motion (drift, top-heavy skew, blinks).
+      // -------------------------------------------------------------
+      const eyeBase = [
+        { cx: 498, cy: 216, range: 6, ecx: 498, eybot: 256 },
+        { cx: 495, cy: 332, range: 7, ecx: 495, eybot: 372 },
+        { cx: 498, cy: 446, range: 6, ecx: 498, eybot: 484 },
+      ];
+
+      const eyeEls = Array.from(document.querySelectorAll(".eye"));
+      const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+
+      const eyes = eyeBase.map((b) => ({
+        baseX: b.cx,
+        baseY: b.cy,
+        range: b.range,
+        ecx: b.ecx,
+        eybot: b.eybot,
+        curX: b.cx,
+        curY: b.cy,
+        tgtX: b.cx,
+        tgtY: b.cy,
+        nextPupilRetarget: 0,
+        tx: 0,
+        ty: 0,
+        rot: 0,
+        skew: 0,
+        sy: 1,
+        ttx: 0,
+        tty: 0,
+        trot: 0,
+        tskew: 0,
+        tsy: 1,
+        nextEyeRetarget: 0,
+        blinkPhase: 0,
+        blinking: false,
+      }));
+
+      function pickPupilTarget(s, now) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * s.range;
+        s.tgtX = s.baseX + Math.cos(angle) * r;
+        s.tgtY = s.baseY + Math.sin(angle) * r;
+        s.nextPupilRetarget = now + 1500 + Math.random() * 1500;
+      }
+
+      function pickEyeTarget(s, now) {
+        s.ttx = (Math.random() * 2 - 1) * 2;
+        s.tty = (Math.random() * 2 - 1) * 2;
+        s.trot = (Math.random() * 2 - 1) * 4;
+        s.tskew = (Math.random() * 2 - 1) * 10;
+        s.tsy = 1 + (Math.random() * 2 - 1) * 0.06;
+        s.nextEyeRetarget = now + 1500 + Math.random() * 2000;
+      }
+
+      function scheduleBlink(s) {
+        const delay = 3000 + Math.random() * 4000;
+        setTimeout(() => {
+          s.blinking = true;
+          setTimeout(() => {
+            s.blinking = false;
+            scheduleBlink(s);
+          }, 140);
+        }, delay);
+      }
+      eyes.forEach(scheduleBlink);
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function animateEyes(ts) {
+        eyes.forEach((s, i) => {
+          if (ts >= s.nextPupilRetarget) pickPupilTarget(s, ts);
+          if (ts >= s.nextEyeRetarget) pickEyeTarget(s, ts);
+          s.curX = lerp(s.curX, s.tgtX, 0.08);
+          s.curY = lerp(s.curY, s.tgtY, 0.08);
+          pupils[i].setAttribute("cx", s.curX.toFixed(2));
+          pupils[i].setAttribute("cy", s.curY.toFixed(2));
+          s.tx = lerp(s.tx, s.ttx, 0.06);
+          s.ty = lerp(s.ty, s.tty, 0.06);
+          s.rot = lerp(s.rot, s.trot, 0.06);
+          s.skew = lerp(s.skew, s.tskew, 0.06);
+          s.sy = lerp(s.sy, s.tsy, 0.06);
+          const targetBlink = s.blinking ? 1 : 0;
+          s.blinkPhase = lerp(s.blinkPhase, targetBlink, 0.45);
+          const blinkScaleY = 1 - s.blinkPhase * 0.95;
+          const finalSy = s.sy * blinkScaleY;
+          const t1x = s.ecx + s.tx;
+          const t1y = s.eybot + s.ty;
+          eyeEls[i].setAttribute(
+            "transform",
+            `translate(${t1x.toFixed(2)} ${t1y.toFixed(2)}) ` +
+              `rotate(${s.rot.toFixed(2)}) ` +
+              `skewX(${s.skew.toFixed(2)}) ` +
+              `scale(1 ${finalSy.toFixed(3)}) ` +
+              `translate(${(-s.ecx).toFixed(2)} ${(-s.eybot).toFixed(2)})`
+          );
+        });
+        requestAnimationFrame(animateEyes);
+      }
+      requestAnimationFrame(animateEyes);
+
+      // -------------------------------------------------------------
+      // Mouth: small wavy curve below the lowest eye.
+      // -------------------------------------------------------------
+      const mouthPath = document.getElementById("mouthPath");
+      const MX = 498,
+        MY = 540;
+      const baseMouth = [];
+      const mouthSteps = 8;
+      for (let i = 0; i <= mouthSteps; i++) {
+        const t = i / mouthSteps;
+        const x = MX - 28 + 56 * t;
+        const y = MY + Math.sin(t * Math.PI * 2.5) * 4;
+        baseMouth.push({ x, y });
+      }
+      const idleAmp = 1.4;
+      const burstAmp = 2.6;
+      const wiggleIntervalSecs = 4;
+      const wiggleDurationSecs = 1.8;
+      let wiggleStart = null;
+      let inBurst = false;
+
+      function fadeFactor(elapsed, total) {
+        const half = total / 2;
+        return elapsed < half ? elapsed / half : (total - elapsed) / half;
+      }
+
+      function smoothD(points) {
+        if (points.length < 2) return "";
+        const d = `M${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
+        return d + smoothPathSuffix(points);
+      }
+
+      function strokeD(points, nowSec, amp, phaseOffset) {
+        const jittered = points.map((p, i) => {
+          const wx = Math.sin(nowSec * 3.0 + phaseOffset + i * 0.9) * amp;
+          const wy = Math.cos(nowSec * 2.6 + phaseOffset + i * 1.1) * amp;
+          return { x: p.x + wx, y: p.y + wy };
+        });
+        return smoothD(jittered);
+      }
+
+      function buildMouthD(nowSec, burstFade) {
+        const amp = idleAmp + burstAmp * burstFade;
+        return strokeD(baseMouth, nowSec, amp, 0.0);
+      }
+
+      function animateMouth(timestamp) {
+        const nowSec = timestamp / 1000;
+        let burstFade = 0;
+        if (inBurst) {
+          if (wiggleStart === null) wiggleStart = timestamp;
+          const elapsed = (timestamp - wiggleStart) / 1000;
+          if (elapsed < wiggleDurationSecs) {
+            burstFade = fadeFactor(elapsed, wiggleDurationSecs);
+          } else {
+            inBurst = false;
+            wiggleStart = null;
+            setTimeout(() => {
+              inBurst = true;
+            }, wiggleIntervalSecs * 1000);
+          }
+        }
+        mouthPath.setAttribute("d", buildMouthD(nowSec, burstFade));
+        requestAnimationFrame(animateMouth);
+      }
+      setTimeout(() => {
+        inBurst = true;
+      }, wiggleIntervalSecs * 1000);
+      requestAnimationFrame(animateMouth);
+
+      // Whole-body twitch every 8-15s
+      const root = document.getElementById("monster-root");
+      function scheduleTwitch() {
+        const delay = 8000 + Math.random() * 7000;
+        setTimeout(() => {
+          root.classList.add("twitch");
+          setTimeout(() => {
+            root.classList.remove("twitch");
+            scheduleTwitch();
+          }, 260);
+        }, delay);
+      }
+      scheduleTwitch();
+    </script>
+  </body>
+</html>

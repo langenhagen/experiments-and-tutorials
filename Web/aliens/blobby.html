@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="only light" />
+    <title>Blobby</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      html {
+        color-scheme: only light;
+      }
+      body {
+        background-color: #ffffff;
+        overflow: hidden;
+      }
+      svg.monster {
+        display: block;
+        width: 100vw;
+        height: 100dvh;
+        background-color: #ffffff;
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+        overflow: visible;
+      }
+
+      #monster-root {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: sway 6.5s ease-in-out infinite;
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-1.2deg);
+        }
+        50% {
+          transform: rotate(1.2deg);
+        }
+      }
+
+      #body-anim {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: breathe 3.2s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.03, 1.02);
+        }
+      }
+
+      #monster-root.twitch {
+        animation:
+          sway 6.5s ease-in-out infinite,
+          shake 0.25s linear;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        20% {
+          translate: -3px 1px;
+        }
+        40% {
+          translate: 3px -2px;
+        }
+        60% {
+          translate: -2px 2px;
+        }
+        80% {
+          translate: 2px -1px;
+        }
+      }
+
+      .eye-sclera,
+      .pupil {
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      class="monster"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="bodyClip">
+          <path id="bodyClipPath" />
+        </clipPath>
+      </defs>
+
+      <g id="monster-root">
+        <g id="body-anim">
+          <!-- Blobby: wide squashed purple round blob with 4 eyes clustered
+                     on top half, 2 short stubby legs hanging down, wavy mouth,
+                     orange spots. Body + legs are one continuous closed path. -->
+          <path
+            id="bodyPath"
+            fill="#9a4dd6"
+            stroke="#000"
+            stroke-width="5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+
+          <!-- orange spots distributed across body, clipped to silhouette -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#ff8c2a">
+            <circle cx="220" cy="500" r="14" />
+            <circle cx="270" cy="580" r="9" />
+            <circle cx="320" cy="640" r="16" />
+            <circle cx="400" cy="680" r="10" />
+            <circle cx="500" cy="700" r="14" />
+            <circle cx="600" cy="680" r="9" />
+            <circle cx="680" cy="640" r="16" />
+            <circle cx="730" cy="580" r="11" />
+            <circle cx="780" cy="500" r="13" />
+            <circle cx="350" cy="540" r="8" />
+            <circle cx="650" cy="540" r="9" />
+            <circle cx="500" cy="600" r="11" />
+            <circle cx="430" cy="600" r="7" />
+            <circle cx="570" cy="600" r="8" />
+          </g>
+
+          <!-- leg dots: positioned per-frame -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#ff8c2a">
+            <circle id="lL-dot-0" r="7" />
+            <circle id="lR-dot-0" r="7" />
+          </g>
+
+          <!-- Eyes: 4 eyes clustered on the upper half of the blob.
+                     Two outer eyes lower, two inner eyes higher (reference layout). -->
+          <g
+            id="eyes"
+            stroke="#000"
+            stroke-width="4.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            fill="none"
+          >
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 305 380
+                        C 295 358, 308 330, 335 330
+                        C 363 330, 376 358, 368 382
+                        C 360 402, 332 408, 314 400
+                        C 306 396, 305 388, 305 380
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 305 400 C 322 412, 358 412, 372 396" />
+              <circle class="pupil" cx="338" cy="362" r="7.5" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 410 320
+                        C 400 296, 414 268, 442 268
+                        C 472 268, 486 298, 478 322
+                        C 470 342, 442 350, 422 342
+                        C 414 338, 410 328, 410 320
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 410 340 C 428 354, 466 354, 482 338" />
+              <circle class="pupil" cx="445" cy="300" r="8" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 522 320
+                        C 514 296, 528 268, 558 268
+                        C 586 268, 600 298, 590 322
+                        C 582 342, 554 350, 536 342
+                        C 528 338, 522 328, 522 320
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 522 340 C 540 354, 578 354, 594 338" />
+              <circle class="pupil" cx="557" cy="300" r="8" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 632 380
+                        C 624 358, 637 330, 665 330
+                        C 692 330, 705 358, 695 382
+                        C 687 402, 660 408, 642 400
+                        C 634 396, 632 388, 632 380
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 632 400 C 650 412, 686 412, 700 396" />
+              <circle class="pupil" cx="664" cy="362" r="7.5" fill="#000" stroke="none" />
+            </g>
+          </g>
+
+          <!-- mouth: wavy curve in lower middle -->
+          <path
+            id="mouthPath"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+      </g>
+    </svg>
+
+    <script>
+      // -------------------------------------------------------------
+      // Blobby: wide squashed purple round blob with two stubby legs
+      // dangling below. One closed path. Body silhouette is a wide
+      // rounded blob; legs spliced into the bottom of the silhouette.
+      // -------------------------------------------------------------
+
+      function S(c1x, c1y, c2x, c2y, px, py) {
+        return { c1: { x: c1x, y: c1y }, c2: { x: c2x, y: c2y }, p: { x: px, y: py } };
+      }
+
+      // Body silhouette walks clockwise from top-center (500, 220).
+      // Left leg attaches at bottom: entry (390, 720), exit (330, 720).
+      // Right leg attaches at bottom: entry (670, 720), exit (610, 720).
+      // Both legs hang DOWN, axis (0, 1).
+      const startPoint = { x: 500, y: 220 };
+
+      // Top to right side, down right side, to bottom-right of blob to right leg entry.
+      const segmentsTopToRightLeg = [
+        S(620, 222, 720, 250, 770, 320), // right shoulder
+        S(820, 390, 830, 480, 800, 560), // right side bulge
+        S(770, 640, 720, 700, 670, 720), // down to right leg entry
+      ];
+      // After right leg exit (610, 720), curve to left leg entry (390, 720)
+      const segmentsBetweenLegs = [S(580, 730, 420, 730, 390, 720)];
+      // After left leg exit (330, 720), up left side back to start (500, 220)
+      const segmentsLeftLegToTop = [
+        S(280, 700, 230, 640, 200, 560),
+        S(170, 480, 180, 390, 230, 320),
+        S(280, 250, 380, 222, 500, 220),
+      ];
+
+      function emitSegments(arr, d) {
+        for (const seg of arr) {
+          d += ` C${seg.c1.x.toFixed(2)},${seg.c1.y.toFixed(2)} ${seg.c2.x.toFixed(2)},${seg.c2.y.toFixed(2)} ${seg.p.x.toFixed(2)},${seg.p.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      // -------------------------------------------------------------
+      // Legs: stubby vertical appendages. Same centerline-rope model as
+      // squidly / tealium.
+      // -------------------------------------------------------------
+      const appendageDefs = {
+        // Right leg: entry (670, 720) → exit (610, 720). axis (0, 1) (down).
+        // entry-exit gap = 60, base thickness = 60.
+        lR: {
+          entry: { x: 670, y: 720 },
+          exit: { x: 610, y: 720 },
+          axis: { x: 0, y: 1 },
+          points: [
+            { d: 18, th: 60, lat: 0 },
+            { d: 45, th: 56, lat: 3 },
+            { d: 75, th: 48, lat: -4 },
+            { d: 105, th: 38, lat: 4 },
+            { d: 130, th: 28, lat: -2 },
+            { d: 150, th: 18, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.55,
+            amp: 8,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+        // Left leg: entry (390, 720) → exit (330, 720). axis (0, 1).
+        lL: {
+          entry: { x: 390, y: 720 },
+          exit: { x: 330, y: 720 },
+          axis: { x: 0, y: 1 },
+          points: [
+            { d: 18, th: 60, lat: 0 },
+            { d: 45, th: 56, lat: -3 },
+            { d: 75, th: 48, lat: 4 },
+            { d: 105, th: 38, lat: -4 },
+            { d: 130, th: 28, lat: 2 },
+            { d: 150, th: 18, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.5,
+            amp: 8,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+      };
+
+      function smoothPathSuffix(points) {
+        let d = "";
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i - 1] || points[i];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = points[i + 2] || p2;
+          const c1x = p1.x + (p2.x - p0.x) / 6;
+          const c1y = p1.y + (p2.y - p0.y) / 6;
+          const c2x = p2.x - (p3.x - p1.x) / 6;
+          const c2y = p2.y - (p3.y - p1.y) / 6;
+          d += ` C${c1x.toFixed(2)},${c1y.toFixed(2)} ${c2x.toFixed(2)},${c2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      function buildAppendageSuffix(name, nowSec) {
+        const def = appendageDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+
+        const cl = def.points.map((p, i) => {
+          const ramp =
+            def.wave.rampStart + (1 - def.wave.rampStart) * (i / (def.points.length - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+            th: p.th,
+          };
+        });
+
+        function tangentAt(i) {
+          const a = cl[Math.max(0, i - 1)];
+          const b = cl[Math.min(cl.length - 1, i + 1)];
+          const tx = b.x - a.x;
+          const ty = b.y - a.y;
+          const len = Math.hypot(tx, ty) || 1;
+          return { x: tx / len, y: ty / len };
+        }
+
+        const topEdge = [def.entry];
+        for (let i = 0; i < cl.length; i++) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          topEdge.push({
+            x: cl[i].x + nx * (cl[i].th / 2),
+            y: cl[i].y + ny * (cl[i].th / 2),
+          });
+        }
+        const bottomEdge = [];
+        for (let i = cl.length - 1; i >= 0; i--) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          bottomEdge.push({
+            x: cl[i].x - nx * (cl[i].th / 2),
+            y: cl[i].y - ny * (cl[i].th / 2),
+          });
+        }
+        bottomEdge.push(def.exit);
+
+        const tipPt = cl[cl.length - 1];
+        const tipT = tangentAt(cl.length - 1);
+        const capPt = {
+          x: tipPt.x + tipT.x * (tipPt.th / 2),
+          y: tipPt.y + tipT.y * (tipPt.th / 2),
+        };
+
+        const polyline = [...topEdge, capPt, ...bottomEdge];
+        return smoothPathSuffix(polyline);
+      }
+
+      function buildBodyD(nowSec) {
+        let d = `M${startPoint.x},${startPoint.y}`;
+        d = emitSegments(segmentsTopToRightLeg, d); // top → right leg entry
+        d += buildAppendageSuffix("lR", nowSec); // around right leg
+        d = emitSegments(segmentsBetweenLegs, d); // to left leg entry
+        d += buildAppendageSuffix("lL", nowSec); // around left leg
+        d = emitSegments(segmentsLeftLegToTop, d); // up left side to top
+        d += " Z";
+        return d;
+      }
+
+      const bodyPath = document.getElementById("bodyPath");
+      const bodyClipPath = document.getElementById("bodyClipPath");
+
+      const dotDefs = [
+        { id: "lL-dot-0", appendage: "lL", frac: 0.55 },
+        { id: "lR-dot-0", appendage: "lR", frac: 0.55 },
+      ];
+      const dotEls = dotDefs.map((def) => ({ ...def, el: document.getElementById(def.id) }));
+
+      function centerlineAt(name, frac, nowSec) {
+        const def = appendageDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+        const n = def.points.length;
+        const idxF = frac * (n - 1);
+        const i0 = Math.floor(idxF);
+        const i1 = Math.min(n - 1, i0 + 1);
+        const t = idxF - i0;
+        function pointAt(i) {
+          const p = def.points[i];
+          const ramp = def.wave.rampStart + (1 - def.wave.rampStart) * (i / (n - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+          };
+        }
+        const a = pointAt(i0);
+        const b = pointAt(i1);
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+      }
+
+      function animateBody(timestamp) {
+        const nowSec = timestamp / 1000;
+        const d = buildBodyD(nowSec);
+        bodyPath.setAttribute("d", d);
+        bodyClipPath.setAttribute("d", d);
+        for (const dot of dotEls) {
+          const p = centerlineAt(dot.appendage, dot.frac, nowSec);
+          dot.el.setAttribute("cx", p.x.toFixed(2));
+          dot.el.setAttribute("cy", p.y.toFixed(2));
+        }
+        requestAnimationFrame(animateBody);
+      }
+      requestAnimationFrame(animateBody);
+
+      // Eyes
+      const eyeBase = [
+        { cx: 338, cy: 362, range: 7, ecx: 338, eybot: 404 },
+        { cx: 445, cy: 300, range: 7, ecx: 445, eybot: 346 },
+        { cx: 557, cy: 300, range: 7, ecx: 557, eybot: 346 },
+        { cx: 664, cy: 362, range: 7, ecx: 664, eybot: 404 },
+      ];
+
+      const eyeEls = Array.from(document.querySelectorAll(".eye"));
+      const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+
+      const eyes = eyeBase.map((b) => ({
+        baseX: b.cx,
+        baseY: b.cy,
+        range: b.range,
+        ecx: b.ecx,
+        eybot: b.eybot,
+        curX: b.cx,
+        curY: b.cy,
+        tgtX: b.cx,
+        tgtY: b.cy,
+        nextPupilRetarget: 0,
+        tx: 0,
+        ty: 0,
+        rot: 0,
+        skew: 0,
+        sy: 1,
+        ttx: 0,
+        tty: 0,
+        trot: 0,
+        tskew: 0,
+        tsy: 1,
+        nextEyeRetarget: 0,
+        blinkPhase: 0,
+        blinking: false,
+      }));
+
+      function pickPupilTarget(s, now) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * s.range;
+        s.tgtX = s.baseX + Math.cos(angle) * r;
+        s.tgtY = s.baseY + Math.sin(angle) * r;
+        s.nextPupilRetarget = now + 1500 + Math.random() * 1500;
+      }
+
+      function pickEyeTarget(s, now) {
+        s.ttx = (Math.random() * 2 - 1) * 2;
+        s.tty = (Math.random() * 2 - 1) * 2;
+        s.trot = (Math.random() * 2 - 1) * 4;
+        s.tskew = (Math.random() * 2 - 1) * 10;
+        s.tsy = 1 + (Math.random() * 2 - 1) * 0.06;
+        s.nextEyeRetarget = now + 1500 + Math.random() * 2000;
+      }
+
+      function scheduleBlink(s) {
+        const delay = 3000 + Math.random() * 4000;
+        setTimeout(() => {
+          s.blinking = true;
+          setTimeout(() => {
+            s.blinking = false;
+            scheduleBlink(s);
+          }, 140);
+        }, delay);
+      }
+      eyes.forEach(scheduleBlink);
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function animateEyes(ts) {
+        eyes.forEach((s, i) => {
+          if (ts >= s.nextPupilRetarget) pickPupilTarget(s, ts);
+          if (ts >= s.nextEyeRetarget) pickEyeTarget(s, ts);
+          s.curX = lerp(s.curX, s.tgtX, 0.08);
+          s.curY = lerp(s.curY, s.tgtY, 0.08);
+          pupils[i].setAttribute("cx", s.curX.toFixed(2));
+          pupils[i].setAttribute("cy", s.curY.toFixed(2));
+          s.tx = lerp(s.tx, s.ttx, 0.06);
+          s.ty = lerp(s.ty, s.tty, 0.06);
+          s.rot = lerp(s.rot, s.trot, 0.06);
+          s.skew = lerp(s.skew, s.tskew, 0.06);
+          s.sy = lerp(s.sy, s.tsy, 0.06);
+          const targetBlink = s.blinking ? 1 : 0;
+          s.blinkPhase = lerp(s.blinkPhase, targetBlink, 0.45);
+          const blinkScaleY = 1 - s.blinkPhase * 0.95;
+          const finalSy = s.sy * blinkScaleY;
+          const t1x = s.ecx + s.tx;
+          const t1y = s.eybot + s.ty;
+          eyeEls[i].setAttribute(
+            "transform",
+            `translate(${t1x.toFixed(2)} ${t1y.toFixed(2)}) ` +
+              `rotate(${s.rot.toFixed(2)}) ` +
+              `skewX(${s.skew.toFixed(2)}) ` +
+              `scale(1 ${finalSy.toFixed(3)}) ` +
+              `translate(${(-s.ecx).toFixed(2)} ${(-s.eybot).toFixed(2)})`
+          );
+        });
+        requestAnimationFrame(animateEyes);
+      }
+      requestAnimationFrame(animateEyes);
+
+      // Mouth
+      const mouthPath = document.getElementById("mouthPath");
+      const MX = 500,
+        MY = 480;
+      const baseMouth = [];
+      const mouthSteps = 10;
+      for (let i = 0; i <= mouthSteps; i++) {
+        const t = i / mouthSteps;
+        const x = MX - 70 + 140 * t;
+        const y = MY + Math.sin(t * Math.PI * 2.5) * 6;
+        baseMouth.push({ x, y });
+      }
+      const idleAmp = 1.6;
+      const burstAmp = 3.0;
+      const wiggleIntervalSecs = 3;
+      const wiggleDurationSecs = 1.8;
+      let wiggleStart = null;
+      let inBurst = false;
+
+      function fadeFactor(elapsed, total) {
+        const half = total / 2;
+        return elapsed < half ? elapsed / half : (total - elapsed) / half;
+      }
+
+      function smoothD(points) {
+        if (points.length < 2) return "";
+        const d = `M${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
+        return d + smoothPathSuffix(points);
+      }
+
+      function strokeD(points, nowSec, amp, phaseOffset) {
+        const jittered = points.map((p, i) => {
+          const wx = Math.sin(nowSec * 3.0 + phaseOffset + i * 0.9) * amp;
+          const wy = Math.cos(nowSec * 2.6 + phaseOffset + i * 1.1) * amp;
+          return { x: p.x + wx, y: p.y + wy };
+        });
+        return smoothD(jittered);
+      }
+
+      function buildMouthD(nowSec, burstFade) {
+        const amp = idleAmp + burstAmp * burstFade;
+        return strokeD(baseMouth, nowSec, amp, 0.0);
+      }
+
+      function animateMouth(timestamp) {
+        const nowSec = timestamp / 1000;
+        let burstFade = 0;
+        if (inBurst) {
+          if (wiggleStart === null) wiggleStart = timestamp;
+          const elapsed = (timestamp - wiggleStart) / 1000;
+          if (elapsed < wiggleDurationSecs) {
+            burstFade = fadeFactor(elapsed, wiggleDurationSecs);
+          } else {
+            inBurst = false;
+            wiggleStart = null;
+            setTimeout(() => {
+              inBurst = true;
+            }, wiggleIntervalSecs * 1000);
+          }
+        }
+        mouthPath.setAttribute("d", buildMouthD(nowSec, burstFade));
+        requestAnimationFrame(animateMouth);
+      }
+      setTimeout(() => {
+        inBurst = true;
+      }, wiggleIntervalSecs * 1000);
+      requestAnimationFrame(animateMouth);
+
+      const root = document.getElementById("monster-root");
+      function scheduleTwitch() {
+        const delay = 8000 + Math.random() * 7000;
+        setTimeout(() => {
+          root.classList.add("twitch");
+          setTimeout(() => {
+            root.classList.remove("twitch");
+            scheduleTwitch();
+          }, 260);
+        }, delay);
+      }
+      scheduleTwitch();
+    </script>
+  </body>
+</html>

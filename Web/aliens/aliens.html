@@ -1,0 +1,1964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="only light" />
+    <title>Aliens</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+      html {
+        color-scheme: only light;
+        background: linear-gradient(to bottom, #1a0b2e 0%, #1a0b2e 50%, #2d5e6e 50%, #2d5e6e 100%);
+      }
+      body {
+        /* Sky on top, ground on bottom; the world SVG with 'slice'
+               always fills the viewport, but if a sub-pixel gap appears
+               at the very edge (top or bottom) the body bg provides a
+               same-color fallback so no seam is visible. */
+        background: linear-gradient(to bottom, #1a0b2e 0%, #1a0b2e 50%, #2d5e6e 50%, #2d5e6e 100%);
+        overflow: hidden;
+      }
+      /* Two stacked full-viewport SVGs:
+           - .world uses 'slice' so the alien-planet world ALWAYS fills the
+             viewport (cropped horizontally on tall/narrow screens, cropped
+             vertically on very wide screens). The world viewBox is extended
+             vertically (y=-500..1500) so cropping reveals more sky/ground
+             rather than empty space.
+           - .scene (aliens) uses 'meet' on top so all three aliens stay
+             fully visible at every aspect ratio. */
+      svg.world,
+      svg.scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-color: transparent;
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+        overflow: visible;
+      }
+      svg.world {
+        z-index: 0;
+      }
+      svg.scene {
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* Per-alien sway/breathe. Each alien root has class .alien-root
+           and its own .body-anim child, with per-alien timing overrides
+           for variety. */
+      .alien-root {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: sway 6s ease-in-out infinite;
+      }
+      .alien-root.a1 {
+        animation-duration: 6s;
+      }
+      .alien-root.a2 {
+        animation-duration: 7s;
+      }
+      .alien-root.a3 {
+        animation-duration: 6.5s;
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-1.4deg);
+        }
+        50% {
+          transform: rotate(1.4deg);
+        }
+      }
+
+      .body-anim {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: breathe 3.5s ease-in-out infinite;
+      }
+      .a1 .body-anim {
+        animation-duration: 4s;
+      }
+      .a2 .body-anim {
+        animation-duration: 3.5s;
+      }
+      .a3 .body-anim {
+        animation-duration: 3.2s;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.025, 1.02);
+        }
+      }
+
+      .alien-root.twitch {
+        animation:
+          sway 6s ease-in-out infinite,
+          shake 0.25s linear;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        20% {
+          translate: -3px 1px;
+        }
+        40% {
+          translate: 3px -2px;
+        }
+        60% {
+          translate: -2px 2px;
+        }
+        80% {
+          translate: 2px -1px;
+        }
+      }
+
+      .eye-sclera,
+      .pupil {
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+      }
+
+      /* World / background animations */
+      .star {
+        animation: twinkle 3s ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      #moon-big {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: moon-drift 20s ease-in-out infinite;
+      }
+      #moon-small {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: moon-drift 26s ease-in-out infinite reverse;
+      }
+      @keyframes moon-drift {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(0, -8px);
+        }
+      }
+      .plant {
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+        animation: plant-sway 5s ease-in-out infinite;
+      }
+      .plant.p2 {
+        animation-duration: 6.3s;
+        animation-delay: -1.2s;
+      }
+      .plant.p3 {
+        animation-duration: 4.4s;
+        animation-delay: -0.5s;
+      }
+      .plant.p4 {
+        animation-duration: 5.7s;
+        animation-delay: -2.1s;
+      }
+      .plant.p5 {
+        animation-duration: 6.8s;
+        animation-delay: -3.3s;
+      }
+      .plant.p6 {
+        animation-duration: 4.9s;
+        animation-delay: -0.8s;
+      }
+      @keyframes plant-sway {
+        0%,
+        100% {
+          transform: rotate(-3deg);
+        }
+        50% {
+          transform: rotate(3deg);
+        }
+      }
+
+      /* Tiny moon orbits along the ring of the ringed planet.
+           Position is computed in JS each frame (animateRingMoon) so it
+           traces the ring's ellipse exactly. No CSS needed. */
+
+      /* Shooting star: a small bright dot with a fading tail.
+           Travels diagonally across the sky, then waits, then
+           repeats. Position and opacity are driven by JS via SVG
+           attributes; CSS sets default colors only.
+           Note: do NOT set `opacity` on .shooting-star here, because a
+           CSS opacity rule would override the SVG `opacity` attribute
+           that JS animates. */
+      .shooting-star .ss-head {
+        fill: #ffffff;
+      }
+      .shooting-star .ss-tail {
+        stroke: #ffffff;
+        stroke-linecap: round;
+        fill: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- World SVG: viewBox is the full extended world (y=-500..1500).
+         Uses 'slice' so it always fills the viewport in both axes; on
+         non-3:1 aspect ratios the world is cropped (revealing more sky
+         or ground from the extended content) rather than letterboxed. -->
+    <svg
+      class="world"
+      viewBox="0 -500 3000 2000"
+      preserveAspectRatio="xMidYMid slice"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!-- ============================================================
+             ALIEN WORLD BACKGROUND
+             Layers (back to front):
+               1. Sky band (top)
+               2. Distant stars
+               3. Two moons
+               4. Far mountain silhouette
+               5. Mid mountain silhouette
+               6. Ground/terrain with craters
+               7. Foreground alien plants
+             ============================================================ -->
+      <g id="world">
+        <!-- 1. SKY: solid deep purple. Extends above viewBox (to y=-500)
+                 so any slice-overflow at the top stays sky color too. -->
+        <rect x="0" y="-500" width="3000" height="1500" fill="#1a0b2e" />
+        <rect x="0" y="520" width="3000" height="180" fill="#2a1148" opacity="0.7" />
+
+        <!-- 2. STARS: scattered white/cyan dots, twinkling at varied delays -->
+        <g fill="#ffffff" stroke="none">
+          <circle class="star" cx="120" cy="80" r="2.5" style="animation-delay: -0.2s" />
+          <circle class="star" cx="260" cy="140" r="1.8" style="animation-delay: -1.1s" />
+          <circle class="star" cx="430" cy="60" r="2.2" style="animation-delay: -2.3s" />
+          <circle class="star" cx="580" cy="180" r="1.5" style="animation-delay: -0.7s" />
+          <circle class="star" cx="720" cy="90" r="2.8" style="animation-delay: -1.6s" />
+          <circle class="star" cx="880" cy="220" r="1.7" style="animation-delay: -2.8s" />
+          <circle class="star" cx="1040" cy="50" r="2.0" style="animation-delay: -0.4s" />
+          <circle class="star" cx="1190" cy="170" r="2.4" style="animation-delay: -1.9s" />
+          <circle class="star" cx="1340" cy="100" r="1.6" style="animation-delay: -0.9s" />
+          <circle class="star" cx="1500" cy="200" r="2.6" style="animation-delay: -2.2s" />
+          <circle class="star" cx="1660" cy="70" r="1.9" style="animation-delay: -1.4s" />
+          <circle class="star" cx="1820" cy="160" r="2.3" style="animation-delay: -0.6s" />
+          <circle class="star" cx="1970" cy="110" r="1.7" style="animation-delay: -2.5s" />
+          <circle class="star" cx="2120" cy="40" r="2.5" style="animation-delay: -1s" />
+          <circle class="star" cx="2280" cy="190" r="2.0" style="animation-delay: -0.3s" />
+          <circle class="star" cx="2440" cy="130" r="1.8" style="animation-delay: -2.7s" />
+          <circle class="star" cx="2600" cy="80" r="2.7" style="animation-delay: -1.7s" />
+          <circle class="star" cx="2760" cy="170" r="1.6" style="animation-delay: -0.5s" />
+          <circle class="star" cx="2900" cy="100" r="2.2" style="animation-delay: -2s" />
+          <!-- mid altitude stars -->
+          <circle class="star" cx="180" cy="320" r="1.4" style="animation-delay: -0.8s" />
+          <circle class="star" cx="640" cy="380" r="1.6" style="animation-delay: -2.1s" />
+          <circle class="star" cx="1100" cy="340" r="1.3" style="animation-delay: -1.3s" />
+          <circle class="star" cx="1560" cy="400" r="1.8" style="animation-delay: -0.6s" />
+          <circle class="star" cx="2020" cy="360" r="1.5" style="animation-delay: -2.4s" />
+          <circle class="star" cx="2480" cy="390" r="1.7" style="animation-delay: -1.5s" />
+          <circle class="star" cx="2840" cy="330" r="1.4" style="animation-delay: -0.7s" />
+        </g>
+        <!-- a few cyan/yellow accent stars -->
+        <g stroke="none">
+          <circle
+            class="star"
+            cx="370"
+            cy="240"
+            r="2.5"
+            fill="#7be8ff"
+            style="animation-delay: -1s"
+          />
+          <circle
+            class="star"
+            cx="1280"
+            cy="280"
+            r="2.8"
+            fill="#ffe066"
+            style="animation-delay: -2.6s"
+          />
+          <circle
+            class="star"
+            cx="2200"
+            cy="250"
+            r="2.3"
+            fill="#7be8ff"
+            style="animation-delay: -0.4s"
+          />
+          <circle
+            class="star"
+            cx="2700"
+            cy="300"
+            r="2.6"
+            fill="#ffe066"
+            style="animation-delay: -1.8s"
+          />
+        </g>
+
+        <!-- Extended stars in extra sky area (y=-500..0), visible on
+                 viewports taller than 3:1 where the body gradient extends sky
+                 color above viewBox top. -->
+        <g fill="#ffffff" stroke="none">
+          <circle class="star" cx="80" cy="-30" r="2.0" style="animation-delay: -1.2s" />
+          <circle class="star" cx="240" cy="-80" r="2.6" style="animation-delay: -0.5s" />
+          <circle class="star" cx="410" cy="-40" r="1.5" style="animation-delay: -2.4s" />
+          <circle class="star" cx="580" cy="-110" r="2.2" style="animation-delay: -1.7s" />
+          <circle class="star" cx="750" cy="-50" r="1.8" style="animation-delay: -0.3s" />
+          <circle class="star" cx="920" cy="-90" r="2.4" style="animation-delay: -2.1s" />
+          <circle class="star" cx="1100" cy="-30" r="1.7" style="animation-delay: -1s" />
+          <circle class="star" cx="1280" cy="-100" r="2.8" style="animation-delay: -2.7s" />
+          <circle class="star" cx="1460" cy="-60" r="1.6" style="animation-delay: -0.8s" />
+          <circle class="star" cx="1640" cy="-110" r="2.3" style="animation-delay: -1.5s" />
+          <circle class="star" cx="1820" cy="-40" r="1.9" style="animation-delay: -2.3s" />
+          <circle class="star" cx="2000" cy="-90" r="2.5" style="animation-delay: -0.6s" />
+          <circle class="star" cx="2180" cy="-30" r="1.6" style="animation-delay: -1.9s" />
+          <circle class="star" cx="2360" cy="-100" r="2.2" style="animation-delay: -2.6s" />
+          <circle class="star" cx="2540" cy="-60" r="1.8" style="animation-delay: -0.4s" />
+          <circle class="star" cx="2720" cy="-110" r="2.7" style="animation-delay: -1.4s" />
+          <circle class="star" cx="2900" cy="-50" r="1.5" style="animation-delay: -2s" />
+
+          <circle class="star" cx="160" cy="-220" r="1.7" style="animation-delay: -0.7s" />
+          <circle class="star" cx="380" cy="-260" r="2.4" style="animation-delay: -2.5s" />
+          <circle class="star" cx="600" cy="-200" r="1.5" style="animation-delay: -1.1s" />
+          <circle class="star" cx="820" cy="-280" r="2.6" style="animation-delay: -0.3s" />
+          <circle class="star" cx="1040" cy="-220" r="1.8" style="animation-delay: -2.2s" />
+          <circle class="star" cx="1260" cy="-270" r="2.2" style="animation-delay: -1.6s" />
+          <circle class="star" cx="1480" cy="-210" r="1.6" style="animation-delay: -0.9s" />
+          <circle class="star" cx="1700" cy="-280" r="2.5" style="animation-delay: -2.4s" />
+          <circle class="star" cx="1920" cy="-230" r="1.7" style="animation-delay: -1.3s" />
+          <circle class="star" cx="2140" cy="-270" r="2.3" style="animation-delay: -0.5s" />
+          <circle class="star" cx="2360" cy="-200" r="1.8" style="animation-delay: -2.1s" />
+          <circle class="star" cx="2580" cy="-280" r="2.6" style="animation-delay: -1.5s" />
+          <circle class="star" cx="2800" cy="-220" r="1.5" style="animation-delay: -0.7s" />
+
+          <circle class="star" cx="100" cy="-380" r="2.0" style="animation-delay: -1.8s" />
+          <circle class="star" cx="320" cy="-440" r="1.6" style="animation-delay: -0.4s" />
+          <circle class="star" cx="540" cy="-380" r="2.4" style="animation-delay: -2.7s" />
+          <circle class="star" cx="780" cy="-450" r="1.8" style="animation-delay: -1.2s" />
+          <circle class="star" cx="1020" cy="-390" r="2.2" style="animation-delay: -0.6s" />
+          <circle class="star" cx="1260" cy="-450" r="1.5" style="animation-delay: -2.3s" />
+          <circle class="star" cx="1500" cy="-380" r="2.6" style="animation-delay: -1s" />
+          <circle class="star" cx="1740" cy="-440" r="1.7" style="animation-delay: -2.5s" />
+          <circle class="star" cx="1980" cy="-390" r="2.3" style="animation-delay: -0.8s" />
+          <circle class="star" cx="2220" cy="-450" r="1.5" style="animation-delay: -2s" />
+          <circle class="star" cx="2460" cy="-380" r="2.5" style="animation-delay: -1.4s" />
+          <circle class="star" cx="2700" cy="-440" r="1.8" style="animation-delay: -0.3s" />
+          <circle class="star" cx="2940" cy="-390" r="2.2" style="animation-delay: -2.2s" />
+        </g>
+        <!-- Extended cyan/yellow accent stars in extra sky -->
+        <g stroke="none">
+          <circle
+            class="star"
+            cx="500"
+            cy="-60"
+            r="2.5"
+            fill="#7be8ff"
+            style="animation-delay: -1.6s"
+          />
+          <circle
+            class="star"
+            cx="1500"
+            cy="-90"
+            r="2.8"
+            fill="#ffe066"
+            style="animation-delay: -0.4s"
+          />
+          <circle
+            class="star"
+            cx="2400"
+            cy="-50"
+            r="2.3"
+            fill="#7be8ff"
+            style="animation-delay: -2.2s"
+          />
+          <circle
+            class="star"
+            cx="900"
+            cy="-250"
+            r="2.6"
+            fill="#ffe066"
+            style="animation-delay: -1s"
+          />
+          <circle
+            class="star"
+            cx="1900"
+            cy="-260"
+            r="2.4"
+            fill="#7be8ff"
+            style="animation-delay: -2.5s"
+          />
+          <circle
+            class="star"
+            cx="2700"
+            cy="-220"
+            r="2.7"
+            fill="#ffe066"
+            style="animation-delay: -0.7s"
+          />
+          <circle
+            class="star"
+            cx="600"
+            cy="-410"
+            r="2.5"
+            fill="#ffe066"
+            style="animation-delay: -1.9s"
+          />
+          <circle
+            class="star"
+            cx="1700"
+            cy="-420"
+            r="2.3"
+            fill="#7be8ff"
+            style="animation-delay: -0.2s"
+          />
+          <circle
+            class="star"
+            cx="2500"
+            cy="-410"
+            r="2.8"
+            fill="#ffe066"
+            style="animation-delay: -2.6s"
+          />
+        </g>
+
+        <!-- 3. MOONS: a big pale moon between alien1 and alien2, small ringed moon between alien2 and alien3 -->
+        <g id="moon-big">
+          <circle cx="1050" cy="200" r="70" fill="#f3e1c7" stroke="#000" stroke-width="3" />
+          <!-- moon craters -->
+          <circle cx="1028" cy="180" r="10" fill="#cdb497" stroke="none" />
+          <circle cx="1070" cy="220" r="14" fill="#cdb497" stroke="none" />
+          <circle cx="1050" cy="175" r="6" fill="#cdb497" stroke="none" />
+          <circle cx="1090" cy="180" r="8" fill="#cdb497" stroke="none" />
+          <circle cx="1040" cy="225" r="7" fill="#cdb497" stroke="none" />
+        </g>
+        <g id="moon-small">
+          <!-- ring (drawn first so moon overlaps it) -->
+          <ellipse
+            cx="1950"
+            cy="180"
+            rx="80"
+            ry="14"
+            fill="none"
+            stroke="#a48ec9"
+            stroke-width="3"
+          />
+          <ellipse cx="1950" cy="180" rx="80" ry="14" fill="none" stroke="#000" stroke-width="2" />
+          <circle cx="1950" cy="180" r="40" fill="#d9b8e8" stroke="#000" stroke-width="3" />
+          <circle cx="1940" cy="175" r="6" fill="#a87ec0" stroke="none" />
+          <circle cx="1965" cy="190" r="8" fill="#a87ec0" stroke="none" />
+        </g>
+        <!-- Tiny moon orbiting along the ring of the ringed planet.
+                 Position is updated each frame from JS so it traces the
+                 ellipse exactly. Drawn after #moon-small so it sits on
+                 top when in front, and we'll fade/scale it slightly when
+                 behind to suggest depth. -->
+        <circle
+          id="ring-moon"
+          cx="2030"
+          cy="180"
+          r="6"
+          fill="#fff4d6"
+          stroke="#000"
+          stroke-width="2"
+        />
+
+        <!-- Shooting star: head + tail. Position and opacity driven
+                 by JS so we can re-fire periodically along varied paths. -->
+        <g id="shooting-star" class="shooting-star" opacity="0">
+          <line class="ss-tail" x1="0" y1="0" x2="-90" y2="30" stroke-width="5" />
+          <line
+            class="ss-tail"
+            x1="0"
+            y1="0"
+            x2="-60"
+            y2="20"
+            stroke-width="2.5"
+            stroke="#ffe8a8"
+          />
+          <circle class="ss-head" cx="0" cy="0" r="5" />
+          <circle class="ss-head" cx="0" cy="0" r="2" fill="#ffe8a8" />
+        </g>
+
+        <!-- 4. FAR MOUNTAIN SILHOUETTE: low rolling hills, dark purple -->
+        <path
+          fill="#3a1a5e"
+          stroke="#000"
+          stroke-width="3"
+          d="
+                M 0 700
+                L 0 600
+                C 200 580, 400 540, 600 560
+                C 800 580, 1000 520, 1200 540
+                C 1400 560, 1600 510, 1800 540
+                C 2000 570, 2200 530, 2400 550
+                C 2600 570, 2800 520, 3000 560
+                L 3000 700
+                Z
+            "
+        />
+
+        <!-- 5. MID MOUNTAIN SILHOUETTE: jagged peaks, slightly lighter -->
+        <path
+          fill="#4a2370"
+          stroke="#000"
+          stroke-width="3"
+          d="
+                M 0 750
+                L 0 660
+                L 150 600 L 280 650 L 420 580 L 560 640
+                L 720 590 L 880 660 L 1040 600 L 1200 650
+                L 1360 590 L 1520 640 L 1680 580 L 1840 650
+                L 2000 600 L 2160 640 L 2320 590 L 2480 650
+                L 2640 600 L 2800 640 L 2960 590 L 3000 620
+                L 3000 750
+                Z
+            "
+        />
+
+        <!-- 6. GROUND: foreground alien terrain, teal-magenta tinted dirt.
+                 Extends below viewBox (to y=1500) so any slice-overflow at the
+                 bottom of the viewport stays the ground color, never reveals
+                 SVG background or body bg. -->
+        <!-- solid base rect underneath the curved top, ensures total fill -->
+        <rect x="0" y="755" width="3000" height="945" fill="#2d5e6e" />
+        <path
+          fill="#2d5e6e"
+          stroke="#000"
+          stroke-width="4"
+          d="
+                M 0 1700
+                L 0 760
+                C 200 740, 400 770, 600 750
+                C 800 730, 1000 770, 1200 760
+                C 1400 750, 1600 780, 1800 765
+                C 2000 750, 2200 780, 2400 760
+                C 2600 740, 2800 775, 3000 755
+                L 3000 1700
+                Z
+            "
+        />
+        <!-- ground craters / ridges -->
+        <g stroke="#0f3340" stroke-width="3" fill="none">
+          <ellipse cx="320" cy="820" rx="60" ry="10" />
+          <ellipse cx="780" cy="850" rx="80" ry="12" />
+          <ellipse cx="1280" cy="830" rx="70" ry="11" />
+          <ellipse cx="1780" cy="855" rx="90" ry="13" />
+          <ellipse cx="2280" cy="830" rx="65" ry="10" />
+          <ellipse cx="2780" cy="850" rx="75" ry="12" />
+          <!-- extended craters in extra ground area (y=1000..1500),
+                     visible on viewports taller than 3:1 -->
+          <ellipse cx="200" cy="1020" rx="70" ry="11" />
+          <ellipse cx="600" cy="1080" rx="90" ry="14" />
+          <ellipse cx="1050" cy="1040" rx="75" ry="12" />
+          <ellipse cx="1500" cy="1100" rx="100" ry="15" />
+          <ellipse cx="2000" cy="1050" rx="80" ry="13" />
+          <ellipse cx="2450" cy="1110" rx="85" ry="13" />
+          <ellipse cx="2850" cy="1060" rx="70" ry="11" />
+          <ellipse cx="380" cy="1220" rx="100" ry="15" />
+          <ellipse cx="900" cy="1280" rx="80" ry="13" />
+          <ellipse cx="1380" cy="1240" rx="110" ry="16" />
+          <ellipse cx="1850" cy="1300" rx="90" ry="14" />
+          <ellipse cx="2300" cy="1250" rx="85" ry="13" />
+          <ellipse cx="2750" cy="1310" rx="100" ry="15" />
+          <ellipse cx="500" cy="1420" rx="90" ry="14" />
+          <ellipse cx="1100" cy="1450" rx="120" ry="17" />
+          <ellipse cx="1700" cy="1410" rx="100" ry="15" />
+          <ellipse cx="2200" cy="1450" rx="95" ry="14" />
+          <ellipse cx="2700" cy="1400" rx="105" ry="16" />
+        </g>
+        <!-- ground texture dots -->
+        <g fill="#1f4654" stroke="none">
+          <circle cx="180" cy="880" r="6" />
+          <circle cx="450" cy="900" r="5" />
+          <circle cx="650" cy="870" r="7" />
+          <circle cx="920" cy="910" r="6" />
+          <circle cx="1150" cy="880" r="5" />
+          <circle cx="1380" cy="920" r="7" />
+          <circle cx="1620" cy="880" r="6" />
+          <circle cx="1880" cy="900" r="5" />
+          <circle cx="2120" cy="880" r="7" />
+          <circle cx="2400" cy="920" r="6" />
+          <circle cx="2680" cy="890" r="5" />
+          <circle cx="2900" cy="880" r="7" />
+          <!-- extended dots in extra ground area -->
+          <circle cx="100" cy="1000" r="6" />
+          <circle cx="350" cy="1140" r="7" />
+          <circle cx="550" cy="1010" r="5" />
+          <circle cx="780" cy="1170" r="8" />
+          <circle cx="980" cy="1020" r="6" />
+          <circle cx="1220" cy="1180" r="7" />
+          <circle cx="1420" cy="1010" r="5" />
+          <circle cx="1660" cy="1170" r="8" />
+          <circle cx="1900" cy="1030" r="6" />
+          <circle cx="2150" cy="1180" r="7" />
+          <circle cx="2400" cy="1020" r="5" />
+          <circle cx="2640" cy="1170" r="8" />
+          <circle cx="2880" cy="1030" r="6" />
+          <circle cx="220" cy="1340" r="7" />
+          <circle cx="480" cy="1280" r="6" />
+          <circle cx="700" cy="1380" r="8" />
+          <circle cx="970" cy="1320" r="5" />
+          <circle cx="1240" cy="1380" r="7" />
+          <circle cx="1480" cy="1300" r="6" />
+          <circle cx="1740" cy="1370" r="8" />
+          <circle cx="1990" cy="1310" r="5" />
+          <circle cx="2240" cy="1380" r="7" />
+          <circle cx="2510" cy="1320" r="6" />
+          <circle cx="2780" cy="1370" r="8" />
+          <circle cx="150" cy="1470" r="7" />
+          <circle cx="650" cy="1480" r="6" />
+          <circle cx="1300" cy="1470" r="7" />
+          <circle cx="1900" cy="1480" r="6" />
+          <circle cx="2500" cy="1470" r="7" />
+          <circle cx="2950" cy="1460" r="6" />
+        </g>
+
+        <!-- 7. ALIEN PLANTS: spiky stalks with bulb tips, between/around aliens -->
+        <!-- Plant base function: vertical stalk + bulb. Hand-drawn. -->
+        <!-- p1: far left, between left edge and alien1 -->
+        <g class="plant p1">
+          <path
+            d="M 100 880 Q 95 800 110 740 Q 115 720 105 700"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 100 880 Q 95 800 110 740 Q 115 720 105 700"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <circle cx="105" cy="695" r="14" fill="#ff5fa8" stroke="#000" stroke-width="3" />
+          <circle cx="105" cy="695" r="5" fill="#ffe066" stroke="none" />
+        </g>
+        <!-- p2: just left of alien1, shorter -->
+        <g class="plant p2">
+          <path
+            d="M 880 900 Q 870 850 890 810"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 880 900 Q 870 850 890 810"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <ellipse
+            cx="890"
+            cy="803"
+            rx="10"
+            ry="14"
+            fill="#ffaa3c"
+            stroke="#000"
+            stroke-width="3"
+          />
+        </g>
+        <!-- p3: between alien1 and alien2, tall multi-bulb -->
+        <g class="plant p3">
+          <path
+            d="M 1100 900 Q 1110 800 1095 720 Q 1090 690 1105 660"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 1100 900 Q 1110 800 1095 720 Q 1090 690 1105 660"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <circle cx="1105" cy="655" r="12" fill="#7be8ff" stroke="#000" stroke-width="3" />
+          <circle cx="1085" cy="780" r="8" fill="#ff5fa8" stroke="#000" stroke-width="3" />
+        </g>
+        <!-- p4: between alien2 and alien3 -->
+        <g class="plant p4">
+          <path
+            d="M 1900 900 Q 1890 820 1910 750 Q 1920 720 1905 690"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 1900 900 Q 1890 820 1910 750 Q 1920 720 1905 690"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <ellipse
+            cx="1905"
+            cy="685"
+            rx="12"
+            ry="16"
+            fill="#e84aa6"
+            stroke="#000"
+            stroke-width="3"
+          />
+          <circle cx="1905" cy="685" r="4" fill="#ffe066" stroke="none" />
+        </g>
+        <!-- p5: just right of alien3 -->
+        <g class="plant p5">
+          <path
+            d="M 2880 900 Q 2870 830 2885 770"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 2880 900 Q 2870 830 2885 770"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <circle cx="2885" cy="763" r="13" fill="#ff8c2a" stroke="#000" stroke-width="3" />
+          <circle cx="2885" cy="763" r="5" fill="#7be8ff" stroke="none" />
+        </g>
+        <!-- p6: far right small plant -->
+        <g class="plant p6">
+          <path
+            d="M 2960 920 Q 2965 870 2955 830"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 2960 920 Q 2965 870 2955 830"
+            fill="none"
+            stroke="#5fc78a"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <ellipse
+            cx="2955"
+            cy="825"
+            rx="9"
+            ry="12"
+            fill="#9a4dd6"
+            stroke="#000"
+            stroke-width="3"
+          />
+        </g>
+      </g>
+    </svg>
+
+    <!-- Aliens SVG on top: 'meet' so all three are always fully visible.
+         Its viewBox is 0 0 3000 1000 (the original alien layout). The
+         aliens' horizon at y=755 is aligned to the world's horizon pixel
+         by JS at the end of this file (it sets a CSS transform on this
+         element so that its in-viewBox horizon lands exactly on the
+         world's in-viewBox horizon at every aspect ratio). -->
+    <svg
+      class="scene"
+      viewBox="0 0 3000 1000"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="bodyClip-a1"><path id="bodyClipPath-a1" /></clipPath>
+        <clipPath id="bodyClip-a2"><path id="bodyClipPath-a2" /></clipPath>
+        <clipPath id="bodyClip-a3"><path id="bodyClipPath-a3" /></clipPath>
+      </defs>
+
+      <!-- ============ ALIEN 1: Original monster (left cell) ============ -->
+      <g transform="translate(0,0)">
+        <g class="alien-root a1" id="root-a1">
+          <g class="body-anim">
+            <path
+              id="bodyPath-a1"
+              fill="#3ec5d6"
+              stroke="#000"
+              stroke-width="5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
+
+            <!-- pink dots distributed across body -->
+            <g clip-path="url(#bodyClip-a1)" stroke="none" fill="#ff5fa8">
+              <circle cx="320" cy="260" r="11" />
+              <circle cx="680" cy="260" r="13" />
+              <circle cx="290" cy="340" r="8" />
+              <circle cx="710" cy="340" r="9" />
+              <circle cx="380" cy="430" r="14" />
+              <circle cx="620" cy="430" r="12" />
+              <circle cx="500" cy="470" r="9" />
+              <circle cx="420" cy="540" r="16" />
+              <circle cx="580" cy="540" r="13" />
+              <circle cx="500" cy="600" r="10" />
+              <circle cx="430" cy="660" r="9" />
+              <circle cx="570" cy="660" r="11" />
+              <circle cx="490" cy="720" r="15" />
+              <circle cx="420" cy="780" r="9" />
+              <circle cx="580" cy="780" r="11" />
+              <circle cx="500" cy="830" r="8" />
+              <circle cx="450" cy="850" r="10" />
+              <circle cx="550" cy="850" r="12" />
+              <circle cx="500" cy="380" r="10" />
+            </g>
+
+            <!-- tentacle dots -->
+            <g clip-path="url(#bodyClip-a1)" stroke="none" fill="#ff5fa8">
+              <circle id="a1-r4-dot-0" r="6" />
+              <circle id="a1-r4-dot-1" r="8" />
+              <circle id="a1-r4-dot-2" r="6" />
+              <circle id="a1-l4-dot-0" r="6" />
+              <circle id="a1-l4-dot-1" r="8" />
+              <circle id="a1-l4-dot-2" r="6" />
+            </g>
+
+            <!-- 5 eyes -->
+            <g
+              class="eyes"
+              id="eyes-a1"
+              stroke="#000"
+              stroke-width="4.5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              fill="none"
+            >
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 345 200
+                            C 332 178, 348 148, 378 148
+                            C 408 148, 420 180, 410 204
+                            C 400 224, 372 232, 354 222
+                            C 346 218, 345 210, 345 200 Z
+                        "
+                />
+                <path class="eye-base" d="M 345 222 C 362 234, 398 234, 414 218" />
+                <circle class="pupil" cx="375" cy="218" r="7.5" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 422 232
+                            C 410 210, 425 180, 455 180
+                            C 485 180, 498 212, 488 234
+                            C 478 254, 450 262, 432 252
+                            C 424 248, 422 242, 422 232 Z
+                        "
+                />
+                <path class="eye-base" d="M 422 252 C 440 264, 476 264, 492 248" />
+                <circle class="pupil" cx="452" cy="248" r="7.5" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 478 178
+                            C 466 156, 482 126, 512 126
+                            C 542 126, 555 156, 545 180
+                            C 535 200, 507 208, 489 198
+                            C 481 194, 478 188, 478 178 Z
+                        "
+                />
+                <path class="eye-base" d="M 478 198 C 496 210, 532 210, 548 194" />
+                <circle class="pupil" cx="511" cy="194" r="8" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 542 208
+                            C 530 186, 545 156, 575 156
+                            C 605 156, 618 188, 608 210
+                            C 598 230, 570 238, 552 228
+                            C 544 224, 542 218, 542 208 Z
+                        "
+                />
+                <path class="eye-base" d="M 542 228 C 560 240, 596 240, 612 224" />
+                <circle class="pupil" cx="572" cy="224" r="7.5" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 605 222
+                            C 593 200, 608 170, 638 170
+                            C 668 170, 680 202, 670 224
+                            C 660 244, 632 252, 614 242
+                            C 606 238, 605 232, 605 222 Z
+                        "
+                />
+                <path class="eye-base" d="M 605 242 C 622 254, 658 254, 674 238" />
+                <circle class="pupil" cx="635" cy="238" r="7.5" fill="#000" stroke="none" />
+              </g>
+            </g>
+
+            <path
+              id="mouthPath-a1"
+              fill="none"
+              stroke="#000"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ ALIEN 2: Squidly (middle cell), translated +1000 ============ -->
+      <g transform="translate(1000,0)">
+        <g class="alien-root a2" id="root-a2">
+          <g class="body-anim">
+            <path
+              id="bodyPath-a2"
+              fill="#e84aa6"
+              stroke="#000"
+              stroke-width="5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
+
+            <g clip-path="url(#bodyClip-a2)" stroke="none" fill="#7ed957">
+              <circle cx="450" cy="280" r="9" />
+              <circle cx="540" cy="320" r="14" />
+              <circle cx="465" cy="380" r="7" />
+              <circle cx="525" cy="420" r="18" />
+              <circle cx="445" cy="470" r="11" />
+              <circle cx="540" cy="510" r="9" />
+              <circle cx="460" cy="560" r="15" />
+              <circle cx="530" cy="600" r="8" />
+              <circle cx="475" cy="650" r="12" />
+              <circle cx="525" cy="700" r="16" />
+              <circle cx="455" cy="740" r="9" />
+              <circle cx="535" cy="780" r="11" />
+              <circle cx="475" cy="820" r="13" />
+            </g>
+
+            <g clip-path="url(#bodyClip-a2)" stroke="none" fill="#7ed957">
+              <circle id="a2-t0-dot-0" r="6" />
+              <circle id="a2-t0-dot-1" r="8" />
+              <circle id="a2-t1-dot-0" r="6" />
+              <circle id="a2-t1-dot-1" r="8" />
+              <circle id="a2-t2-dot-0" r="6" />
+              <circle id="a2-t2-dot-1" r="8" />
+              <circle id="a2-ant-dot-0" r="5" />
+            </g>
+
+            <g
+              class="eyes"
+              id="eyes-a2"
+              stroke="#000"
+              stroke-width="4.5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              fill="none"
+            >
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 470 235
+                            C 462 215, 472 188, 495 188
+                            C 520 188, 532 212, 526 234
+                            C 520 252, 498 258, 480 252
+                            C 472 248, 470 240, 470 235 Z
+                        "
+                />
+                <path class="eye-base" d="M 470 252 C 484 264, 514 264, 528 248" />
+                <circle class="pupil" cx="498" cy="216" r="7" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 462 350
+                            C 454 328, 466 302, 490 302
+                            C 516 302, 528 328, 522 350
+                            C 516 368, 492 374, 474 368
+                            C 466 364, 462 356, 462 350 Z
+                        "
+                />
+                <path class="eye-base" d="M 462 368 C 478 380, 510 380, 524 364" />
+                <circle class="pupil" cx="495" cy="332" r="7.5" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 470 462
+                            C 462 442, 472 416, 495 416
+                            C 520 416, 532 440, 526 462
+                            C 520 480, 498 486, 480 480
+                            C 472 476, 470 468, 470 462 Z
+                        "
+                />
+                <path class="eye-base" d="M 470 480 C 484 492, 514 492, 528 476" />
+                <circle class="pupil" cx="498" cy="446" r="7" fill="#000" stroke="none" />
+              </g>
+            </g>
+
+            <path
+              id="mouthPath-a2"
+              fill="none"
+              stroke="#000"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ ALIEN 3: Blobby (right cell), translated +2000 ============ -->
+      <g transform="translate(2000,0)">
+        <g class="alien-root a3" id="root-a3">
+          <g class="body-anim">
+            <path
+              id="bodyPath-a3"
+              fill="#9a4dd6"
+              stroke="#000"
+              stroke-width="5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
+
+            <g clip-path="url(#bodyClip-a3)" stroke="none" fill="#ff8c2a">
+              <circle cx="220" cy="500" r="14" />
+              <circle cx="270" cy="580" r="9" />
+              <circle cx="320" cy="640" r="16" />
+              <circle cx="400" cy="680" r="10" />
+              <circle cx="500" cy="700" r="14" />
+              <circle cx="600" cy="680" r="9" />
+              <circle cx="680" cy="640" r="16" />
+              <circle cx="730" cy="580" r="11" />
+              <circle cx="780" cy="500" r="13" />
+              <circle cx="350" cy="540" r="8" />
+              <circle cx="650" cy="540" r="9" />
+              <circle cx="500" cy="600" r="11" />
+              <circle cx="430" cy="600" r="7" />
+              <circle cx="570" cy="600" r="8" />
+            </g>
+
+            <g clip-path="url(#bodyClip-a3)" stroke="none" fill="#ff8c2a">
+              <circle id="a3-lL-dot-0" r="7" />
+              <circle id="a3-lR-dot-0" r="7" />
+            </g>
+
+            <g
+              class="eyes"
+              id="eyes-a3"
+              stroke="#000"
+              stroke-width="4.5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              fill="none"
+            >
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 305 380
+                            C 295 358, 308 330, 335 330
+                            C 363 330, 376 358, 368 382
+                            C 360 402, 332 408, 314 400
+                            C 306 396, 305 388, 305 380 Z
+                        "
+                />
+                <path class="eye-base" d="M 305 400 C 322 412, 358 412, 372 396" />
+                <circle class="pupil" cx="338" cy="362" r="7.5" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 410 320
+                            C 400 296, 414 268, 442 268
+                            C 472 268, 486 298, 478 322
+                            C 470 342, 442 350, 422 342
+                            C 414 338, 410 328, 410 320 Z
+                        "
+                />
+                <path class="eye-base" d="M 410 340 C 428 354, 466 354, 482 338" />
+                <circle class="pupil" cx="445" cy="300" r="8" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 522 320
+                            C 514 296, 528 268, 558 268
+                            C 586 268, 600 298, 590 322
+                            C 582 342, 554 350, 536 342
+                            C 528 338, 522 328, 522 320 Z
+                        "
+                />
+                <path class="eye-base" d="M 522 340 C 540 354, 578 354, 594 338" />
+                <circle class="pupil" cx="557" cy="300" r="8" fill="#000" stroke="none" />
+              </g>
+              <g class="eye">
+                <path
+                  class="eye-sclera"
+                  fill="#fafafa"
+                  d="
+                            M 632 380
+                            C 624 358, 637 330, 665 330
+                            C 692 330, 705 358, 695 382
+                            C 687 402, 660 408, 642 400
+                            C 634 396, 632 388, 632 380 Z
+                        "
+                />
+                <path class="eye-base" d="M 632 400 C 650 412, 686 412, 700 396" />
+                <circle class="pupil" cx="664" cy="362" r="7.5" fill="#000" stroke="none" />
+              </g>
+            </g>
+
+            <path
+              id="mouthPath-a3"
+              fill="none"
+              stroke="#000"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+        </g>
+      </g>
+    </svg>
+
+    <script>
+      // =================================================================
+      // Shared helpers
+      // =================================================================
+      function S(c1x, c1y, c2x, c2y, px, py) {
+        return { c1: { x: c1x, y: c1y }, c2: { x: c2x, y: c2y }, p: { x: px, y: py } };
+      }
+      function emitSegments(arr, d) {
+        for (const seg of arr) {
+          d += ` C${seg.c1.x.toFixed(2)},${seg.c1.y.toFixed(2)} ${seg.c2.x.toFixed(2)},${seg.c2.y.toFixed(2)} ${seg.p.x.toFixed(2)},${seg.p.y.toFixed(2)}`;
+        }
+        return d;
+      }
+      function smoothPathSuffix(points) {
+        let d = "";
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i - 1] || points[i];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = points[i + 2] || p2;
+          const c1x = p1.x + (p2.x - p0.x) / 6;
+          const c1y = p1.y + (p2.y - p0.y) / 6;
+          const c2x = p2.x - (p3.x - p1.x) / 6;
+          const c2y = p2.y - (p3.y - p1.y) / 6;
+          d += ` C${c1x.toFixed(2)},${c1y.toFixed(2)} ${c2x.toFixed(2)},${c2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+        }
+        return d;
+      }
+      function smoothD(points) {
+        if (points.length < 2) return "";
+        let d = `M${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
+        return d + smoothPathSuffix(points);
+      }
+      function buildAppendageSuffix(def, nowSec) {
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+        const cl = def.points.map((p, i) => {
+          const ramp =
+            def.wave.rampStart + (1 - def.wave.rampStart) * (i / (def.points.length - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+            th: p.th,
+          };
+        });
+        function tangentAt(i) {
+          const a = cl[Math.max(0, i - 1)];
+          const b = cl[Math.min(cl.length - 1, i + 1)];
+          const tx = b.x - a.x,
+            ty = b.y - a.y;
+          const len = Math.hypot(tx, ty) || 1;
+          return { x: tx / len, y: ty / len };
+        }
+        const topEdge = [def.entry];
+        for (let i = 0; i < cl.length; i++) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          topEdge.push({ x: cl[i].x + nx * (cl[i].th / 2), y: cl[i].y + ny * (cl[i].th / 2) });
+        }
+        const bottomEdge = [];
+        for (let i = cl.length - 1; i >= 0; i--) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          bottomEdge.push({ x: cl[i].x - nx * (cl[i].th / 2), y: cl[i].y - ny * (cl[i].th / 2) });
+        }
+        bottomEdge.push(def.exit);
+        const tipPt = cl[cl.length - 1];
+        const tipT = tangentAt(cl.length - 1);
+        const capPt = {
+          x: tipPt.x + tipT.x * (tipPt.th / 2),
+          y: tipPt.y + tipT.y * (tipPt.th / 2),
+        };
+        return smoothPathSuffix([...topEdge, capPt, ...bottomEdge]);
+      }
+      function centerlineAt(def, frac, nowSec) {
+        const base = { x: (def.entry.x + def.exit.x) / 2, y: (def.entry.y + def.exit.y) / 2 };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+        const n = def.points.length;
+        const idxF = frac * (n - 1);
+        const i0 = Math.floor(idxF);
+        const i1 = Math.min(n - 1, i0 + 1);
+        const t = idxF - i0;
+        function pointAt(i) {
+          const p = def.points[i];
+          const ramp = def.wave.rampStart + (1 - def.wave.rampStart) * (i / (n - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return { x: base.x + ax * p.d + px * lateral, y: base.y + ay * p.d + py * lateral };
+        }
+        const a = pointAt(i0),
+          b = pointAt(i1);
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+      }
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+      function strokeD(points, nowSec, amp, phaseOffset) {
+        const jittered = points.map((p, i) => {
+          const wx = Math.sin(nowSec * 3.0 + phaseOffset + i * 0.9) * amp;
+          const wy = Math.cos(nowSec * 2.6 + phaseOffset + i * 1.1) * amp;
+          return { x: p.x + wx, y: p.y + wy };
+        });
+        return smoothD(jittered);
+      }
+
+      // =================================================================
+      // ALIEN 1: Original monster (cyan, head with shoulders, 2 tentacles)
+      // =================================================================
+      const a1 = (() => {
+        const startPoint = { x: 500, y: 170 };
+        // Body: wider rounded HEAD top, narrower body below.
+        // Right tentacle: entry (660, 415), exit (660, 475), axis (1, 0).
+        // Left tentacle: entry (340, 475), exit (340, 415), axis (-1, 0).
+        const segTopRight = [
+          S(580, 168, 660, 178, 695, 230), // top to right shoulder
+          S(720, 280, 700, 360, 660, 380), // right of head bulge
+        ];
+        // After right tent exit (660, 475), down right side to bottom-right
+        const segRightToBottom = [
+          S(660, 540, 640, 640, 620, 720),
+          S(610, 770, 590, 830, 555, 870),
+          S(530, 890, 470, 890, 445, 870),
+          S(410, 830, 390, 770, 380, 720),
+          S(360, 640, 340, 540, 340, 475),
+        ];
+        // After left tent exit (340, 415), up left side to top-center start
+        const segLeftToTop = [S(300, 360, 280, 280, 305, 230), S(340, 178, 420, 168, 500, 170)];
+        const tentDefs = {
+          r4: {
+            entry: { x: 660, y: 415 },
+            exit: { x: 660, y: 475 },
+            axis: { x: 1, y: 0 },
+            points: [
+              { d: 30, th: 60, lat: 0 },
+              { d: 70, th: 54, lat: 4 },
+              { d: 115, th: 44, lat: -5 },
+              { d: 155, th: 34, lat: 5 },
+              { d: 190, th: 24, lat: -4 },
+              { d: 220, th: 14, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.55,
+              amp: 14,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+          l4: {
+            entry: { x: 340, y: 475 },
+            exit: { x: 340, y: 415 },
+            axis: { x: -1, y: 0 },
+            points: [
+              { d: 30, th: 60, lat: 0 },
+              { d: 70, th: 54, lat: -4 },
+              { d: 115, th: 44, lat: 5 },
+              { d: 155, th: 34, lat: -5 },
+              { d: 190, th: 24, lat: 4 },
+              { d: 220, th: 14, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.5,
+              amp: 14,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+        };
+        const bodyPath = document.getElementById("bodyPath-a1");
+        const clipPath = document.getElementById("bodyClipPath-a1");
+        const dotDefs = [
+          { id: "a1-r4-dot-0", tent: "r4", frac: 0.2 },
+          { id: "a1-r4-dot-1", tent: "r4", frac: 0.55 },
+          { id: "a1-r4-dot-2", tent: "r4", frac: 0.8 },
+          { id: "a1-l4-dot-0", tent: "l4", frac: 0.2 },
+          { id: "a1-l4-dot-1", tent: "l4", frac: 0.55 },
+          { id: "a1-l4-dot-2", tent: "l4", frac: 0.8 },
+        ].map((d) => ({ ...d, el: document.getElementById(d.id) }));
+        function buildD(nowSec) {
+          let d = `M${startPoint.x},${startPoint.y}`;
+          d = emitSegments(segTopRight, d);
+          d += buildAppendageSuffix(tentDefs.r4, nowSec);
+          d = emitSegments(segRightToBottom, d);
+          d += buildAppendageSuffix(tentDefs.l4, nowSec);
+          d = emitSegments(segLeftToTop, d);
+          return d + " Z";
+        }
+        function update(nowSec) {
+          const d = buildD(nowSec);
+          bodyPath.setAttribute("d", d);
+          clipPath.setAttribute("d", d);
+          for (const dot of dotDefs) {
+            const p = centerlineAt(tentDefs[dot.tent], dot.frac, nowSec);
+            dot.el.setAttribute("cx", p.x.toFixed(2));
+            dot.el.setAttribute("cy", p.y.toFixed(2));
+          }
+        }
+        // Eyes
+        const eyeBase = [
+          { cx: 375, cy: 218, range: 6, ecx: 375, eybot: 240 },
+          { cx: 452, cy: 248, range: 6, ecx: 452, eybot: 270 },
+          { cx: 511, cy: 194, range: 7, ecx: 511, eybot: 216 },
+          { cx: 572, cy: 224, range: 6, ecx: 572, eybot: 246 },
+          { cx: 635, cy: 238, range: 6, ecx: 635, eybot: 260 },
+        ];
+        const eyeEls = Array.from(document.querySelectorAll("#eyes-a1 .eye"));
+        const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+        // Mouth
+        const mouthPath = document.getElementById("mouthPath-a1");
+        const MX = 500,
+          MY = 320;
+        const baseMouth = [];
+        for (let i = 0; i <= 10; i++) {
+          const t = i / 10;
+          baseMouth.push({ x: MX - 70 + 140 * t, y: MY + Math.sin(t * Math.PI * 2.5) * 6 });
+        }
+        return {
+          update,
+          eyeBase,
+          eyeEls,
+          pupils,
+          mouthPath,
+          baseMouth,
+          root: document.getElementById("root-a1"),
+        };
+      })();
+
+      // =================================================================
+      // ALIEN 2: Squidly (pink, antenna up, 3 droopy tentacles down)
+      // =================================================================
+      const a2 = (() => {
+        const startPoint = { x: 460, y: 165 };
+        const segAfterAntenna = [
+          S(560, 175, 575, 250, 575, 350),
+          S(575, 460, 575, 580, 570, 700),
+          S(568, 730, 565, 755, 560, 770),
+        ];
+        const segBetweenRM = [S(538, 802, 534, 804, 530, 805)];
+        const segBetweenML = [S(466, 804, 462, 802, 460, 800)];
+        const segAfterLeftTent = [
+          S(435, 755, 432, 730, 430, 700),
+          S(425, 580, 425, 460, 425, 350),
+          S(425, 250, 440, 175, 460, 165),
+        ];
+        const defs = {
+          antenna: {
+            entry: { x: 460, y: 165 },
+            exit: { x: 540, y: 165 },
+            axis: { x: 0, y: -1 },
+            points: [
+              { d: 20, th: 80, lat: 0 },
+              { d: 55, th: 60, lat: 3 },
+              { d: 90, th: 44, lat: -4 },
+              { d: 125, th: 32, lat: 4 },
+              { d: 155, th: 22, lat: -3 },
+              { d: 175, th: 14, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.6,
+              amp: 12,
+              phaseDelay: 0.95,
+              rampStart: 0.05,
+            },
+          },
+          t0: {
+            entry: { x: 560, y: 770 },
+            exit: { x: 540, y: 800 },
+            axis: { x: 0.6, y: 0.8 },
+            points: [
+              { d: 18, th: 36, lat: 0 },
+              { d: 50, th: 32, lat: 4 },
+              { d: 85, th: 26, lat: -5 },
+              { d: 120, th: 20, lat: 4 },
+              { d: 150, th: 14, lat: -3 },
+              { d: 175, th: 10, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.5,
+              amp: 14,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+          t1: {
+            entry: { x: 530, y: 805 },
+            exit: { x: 470, y: 805 },
+            axis: { x: 0, y: 1 },
+            points: [
+              { d: 20, th: 60, lat: 0 },
+              { d: 55, th: 50, lat: -3 },
+              { d: 95, th: 40, lat: 5 },
+              { d: 135, th: 30, lat: -3 },
+              { d: 170, th: 22, lat: 4 },
+              { d: 195, th: 14, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.45,
+              amp: 16,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+          t2: {
+            entry: { x: 460, y: 800 },
+            exit: { x: 440, y: 770 },
+            axis: { x: -0.6, y: 0.8 },
+            points: [
+              { d: 18, th: 36, lat: 0 },
+              { d: 50, th: 32, lat: -4 },
+              { d: 85, th: 26, lat: 5 },
+              { d: 120, th: 20, lat: -4 },
+              { d: 150, th: 14, lat: 3 },
+              { d: 175, th: 10, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.55,
+              amp: 14,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+        };
+        const bodyPath = document.getElementById("bodyPath-a2");
+        const clipPath = document.getElementById("bodyClipPath-a2");
+        const dotDefs = [
+          { id: "a2-t0-dot-0", tent: "t0", frac: 0.3 },
+          { id: "a2-t0-dot-1", tent: "t0", frac: 0.65 },
+          { id: "a2-t1-dot-0", tent: "t1", frac: 0.3 },
+          { id: "a2-t1-dot-1", tent: "t1", frac: 0.65 },
+          { id: "a2-t2-dot-0", tent: "t2", frac: 0.3 },
+          { id: "a2-t2-dot-1", tent: "t2", frac: 0.65 },
+          { id: "a2-ant-dot-0", tent: "antenna", frac: 0.55 },
+        ].map((d) => ({ ...d, el: document.getElementById(d.id) }));
+        function buildD(nowSec) {
+          let d = `M${startPoint.x},${startPoint.y}`;
+          d += buildAppendageSuffix(defs.antenna, nowSec);
+          d = emitSegments(segAfterAntenna, d);
+          d += buildAppendageSuffix(defs.t0, nowSec);
+          d = emitSegments(segBetweenRM, d);
+          d += buildAppendageSuffix(defs.t1, nowSec);
+          d = emitSegments(segBetweenML, d);
+          d += buildAppendageSuffix(defs.t2, nowSec);
+          d = emitSegments(segAfterLeftTent, d);
+          return d + " Z";
+        }
+        function update(nowSec) {
+          const d = buildD(nowSec);
+          bodyPath.setAttribute("d", d);
+          clipPath.setAttribute("d", d);
+          for (const dot of dotDefs) {
+            const p = centerlineAt(defs[dot.tent], dot.frac, nowSec);
+            dot.el.setAttribute("cx", p.x.toFixed(2));
+            dot.el.setAttribute("cy", p.y.toFixed(2));
+          }
+        }
+        const eyeBase = [
+          { cx: 498, cy: 216, range: 6, ecx: 498, eybot: 256 },
+          { cx: 495, cy: 332, range: 7, ecx: 495, eybot: 372 },
+          { cx: 498, cy: 446, range: 6, ecx: 498, eybot: 484 },
+        ];
+        const eyeEls = Array.from(document.querySelectorAll("#eyes-a2 .eye"));
+        const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+        const mouthPath = document.getElementById("mouthPath-a2");
+        const MX = 498,
+          MY = 540;
+        const baseMouth = [];
+        for (let i = 0; i <= 8; i++) {
+          const t = i / 8;
+          baseMouth.push({ x: MX - 28 + 56 * t, y: MY + Math.sin(t * Math.PI * 2.5) * 4 });
+        }
+        return {
+          update,
+          eyeBase,
+          eyeEls,
+          pupils,
+          mouthPath,
+          baseMouth,
+          root: document.getElementById("root-a2"),
+        };
+      })();
+
+      // =================================================================
+      // ALIEN 3: Blobby (purple, wide squashed, 2 stubby legs, 4 eyes)
+      // =================================================================
+      const a3 = (() => {
+        const startPoint = { x: 500, y: 220 };
+        const segTopToRightLeg = [
+          S(620, 222, 720, 250, 770, 320),
+          S(820, 390, 830, 480, 800, 560),
+          S(770, 640, 720, 700, 670, 720),
+        ];
+        const segBetweenLegs = [S(580, 730, 420, 730, 390, 720)];
+        const segLeftLegToTop = [
+          S(280, 700, 230, 640, 200, 560),
+          S(170, 480, 180, 390, 230, 320),
+          S(280, 250, 380, 222, 500, 220),
+        ];
+        const defs = {
+          lR: {
+            entry: { x: 670, y: 720 },
+            exit: { x: 610, y: 720 },
+            axis: { x: 0, y: 1 },
+            points: [
+              { d: 18, th: 60, lat: 0 },
+              { d: 45, th: 56, lat: 3 },
+              { d: 75, th: 48, lat: -4 },
+              { d: 105, th: 38, lat: 4 },
+              { d: 130, th: 28, lat: -2 },
+              { d: 150, th: 18, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.55,
+              amp: 8,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+          lL: {
+            entry: { x: 390, y: 720 },
+            exit: { x: 330, y: 720 },
+            axis: { x: 0, y: 1 },
+            points: [
+              { d: 18, th: 60, lat: 0 },
+              { d: 45, th: 56, lat: -3 },
+              { d: 75, th: 48, lat: 4 },
+              { d: 105, th: 38, lat: -4 },
+              { d: 130, th: 28, lat: 2 },
+              { d: 150, th: 18, lat: 0 },
+            ],
+            wave: {
+              phase: Math.random() * Math.PI * 2,
+              freq: 0.5,
+              amp: 8,
+              phaseDelay: 0.9,
+              rampStart: 0.1,
+            },
+          },
+        };
+        const bodyPath = document.getElementById("bodyPath-a3");
+        const clipPath = document.getElementById("bodyClipPath-a3");
+        const dotDefs = [
+          { id: "a3-lL-dot-0", tent: "lL", frac: 0.55 },
+          { id: "a3-lR-dot-0", tent: "lR", frac: 0.55 },
+        ].map((d) => ({ ...d, el: document.getElementById(d.id) }));
+        function buildD(nowSec) {
+          let d = `M${startPoint.x},${startPoint.y}`;
+          d = emitSegments(segTopToRightLeg, d);
+          d += buildAppendageSuffix(defs.lR, nowSec);
+          d = emitSegments(segBetweenLegs, d);
+          d += buildAppendageSuffix(defs.lL, nowSec);
+          d = emitSegments(segLeftLegToTop, d);
+          return d + " Z";
+        }
+        function update(nowSec) {
+          const d = buildD(nowSec);
+          bodyPath.setAttribute("d", d);
+          clipPath.setAttribute("d", d);
+          for (const dot of dotDefs) {
+            const p = centerlineAt(defs[dot.tent], dot.frac, nowSec);
+            dot.el.setAttribute("cx", p.x.toFixed(2));
+            dot.el.setAttribute("cy", p.y.toFixed(2));
+          }
+        }
+        const eyeBase = [
+          { cx: 338, cy: 362, range: 7, ecx: 338, eybot: 404 },
+          { cx: 445, cy: 300, range: 7, ecx: 445, eybot: 346 },
+          { cx: 557, cy: 300, range: 7, ecx: 557, eybot: 346 },
+          { cx: 664, cy: 362, range: 7, ecx: 664, eybot: 404 },
+        ];
+        const eyeEls = Array.from(document.querySelectorAll("#eyes-a3 .eye"));
+        const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+        const mouthPath = document.getElementById("mouthPath-a3");
+        const MX = 500,
+          MY = 480;
+        const baseMouth = [];
+        for (let i = 0; i <= 10; i++) {
+          const t = i / 10;
+          baseMouth.push({ x: MX - 70 + 140 * t, y: MY + Math.sin(t * Math.PI * 2.5) * 6 });
+        }
+        return {
+          update,
+          eyeBase,
+          eyeEls,
+          pupils,
+          mouthPath,
+          baseMouth,
+          root: document.getElementById("root-a3"),
+        };
+      })();
+
+      // =================================================================
+      // Eye + mouth animation, shared driver across all aliens
+      // =================================================================
+      const aliens = [a1, a2, a3];
+
+      // Build per-eye state
+      aliens.forEach((a) => {
+        a.eyes = a.eyeBase.map((b) => ({
+          baseX: b.cx,
+          baseY: b.cy,
+          range: b.range,
+          ecx: b.ecx,
+          eybot: b.eybot,
+          curX: b.cx,
+          curY: b.cy,
+          tgtX: b.cx,
+          tgtY: b.cy,
+          nextPupilRetarget: 0,
+          tx: 0,
+          ty: 0,
+          rot: 0,
+          skew: 0,
+          sy: 1,
+          ttx: 0,
+          tty: 0,
+          trot: 0,
+          tskew: 0,
+          tsy: 1,
+          nextEyeRetarget: 0,
+          blinkPhase: 0,
+          blinking: false,
+        }));
+        a.eyes.forEach(scheduleBlink);
+        // Mouth burst state
+        a.mouthBurst = { wiggleStart: null, inBurst: false };
+        const wiggleIntervalSecs = 3 + Math.random() * 2;
+        setTimeout(() => {
+          a.mouthBurst.inBurst = true;
+        }, wiggleIntervalSecs * 1000);
+        a.mouthInterval = wiggleIntervalSecs;
+      });
+
+      function pickPupilTarget(s, now) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * s.range;
+        s.tgtX = s.baseX + Math.cos(angle) * r;
+        s.tgtY = s.baseY + Math.sin(angle) * r;
+        s.nextPupilRetarget = now + 1500 + Math.random() * 1500;
+      }
+      function pickEyeTarget(s, now) {
+        s.ttx = (Math.random() * 2 - 1) * 2;
+        s.tty = (Math.random() * 2 - 1) * 2;
+        s.trot = (Math.random() * 2 - 1) * 4;
+        s.tskew = (Math.random() * 2 - 1) * 10;
+        s.tsy = 1 + (Math.random() * 2 - 1) * 0.06;
+        s.nextEyeRetarget = now + 1500 + Math.random() * 2000;
+      }
+      function scheduleBlink(s) {
+        const delay = 3000 + Math.random() * 4000;
+        setTimeout(() => {
+          s.blinking = true;
+          setTimeout(() => {
+            s.blinking = false;
+            scheduleBlink(s);
+          }, 140);
+        }, delay);
+      }
+      function fadeFactor(elapsed, total) {
+        const half = total / 2;
+        return elapsed < half ? elapsed / half : (total - elapsed) / half;
+      }
+
+      function frame(timestamp) {
+        const nowSec = timestamp / 1000;
+        for (const a of aliens) {
+          a.update(nowSec);
+          // Eyes
+          a.eyes.forEach((s, i) => {
+            if (timestamp >= s.nextPupilRetarget) pickPupilTarget(s, timestamp);
+            if (timestamp >= s.nextEyeRetarget) pickEyeTarget(s, timestamp);
+            s.curX = lerp(s.curX, s.tgtX, 0.08);
+            s.curY = lerp(s.curY, s.tgtY, 0.08);
+            a.pupils[i].setAttribute("cx", s.curX.toFixed(2));
+            a.pupils[i].setAttribute("cy", s.curY.toFixed(2));
+            s.tx = lerp(s.tx, s.ttx, 0.06);
+            s.ty = lerp(s.ty, s.tty, 0.06);
+            s.rot = lerp(s.rot, s.trot, 0.06);
+            s.skew = lerp(s.skew, s.tskew, 0.06);
+            s.sy = lerp(s.sy, s.tsy, 0.06);
+            const targetBlink = s.blinking ? 1 : 0;
+            s.blinkPhase = lerp(s.blinkPhase, targetBlink, 0.45);
+            const finalSy = s.sy * (1 - s.blinkPhase * 0.95);
+            const t1x = s.ecx + s.tx,
+              t1y = s.eybot + s.ty;
+            a.eyeEls[i].setAttribute(
+              "transform",
+              `translate(${t1x.toFixed(2)} ${t1y.toFixed(2)}) ` +
+                `rotate(${s.rot.toFixed(2)}) ` +
+                `skewX(${s.skew.toFixed(2)}) ` +
+                `scale(1 ${finalSy.toFixed(3)}) ` +
+                `translate(${(-s.ecx).toFixed(2)} ${(-s.eybot).toFixed(2)})`
+            );
+          });
+          // Mouth
+          const mb = a.mouthBurst;
+          const wiggleDur = 1.8;
+          let burstFade = 0;
+          if (mb.inBurst) {
+            if (mb.wiggleStart === null) mb.wiggleStart = timestamp;
+            const elapsed = (timestamp - mb.wiggleStart) / 1000;
+            if (elapsed < wiggleDur) {
+              burstFade = fadeFactor(elapsed, wiggleDur);
+            } else {
+              mb.inBurst = false;
+              mb.wiggleStart = null;
+              setTimeout(() => {
+                mb.inBurst = true;
+              }, a.mouthInterval * 1000);
+            }
+          }
+          const amp = 1.6 + 3.0 * burstFade;
+          a.mouthPath.setAttribute("d", strokeD(a.baseMouth, nowSec, amp, 0.0));
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      // Whole-body twitch per alien, independent timers
+      aliens.forEach((a) => {
+        function scheduleTwitch() {
+          const delay = 8000 + Math.random() * 7000;
+          setTimeout(() => {
+            a.root.classList.add("twitch");
+            setTimeout(() => {
+              a.root.classList.remove("twitch");
+              scheduleTwitch();
+            }, 260);
+          }, delay);
+        }
+        scheduleTwitch();
+      });
+
+      // ===================================================================
+      // Align aliens horizon to world horizon at every aspect ratio.
+      //
+      // World SVG: viewBox=(0,-500,3000,2000), preserveAspectRatio=slice.
+      //   uniform scale Sw = max(vw/3000, vh/2000)
+      //   The center of the viewBox is x=1500, y=500 and slice maps that
+      //   point to the viewport center. So world's y=755 lands at
+      //   viewport_y = vh/2 + (755 - 500) * Sw.
+      //
+      // Aliens SVG: viewBox=(0,0,3000,1000), preserveAspectRatio=meet.
+      //   uniform scale Sa = min(vw/3000, vh/1000)
+      //   The viewBox center is y=500 mapped to viewport center, so y=755
+      //   lands at viewport_y = vh/2 + (755 - 500) * Sa.
+      //
+      // Translate the aliens SVG by dy = 255 * (Sw - Sa) so the two
+      // horizons coincide. Sw >= Sa always (slice scales up; meet scales
+      // down), so dy is non-negative -> shift aliens DOWN.
+      // ===================================================================
+      function alignAliensHorizon() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const Sw = Math.max(vw / 3000, vh / 2000);
+        const Sa = Math.min(vw / 3000, vh / 1000);
+        const dy = 255 * (Sw - Sa);
+        const sceneSvg = document.querySelector("svg.scene");
+        if (sceneSvg) {
+          sceneSvg.style.transform = `translateY(${dy.toFixed(2)}px)`;
+        }
+      }
+      alignAliensHorizon();
+      window.addEventListener("resize", alignAliensHorizon);
+
+      // ===================================================================
+      // Tiny moon orbits along the ring of the ringed planet.
+      // Ring center (1950, 180), rx=80, ry=14. Use angle to compute
+      // position. To suggest depth, scale the moon slightly smaller when
+      // it's on the far side (top half of orbit, since the ring is viewed
+      // edge-on with a slight tilt) and slightly larger on the near side.
+      // ===================================================================
+      const ringMoonEl = document.getElementById("ring-moon");
+      const RING_CX = 1950,
+        RING_CY = 180,
+        RING_RX = 80,
+        RING_RY = 14;
+      function animateRingMoon(nowSec) {
+        // Period: ~6 seconds per orbit.
+        const angle = (nowSec / 6) * Math.PI * 2;
+        const x = RING_CX + Math.cos(angle) * RING_RX;
+        const y = RING_CY + Math.sin(angle) * RING_RY;
+        // Far side of orbit when sin(angle) < 0 (top half: ring tilts so
+        // bottom is in front of the planet, top is behind).
+        const onFarSide = Math.sin(angle) < 0;
+        // Hide entirely when behind the planet disk: on far side AND
+        // within the planet's projected radius.
+        const PLANET_R = 40;
+        const dx = x - RING_CX;
+        const behind = onFarSide && Math.abs(dx) < PLANET_R;
+        // Near side gets larger and brighter; far side smaller and faded.
+        const nearness = (Math.sin(angle) + 1) / 2; // 0..1
+        const r = 4 + nearness * 3; // 4..7
+        const opacity = behind ? 0 : 0.55 + nearness * 0.45;
+        ringMoonEl.setAttribute("cx", x.toFixed(2));
+        ringMoonEl.setAttribute("cy", y.toFixed(2));
+        ringMoonEl.setAttribute("r", r.toFixed(2));
+        ringMoonEl.setAttribute("opacity", opacity.toFixed(2));
+      }
+
+      // ===================================================================
+      // Shooting star: occasional diagonal streak across the sky.
+      // Each run picks a random start point near the top of the sky
+      // (world coords: x in 100..900 or 2100..2900, y in -200..100) and a
+      // shallow downward direction (left-to-right or right-to-left). The
+      // streak lasts ~0.8-1.2s with fade in/out, then waits 6-14s before
+      // the next one.
+      // ===================================================================
+      const shootingStar = document.getElementById("shooting-star");
+      const ssTails = shootingStar.querySelectorAll(".ss-tail");
+      let ssState = null;
+      function scheduleShootingStar() {
+        const wait = 6000 + Math.random() * 8000;
+        setTimeout(launchShootingStar, wait);
+      }
+      function launchShootingStar() {
+        const dir = Math.random() < 0.5 ? 1 : -1;
+        const startX = dir === 1 ? 100 + Math.random() * 800 : 2100 + Math.random() * 800;
+        const startY = -200 + Math.random() * 300; // between -200 and 100
+        const dist = 700 + Math.random() * 400;
+        const angleDeg = 18 + Math.random() * 14; // shallow downward
+        const rad = (angleDeg * Math.PI) / 180;
+        const dx = Math.cos(rad) * dist * dir;
+        const dy = Math.sin(rad) * dist;
+        const endX = startX + dx;
+        const endY = startY + dy;
+        // Tails point opposite to motion direction. Outer tail is longer/wider.
+        const outerLen = 100;
+        const innerLen = 60;
+        const tdx = -Math.cos(rad) * dir;
+        const tdy = -Math.sin(rad);
+        ssTails[0].setAttribute("x2", (tdx * outerLen).toFixed(2));
+        ssTails[0].setAttribute("y2", (tdy * outerLen).toFixed(2));
+        ssTails[1].setAttribute("x2", (tdx * innerLen).toFixed(2));
+        ssTails[1].setAttribute("y2", (tdy * innerLen).toFixed(2));
+        ssState = {
+          startTime: performance.now(),
+          duration: 800 + Math.random() * 400,
+          startX,
+          startY,
+          endX,
+          endY,
+        };
+      }
+      function animateShootingStar(nowMs) {
+        if (!ssState) return;
+        const t = (nowMs - ssState.startTime) / ssState.duration;
+        if (t >= 1) {
+          shootingStar.setAttribute("opacity", "0");
+          ssState = null;
+          scheduleShootingStar();
+          return;
+        }
+        const x = ssState.startX + (ssState.endX - ssState.startX) * t;
+        const y = ssState.startY + (ssState.endY - ssState.startY) * t;
+        // Fade in fast, fade out toward the end.
+        let op;
+        if (t < 0.15) op = t / 0.15;
+        else if (t > 0.75) op = (1 - t) / 0.25;
+        else op = 1;
+        shootingStar.setAttribute("opacity", op.toFixed(2));
+        shootingStar.setAttribute("transform", `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+      }
+      scheduleShootingStar();
+
+      // Drive both from rAF.
+      function skyFrame(ts) {
+        animateRingMoon(ts / 1000);
+        animateShootingStar(ts);
+        requestAnimationFrame(skyFrame);
+      }
+      requestAnimationFrame(skyFrame);
+    </script>
+  </body>
+</html>

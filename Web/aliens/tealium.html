@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="only light" />
+    <title>Tealium</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      html {
+        color-scheme: only light;
+      }
+      body {
+        background-color: #ffffff;
+        overflow: hidden;
+      }
+      svg.monster {
+        display: block;
+        width: 100vw;
+        height: 100dvh;
+        background-color: #ffffff;
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+        overflow: visible;
+      }
+
+      #monster-root {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: sway 6s ease-in-out infinite;
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotate(-1.2deg);
+        }
+        50% {
+          transform: rotate(1.2deg);
+        }
+      }
+
+      #body-anim {
+        transform-box: fill-box;
+        transform-origin: 50% 95%;
+        animation: breathe 4s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1, 1);
+        }
+        50% {
+          transform: scale(1.02, 1.025);
+        }
+      }
+
+      #monster-root.twitch {
+        animation:
+          sway 6s ease-in-out infinite,
+          shake 0.25s linear;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        20% {
+          translate: -3px 1px;
+        }
+        40% {
+          translate: 3px -2px;
+        }
+        60% {
+          translate: -2px 2px;
+        }
+        80% {
+          translate: 2px -1px;
+        }
+      }
+
+      .eye-sclera,
+      .pupil {
+        forced-color-adjust: none;
+        -webkit-forced-color-adjust: none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      class="monster"
+      viewBox="0 0 1000 1000"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath id="bodyClip">
+          <path id="bodyClipPath" />
+        </clipPath>
+      </defs>
+
+      <g id="monster-root">
+        <g id="body-anim">
+          <!-- main body silhouette: single continuous path, rebuilt each
+                     frame so the tentacles can wave while the body root stays
+                     fixed. -->
+          <path
+            id="bodyPath"
+            fill="#b6d44a"
+            stroke="#000"
+            stroke-width="5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+
+          <!-- magenta spots, clipped to body silhouette.
+                     Distributed across the full body region: head sides (avoiding eyes),
+                     shoulders, body trunk down to the bottom. Mix of sizes for variety. -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#e84aa6">
+            <!-- top: small dots near sides of head, avoiding eye region -->
+            <circle cx="370" cy="240" r="9" />
+            <circle cx="650" cy="220" r="11" />
+            <circle cx="345" cy="320" r="13" />
+            <circle cx="660" cy="350" r="8" />
+            <!-- mid-upper: shoulders + upper body -->
+            <circle cx="430" cy="330" r="18" />
+            <circle cx="565" cy="310" r="6" />
+            <circle cx="500" cy="360" r="22" />
+            <circle cx="395" cy="430" r="10" />
+            <circle cx="600" cy="440" r="14" />
+            <!-- middle: around mouth area -->
+            <circle cx="445" cy="500" r="11" />
+            <circle cx="555" cy="520" r="20" />
+            <circle cx="495" cy="475" r="7" />
+            <!-- lower body -->
+            <circle cx="420" cy="600" r="16" />
+            <circle cx="585" cy="615" r="9" />
+            <circle cx="490" cy="660" r="13" />
+            <circle cx="540" cy="700" r="7" />
+            <!-- bottom -->
+            <circle cx="430" cy="760" r="11" />
+            <circle cx="565" cy="780" r="14" />
+            <circle cx="490" cy="810" r="8" />
+          </g>
+
+          <!-- tentacle dots: positioned per-frame along the animated
+                     centerlines of each tentacle so they move with the wave.
+                     IDs encode tentacle name and along-tentacle distance.
+                     Clipped to body so they only appear inside the silhouette. -->
+          <g clip-path="url(#bodyClip)" stroke="none" fill="#e84aa6">
+            <circle id="r4-dot-0" r="9" />
+            <circle id="r4-dot-1" r="6" />
+            <circle id="r4-dot-2" r="7" />
+            <circle id="l4-dot-0" r="9" />
+            <circle id="l4-dot-1" r="6" />
+            <circle id="l4-dot-2" r="7" />
+          </g>
+
+          <path
+            id="mouthPath"
+            fill="none"
+            stroke="#000"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- Eyes are CHILDREN of #body-anim so they breathe + sway with
+                     the body and stay attached, not floating as an overlay. -->
+          <g
+            id="eyes"
+            stroke="#000"
+            stroke-width="4.5"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            fill="none"
+          >
+            <!-- 5 eyes distributed across the wide head, matching the
+                     reference. Each eye is an OVAL BULB (round, top-heavy)
+                     sitting on a curved BASE LINE (the "pedestal" / socket
+                     where the eye emerges from the body). The base line is
+                     drawn separately so the eye reads as a thing protruding
+                     out of the head, not a teardrop melting into it.
+                     Layout: leftmost eye, drooping eye low-left, high
+                     center eye, upper-right eye, rightmost eye. -->
+            <g class="eye">
+              <!-- eye bulb centered ~(372, 222) -->
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 348 240
+                        C 340 218, 348 192, 370 188
+                        C 392 184, 402 208, 398 232
+                        C 394 252, 372 260, 354 254
+                        C 348 250, 348 244, 348 240
+                        Z
+                    "
+              />
+              <!-- pedestal/socket line under the bulb -->
+              <path class="eye-base" d="M 348 252 C 360 264, 388 264, 400 248" />
+              <circle class="pupil" cx="375" cy="218" r="7" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <!-- drooping low: bulb at ~(450, 252) -->
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 422 274
+                        C 412 248, 422 218, 446 214
+                        C 472 210, 484 238, 480 266
+                        C 476 290, 452 298, 432 290
+                        C 424 286, 422 280, 422 274
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 422 286 C 436 300, 466 300, 482 282" />
+              <circle class="pupil" cx="452" cy="248" r="8" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <!-- high center: bulb at ~(508, 196) -->
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 484 218
+                        C 478 196, 488 170, 510 168
+                        C 532 168, 542 192, 538 214
+                        C 534 234, 514 240, 496 234
+                        C 488 232, 484 224, 484 218
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 484 232 C 496 244, 524 244, 538 226" />
+              <circle class="pupil" cx="511" cy="194" r="7" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <!-- upper right: bulb at ~(570, 226) -->
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 546 244
+                        C 538 222, 548 198, 568 196
+                        C 590 196, 600 218, 596 240
+                        C 592 258, 572 266, 554 260
+                        C 548 256, 546 250, 546 244
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 546 258 C 558 270, 586 270, 598 254" />
+              <circle class="pupil" cx="572" cy="224" r="7" fill="#000" stroke="none" />
+            </g>
+            <g class="eye">
+              <!-- rightmost: bulb at ~(632, 240) -->
+              <path
+                class="eye-sclera"
+                fill="#fafafa"
+                d="
+                        M 610 258
+                        C 602 234, 614 210, 634 210
+                        C 656 212, 664 234, 660 256
+                        C 656 274, 636 282, 620 276
+                        C 612 272, 610 266, 610 258
+                        Z
+                    "
+              />
+              <path class="eye-base" d="M 610 274 C 622 286, 650 286, 662 268" />
+              <circle class="pupil" cx="635" cy="238" r="6.5" fill="#000" stroke="none" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+
+    <script>
+      // -------------------------------------------------------------
+      // Body silhouette as a parameterized list of cubic segments.
+      // Each segment: {c1, c2, p}  representing a "C c1 c2 p" continuation.
+      // Path starts at startPoint, then walks segments in order. The two
+      // tentacles are spliced into the body path between segments so the
+      // outline is one continuous closed curve.
+      // -------------------------------------------------------------
+      const startPoint = { x: 500, y: 170 };
+
+      // Helper to make a cubic-bezier segment.
+      function S(c1x, c1y, c2x, c2y, px, py) {
+        return { c1: { x: c1x, y: c1y }, c2: { x: c2x, y: c2y }, p: { x: px, y: py } };
+      }
+
+      // Body silhouette walks CLOCKWISE from top-center.
+      // Reference shape: WIDE rounded "head" at top (where eyes sit), narrowing
+      // through shoulders into a tapered narrower BODY below. Tentacles sprout
+      // sideways from the shoulder transition.
+      //   head:      x ≈ 305..695  (width ~390) at y ≈ 170..380
+      //   shoulders: head narrows inward between y ≈ 380..470
+      //   body:      x ≈ 365..635  (width ~270) at y ≈ 470..880
+      //   bottom:    rounded cap around y = 900
+      //
+      // CRITICAL for tentacle connection: the body curve approaching the
+      // tentacle entry must have its tangent pointing OUTWARD along the
+      // tentacle axis (not along the body wall). Likewise the curve leaving
+      // the tentacle exit must START with a tangent coming FROM the tentacle
+      // axis. Then the tentacle's top/bottom edges flow continuously out of
+      // and back into the body outline - no visible seam.
+      //
+      // Tentacle entry/exit on body wall (gap = 60px = base thickness):
+      //   right: entry (660, 415), exit (660, 475)  - axis +x
+      //   left:  entry (340, 475), exit (340, 415)  - axis -x
+      const segmentsTopRight = [
+        // top-right corner of HEAD
+        S(595, 170, 660, 185, 685, 230),
+        // right wall of head down. Final cubic ends at entry (660, 415)
+        // with c2 = (640, 415) so incoming tangent at entry is +x (horizontal).
+        S(700, 290, 700, 360, 690, 395),
+        S(680, 410, 640, 415, 660, 415),
+      ];
+      const segmentsRightToBottom = [
+        // From tentacle exit (660, 475). Path arrives heading -x. c1 placed
+        // LEFT of exit so outgoing tangent at exit is also -x, then curves
+        // DOWN-AND-INWARD to taper the torso narrower than the head.
+        S(640, 475, 670, 500, 660, 545),
+        // right body wall TAPERING INWARD as it descends.
+        // (head shoulder x≈660 → body widest at shoulder ~660, then taper
+        //  to about x=620 at mid-torso, x=605 near bottom.)
+        S(645, 615, 625, 720, 615, 800),
+        // bottom-right rounded corner, tucked inward
+        S(610, 845, 575, 870, 530, 875),
+        // bottom curve
+        S(510, 878, 490, 878, 470, 875),
+        // bottom-left rounded corner
+        S(425, 870, 390, 845, 385, 800),
+        // up left wall, tapering OUTWARD as it ascends to the wider shoulder
+        S(375, 720, 355, 615, 360, 545),
+        // approach left tentacle entry (340, 475) with horizontal tangent
+        S(340, 500, 360, 475, 340, 475),
+      ];
+      const segmentsLeftToTop = [
+        // From left tentacle exit (340, 415). Tentacle's last top-edge
+        // point sits at (320, 415). Path arrives at exit heading +x
+        // (rightward). c1 = (360, 415) so outgoing tangent at exit is
+        // +x, then curve up into head wall.
+        S(360, 415, 305, 410, 310, 395),
+        S(300, 360, 300, 290, 315, 230),
+        // top-left corner of head back to top
+        S(340, 185, 405, 170, 500, 170),
+      ];
+
+      // Rendering: emit segments as cubic-bezier continuations of the path.
+      function emitSegments(arr, d) {
+        for (const seg of arr) {
+          d += ` C${seg.c1.x.toFixed(2)},${seg.c1.y.toFixed(2)} ${seg.c2.x.toFixed(2)},${seg.c2.y.toFixed(2)} ${seg.p.x.toFixed(2)},${seg.p.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      // -------------------------------------------------------------
+      // Tentacles: a tentacle is defined by a STATIC centerline polyline
+      // (control points along its length) plus per-segment thickness.
+      // Per frame, each centerline point is displaced perpendicular to
+      // the local axis by a sine wave with phase that PROPAGATES along
+      // the length, producing a travelling rope wave.
+      // The silhouette path is then built as:
+      //   base entry on body
+      //   → top edge (displaced centerline + half-thickness perpendicular)
+      //   → smooth tip cap
+      //   → bottom edge (displaced centerline - half-thickness perpendicular)
+      //   → base exit on body
+      // Smoothing uses Catmull-Rom-to-Bezier so there are no kinks.
+      // -------------------------------------------------------------
+
+      // Each tentacle defines:
+      //   entry, exit: points on body where tentacle attaches (no wiggle)
+      //   axis:        unit vector pointing OUT of body along tentacle length
+      //   centerline:  array of {dist, thickness} along tentacle from base
+      //                (dist measured outward from base midpoint along axis)
+      //   wave:        animation params
+      const tentacleDefs = {
+        r4: {
+          entry: { x: 660, y: 415 },
+          exit: { x: 660, y: 475 },
+          axis: { x: 1, y: 0 },
+          points: [
+            { d: 20, th: 60, lat: 0 },
+            { d: 60, th: 50, lat: -3 },
+            { d: 105, th: 40, lat: 6 },
+            { d: 150, th: 30, lat: -2 },
+            { d: 190, th: 22, lat: 4 },
+            { d: 220, th: 14, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.55,
+            amp: 18,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+        l4: {
+          entry: { x: 340, y: 475 },
+          exit: { x: 340, y: 415 },
+          axis: { x: -1, y: 0 },
+          points: [
+            { d: 20, th: 60, lat: 0 },
+            { d: 60, th: 50, lat: 3 },
+            { d: 105, th: 40, lat: -6 },
+            { d: 150, th: 30, lat: 2 },
+            { d: 190, th: 22, lat: -4 },
+            { d: 220, th: 14, lat: 0 },
+          ],
+          wave: {
+            phase: Math.random() * Math.PI * 2,
+            freq: 0.5,
+            amp: 18,
+            phaseDelay: 0.9,
+            rampStart: 0.1,
+          },
+        },
+      };
+
+      // Catmull-Rom smoothing: convert a polyline of points to a smooth Bezier
+      // path string starting from points[0]. Returns the path WITHOUT the
+      // initial Move command (caller manages connection).
+      function smoothPathSuffix(points) {
+        let d = "";
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i - 1] || points[i];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = points[i + 2] || p2;
+          const c1x = p1.x + (p2.x - p0.x) / 6;
+          const c1y = p1.y + (p2.y - p0.y) / 6;
+          const c2x = p2.x - (p3.x - p1.x) / 6;
+          const c2y = p2.y - (p3.y - p1.y) / 6;
+          d += ` C${c1x.toFixed(2)},${c1y.toFixed(2)} ${c2x.toFixed(2)},${c2y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+        }
+        return d;
+      }
+
+      // Build a tentacle path suffix (from entry to exit, both on body).
+      // The path is: entry → smooth top edge along displaced centerline →
+      // rounded tip cap → smooth bottom edge → exit.
+      function buildTentacleSuffix(name, nowSec) {
+        const def = tentacleDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        // perpendicular (rotated 90° clockwise from axis)
+        const px = -ay,
+          py = ax;
+
+        // Compute displaced centerline points
+        const cl = def.points.map((p, i) => {
+          const ramp =
+            def.wave.rampStart + (1 - def.wave.rampStart) * (i / (def.points.length - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          // along-axis component is p.d, perpendicular component is lateral
+          const cx = base.x + ax * p.d + px * lateral;
+          const cy = base.y + ay * p.d + py * lateral;
+          return { x: cx, y: cy, th: p.th };
+        });
+
+        // Compute local tangents along the displaced centerline (for
+        // perpendicular offset of edges).
+        function tangentAt(i) {
+          const a = cl[Math.max(0, i - 1)];
+          const b = cl[Math.min(cl.length - 1, i + 1)];
+          const tx = b.x - a.x;
+          const ty = b.y - a.y;
+          const len = Math.hypot(tx, ty) || 1;
+          return { x: tx / len, y: ty / len };
+        }
+
+        // Top edge points (centerline + perpendicular*thickness/2).
+        // Body silhouette is walked CLOCKWISE, so for the right tentacle
+        // (axis +x) the "top edge" - traversed first after entry - must
+        // sit ABOVE the centerline (smaller y). Normal rotated 90° CW from
+        // tangent gives that orientation: (nx, ny) = (t.y, -t.x).
+        const topEdge = [def.entry];
+        for (let i = 0; i < cl.length; i++) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          topEdge.push({
+            x: cl[i].x + nx * (cl[i].th / 2),
+            y: cl[i].y + ny * (cl[i].th / 2),
+          });
+        }
+
+        // Bottom edge points (reverse, opposite perpendicular - sits BELOW
+        // centerline for right tentacle, completing the silhouette).
+        const bottomEdge = [];
+        for (let i = cl.length - 1; i >= 0; i--) {
+          const t = tangentAt(i);
+          const nx = t.y,
+            ny = -t.x;
+          bottomEdge.push({
+            x: cl[i].x - nx * (cl[i].th / 2),
+            y: cl[i].y - ny * (cl[i].th / 2),
+          });
+        }
+        bottomEdge.push(def.exit);
+
+        // Tip cap: a small arc connecting top edge end to bottom edge start.
+        // We use the last centerline point as the cap center and add 2 points
+        // forming a rounded U-turn around the tip in the direction of axis.
+        const tipPt = cl[cl.length - 1];
+        const tipT = tangentAt(cl.length - 1);
+        // forward beyond tip by half thickness
+        const capDist = tipPt.th / 2;
+        const capPt = {
+          x: tipPt.x + tipT.x * capDist,
+          y: tipPt.y + tipT.y * capDist,
+        };
+
+        // Build the full polyline: entry → topEdge → cap → bottomEdge → exit
+        const polyline = [...topEdge, capPt, ...bottomEdge];
+
+        return smoothPathSuffix(polyline);
+      }
+
+      function buildBodyD(nowSec) {
+        let d = `M${startPoint.x},${startPoint.y}`;
+        d = emitSegments(segmentsTopRight, d);
+        // splice right tentacle (entry already at last segment endpoint)
+        d += buildTentacleSuffix("r4", nowSec);
+        d = emitSegments(segmentsRightToBottom, d);
+        // splice left tentacle
+        d += buildTentacleSuffix("l4", nowSec);
+        d = emitSegments(segmentsLeftToTop, d);
+        d += " Z";
+        return d;
+      }
+
+      const bodyPath = document.getElementById("bodyPath");
+      const bodyClipPath = document.getElementById("bodyClipPath");
+
+      // Tentacle dots: positioned per-frame along the animated centerline of
+      // each tentacle so they wave together with the tentacle outline.
+      // Dot at fraction f along centerline: linearly interpolate between the
+      // displaced centerline points used by buildTentacleSuffix.
+      const tentacleDotDefs = [
+        { id: "r4-dot-0", tentacle: "r4", frac: 0.2 },
+        { id: "r4-dot-1", tentacle: "r4", frac: 0.55 },
+        { id: "r4-dot-2", tentacle: "r4", frac: 0.8 },
+        { id: "l4-dot-0", tentacle: "l4", frac: 0.2 },
+        { id: "l4-dot-1", tentacle: "l4", frac: 0.55 },
+        { id: "l4-dot-2", tentacle: "l4", frac: 0.8 },
+      ];
+      const tentacleDotEls = tentacleDotDefs.map((def) => ({
+        ...def,
+        el: document.getElementById(def.id),
+      }));
+
+      function tentacleCenterlineAt(name, frac, nowSec) {
+        const def = tentacleDefs[name];
+        const base = {
+          x: (def.entry.x + def.exit.x) / 2,
+          y: (def.entry.y + def.exit.y) / 2,
+        };
+        const ax = def.axis.x,
+          ay = def.axis.y;
+        const px = -ay,
+          py = ax;
+        // Index along centerline (continuous fraction)
+        const n = def.points.length;
+        const idxF = frac * (n - 1);
+        const i0 = Math.floor(idxF);
+        const i1 = Math.min(n - 1, i0 + 1);
+        const t = idxF - i0;
+        function pointAt(i) {
+          const p = def.points[i];
+          const ramp = def.wave.rampStart + (1 - def.wave.rampStart) * (i / (n - 1));
+          const wavePhase = def.wave.phase + i * def.wave.phaseDelay;
+          const wave =
+            Math.sin(nowSec * def.wave.freq * 2 * Math.PI + wavePhase) * def.wave.amp * ramp;
+          const lateral = p.lat + wave;
+          return {
+            x: base.x + ax * p.d + px * lateral,
+            y: base.y + ay * p.d + py * lateral,
+          };
+        }
+        const a = pointAt(i0);
+        const b = pointAt(i1);
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+      }
+
+      function animateBody(timestamp) {
+        const nowSec = timestamp / 1000;
+        const d = buildBodyD(nowSec);
+        bodyPath.setAttribute("d", d);
+        bodyClipPath.setAttribute("d", d);
+        // Position tentacle dots along the animated centerlines
+        for (const dot of tentacleDotEls) {
+          const p = tentacleCenterlineAt(dot.tentacle, dot.frac, nowSec);
+          dot.el.setAttribute("cx", p.x.toFixed(2));
+          dot.el.setAttribute("cy", p.y.toFixed(2));
+        }
+        requestAnimationFrame(animateBody);
+      }
+      requestAnimationFrame(animateBody);
+
+      // -------------------------------------------------------------
+      // Eyes: per-eye independent motion. Top-heavy bend via skewX
+      // pivoted at each eye's BOTTOM, so upper part moves more than base.
+      // Plus subtle drift, small overall rotate, vertical pulse, blinks.
+      // -------------------------------------------------------------
+      const eyeBase = [
+        // ecx = eye center x. eybot = base/socket y (pivot - eye top
+        // leans/sways while base stays planted on the head).
+        { cx: 375, cy: 218, range: 6, ecx: 374, eybot: 256 },
+        { cx: 452, cy: 248, range: 7, ecx: 452, eybot: 292 },
+        { cx: 511, cy: 194, range: 6, ecx: 511, eybot: 236 },
+        { cx: 572, cy: 224, range: 6, ecx: 572, eybot: 264 },
+        { cx: 635, cy: 238, range: 5, ecx: 636, eybot: 280 },
+      ];
+
+      const eyeEls = Array.from(document.querySelectorAll(".eye"));
+      const pupils = eyeEls.map((e) => e.querySelector(".pupil"));
+
+      const eyes = eyeBase.map((b) => ({
+        baseX: b.cx,
+        baseY: b.cy,
+        range: b.range,
+        ecx: b.ecx,
+        eybot: b.eybot,
+        curX: b.cx,
+        curY: b.cy,
+        tgtX: b.cx,
+        tgtY: b.cy,
+        nextPupilRetarget: 0,
+        // animated state: drift, overall rotate, top-heavy skew, vertical pulse
+        tx: 0,
+        ty: 0,
+        rot: 0,
+        skew: 0,
+        sy: 1,
+        ttx: 0,
+        tty: 0,
+        trot: 0,
+        tskew: 0,
+        tsy: 1,
+        nextEyeRetarget: 0,
+        blinkPhase: 0,
+        blinking: false,
+      }));
+
+      function pickPupilTarget(s, now) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * s.range;
+        s.tgtX = s.baseX + Math.cos(angle) * r;
+        s.tgtY = s.baseY + Math.sin(angle) * r;
+        s.nextPupilRetarget = now + 1500 + Math.random() * 1500;
+      }
+
+      function pickEyeTarget(s, now) {
+        s.ttx = (Math.random() * 2 - 1) * 2; // +/- 2 px drift
+        s.tty = (Math.random() * 2 - 1) * 2;
+        s.trot = (Math.random() * 2 - 1) * 4; // +/- 4 deg overall tilt
+        s.tskew = (Math.random() * 2 - 1) * 12; // +/- 12 deg top-heavy bend
+        s.tsy = 1 + (Math.random() * 2 - 1) * 0.06; // 0.94 - 1.06
+        s.nextEyeRetarget = now + 1500 + Math.random() * 2000;
+      }
+
+      function scheduleBlink(s) {
+        const delay = 3000 + Math.random() * 4000;
+        setTimeout(() => {
+          s.blinking = true;
+          setTimeout(() => {
+            s.blinking = false;
+            scheduleBlink(s);
+          }, 140);
+        }, delay);
+      }
+      eyes.forEach(scheduleBlink);
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function animateEyes(ts) {
+        eyes.forEach((s, i) => {
+          if (ts >= s.nextPupilRetarget) pickPupilTarget(s, ts);
+          if (ts >= s.nextEyeRetarget) pickEyeTarget(s, ts);
+
+          s.curX = lerp(s.curX, s.tgtX, 0.08);
+          s.curY = lerp(s.curY, s.tgtY, 0.08);
+          pupils[i].setAttribute("cx", s.curX.toFixed(2));
+          pupils[i].setAttribute("cy", s.curY.toFixed(2));
+
+          s.tx = lerp(s.tx, s.ttx, 0.06);
+          s.ty = lerp(s.ty, s.tty, 0.06);
+          s.rot = lerp(s.rot, s.trot, 0.06);
+          s.skew = lerp(s.skew, s.tskew, 0.06);
+          s.sy = lerp(s.sy, s.tsy, 0.06);
+
+          const targetBlink = s.blinking ? 1 : 0;
+          s.blinkPhase = lerp(s.blinkPhase, targetBlink, 0.45);
+          const blinkScaleY = 1 - s.blinkPhase * 0.95;
+
+          // Pivot at the eye BOTTOM so skewX makes the top lean more than the base.
+          // Compose: translate(ecx+tx, eybot+ty) rotate skewX scale(1, sy*blink) translate(-ecx, -eybot)
+          const finalSy = s.sy * blinkScaleY;
+          const t1x = s.ecx + s.tx;
+          const t1y = s.eybot + s.ty;
+          eyeEls[i].setAttribute(
+            "transform",
+            `translate(${t1x.toFixed(2)} ${t1y.toFixed(2)}) ` +
+              `rotate(${s.rot.toFixed(2)}) ` +
+              `skewX(${s.skew.toFixed(2)}) ` +
+              `scale(1 ${finalSy.toFixed(3)}) ` +
+              `translate(${(-s.ecx).toFixed(2)} ${(-s.eybot).toFixed(2)})`
+          );
+        });
+        requestAnimationFrame(animateEyes);
+      }
+      requestAnimationFrame(animateEyes);
+
+      // -------------------------------------------------------------
+      // Mouth: hand-drawn squiggly H. Smooth curves, idle wiggle + bursts.
+      // -------------------------------------------------------------
+      const mouthPath = document.getElementById("mouthPath");
+
+      const MX = 500,
+        MY = 470;
+      const leftX = MX - 30,
+        rightX = MX + 30;
+      const topY = MY - 30,
+        botY = MY + 30;
+
+      const baseLeft = [
+        { x: leftX, y: topY },
+        { x: leftX - 3, y: topY + 15 },
+        { x: leftX + 2, y: topY + 30 },
+        { x: leftX - 2, y: topY + 45 },
+        { x: leftX, y: botY },
+      ];
+      const baseRight = [
+        { x: rightX, y: topY },
+        { x: rightX + 3, y: topY + 15 },
+        { x: rightX - 2, y: topY + 30 },
+        { x: rightX + 2, y: topY + 45 },
+        { x: rightX, y: botY },
+      ];
+      const baseBar = [];
+      const barSteps = 10;
+      for (let i = 0; i <= barSteps; i++) {
+        const t = i / barSteps;
+        const x = leftX + 3 + (rightX - leftX - 6) * t;
+        const y = MY + Math.sin(t * Math.PI * 2.2) * 4;
+        baseBar.push({ x, y });
+      }
+
+      const wiggleIntervalSecs = 3;
+      const wiggleDurationSecs = 2.0;
+      const idleAmp = 1.6;
+      const burstAmp = 3.0;
+      let wiggleStart = null;
+      let inBurst = false;
+
+      function fadeFactor(elapsed, total) {
+        const half = total / 2;
+        return elapsed < half ? elapsed / half : (total - elapsed) / half;
+      }
+
+      function smoothD(points) {
+        if (points.length < 2) return "";
+        const d = `M${points[0].x.toFixed(2)},${points[0].y.toFixed(2)}`;
+        return d + smoothPathSuffix(points);
+      }
+
+      function strokeD(points, nowSec, amp, phaseOffset) {
+        const jittered = points.map((p, i) => {
+          const wx = Math.sin(nowSec * 3.0 + phaseOffset + i * 0.9) * amp;
+          const wy = Math.cos(nowSec * 2.6 + phaseOffset + i * 1.1) * amp;
+          return { x: p.x + wx, y: p.y + wy };
+        });
+        return smoothD(jittered);
+      }
+
+      function buildMouthD(nowSec, burstFade) {
+        const amp = idleAmp + burstAmp * burstFade;
+        return (
+          strokeD(baseLeft, nowSec, amp, 0.0) +
+          " " +
+          strokeD(baseBar, nowSec, amp, 1.7) +
+          " " +
+          strokeD(baseRight, nowSec, amp, 3.4)
+        );
+      }
+
+      function animateMouth(timestamp) {
+        const nowSec = timestamp / 1000;
+        let burstFade = 0;
+        if (inBurst) {
+          if (wiggleStart === null) wiggleStart = timestamp;
+          const elapsed = (timestamp - wiggleStart) / 1000;
+          if (elapsed < wiggleDurationSecs) {
+            burstFade = fadeFactor(elapsed, wiggleDurationSecs);
+          } else {
+            inBurst = false;
+            wiggleStart = null;
+            setTimeout(() => {
+              inBurst = true;
+            }, wiggleIntervalSecs * 1000);
+          }
+        }
+        mouthPath.setAttribute("d", buildMouthD(nowSec, burstFade));
+        requestAnimationFrame(animateMouth);
+      }
+      setTimeout(() => {
+        inBurst = true;
+      }, wiggleIntervalSecs * 1000);
+      requestAnimationFrame(animateMouth);
+
+      // -------------------------------------------------------------
+      // Whole-body twitch every 8-15s
+      // -------------------------------------------------------------
+      const root = document.getElementById("monster-root");
+      function scheduleTwitch() {
+        const delay = 8000 + Math.random() * 7000;
+        setTimeout(() => {
+          root.classList.add("twitch");
+          setTimeout(() => {
+            root.classList.remove("twitch");
+            scheduleTwitch();
+          }, 260);
+        }, delay);
+      }
+      scheduleTwitch();
+    </script>
+  </body>
+</html>
