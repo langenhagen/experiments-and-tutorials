@@ -1,0 +1,10 @@
+[project]
+name = "marimo-hello"
+version = "0.1.0"
+description = "Try marimo with two notebooks in one uv project"
+readme = "README.md"
+requires-python = ">=3.13.3"
+dependencies = [
+    "marimo>=0.14.10",
+    "plotly>=6.4.0",
+]
