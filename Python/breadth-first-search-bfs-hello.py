@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Showcase implementations of Breadth-first-search (BFS) for graph traversal.
 
+Use BFS when finding solutions with fewest edges.
+
 author: andreasl
 """
 
