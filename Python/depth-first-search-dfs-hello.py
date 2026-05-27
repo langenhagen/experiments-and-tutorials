@@ -42,7 +42,7 @@ graph: AdjacencyList = {
     "O": ["A"],
 }
 
-print("--- 1 naive DFS ---\n")
+print("--- 1 Simple DFS ---\n")
 
 
 def process(node: Node) -> None:
@@ -55,7 +55,7 @@ def dfs(
     graph: AdjacencyList,
     visited: set[Node] | None = None,
 ) -> None:
-    """Simple depth-first search through an adjacency list."""
+    """Run as imple depth-first search through an adjacency list."""
     visited = visited or set()
     if node in visited:
         return
@@ -134,7 +134,76 @@ print()
 found = dfs_with_goal("A", graph, goal="not available")
 print(f"{found=}")  # false
 
-print("\n--- 4 DFS with path to goal ---\n")
+print("\n--- 4 DFS with backtracking ---\n")
+
+
+def dfs_backtracking(
+    node: Node,
+    graph: AdjacencyList,
+    goal: Node,
+    visited: set[Node] | None = None,
+    path: list[Node] | None = None,
+) -> list[list[Node]]:
+    """DFS with backtracking. Find every path from `node` to `goal`.
+
+    Unlike plain DFS, which permanently marks nodes as visited to avoid
+    revisiting them globally, backtracking only marks nodes for the
+    current exploration branch. This means alternative routes that pass
+    through the same node via different ancestors are still considered.
+    Use this whenever you need all valid configurations or paths in a
+    search space (e.g. N-Queens, Sudoku, maze solving, permutations).
+
+    The core pattern:
+      1. Mark    — add current node to `visited` and `path`
+      2. Explore — recurse into unvisited children
+      3. Unmark  — remove node from both after returning, so other
+                   branches can still use it
+
+    Return a list of all paths (list of nodes) that reach `goal`.
+    Return an empty list if no path exists.
+
+    DFS is for getting *a* solution and dfs w/ backtracking is for **all**
+    dfs solutions.
+    """
+    visited = visited or set()
+    path = path or []
+    if node in visited:
+        return []
+
+    visited.add(node)
+    path.append(node)
+
+    paths = [path.copy()] if is_goal(node, goal=goal) else []
+
+    for child in graph[node]:
+        if child not in visited:
+            paths.extend(dfs_backtracking(child, graph, goal, visited, path))
+
+    # those 2 reverts to both path and visited to their state before this node
+    # was entered make it backtracking
+    path.pop()
+    visited.remove(node)
+
+    return paths
+
+
+paths = dfs_backtracking("A", graph, goal="K")
+for p in paths:
+    print(f"{p=}")
+print(f"total paths={len(paths)}")
+
+print()
+paths = dfs_backtracking("A", graph, goal="N")
+for p in paths:
+    print(f"{p=}")
+print(f"total paths={len(paths)}")
+
+print()
+paths = dfs_backtracking("A", graph, goal="not available")
+print(f"{paths=}")
+print(f"total paths={len(paths)}")
+
+print("\n--- 5 DFS with path to goal ---\n")
 
 
 def dfs_with_path(
