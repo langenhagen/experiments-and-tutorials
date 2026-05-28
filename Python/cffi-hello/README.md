@@ -1,5 +1,5 @@
 # CFFI Hello
-Showcase the usage of the 3rd party library CFFI.
+Showcase the usage of the 3rd party library CFFI for a foreign functin interface (FFI).
 
 See https://cffi.readthedocs.io
 
