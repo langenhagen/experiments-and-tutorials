@@ -8,6 +8,9 @@ Thus, guaranteed constant access to the smallest (largest) item at index 0.
 
 If you work with Python, rather use the standard library's package `heapq`
 to do thing.
+
+This method here uses what is called Floyd's algorithm.
+- Build heap (heapify entire array): O(n)
 """
 
 import heapq
