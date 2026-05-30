@@ -8,5 +8,6 @@ dependencies = [
     "bpython>=0.25",
     "chatterbox-tts>=0.1.1",
     "gradio>=5.33.1",
+    "numpy>=2.1",
     "setuptools>=80.9.0,<81.0", # fixes an otherwise occuring `ModuleNotFoundError: No module named 'pkg_resources'` error
 ]
