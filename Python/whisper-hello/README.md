@@ -20,6 +20,29 @@ The script auto-detects one of:
 
 Install at least one of these if clipboard copy fails.
 
+For streaming (`stream_stdout.py`):
+
+```bash
+sudo apt install libportaudio2
+```
+
+GPU acceleration for faster-whisper (CUDA 12); skip if using `--device cpu`:
+
+```bash
+sudo apt install libcublas12
+```
+
+On RTX 50-series (Blackwell) GPUs, CUDA 12 cuBLAS is incompatible.
+Install CUDA 13 cuBLAS and symlink it so ctranslate2 picks it up:
+
+```bash
+sudo apt install libcublas-13-1
+sudo ln -sf /usr/local/cuda-13.1/targets/x86_64-linux/lib/libcublas.so.13 \
+            /usr/lib/x86_64-linux-gnu/libcublas.so.12
+sudo ln -sf /usr/local/cuda-13.1/targets/x86_64-linux/lib/libcublasLt.so.13 \
+            /usr/lib/x86_64-linux-gnu/libcublasLt.so.12
+```
+
 ## Usage
 
 ```bash

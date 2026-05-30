@@ -1,4 +1,4 @@
-#!/usr/bin.env python3
+#!/usr/bin/env python3
 """Showcase `faster-whisper` for microphone speech-to-text, here with clipboard
 output.
 
@@ -109,6 +109,7 @@ def whisper_to_text(
         device=args.device,
         compute_type=args.compute_type,
     )
+    stderr(f"Using device: {model.model.device}\n")
     segments, info = model.transcribe(
         str(wav_path),
         task=args.task,

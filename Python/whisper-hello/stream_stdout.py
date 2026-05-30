@@ -149,7 +149,7 @@ def run_stream(args: argparse.Namespace) -> None:
         device=args.device,
         compute_type=args.compute_type,
     )
-    stderr("Model ready.\n")
+    stderr(f"Model ready. Using device: {model.model.device}\n")
 
     pending_chunks: list[np.ndarray] = []
     lock = threading.Lock()
