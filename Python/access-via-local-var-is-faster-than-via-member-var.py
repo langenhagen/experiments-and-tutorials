@@ -1,4 +1,4 @@
-"""Showcase that access via member vars is slower than acces by local references."""
+"""Showcase that access via member vars is slower than access by local references."""
 
 from timeit import timeit
 
