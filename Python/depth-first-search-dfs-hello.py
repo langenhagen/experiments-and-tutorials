@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Showcase implementations of Depth-first-search (DFS) for graph traversal.
 
+O(V + E) time
+O(V) space
+
 author: andreasl
 """
 
