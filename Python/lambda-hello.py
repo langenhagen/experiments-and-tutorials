@@ -7,10 +7,12 @@ Use them for short, throw-away operations where a named def would be overkill.
 
 from collections.abc import Callable
 
+# ruff linter rule E731: do not assign a lambda expression, use a def
+# ruff: noqa: E731
+
 print("--- 1 basic syntax ---\n")
 
-# ruff linter rule E731: do not assign a lambda expression, use a def
-double = lambda x: x * 2  # noqa: E731
+double = lambda x: x * 2
 print(f"{double(5)=}")
 print(f"{(lambda x: x * 3)(5)=}")
 
@@ -45,7 +47,7 @@ def add_def(a: int, b: int) -> int:
     return a + b
 
 
-add_lambda = lambda a, b: a + b  # noqa: E731
+add_lambda = lambda a, b: a + b
 
 print(f"{add_def(3, 4)=}")
 print(f"{add_lambda(3, 4)=}")
@@ -56,5 +58,17 @@ print("\n--- 4 lambda limitations ---\n")
 # lambda x: x; x  # would be a SyntaxError
 
 # but you can use a tuple to sequence expressions
-f = lambda x: (x, x * 2, x * 3)  # noqa: E731
+f = lambda x: (x, x * 2, x * 3)
 print(f"{f(3)=}")
+
+print("\n--- 5 lambda with several arguments ---\n")
+
+sum3 = lambda a, b, c: a + b + c
+print(f"{sum3(1, 2, 3)=}")
+
+avg = lambda a, b, c: (a + b + c) / 3
+print(f"{avg(10, 20, 30)=}")
+
+# variadic args also work
+sum_all = lambda *args: sum(args)
+print(f"{sum_all(1, 2, 3, 4, 5)=}")
