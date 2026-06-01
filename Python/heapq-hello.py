@@ -70,6 +70,8 @@ smallest = heapq.heappop(data)  # O(log n)
 print(f"heappop(data)={smallest}, {data=}")
 
 print("\n--- 3 heappushpop() - push item, then pop smallest in one go ---\n")
+# The combined action runs more efficiently than heappush() followed by
+# a separate call to heappop().
 
 smallest = heapq.heappushpop(data, 4)  # push 4, then pop & return smallest
 print(f"heappushpop(data, 4)={smallest}, {data=}")
@@ -107,6 +109,27 @@ heapq.heappush(myheap, j)
 heapq.heappush(myheap, k)
 
 print(f"{myheap=}")
+
+# nsmallest can also take a key arg
+smallest_two = heapq.nsmallest(2, myheap, key=lambda x: x[0])
+print(f"nsmallest={smallest_two}")
+
 print(f"{heapq.heappop(myheap)=}")
 print(f"{heapq.heappop(myheap)=}")
 print(f"{heapq.heappop(myheap)=}")
+
+print("\n--- 8 - max-heap ---\n")
+
+data = [1, 7, 5, 3, 9, 8]
+print(f"initial             {data=}")
+heapq.heapify_max(data)
+print(f"heapify_max         {data=}")
+
+heapq.heappush_max(data, 6)
+print(f"heappush_max(6)     {data=}")
+
+largest = heapq.heappop_max(data)
+print(f"heappop_max()       {largest=}, {data=}")
+
+replaced = heapq.heapreplace_max(data, 4)
+print(f"heapreplace_max(4)  replaced={replaced}, {data=}")
