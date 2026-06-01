@@ -28,7 +28,10 @@ For reference:
 | Min heap       | O(log n)  |  O(log n)   |   O(n)    |   O(1)    |
 +----------------+-----------+-------------+-----------+-----------+
 
-- Build heap (heapify entire array): O(n)
+- heapify: O(n)
+- heappush: O(log n)
+- heappop: O(log n)
+- heappushpop: O(log n)
 
 See:
 - https://docs.python.org/3/library/heapq.html
