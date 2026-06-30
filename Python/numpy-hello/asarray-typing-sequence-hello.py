@@ -2,15 +2,14 @@
 """Showcase np.asarray with typing.Sequence.
 
 Fyi, ndarray is not a Sequence: https://stackoverflow.com/questions/76082807/why-numpy-array-is-not-of-sequence-type.
+
+Initially done in numpy==1.26.4
 """
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING
 
 import numpy as np
-
-if TYPE_CHECKING:
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 def to_numpy_array(seq: Sequence[float]) -> NDArray:

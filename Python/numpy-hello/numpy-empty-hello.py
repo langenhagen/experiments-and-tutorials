@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Fun and games with random uninitialized values."""
+"""Fun and games with random uninitialized values.
+
+Initially done with numpy==1.26.4 - there the values seemed random but with
+newer numpy versions, the result image seems boring black.
+"""
 
 import sys
 from itertools import count
@@ -14,13 +18,7 @@ def main() -> int:
         key = cv2.waitKey(1)
         if key == ord("q"):
             break
-        elif key == 81:  # left key
-            pass
-        elif key == 83:  # right key
-            pass
-        elif key == 82:  # up key
-            pass
-        elif key == 84:  # down key
+        if key == 81 or key == 83 or key == 82 or key == 84:  # left key
             pass
 
         data = np.empty(shape=(30, 30, 3), dtype=float)

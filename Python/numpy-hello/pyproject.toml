@@ -1,0 +1,11 @@
+[project]
+name = "numpy-hello"
+version = "0.1.0"
+description = "NumPy hello-world experiments"
+requires-python = ">=3.11"
+dependencies = [
+    "bpython",
+    "mypy",
+    "numpy",
+    "opencv-python",
+]
