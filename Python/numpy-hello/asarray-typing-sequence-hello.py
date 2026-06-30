@@ -13,6 +13,7 @@ from numpy.typing import NDArray
 
 
 def to_numpy_array(seq: Sequence[float]) -> NDArray:
+    """Convert a sequence to a numpy arr."""
     return np.asarray(seq)
 
 

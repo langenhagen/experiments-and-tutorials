@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Fun and games with random uninitialized values.
 
-Initially done with numpy==1.26.4 - there the values seemed random but with
-newer numpy versions, the result image seems boring black.
+Initially done with numpy==1.26.4 - there the values seemed random, still seems
+the case with numpy>2, but is ...flaky? and sometimes just black, apparently
+esp. for higher matrix resolutions.
 """
 
 import sys
@@ -14,7 +15,7 @@ import numpy as np
 
 def main() -> int:
     """Program main entry point."""
-    for i in count(0):
+    for _ in count(0):
         key = cv2.waitKey(1)
         if key == ord("q"):
             break
