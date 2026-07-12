@@ -1,4 +1,22 @@
-# Python-related project configuration.
+[project]
+name = "store"
+requires-python = ">=3.11"
+version = "0.1.0"
+
+[dependency-groups]
+dev = [
+    "black",
+    "bpython",
+    "coverage[toml]",
+    "flake8",
+    "isort",
+    "mypy",
+    "pylint",
+    "pytest",
+    "pytest-random-order",
+    "ruff",
+    "vulture",
+]
 
 [tool.coverage.run]
 command_line = "-m pytest -vv --random-order"

@@ -1,0 +1,8 @@
+[project]
+name = "selenium-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "selenium",
+    "webdriver-manager",
+]

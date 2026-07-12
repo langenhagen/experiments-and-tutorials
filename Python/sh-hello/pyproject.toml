@@ -1,0 +1,7 @@
+[project]
+name = "sh-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "sh",
+]

@@ -1,4 +1,0 @@
-bpython
-gradio
-coqui-tts[all]
-torch

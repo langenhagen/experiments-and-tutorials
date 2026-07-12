@@ -1,5 +1,13 @@
 # Python-related project configuration.
 
+[project]
+name = "pytest-logging-hello"
+version = "0.1.0"
+dependencies = [
+    "pytest",
+    "requests",
+]
+
 [tool.pytest.ini_options]
 log_cli = true
 log_cli_level = "DEBUG"

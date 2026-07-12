@@ -25,4 +25,8 @@ sudo udevadm trigger
 ```
 
 
-## 
+## Setup
+
+```bash
+uv sync
+```

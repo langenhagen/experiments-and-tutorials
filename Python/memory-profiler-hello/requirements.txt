@@ -1,3 +1,0 @@
-bpython
-matplotlib
-memory_profiler

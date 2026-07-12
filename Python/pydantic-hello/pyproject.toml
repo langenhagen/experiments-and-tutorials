@@ -1,0 +1,7 @@
+[project]
+name = "pydantic-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "pydantic",
+]

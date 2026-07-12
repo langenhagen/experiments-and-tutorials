@@ -1,0 +1,7 @@
+[project]
+name = "flatten_json_hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "flatten_json",
+]

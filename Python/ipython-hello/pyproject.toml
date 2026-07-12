@@ -1,0 +1,10 @@
+[project]
+name = "ipython-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "fastapi",
+    "ipython",
+    "pydantic",
+    "uvicorn",
+]

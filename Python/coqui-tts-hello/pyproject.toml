@@ -1,0 +1,10 @@
+[project]
+name = "coqui-tts-hello"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "bpython",
+    "gradio",
+    "coqui-tts[all]",
+    "torch",
+]

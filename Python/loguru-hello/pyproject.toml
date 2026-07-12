@@ -1,0 +1,7 @@
+[project]
+name = "loguru-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "loguru",
+]

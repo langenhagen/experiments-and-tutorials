@@ -1,0 +1,10 @@
+[project]
+name = "pyarrow-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "flatten-json",
+    "pandas",
+    "parquet-viewer",
+    "pyarrow",
+]

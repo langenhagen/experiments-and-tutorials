@@ -1,0 +1,15 @@
+[project]
+name = "imaginairy-hello"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "black[isort]",
+    "bpython",
+    "darker[isort]",
+    "imaginairy",
+    "isort",
+    "numpy",
+    "opencv-python",
+    "Pillow",
+    "stopit",
+]

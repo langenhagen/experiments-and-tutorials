@@ -1,0 +1,7 @@
+[project]
+name = "nicegui-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "nicegui",
+]

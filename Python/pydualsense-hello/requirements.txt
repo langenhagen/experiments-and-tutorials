@@ -1,7 +1,0 @@
-black
-bpython
-isort
-pydualsense
-pygame
-PyOpenGL
-wat-inspector

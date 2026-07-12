@@ -1,5 +1,17 @@
-# Python-related project configuration.
-# A start, but not perfect, e.g. pylint has also issues with alembic.
+[project]
+name = "alembic-hello"
+version = "0.1.0"
+description = "A small showcase on how to use alembic with sqlalchemy on a PostgreSQL database."
+dependencies = [
+    "alembic",
+    "black",
+    "bpython",
+    "flake8",
+    "mypy",
+    "psycopg2",
+    "pylint",
+    "sqlalchemy",
+]
 
 [tool.isort]
 profile = "black"

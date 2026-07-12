@@ -1,0 +1,9 @@
+[project]
+name = "nats-py-hello"
+version = "0.1.0"
+description = "Showcase the NATS client nats-py"
+requires-python = ">=3.10"
+dependencies = [
+    "bpython",
+    "nats-py>=2.10.0,<3.0.0",
+]

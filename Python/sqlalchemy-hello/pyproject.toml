@@ -1,0 +1,8 @@
+[project]
+name = "sqlalchemy-hello"
+version = "0.1.0"
+requires-python = ">=3.6"
+dependencies = [
+    "bpython",
+    "SQLAlchemy>=1.2,<2",
+]

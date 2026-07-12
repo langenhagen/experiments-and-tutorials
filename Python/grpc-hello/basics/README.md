@@ -4,7 +4,7 @@ Based on the basics tutorial: https://grpc.io/docs/languages/python/basics/
 
 
 ```bash
-scripts/setup.sh
+uv sync
 scripts/generate_grpc_code.py
 ```
 

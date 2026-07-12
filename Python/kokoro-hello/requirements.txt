@@ -1,4 +1,0 @@
-audiblez  # optional extra tool based on kokoro; uses kokoro to create audiobooks from .epub ebooks
-bpython
-kokoro
-soundfile

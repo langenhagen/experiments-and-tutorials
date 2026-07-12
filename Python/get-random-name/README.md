@@ -2,18 +2,15 @@
 Get a random name via behindthename.com/random.
 
 ## Setup
-Set up a Python virtual environment and install the requirements, e.g. via `setup.sh`:
-E.g., run:
+Set up the project with [uv](https://docs.astral.sh/uv/):
 ```bash
-bash setup.sh
+uv sync
 ```
 
 ## Run
 Prior to running the script, review the code. Inspect and modify the search queries to your needs.
 
-Run the script in the virtual environment you created when you set the project up.
-E.g., run:
+Run the script in the virtual environment:
 ```bash
-source .venv/bin/activate
-python random_name.py
+uv run random_name.py
 ```

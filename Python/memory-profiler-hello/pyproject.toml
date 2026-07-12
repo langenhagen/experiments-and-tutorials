@@ -1,0 +1,8 @@
+[project]
+name = "memory-profiler-hello"
+version = "0.1.0"
+dependencies = [
+    "bpython",
+    "matplotlib",
+    "memory-profiler",
+]

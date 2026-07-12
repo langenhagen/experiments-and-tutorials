@@ -3,11 +3,18 @@ A small showcase on how to use `alembic` with `sqlalchemy` on a `PostgreSQL` dat
 
 Show how to use `alembic` to create an enum and a table in `PostgreSQL`.
 
+## Prerequisites
+For `psycopg2` you need the PostgreSQL development headers:
+```bash
+# Debian/Ubuntu
+sudo apt-get install -y libpq-dev
+```
+
 ## Usage
 Basic usage:
 ```bash
-bash setup.sh
-source .venv/bin/activate.fish
+uv sync
+source .venv/bin/activate
 
 # if the folder `alembic/` is missing
 alembic init alembic

@@ -1,8 +1,0 @@
-alembic
-black
-bpython
-flake8
-mypy
-psycopg2
-pylint
-SQLAlchemy

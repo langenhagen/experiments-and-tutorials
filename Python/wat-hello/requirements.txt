@@ -1,2 +1,0 @@
-bpython
-wat-inspector

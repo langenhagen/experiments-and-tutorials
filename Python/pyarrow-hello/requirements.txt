@@ -1,5 +1,0 @@
-bpython
-flatten-json
-pandas
-parquet-viewer
-pyarrow

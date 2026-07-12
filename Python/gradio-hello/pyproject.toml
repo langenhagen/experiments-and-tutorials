@@ -1,0 +1,8 @@
+[project]
+name = "gradio-hello"
+version = "0.1.0"
+description = "Showcase the programmatic quick and easy GUI library Gradio"
+dependencies = [
+    "bpython",
+    "gradio",
+]

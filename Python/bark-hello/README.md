@@ -3,6 +3,11 @@ Showcase Bark, a transformer-based text-to-audio model.
 
 https://github.com/suno-ai/bark
 
+## Setup
+```bash
+uv sync
+```
+
 Did not get it to work locally, but got it to work on a PC rig with a 2080 TI. I then opened an
 interactive jupyter session and forwarded the port via SSH:
 

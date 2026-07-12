@@ -1,0 +1,7 @@
+[project]
+name = "anyio-hello"
+version = "0.1.0"
+dependencies = [
+    "anyio",
+    "bpython",
+]

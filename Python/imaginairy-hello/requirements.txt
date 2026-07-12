@@ -1,9 +1,0 @@
-black[isort]
-bpython
-darker[isort]
-imaginairy
-isort
-numpy
-opencv-python
-Pillow
-stopit
