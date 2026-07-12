@@ -1,0 +1,40 @@
+graph TD
+    %% HPA wiring in Kubernetes
+    %%
+    %% An HPA is bound to exactly one workload via spec.scaleTargetRef: a resource
+    %% that exposes the /scale subresource (Deployment, StatefulSet, ReplicaSet, or a
+    %% CRD that implements scale). Never a Service, never a bare Pod.
+    %%
+    %% Loop (every 15s by default):
+    %%   1. GET target/scale, giving current replica count + status.selector
+    %%   2. Ask metrics.k8s.io for the metrics of the pods matching that selector
+    %%   3. desired = ceil(current * currentMetric / targetMetric)
+    %%   4. PUT desired back to target/scale
+    %% The Deployment controller takes it from there: ReplicaSet, then Pods.
+    %% The HPA itself never touches a Pod.
+    %%
+    %% Notes: resource metrics require resources.requests to be set (a CPU target is a
+    %% percentage OF the request). Drop spec.replicas from the Deployment manifest once
+    %% an HPA owns it, or GitOps and the HPA will fight over the field.
+
+    HPA["HorizontalPodAutoscaler<br/>spec.scaleTargetRef"]
+    DEP["Deployment<br/>has /scale subresource"]
+    RS["ReplicaSet<br/>owns the pod template"]
+    POD["Pods<br/>found via label selector"]
+    MET["metrics.k8s.io<br/>pod CPU / memory"]
+
+    MET -->|"reads current usage"| HPA
+    HPA -->|"PUT desired replicas"| DEP
+    DEP -->|"updates"| RS
+    RS -->|"creates / deletes"| POD
+    POD -.->|"scraped by metrics-server"| MET
+
+    classDef ctrl fill:#EEEDFE,stroke:#534AB7,color:#3C3489
+    classDef work fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+    classDef pods fill:#FAECE7,stroke:#993C1D,color:#712B13
+    classDef obs  fill:#E1F5EE,stroke:#0F6E56,color:#085041
+
+    class HPA ctrl
+    class DEP,RS work
+    class POD pods
+    class MET obs
