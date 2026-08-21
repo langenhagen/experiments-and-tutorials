@@ -1,0 +1,12 @@
+[project]
+name = "qwen3-tts-hello"
+version = "0.1.0"
+description = "Local Qwen3-TTS experiments: demo script and audiobook creation from chapter text files"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "qwen-tts>=0.1.1",
+    "soundfile>=0.14.0",
+    "torch>=2.13.0",
+    "torchvision>=0.28.0",
+]
