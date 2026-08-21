@@ -1,6 +1,7 @@
 [project]
 name = "kokoro-hello"
 version = "0.1.0"
+description = "Kokoro TTS experiments: demo scripts and audiobook creation."
 requires-python = ">=3.12"
 dependencies = [
     "audiblez",
