@@ -1,0 +1,13 @@
+[project]
+name = "emotion2vec-hello"
+version = "0.1.0"
+description = "Showcase emotion2vec+ large speech emotion recognition with a Gradio interface"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "funasr>=1.2,<2",
+    "gradio>=5,<6",
+    "modelscope>=1.26,<2",
+    "pandas>=2,<3",
+    "torch>=2,<3",
+]
