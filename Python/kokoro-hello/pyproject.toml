@@ -7,5 +7,6 @@ dependencies = [
     "audiblez",
     "bpython",
     "kokoro",
+    "sounddevice>=0.5.6",
     "soundfile",
 ]

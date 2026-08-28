@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Go through the English voices for to see how which one sounds.
+"""Go through the English voices to sample how each one sounds.
 
 - voice list based on: https://github.com/nazdridoy/kokoro-tts
 
@@ -17,14 +17,13 @@ Examples:
 import sys
 
 import soundfile as sf
+
 from kokoro import KPipeline
 
 if len(sys.argv) > 1:
-    filename = sys.argv[1]
-    with open(filename, encoding="utf-8") as f:
+    with open(sys.argv[1], encoding="utf-8") as f:
         text = f.read()
 else:
-    filename = ""
     text = "The quick brown fox jumps over the lazy dog."
 
 american_female = [
