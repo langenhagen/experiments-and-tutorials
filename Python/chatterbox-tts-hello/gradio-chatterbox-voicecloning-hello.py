@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Interactive Chatterbox Voice Cloning Gradio browser app."""
+"""Interactive Chatterbox Voice Cloning Gradio browser app.
+
+Ther<S-F6>e is a max length to the target audio file, it should allegedly not be longer than,
+roughly 1 1/2 minutes, otherwise chatterbox crashes with some error like
+
+    RuntimeError: The size of tensor a (63447) must match the size of tensor b (2048) at
+    non-singleton dimension 1
+"""
+
 
 import gradio as gr
 import torch
