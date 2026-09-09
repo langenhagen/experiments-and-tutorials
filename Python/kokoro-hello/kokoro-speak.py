@@ -32,15 +32,26 @@ DESCRIPTION = (
 SAMPLERATE = 24000
 VOICE = "af_heart"
 LANG_CODE = "a"
-XCLIP = shutil.which("xclip") or "xclip"
+
+
+def _clipboard_read_command() -> list[str]:
+    """Return the OS-appropriate command that prints the clipboard to stdout."""
+    if sys.platform == "darwin":
+        return ["pbpaste"]
+    if shutil.which("wl-paste"):
+        return ["wl-paste", "--no-newline"]
+    if shutil.which("xclip"):
+        return ["xclip", "-selection", "clipboard", "-o"]
+    if shutil.which("xsel"):
+        return ["xsel", "--clipboard", "--output"]
+    raise RuntimeError(
+        "No clipboard utility found (need pbpaste, wl-paste, xclip, or xsel)"
+    )
 
 
 def read_clipboard() -> str:
     """Return the text currently stored in the clipboard."""
-    return subprocess.check_output(
-        [XCLIP, "-selection", "clipboard", "-o"],
-        text=True,
-    )
+    return subprocess.check_output(_clipboard_read_command(), text=True)
 
 
 def main() -> None:

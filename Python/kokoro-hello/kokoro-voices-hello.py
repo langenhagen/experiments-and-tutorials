@@ -17,7 +17,6 @@ Examples:
 import sys
 
 import soundfile as sf
-
 from kokoro import KPipeline
 
 if len(sys.argv) > 1:
