@@ -9,6 +9,8 @@ Usage:
     echo "hi" | kokoro-speak.py       speak text piped to stdin
     kokoro-speak.py FILE --out-file x.wav
         write the synthesized speech from FILE to x.wav instead of speaking
+    kokoro-speak.py FILE --speed 1.25
+        speak the text file at 1.25x speed
 
     kokoro-speak.py --help        show help
 """
@@ -71,6 +73,13 @@ def main() -> None:
         metavar="FILE",
         help="write the synthesized speech to FILE instead of playing it",
     )
+    parser.add_argument(
+        "--speed",
+        "-s",
+        type=float,
+        default=1,
+        help="narration speed multiplier (default: %(default)s)",
+    )
     args = parser.parse_args()
 
     if args.file:
@@ -84,7 +93,7 @@ def main() -> None:
         sys.exit(2)
 
     pipeline = KPipeline(lang_code=LANG_CODE)
-    generator = pipeline(text, voice=VOICE, speed=1, split_pattern=r"\n+")
+    generator = pipeline(text, voice=VOICE, speed=args.speed, split_pattern=r"\n+")
 
     if args.out_file:
         with sf.SoundFile(
