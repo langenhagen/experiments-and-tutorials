@@ -13,4 +13,4 @@ if [[ ! -x "$python_bin" ]]; then
     exit 1
 fi
 
-exec "$python_bin" "$kokoro_py" "$@"
+time exec "$python_bin" "$kokoro_py" "$@"
