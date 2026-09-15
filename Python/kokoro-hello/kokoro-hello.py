@@ -19,11 +19,20 @@ import sys
 from pathlib import Path
 
 import soundfile as sf
+import torch
 from kokoro import KPipeline
 
 # 🇺🇸 'a' => American English
 # 🇬🇧 'b' => British English
-pipeline = KPipeline(lang_code="a")  # make sure lang_code matches voice
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+print(f"device: {device}")
+pipeline = KPipeline(lang_code="a", device=device)  # make sure lang_code matches voice
 
 if len(sys.argv) > 1:
     filename = Path(sys.argv[1])

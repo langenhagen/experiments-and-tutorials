@@ -17,6 +17,7 @@ Examples:
 import sys
 
 import soundfile as sf
+import torch
 from kokoro import KPipeline
 
 if len(sys.argv) > 1:
@@ -72,8 +73,18 @@ languages2voices = {
 }
 samplerate = 24000
 
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+print(f"device: {device}")
+
 for lang, voices in languages2voices.items():
-    pipeline = KPipeline(lang_code=lang)  # make sure lang_code matches voice
+    # make sure lang_code matches voice
+    pipeline = KPipeline(lang_code=lang, device=device)
 
     for voice in voices:
         generator = pipeline(

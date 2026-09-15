@@ -24,6 +24,7 @@ from pathlib import Path
 
 import sounddevice as sd
 import soundfile as sf
+import torch
 from kokoro import KPipeline
 
 DESCRIPTION = (
@@ -92,7 +93,15 @@ def main() -> None:
         parser.print_usage()
         sys.exit(2)
 
-    pipeline = KPipeline(lang_code=LANG_CODE)
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+    print(f"device: {device}")
+    pipeline = KPipeline(lang_code=LANG_CODE, device=device)
     generator = pipeline(text, voice=VOICE, speed=args.speed, split_pattern=r"\n+")
 
     if args.out_file:
