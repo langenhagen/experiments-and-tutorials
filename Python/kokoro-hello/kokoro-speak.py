@@ -22,11 +22,6 @@ import sys
 from contextlib import suppress
 from pathlib import Path
 
-import sounddevice as sd
-import soundfile as sf
-import torch
-from kokoro import KPipeline
-
 DESCRIPTION = (
     "Minimal Kokoro TTS: read text from a file, a pipe, or the clipboard and "
     "play it back as speech directly (no file is written), or write it to a "
@@ -92,6 +87,13 @@ def main() -> None:
     else:
         parser.print_usage()
         sys.exit(2)
+
+    # Importing torch and the Kokoro model machinery takes seconds to load.
+    # Thus, imported here - late - so that --help and usage errors execute quickly.
+    import sounddevice as sd
+    import soundfile as sf
+    import torch
+    from kokoro import KPipeline
 
     device = (
         "cuda"
