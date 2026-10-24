@@ -1,0 +1,12 @@
+[project]
+name = "mflux-hello"
+version = "0.1.0"
+description = "Text-to-image and image-to-image with FLUX on Apple Silicon via mflux."
+readme = "README.md"
+# Upper bound: torch wheels lag behind new Python releases.
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "bpython",
+    "mflux",
+    "pillow>=12.3,<13",
+]

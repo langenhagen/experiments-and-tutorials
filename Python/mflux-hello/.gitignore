@@ -1,0 +1,7 @@
+.venv/
+.mypy_cache/
+.ruff_cache/
+*.png
+*.jpg
+__pycache__/
+.envrc
