@@ -3,6 +3,8 @@
 
 Nice thing about Matcha is, that it can pronounce code nicely, unlike kokoro.
 
+I consider Kokoro still better in natural sentences, and overall.
+
 Usage
 
     time uv run main.py --file foo.txt

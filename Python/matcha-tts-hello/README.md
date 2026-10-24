@@ -9,7 +9,7 @@ uv run python main.py --help
 
 time uv run python main.py                      # Generate speech with default text
 time uv run python main.py --text "Hi there!"   # Generate speech with custom text
-time uv run python main.py --file my-lines.txt  # Generate speech from a text file
+time uv run python main.py --file foo.txt       # Generate speech from a text file
 
 # Use another model and write to a folder
 time uv run python main.py \
