@@ -14,6 +14,7 @@ Usage
     time uv run python img2img.py --init-image photo.jpg --init-image-strength 0.3 \
         --prompt "an oil painting"
     time uv run python img2img.py --model flux1-dev --steps 30
+    time uv run python img2img.py --model flux1-dev --model-path models/flux/some_finetune
 
 Output size defaults to 1024x1024, so pass --width/--height to match a
 non-square init image.
@@ -41,9 +42,10 @@ def main() -> None:
     )
     args = resolve_defaults(parser.parse_args())
 
-    model = load_model(args.model, args.quantize)
+    model = load_model(args.model, args.quantize, args.model_path)
 
-    print(f"model: {args.model}, seed: {args.seed}, steps: {args.steps}, guidance: {args.guidance}")
+    model_label = args.model if args.model_path is None else f"{args.model} ({args.model_path})"
+    print(f"model: {model_label}, seed: {args.seed}, steps: {args.steps}, guidance: {args.guidance}")
     image = model.generate_image(
         seed=args.seed,
         prompt=args.prompt,

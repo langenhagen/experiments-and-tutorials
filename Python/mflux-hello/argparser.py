@@ -3,6 +3,10 @@
 Model names map to the defaults that suit them: the distilled FLUX.2 Klein
 models need only 4 steps and guidance 1.0, FLUX.1 dev needs about 20 steps and
 guidance around 3.5. mflux has no FLUX.2 dev (32B) config, so it is not listed.
+
+--model-path points at a local diffusers-format directory and keeps the config
+of --model, so a finetune whose weights are not a built-in name runs as
+`--model flux1-dev --model-path models/flux/some_finetune`.
 """
 
 import argparse
@@ -31,6 +35,15 @@ def build_parser(description: str, default_out_file: str) -> argparse.ArgumentPa
         default="klein-4b",
         choices=list(MODEL_DEFAULTS),
         help="klein-4b is the smallest and fastest. flux1-dev is the 12B classic.",
+    )
+    parser.add_argument(
+        "--model-path",
+        default=None,
+        help=(
+            "Local diffusers-format model directory. Replaces the built-in weights "
+            "for --model while keeping that model's config, so a FLUX.1 finetune is "
+            "--model flux1-dev --model-path DIR."
+        ),
     )
     parser.add_argument(
         "--width",

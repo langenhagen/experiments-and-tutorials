@@ -24,9 +24,10 @@ def main() -> None:
         build_parser("Generate an image from a text prompt.", "text2img.png").parse_args()
     )
 
-    model = load_model(args.model, args.quantize)
+    model = load_model(args.model, args.quantize, args.model_path)
 
-    print(f"model: {args.model}, seed: {args.seed}, steps: {args.steps}, guidance: {args.guidance}")
+    model_label = args.model if args.model_path is None else f"{args.model} ({args.model_path})"
+    print(f"model: {model_label}, seed: {args.seed}, steps: {args.steps}, guidance: {args.guidance}")
     image = model.generate_image(
         seed=args.seed,
         prompt=args.prompt,
