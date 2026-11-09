@@ -3,7 +3,7 @@ name = "voxtral-stt-hello"
 version = "0.1.0"
 description = "Speech-to-text with Mistral Voxtral models on Apple Silicon via mlx-audio."
 readme = "README.md"
-requires-python = ">=3.12,<3.14"
+requires-python = ">=3.14,<3.15"
 dependencies = [
     "bpython",
     "mlx-audio>=0.6.5,<0.7",
