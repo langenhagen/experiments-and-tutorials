@@ -1,0 +1,12 @@
+[project]
+name = "voxtral-tts-hello"
+version = "0.1.0"
+description = "Showcase Mistral Voxtral 4B TTS via mlx-audio in a Gradio browser app (Mac Metal or Linux CUDA)"
+readme = "README.md"
+requires-python = ">=3.15"
+dependencies = [
+    "gradio>=6.32.0",
+    "mlx-audio[tts]>=0.6.5",
+    # macOS gets the Metal backend automatically; Linux gets the CUDA backend for NVIDIA GPUs.
+    "mlx[cuda12]; sys_platform == 'linux'",
+]
