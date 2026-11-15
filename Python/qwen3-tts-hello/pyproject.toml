@@ -1,12 +1,20 @@
 [project]
 name = "qwen3-tts-hello"
 version = "0.1.0"
-description = "Local Qwen3-TTS experiments: demo script and audiobook creation from chapter text files"
+description = "Local Qwen3-TTS experiments: Gradio app with voice cloning, demo script and audiobook creation, on Linux with an NVIDIA GPU or on Apple Silicon Macs"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.14"
 dependencies = [
-    "qwen-tts>=0.1.1",
+    "gradio",
+    "numpy",
     "soundfile>=0.14.0",
-    "torch>=2.13.0",
-    "torchvision>=0.28.0",
+    # Linux: the official qwen-tts package on an NVIDIA GPU.
+    "qwen-tts>=0.1.1; sys_platform == 'linux'",
+    "torch>=2.13.0; sys_platform == 'linux'",
+    "torchvision>=0.28.0; sys_platform == 'linux'",
+    # macOS: the MLX port in mlx-audio on the Apple Silicon GPU.
+    "mlx-audio[tts]>=0.6.5; sys_platform == 'darwin'",
+    # qwen-tts pins transformers 4.57, mlx-audio needs 5; these split the resolution per platform.
+    "transformers==4.57.3; sys_platform == 'linux'",
+    "transformers>=5.14.0; sys_platform == 'darwin'",
 ]

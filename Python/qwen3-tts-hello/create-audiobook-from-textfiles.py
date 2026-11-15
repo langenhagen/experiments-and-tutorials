@@ -7,6 +7,11 @@ splits each chapter at sentence boundaries into chunks of at most
 --max-chars characters, synthesizes every chunk with Qwen3-TTS, and
 stitches the chunk audio into one WAV file per chapter.
 
+Runs on Linux with an NVIDIA GPU or on an Apple Silicon Mac; see
+qwen3_backend.py. The voice comes from a preset speaker (default), a saved
+voice clone (--voice), a cloned reference recording (--ref-audio), or a voice
+description (--voice-design).
+
 Paths created:
     audio/chapter_NN/NNNN.wav    intermediate chunk audio (kept so bad
                                  chunks can be regenerated individually)
@@ -16,6 +21,9 @@ Paths created:
 Usage:
     uv run create-audiobook-from-textfiles.py                    # whole book
     uv run create-audiobook-from-textfiles.py --only-chapters 8,9
+    uv run create-audiobook-from-textfiles.py --language german --voice andreas-de
+    uv run create-audiobook-from-textfiles.py --language german \
+        --ref-audio my-voice.wav --ref-text "Transcript of my-voice.wav"
 
 Synthesis is resumable: existing chunk WAVs are skipped, so an
 interrupted run can simply be restarted.
@@ -30,10 +38,9 @@ from typing import NamedTuple
 
 import numpy as np
 import soundfile as sf
-import torch
-from qwen_tts import Qwen3TTSModel
 
-MODEL_ID = "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
+import qwen3_backend
+
 MIN_CHUNK_SEC_PER_WORD = 0.27
 MAX_CHUNK_SEC_PER_WORD = 0.75
 MANIFEST_NAME = "manifest.json"
@@ -42,11 +49,15 @@ SENTENCE_END = re.compile(r"[.!?]+[\"'\u2019\u201d)\]]*")
 
 
 class Voice(NamedTuple):
-    """Speaker, language, and optional style instruction for synthesis."""
+    """Model kind and voice settings for synthesis; see qwen3_backend.generate()."""
 
-    speaker: str
+    kind: str
+    precision: str
     language: str
+    speaker: str
     instruct: str | None
+    ref_audio: str | None
+    ref_text: str | None
 
 
 def parse_args() -> argparse.Namespace:
@@ -77,20 +88,66 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--speaker",
-        default="Ryan",
-        help="Speaker voice name supported by the CustomVoice model (default: Ryan)",
+        default="ryan",
+        choices=qwen3_backend.SPEAKERS.values(),
+        help="Preset speaker of the CustomVoice model (default: ryan)",
     )
     parser.add_argument(
         "--language",
-        default="English",
-        help="Language of the texts (default: English)",
+        default="english",
+        choices=qwen3_backend.LANGUAGES,
+        help="Language of the texts (default: english)",
     )
     parser.add_argument(
         "--instruct",
         default=None,
         help=(
-            "Optional voice instruction controlling emotion and style, "
+            "Optional style instruction for the preset speaker, "
             "for example 'Read like an audiobook narrator'. Default: none"
+        ),
+    )
+    parser.add_argument(
+        "--voice",
+        default=None,
+        help=(
+            "Name of a saved voice clone, i.e. a folder name in voices/ such "
+            "as andreas-de; not a file path, use --ref-audio for that. Uses "
+            "the Base model instead of a preset speaker. Default: none"
+        ),
+    )
+    parser.add_argument(
+        "--ref-audio",
+        default=None,
+        help=(
+            "Reference recording to clone the voice from, a few seconds to "
+            "about 30 s of clean speech. Uses the Base model instead of a "
+            "preset speaker. Default: none"
+        ),
+    )
+    parser.add_argument(
+        "--ref-text",
+        default=None,
+        help=(
+            "Transcript of --ref-audio; makes the clone closer to the "
+            "original. Default: none"
+        ),
+    )
+    parser.add_argument(
+        "--voice-design",
+        default=None,
+        help=(
+            "Description of a new voice, for example 'A deep, calm male "
+            "voice'. Uses the VoiceDesign model instead of a preset "
+            "speaker. Default: none"
+        ),
+    )
+    parser.add_argument(
+        "--precision",
+        default="bf16",
+        choices=qwen3_backend.PRECISIONS,
+        help=(
+            "Model precision; 8, 6, 5, and 4-bit are smaller and faster "
+            "and only available on the Mac. Default: bf16"
         ),
     )
     parser.add_argument(
@@ -247,7 +304,6 @@ def progress_line(
 
 
 def synthesize_chapter(
-    model: Qwen3TTSModel,
     chunks: list[str],
     chunk_dir: Path,
     voice: Voice,
@@ -263,15 +319,19 @@ def synthesize_chapter(
         path = chunk_dir / f"{index:04d}.wav"
         if not path.exists():
             tick = time.monotonic()
-            wavs, sr = model.generate_custom_voice(
-                text=text,
-                language=voice.language,
+            audio, sample_rate = qwen3_backend.generate(
+                voice.kind,
+                text,
+                voice.language,
+                precision=voice.precision,
                 speaker=voice.speaker,
                 instruct=voice.instruct,
+                ref_audio=voice.ref_audio,
+                ref_text=voice.ref_text,
             )
             gen_seconds += time.monotonic() - tick
             generated += 1
-            sf.write(path, wavs[0], sr)
+            sf.write(path, audio, sample_rate)
         paths.append(path)
         print(
             progress_line(index, len(chunks), path.name, generated, gen_seconds),
@@ -358,19 +418,29 @@ def main() -> None:
             )
             raise SystemExit(message) from None
 
-    chapters = discover_chapters(args.text_dir, only)
-    print(f"Processing {len(chapters)} chapter(s) with speaker '{args.speaker}'.")
+    if sum(map(bool, [args.voice, args.ref_audio, args.voice_design])) > 1:
+        raise SystemExit("--voice, --ref-audio, and --voice-design exclude each other.")
+    if args.voice:
+        args.ref_audio, args.ref_text = qwen3_backend.load_saved_voice(args.voice)
+        kind, voice_label = "Base", f"saved voice '{args.voice}'"
+    elif args.ref_audio:
+        kind, voice_label = "Base", f"voice cloned from {args.ref_audio}"
+    elif args.voice_design:
+        kind, voice_label = "VoiceDesign", f"designed voice '{args.voice_design}'"
+    else:
+        kind, voice_label = "CustomVoice", f"speaker '{args.speaker}'"
 
-    model = Qwen3TTSModel.from_pretrained(
-        MODEL_ID,
-        device_map="cuda:0",
-        dtype=torch.bfloat16,
-        attn_implementation="sdpa",
-    )
+    chapters = discover_chapters(args.text_dir, only)
+    print(f"Processing {len(chapters)} chapter(s) with {voice_label}.")
+
     voice = Voice(
-        speaker=args.speaker,
+        kind=kind,
+        precision=args.precision,
         language=args.language,
-        instruct=args.instruct,
+        speaker=args.speaker,
+        instruct=args.voice_design or args.instruct,
+        ref_audio=args.ref_audio,
+        ref_text=args.ref_text,
     )
 
     total_start = time.monotonic()
@@ -384,7 +454,6 @@ def main() -> None:
         chunks = build_chunks(paragraphs, args.max_chars)
         print(f"  {len(chunks)} chunk(s)")
         chunk_paths = synthesize_chapter(
-            model,
             chunks,
             args.audio_dir / label,
             voice,
