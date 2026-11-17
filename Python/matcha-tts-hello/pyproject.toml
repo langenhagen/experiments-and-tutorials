@@ -6,6 +6,12 @@ readme = "README.md"
 requires-python = ">3.10,<3.12"
 dependencies = [
     "bpython>=0.26",
+    "gradio>=6.0.0",
     "matcha-tts>=0.0.7",
     "numpy >1.24.3",
 ]
+
+[tool.uv]
+# matcha-tts pins gradio==3.43.2, which breaks with current fastapi and starlette.
+# matcha-tts uses gradio only in its own demo app, not in the code used here.
+override-dependencies = ["gradio>=6.0.0"]

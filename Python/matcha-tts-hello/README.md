@@ -21,6 +21,16 @@ time uv run python main.py \
 time uv run python main.py --cpu
 ```
 
+## Browser App
+
+```bash
+uv run gradio-matcha-hello.py   # http://127.0.0.1:7860
+```
+
+Pick the model (`matcha_ljspeech` has one voice, `matcha_vctk` has 108
+speakers) and tweak speaking rate, temperature, ODE steps, and denoiser
+strength. Each line of the text is spoken as its own piece.
+
 ## Tiny CLI Wrapper
 
 `matcha-say.sh` wraps the CLI tool `matcha-tts`.
