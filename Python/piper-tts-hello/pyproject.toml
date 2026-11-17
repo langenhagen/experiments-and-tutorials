@@ -1,0 +1,19 @@
+[project]
+name = "piper-tts-hello"
+version = "0.1.0"
+description = "Showcase Piper TTS (ONNX, CPU or NVIDIA CUDA) in a Gradio browser app"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "gradio>=6.32.0",
+    "numpy",
+    # The ja extra is for the Japanese voice. The th extra (Thai) needs gensim, which fails to build on Python 3.14.
+    "piper-tts[ja]>=1.8.0",
+    # Linux: ONNX Runtime with the CUDA provider; it also runs on the CPU.
+    "onnxruntime-gpu[cuda,cudnn]; sys_platform == 'linux'",
+]
+
+[tool.uv]
+# piper-tts requires the CPU-only onnxruntime, which clashes with onnxruntime-gpu
+# (same module name); keep it only where the GPU package is not installed.
+override-dependencies = ["onnxruntime>=1,<2; sys_platform != 'linux'"]
