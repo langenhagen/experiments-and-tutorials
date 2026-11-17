@@ -20,21 +20,28 @@ Settings:
 - Top-k and top-p: how many candidate sounds the model may pick from
 - Repetition penalty: discourages repeating the same sounds; on the Mac, voice
   cloning with a transcript uses at least 1.5
-- Max tokens: limit per line of text; 12.5 tokens are one second of audio
-- Each line of the text is spoken as its own piece, so put paragraphs on
-  separate lines for long texts
+- Max tokens: limit per chunk of text; 12.5 tokens are one second of audio
+- Max characters: the text is spoken in chunks of at most this size;
+  consecutive lines are merged until the limit, a longer line is split at
+  sentence endings, and a chunk never crosses a blank line
+- Below the output, every chunk has its own player with a download button;
+  one zip holds all chunk WAV files and chunks.txt with the chunk texts
 
 See:
 - https://github.com/QwenLM/Qwen3-TTS
 - https://github.com/Blaizzy/mlx-audio
 """
 
+import io
 import shutil
+import tempfile
 import time
+import zipfile
 from pathlib import Path
 
 import gradio as gr
 import numpy as np
+import soundfile as sf
 
 import qwen3_backend
 
@@ -73,13 +80,14 @@ def generate(
     top_p: float,
     repetition_penalty: float,
     max_tokens: float,
+    max_chars: float,
     seed: float,
-) -> tuple[tuple[int, np.ndarray], str]:
+) -> tuple[tuple[int, np.ndarray], str, list[tuple[str, int, np.ndarray]], str]:
     if seed != 0:
         qwen3_backend.seed(int(seed))
 
     start = time.monotonic()
-    audio, sample_rate = qwen3_backend.generate(
+    chunks, sample_rate = qwen3_backend.generate_chunks(
         MODES[mode],
         text,
         language,
@@ -93,15 +101,36 @@ def generate(
         top_p=top_p,
         repetition_penalty=repetition_penalty,
         max_new_tokens=int(max_tokens),
+        max_chars=int(max_chars),
     )
     processing_seconds = time.monotonic() - start
 
+    audio = np.concatenate([chunk_audio for _, chunk_audio in chunks])
     audio_seconds = len(audio) / sample_rate
     info = (
-        f"Audio: {audio_seconds:.1f} s, processing: {processing_seconds:.1f} s "
-        f"(including model loading), real-time factor: {audio_seconds / processing_seconds:.2f}x"
+        f"Audio: {audio_seconds:.1f} s in {len(chunks)} chunks, processing: "
+        f"{processing_seconds:.1f} s (including model loading), real-time factor: "
+        f"{audio_seconds / processing_seconds:.2f}x"
     )
-    return (sample_rate, audio), info
+    return (
+        (sample_rate, audio),
+        info,
+        [(chunk_text, sample_rate, chunk_audio) for chunk_text, chunk_audio in chunks],
+        zip_chunks(chunks, sample_rate),
+    )
+
+
+def zip_chunks(chunks: list[tuple[str, np.ndarray]], sample_rate: int) -> str:
+    """Write the chunks as 0001.wav, 0002.wav, ... plus chunks.txt, with the
+    text of each chunk on its own line, into a zip file and return its path."""
+    zip_path = Path(tempfile.mkdtemp(prefix="qwen3-chunks-")) / "chunks.zip"
+    with zipfile.ZipFile(zip_path, "w") as archive:
+        for index, (_, chunk_audio) in enumerate(chunks, start=1):
+            wav = io.BytesIO()
+            sf.write(wav, chunk_audio, sample_rate, format="WAV")
+            archive.writestr(f"{index:04d}.wav", wav.getvalue())
+        archive.writestr("chunks.txt", "\n".join(text for text, _ in chunks))
+    return str(zip_path)
 
 
 def save_voice(
@@ -159,8 +188,32 @@ def main() -> None:
                 )
                 text = gr.Textbox(
                     value=SAMPLE_TEXT,
-                    label="Text to synthesize (each line is spoken as its own piece)",
+                    label="Text to synthesize (spoken in chunks, see max characters)",
                     max_lines=20,
+                )
+                max_chars = gr.Slider(
+                    50,
+                    1000,
+                    step=10,
+                    value=300,
+                    label="Max characters per chunk (default 300)",
+                    info="The text is spoken chunk by chunk. Consecutive lines are merged "
+                    "until this size, a longer line is split at sentence endings, and a "
+                    "chunk never crosses a blank line. Longer chunks flow more naturally, "
+                    "but can drift or repeat, need more memory, and cost more to redo.",
+                )
+                max_tokens = gr.Slider(
+                    100,
+                    8192,
+                    step=1,
+                    value=2048,
+                    label="Max tokens per chunk (default 2048)",
+                    info="The model produces audio in small pieces called tokens, 12.5 per "
+                    "second. This caps how long one chunk of text may become and stops "
+                    "runaway generation; 2048 tokens are about 2.7 minutes. Too low "
+                    "cuts the speech off: a chunk needs roughly 1 token per character, "
+                    "more for slow speech. A cap of 2.5 to 3 tokens per character of "
+                    "max characters is safe: 800 for 300 characters, 1600 for 600.",
                 )
                 language = gr.Dropdown(
                     choices=qwen3_backend.LANGUAGES, value="auto", label="Language"
@@ -171,8 +224,20 @@ def main() -> None:
                         type="filepath",
                         label="Reference audio to clone (a few seconds to about 30 s of clean speech)",
                     )
+                    gr.Markdown(
+                        "Longer is not better. With a transcript, the whole recording goes "
+                        "into the model's context before every chunk, which costs time and "
+                        "memory, and long recordings raise the risk that the output "
+                        "degenerates. Pick a clean clip of up to about 30 seconds."
+                    )
                     reference_text = gr.Textbox(
-                        label="Transcript of the reference audio (optional; makes the clone closer)",
+                        label="Transcript of the reference audio (optional)",
+                        info="With the exact words of the recording, the model continues "
+                        "it as one utterance and also picks up your rhythm, pacing and "
+                        "accent. Without it, only the overall voice character is copied. "
+                        "The recording then goes into the model's context before every "
+                        "chunk, which costs time and memory. A wrong transcript misleads "
+                        "the model.",
                     )
                     with gr.Row():
                         voice_name = gr.Textbox(
@@ -204,8 +269,13 @@ def main() -> None:
                         value=0.9,
                         label="Temperature (default 0.9)",
                         info="How adventurous the model is when picking the next bit of sound. "
-                        "Lower sounds steadier and more even, but can get monotone; higher "
-                        "sounds livelier, but slips and odd pronunciations become likelier.",
+                        "Below about 0.6 the delivery is steadier but flatter, which gets tiring "
+                        "over long audio, and a chunk can run away: it never ends and fills "
+                        "the time up to the max tokens limit with silence. Above about 1.0 it "
+                        "sounds livelier, but slips, odd stress and mispronunciations become "
+                        "likelier. For audiobooks, 0.7 to 0.8 is a good range: a consistent "
+                        "narrator across many chunks matters more than liveliness, and one "
+                        "bad chunk is easy to miss.",
                     )
                     top_k = gr.Slider(
                         1,
@@ -214,7 +284,9 @@ def main() -> None:
                         value=50,
                         label="Top-k (default 50)",
                         info="The model only picks among this many most likely next sounds. "
-                        "Lower is safer and more uniform; higher allows more variety.",
+                        "Lower sticks to the most expected sounds: fewer slips, but a flatter, "
+                        "more predictable delivery. Higher also lets in less expected sounds: "
+                        "a livelier intonation, but more slips.",
                     )
                     top_p = gr.Slider(
                         0.1,
@@ -224,7 +296,10 @@ def main() -> None:
                         label="Top-p (default 1.0)",
                         info="The model only picks among the most likely next sounds that "
                         "together make up this share of the probability. 1.0 means no limit; "
-                        "0.8 drops the unlikely 20 percent, which is safer.",
+                        "0.8 drops the least likely sounds that make up the last 20 percent. "
+                        "Lower sticks to the most expected sounds: fewer slips, but a flatter, "
+                        "more predictable delivery. 1.0 also lets in unexpected sounds: a "
+                        "livelier intonation, but more slips.",
                     )
                     repetition_penalty = gr.Slider(
                         1.0,
@@ -235,16 +310,6 @@ def main() -> None:
                         info="Makes the model less likely to repeat the same sounds, which "
                         "helps against stuttering and loops. Too high can sound unnatural. "
                         "On the Mac, voice cloning with a transcript uses at least 1.5.",
-                    )
-                    max_tokens = gr.Slider(
-                        100,
-                        8192,
-                        step=1,
-                        value=2048,
-                        label="Max tokens per line (default 2048)",
-                        info="The model produces audio in small pieces called tokens, 12.5 per "
-                        "second. This caps how long one line of text may become and stops "
-                        "runaway generation; 2048 tokens are about 2.7 minutes.",
                     )
                 seed = gr.Number(
                     value=0,
@@ -257,6 +322,20 @@ def main() -> None:
             with gr.Column():
                 audio_output = gr.Audio(label="Output Audio")
                 info_output = gr.Textbox(label="Generation Info", interactive=False)
+                chunks_zip = gr.File(label="All chunks (WAV files and chunks.txt)")
+                chunks_state = gr.State([])
+
+                @gr.render(inputs=chunks_state)
+                def show_chunks(chunks: list[tuple[str, int, np.ndarray]]) -> None:
+                    for index, (chunk_text, sample_rate, chunk_audio) in enumerate(
+                        chunks, start=1
+                    ):
+                        gr.Markdown(f"{index}. {chunk_text}")
+                        gr.Audio(
+                            (sample_rate, chunk_audio),
+                            label=f"Chunk {index}",
+                            buttons=["download"],
+                        )
 
         mode.change(
             fn=change_mode,
@@ -289,9 +368,10 @@ def main() -> None:
                 top_p,
                 repetition_penalty,
                 max_tokens,
+                max_chars,
                 seed,
             ],
-            outputs=[audio_output, info_output],
+            outputs=[audio_output, info_output, chunks_state, chunks_zip],
         )
 
     demo.launch()

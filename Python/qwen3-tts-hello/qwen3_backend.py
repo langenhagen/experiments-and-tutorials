@@ -14,14 +14,17 @@ The three model kinds:
 - CustomVoice: 9 preset speakers, optionally steered by a style instruction
 - VoiceDesign: a new voice described in words by the instruction
 
-- `generate()` synthesizes a text and returns the audio and its sample rate;
-  it speaks each line of the text as its own piece and joins the pieces
+- `split_chunks()` cuts a text into chunks of at most a number of characters
+- `generate_chunks()` synthesizes a text and returns the text and audio of
+  each chunk as its own piece, plus the sample rate
+- `generate()` does the same and joins the pieces into one audio
 - `seed()` makes the next generations reproducible
 - `saved_voice_names()` and `load_saved_voice()` read voice clones saved in
   voices/NAME/ as reference.<ext> plus transcript.txt, e.g. by the Gradio app
 """
 
 import functools
+import re
 import sys
 from pathlib import Path
 
@@ -113,6 +116,34 @@ def seed(value: int) -> None:
         torch.manual_seed(value)
 
 
+def split_chunks(text: str, max_chars: int) -> list[str]:
+    """Split text into the chunks that are spoken one by one.
+
+    Blank lines separate paragraphs; a chunk never crosses one. Within a
+    paragraph, consecutive lines are merged into one chunk until max_chars is
+    reached. A line longer than max_chars is first split at sentence endings.
+    A single sentence longer than max_chars stays whole.
+    """
+    chunks = []
+    for paragraph in re.split(r"\n\s*\n", text):
+        current = ""
+        for line in paragraph.splitlines():
+            line = line.strip()
+            units = (
+                re.split(r"(?<=[.!?])\s+", line) if len(line) > max_chars else [line]
+            )
+            for unit in units:
+                if current and len(current) + 1 + len(unit) <= max_chars:
+                    current += " " + unit
+                else:
+                    if current:
+                        chunks.append(current)
+                    current = unit
+        if current:
+            chunks.append(current)
+    return chunks
+
+
 def _generate_piece(
     model, kind: str, text: str, language: str, voice: dict, sampling: dict
 ) -> tuple[np.ndarray, int]:
@@ -122,7 +153,7 @@ def _generate_piece(
             for name, value in sampling.items()
         }
         if kind == "Base":
-            # split_pattern="" because generate() already splits the text into lines.
+            # split_pattern="" because generate() already splits the text into chunks.
             results = model.generate(
                 text=text, lang_code=language, split_pattern="", **voice, **mlx_sampling
             )
@@ -154,7 +185,7 @@ def _generate_piece(
     return wavs[0], sample_rate
 
 
-def generate(
+def generate_chunks(
     kind: str,
     text: str,
     language: str = "auto",
@@ -169,9 +200,13 @@ def generate(
     top_p: float = 1.0,
     repetition_penalty: float = 1.05,
     max_new_tokens: int = 2048,
-) -> tuple[np.ndarray, int]:
-    """Synthesize text; speaker is for CustomVoice, instruct for CustomVoice and
-    VoiceDesign, ref_audio and the optional ref_text for Base."""
+    max_chars: int = 300,
+) -> tuple[list[tuple[str, np.ndarray]], int]:
+    """Synthesize text chunk by chunk (see split_chunks) and return each chunk's
+    text and audio, plus the sample rate. Speaker is for CustomVoice, instruct
+    for CustomVoice and VoiceDesign, ref_audio and the optional ref_text for
+    Base.
+    """
     model = load_model(kind, precision)
     voice = {
         "Base": {"ref_audio": ref_audio, "ref_text": ref_text},
@@ -179,8 +214,8 @@ def generate(
         "VoiceDesign": {"instruct": instruct},
     }[kind]
 
-    pieces = []
-    for line in [line.strip() for line in text.splitlines() if line.strip()]:
+    chunks = []
+    for chunk in split_chunks(text, max_chars):
         sampling = {
             "temperature": temperature,
             "top_k": top_k,
@@ -189,7 +224,13 @@ def generate(
             "max_new_tokens": max_new_tokens,
         }
         audio, sample_rate = _generate_piece(
-            model, kind, line, language, voice, sampling
+            model, kind, chunk, language, voice, sampling
         )
-        pieces.append(audio)
-    return np.concatenate(pieces), sample_rate
+        chunks.append((chunk, audio))
+    return chunks, sample_rate
+
+
+def generate(*args, **kwargs) -> tuple[np.ndarray, int]:
+    """Like generate_chunks(), but return all chunks joined into one audio."""
+    chunks, sample_rate = generate_chunks(*args, **kwargs)
+    return np.concatenate([audio for _, audio in chunks]), sample_rate

@@ -36,7 +36,13 @@ uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"
 ./run-time-benchmark.sh                 # time Kokoro and every Qwen3 precision on text.txt
 ```
 
-- Each line of the text is spoken as its own piece.
+- The text is spoken in chunks of at most `--max-chars` characters (default
+  300, a slider in the Gradio app): consecutive lines are merged until the
+  limit, a longer line is split at sentence endings, and a chunk never crosses
+  a blank line.
+- The Gradio app lists every chunk below the output with its own player and
+  download button, and offers all chunks as one zip of WAV files plus
+  `chunks.txt`, which has the text of each chunk on its own line.
 - The Gradio app's "Save voice" button stores a voice clone in the git-ignored
   `voices/NAME/` folder; `--voice NAME` uses it.
 - `qwen3-speak.py` has the same settings as the Gradio app.
@@ -70,7 +76,69 @@ chunks, so an interrupted run continues where it stopped. It warns about
 chunks that sound too fast or too slow for their word count.
 
 The voice comes from `--speaker` with optional `--instruct`, `--voice NAME`,
-`--ref-audio` with optional `--ref-text`, or `--voice-design`.
+`--ref-audio` with optional `--ref-text`, or `--voice-design`. `--temperature`
+(default 0.9) sets the randomness of the delivery.
+
+Guesstimated good values for audiobooks:
+
+┌────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────┐
+│      Setting       │                                        Recommendation                                         │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Mode               │ Voice cloning with a transcript, or Preset voice (Ryan) with "Calm, even audiobook narration" │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Precision          │ bf16, or 8bit if bf16 is too slow                                                             │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Language           │ Set it, for example german                                                                    │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Max characters     │ 200 - 300                                                                                     │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Temperature        │ 0.7 to 0.8                                                                                    │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Top-k, top-p       │ Leave at 50 and 1.0                                                                           │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Repetition penalty │ Leave at 1.05 (implicit 1.5)                                                                  │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Max tokens         │ 2.667 times the max characters --> ~600 for 200 characters, ~800 for 300 characters           │
+├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Seed               │ Set it                                                                                        │
+└────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+## Temperature
+
+`--temperature` (default 0.9) sets how adventurous the model is when picking
+the next bit of sound.
+
+- Below about 0.6 the delivery is steadier but flatter, which gets tiring over
+  hours of audio. A chunk can also run away: it never ends and fills the time
+  up to the max tokens limit with silence.
+- Above about 1.0 it sounds livelier, but slips, odd stress, and
+  mispronunciations become more likely.
+- For audiobooks, 0.7 to 0.8 is a good range. The same narrator across
+  thousands of chunks matters more than liveliness per chunk, and one bad
+  chunk is easy to miss.
+
+## Voice Cloning Transcript
+
+A transcript is the exact words spoken in the reference recording. It is
+optional (`--ref-text`, or `transcript.txt` of a saved voice) and changes how
+the voice is cloned:
+
+- With a transcript, the model gets the recording as audio plus its words and
+  continues it as one utterance. It picks up rhythm, pacing, accent, and
+  delivery as well as the timbre.
+- Without a transcript, only a speaker embedding is taken from the recording:
+  a fixed summary of the voice's overall character. It sounds like a similar
+  voice, not like you speaking.
+- With a transcript, the whole recording goes into the model's context before
+  every chunk, which costs time and memory; a longer recording costs more.
+- A longer recording is not better. It costs more time and memory (6 minutes
+  are about 4500 positions in the context, 20 seconds about 250), and
+  `mlx-audio` warns in its source that long reference audio makes the output
+  degenerate. Use a clean clip of up to about 30 seconds.
+- On the Mac, `mlx-audio` raises the repetition penalty to at least 1.5 in
+  this mode to keep the output from looping.
+- A wrong transcript misleads the model about which sounds are which words.
 
 ## Models
 
@@ -111,6 +179,10 @@ RAM of the `mlx-community` models used on the Mac:
 
 RAM idle is the memory MLX holds right after loading a model.
 RAM peak is the highest memory MLX held while the model also spoke one short line
-Ppeaks vary by up to about 1 GB between runs.
+Peaks vary by up to about 1 GB between runs.
+The peaks were measured on one text of 151 characters (two sentences), which
+came out as 8 to 17 seconds of audio. Generation memory grows with the length
+of the audio, so a longer chunk (`--max-chars`) peaks higher than the table
+shows.
 
 For comparison: Kokoro 2.00 GB RAM idle; 5.71 GB at peak.

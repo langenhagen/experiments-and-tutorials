@@ -58,6 +58,8 @@ class Voice(NamedTuple):
     instruct: str | None
     ref_audio: str | None
     ref_text: str | None
+    temperature: float
+    max_chars: int
 
 
 def parse_args() -> argparse.Namespace:
@@ -148,6 +150,17 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Model precision; 8, 6, 5, and 4-bit are smaller and faster "
             "and only available on the Mac. Default: bf16"
+        ),
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=0.9,
+        help=(
+            "Randomness of the delivery. Lower is steadier but can sound "
+            "monotone, and very low values can make a chunk run away into "
+            "silence; higher is livelier but slips become likelier. "
+            "Default: 0.9"
         ),
     )
     parser.add_argument(
@@ -328,6 +341,8 @@ def synthesize_chapter(
                 instruct=voice.instruct,
                 ref_audio=voice.ref_audio,
                 ref_text=voice.ref_text,
+                temperature=voice.temperature,
+                max_chars=voice.max_chars,
             )
             gen_seconds += time.monotonic() - tick
             generated += 1
@@ -441,6 +456,8 @@ def main() -> None:
         instruct=args.voice_design or args.instruct,
         ref_audio=args.ref_audio,
         ref_text=args.ref_text,
+        temperature=args.temperature,
+        max_chars=args.max_chars,
     )
 
     total_start = time.monotonic()

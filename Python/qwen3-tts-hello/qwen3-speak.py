@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Speak a text file with Qwen3-TTS and write the audio to a file.
 
-Offers the same settings as gradio-qwen3-tts-hello.py. Each line of the text
-is spoken as its own piece, so put one sentence per line. The output format
-follows the extension of --out-file, for example .mp3 or .wav.
+Offers the same settings as gradio-qwen3-tts-hello.py. The text is spoken in
+chunks of at most --max-chars characters: consecutive lines are merged until
+the limit, a longer line is split at sentence endings, and a chunk never
+crosses a blank line. The output format follows the extension of --out-file,
+for example .mp3 or .wav.
 
 The voice comes from exactly one of these, which is required:
 - --voice NAME: the name of a saved voice clone, i.e. a folder name in
@@ -36,7 +38,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("file", type=Path, help="text file, one sentence per line")
+    parser.add_argument(
+        "file",
+        type=Path,
+        help="text file, one sentence per line, blank line between paragraphs",
+    )
     parser.add_argument(
         "--out-file",
         type=Path,
@@ -98,7 +104,13 @@ def parse_args() -> argparse.Namespace:
         "--max-tokens",
         type=int,
         default=2048,
-        help="limit per line, 12.5 per second of audio (default: 2048)",
+        help="limit per chunk, 12.5 per second of audio (default: 2048)",
+    )
+    parser.add_argument(
+        "--max-chars",
+        type=int,
+        default=300,
+        help="chunk size limit in characters (default: 300)",
     )
     parser.add_argument(
         "--seed", type=int, default=0, help="random seed; 0 for random (default: 0)"
@@ -122,17 +134,15 @@ def main() -> None:
     if args.seed != 0:
         qwen3_backend.seed(args.seed)
 
-    lines = [
-        line.strip() for line in args.file.read_text().splitlines() if line.strip()
-    ]
+    chunks = qwen3_backend.split_chunks(args.file.read_text(), args.max_chars)
     out_file = args.out_file or args.file.with_suffix(".mp3")
 
     pieces = []
     start = time.monotonic()
-    for index, line in enumerate(lines, start=1):
+    for index, chunk in enumerate(chunks, start=1):
         audio, sample_rate = qwen3_backend.generate(
             kind,
-            line,
+            chunk,
             args.language,
             precision=args.precision,
             speaker=args.speaker,
@@ -144,10 +154,11 @@ def main() -> None:
             top_p=args.top_p,
             repetition_penalty=args.repetition_penalty,
             max_new_tokens=args.max_tokens,
+            max_chars=args.max_chars,
         )
         pieces.append(audio)
         elapsed = time.monotonic() - start
-        print(f"[{index}/{len(lines)}] {elapsed:.0f} s: {line[:60]}", flush=True)
+        print(f"[{index}/{len(chunks)}] {elapsed:.0f} s: {chunk[:60]}", flush=True)
 
     sf.write(out_file, np.concatenate(pieces), sample_rate)
     print(f"Wrote {out_file}")
