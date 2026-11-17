@@ -14,9 +14,10 @@ The three model kinds:
 - CustomVoice: 9 preset speakers, optionally steered by a style instruction
 - VoiceDesign: a new voice described in words by the instruction
 
-- `generate_chunks()` synthesizes a text and returns the text and audio of
-  each chunk as its own piece, plus the sample rate
-- `generate()` does the same and joins the pieces into one audio
+- `iter_chunks()` synthesizes a text and yields the text, audio, and sample
+  rate of each chunk as soon as it is done; its on_audio callback receives the
+  audio while it is generated, in pieces of about 2 s on the Mac
+- `generate()` does the same and joins the chunks into one audio
 - `seed()` makes the next generations reproducible
 - `saved_voice_names()` and `load_saved_voice()` read voice clones saved in
   voices/NAME/ as reference.<ext> plus transcript.txt, e.g. by the Gradio app
@@ -25,10 +26,14 @@ The three model kinds:
 import functools
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 import chunking
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
 
 USES_MLX = sys.platform == "darwin"
 
@@ -91,7 +96,9 @@ def load_model(kind: str, precision: str):
 def _clone_prompt(model, ref_audio: str, ref_text: str | None):
     """Analyse a reference recording once and reuse it; qwen-tts only."""
     return model.create_voice_clone_prompt(
-        ref_audio=ref_audio, ref_text=ref_text, x_vector_only_mode=ref_text is None
+        ref_audio=ref_audio,
+        ref_text=ref_text,
+        x_vector_only_mode=ref_text is None,
     )
 
 
@@ -105,7 +112,8 @@ def load_saved_voice(name: str) -> tuple[str, str | None]:
     voice_dir = VOICES_DIR / name
     if not (voice_dir / "transcript.txt").exists():
         raise ValueError(
-            f"No saved voice {name!r} in {VOICES_DIR}; saved voices: {saved_voice_names()}"
+            f"No saved voice {name!r} in {VOICES_DIR}; "
+            f"saved voices: {saved_voice_names()}",
         )
     (reference,) = voice_dir.glob("reference.*")
     return str(reference), (voice_dir / "transcript.txt").read_text().strip() or None
@@ -120,47 +128,82 @@ def seed(value: int) -> None:
 
 
 def _generate_piece(
-    model, kind: str, text: str, language: str, voice: dict, sampling: dict
+    model,
+    kind: str,
+    text: str,
+    language: str,
+    voice: dict,
+    sampling: dict,
+    on_audio: Callable[[np.ndarray, int], None] | None,
 ) -> tuple[np.ndarray, int]:
     if USES_MLX:
         mlx_sampling = {
             ("max_tokens" if name == "max_new_tokens" else name): value
             for name, value in sampling.items()
         }
+        # With on_audio, mlx-audio streams: it yields about every 2 s of audio
+        # while it is still generating the rest of the chunk.
+        mlx_sampling["stream"] = on_audio is not None
         if kind == "Base":
             # split_pattern="" because generate() already splits the text into chunks.
             results = model.generate(
-                text=text, lang_code=language, split_pattern="", **voice, **mlx_sampling
+                text=text,
+                lang_code=language,
+                split_pattern="",
+                **voice,
+                **mlx_sampling,
             )
         elif kind == "CustomVoice":
             results = model.generate_custom_voice(
-                text=text, language=language, **voice, **mlx_sampling
+                text=text,
+                language=language,
+                **voice,
+                **mlx_sampling,
             )
         else:
             results = model.generate_voice_design(
-                text=text, language=language, **voice, **mlx_sampling
+                text=text,
+                language=language,
+                **voice,
+                **mlx_sampling,
             )
-        return np.concatenate(
-            [np.array(result.audio) for result in results]
-        ), model.sample_rate
+        pieces = []
+        for result in results:
+            piece = np.array(result.audio)
+            if on_audio is not None:
+                on_audio(piece, model.sample_rate)
+            pieces.append(piece)
+        return np.concatenate(pieces), model.sample_rate
 
     if kind == "Base":
         prompt = _clone_prompt(model, voice["ref_audio"], voice["ref_text"])
         wavs, sample_rate = model.generate_voice_clone(
-            text=text, language=language, voice_clone_prompt=prompt, **sampling
+            text=text,
+            language=language,
+            voice_clone_prompt=prompt,
+            **sampling,
         )
     elif kind == "CustomVoice":
         wavs, sample_rate = model.generate_custom_voice(
-            text=text, language=language, **voice, **sampling
+            text=text,
+            language=language,
+            **voice,
+            **sampling,
         )
     else:
         wavs, sample_rate = model.generate_voice_design(
-            text=text, language=language, **voice, **sampling
+            text=text,
+            language=language,
+            **voice,
+            **sampling,
         )
+    # qwen-tts does not stream, so the whole chunk is the only piece.
+    if on_audio is not None:
+        on_audio(wavs[0], sample_rate)
     return wavs[0], sample_rate
 
 
-def generate_chunks(
+def iter_chunks(
     kind: str,
     text: str,
     language: str = "auto",
@@ -176,11 +219,13 @@ def generate_chunks(
     repetition_penalty: float = 1.05,
     max_new_tokens: int = 2048,
     max_chars: int = chunking.DEFAULT_MAX_CHARS,
-) -> tuple[list[tuple[str, np.ndarray]], int]:
-    """Synthesize text chunk by chunk (see chunking.py) and return each chunk's
-    text and audio, plus the sample rate. Speaker is for CustomVoice, instruct
-    for CustomVoice and VoiceDesign, ref_audio and the optional ref_text for
-    Base.
+    on_audio: Callable[[np.ndarray, int], None] | None = None,
+) -> Iterator[tuple[str, np.ndarray, int]]:
+    """Synthesize text chunk by chunk (see chunking.py) and yield each chunk's
+    text, audio, and sample rate as soon as it is done. Speaker is for
+    CustomVoice, instruct for CustomVoice and VoiceDesign, ref_audio and the
+    optional ref_text for Base. on_audio, if given, receives the audio while it
+    is generated, in pieces of about 2 s on the Mac and whole chunks on Linux.
     """
     model = load_model(kind, precision)
     voice = {
@@ -189,7 +234,6 @@ def generate_chunks(
         "VoiceDesign": {"instruct": instruct},
     }[kind]
 
-    chunks = []
     for chunk in chunking.split_chunks(text, max_chars):
         sampling = {
             "temperature": temperature,
@@ -199,13 +243,20 @@ def generate_chunks(
             "max_new_tokens": max_new_tokens,
         }
         audio, sample_rate = _generate_piece(
-            model, kind, chunk, language, voice, sampling
+            model,
+            kind,
+            chunk,
+            language,
+            voice,
+            sampling,
+            on_audio,
         )
-        chunks.append((chunk, audio))
-    return chunks, sample_rate
+        yield chunk, audio, sample_rate
 
 
 def generate(*args, **kwargs) -> tuple[np.ndarray, int]:
-    """Like generate_chunks(), but return all chunks joined into one audio."""
-    chunks, sample_rate = generate_chunks(*args, **kwargs)
-    return np.concatenate([audio for _, audio in chunks]), sample_rate
+    """Like iter_chunks(), but return all chunks joined into one audio and the
+    sample rate.
+    """
+    chunks = list(iter_chunks(*args, **kwargs))
+    return np.concatenate([audio for _, audio, _ in chunks]), chunks[-1][2]

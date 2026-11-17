@@ -3,11 +3,15 @@
 
 Blank lines separate paragraphs; a chunk never crosses one. Within a
 paragraph, line breaks become spaces, so hard-wrapped lines are joined. Then,
-until the paragraph is used up: take the first max-chars characters, find the
-last of ". ", "? ", "! ", ", ", or "; " in them, and cut after its
-punctuation mark. Without any of these, cut at the last space, or at
-max-chars if there is no space. Once the rest of the paragraph fits, it is
-the last chunk. So short sentences are packed together greedily, in order.
+until the paragraph is used up: take the first max-chars characters and cut
+after the last sentence end in them (". ", "? ", "! ", also before closing
+quotes or brackets like `." ` or `!) `). Without a sentence end, cut after the last
+"; ", else after the last ", ", else at the last space, else at max-chars.
+Once the rest of the paragraph fits, it is the last chunk. So short sentences
+are packed together greedily, in order.
+
+Abbreviations like "z. B." count as sentence ends, and a heading without a
+period is joined to the next line of its paragraph.
 
 Usage:
 
@@ -24,6 +28,7 @@ create-audiobook-from-textfiles.py use split_chunks() from here.
 """
 
 import argparse
+import itertools
 import re
 import shutil
 import subprocess
@@ -31,7 +36,24 @@ import sys
 from pathlib import Path
 
 DEFAULT_MAX_CHARS = 500
-SENTENCE_ENDS = (". ", "? ", "! ", ", ", "; ")
+
+# Places to cut, best first; each pattern ends in the space to cut at.
+CUT_PATTERNS = (
+    # Sentence end, also before closing quotes or brackets, e.g. `." ` or `!) `
+    re.compile(r"[.!?][\"'\u201c\u201d\u2018\u2019\u00ab\u00bb)\]]* "),
+    re.compile(r"; "),
+    re.compile(r", "),
+    re.compile(r" "),
+)
+
+
+def find_cut(window: str) -> int:
+    """Return the index of the space after the best cut place, or -1."""
+    for pattern in CUT_PATTERNS:
+        matches = list(pattern.finditer(window))
+        if matches:
+            return matches[-1].end() - 1
+    return -1
 
 
 def split_paragraph(paragraph: str, max_chars: int) -> list[str]:
@@ -39,13 +61,10 @@ def split_paragraph(paragraph: str, max_chars: int) -> list[str]:
     rest = " ".join(paragraph.split())
     chunks = []
     while len(rest) > max_chars:
-        window = rest[: max_chars + 1]
-        end = max(window.rfind(mark) for mark in SENTENCE_ENDS)
-        space = window.rfind(" ")
-        if end != -1:
-            chunk, rest = rest[: end + 1], rest[end + 2 :]
-        elif space != -1:
-            chunk, rest = rest[:space], rest[space + 1 :]
+        cut = find_cut(rest[: max_chars + 1])
+        if cut != -1:
+            after_space = cut + 1
+            chunk, rest = rest[:cut], rest[after_space:]
         else:
             chunk, rest = rest[:max_chars], rest[max_chars:]
         chunks.append(chunk)
@@ -65,7 +84,7 @@ def split_paragraphs(text: str, max_chars: int) -> list[list[str]]:
 
 def split_chunks(text: str, max_chars: int) -> list[str]:
     """Return the chunks of all paragraphs of the text in one list."""
-    return [chunk for chunks in split_paragraphs(text, max_chars) for chunk in chunks]
+    return list(itertools.chain.from_iterable(split_paragraphs(text, max_chars)))
 
 
 def _clipboard_read_command() -> list[str]:
@@ -85,7 +104,8 @@ def _clipboard_read_command() -> list[str]:
 def main() -> None:
     """Print the chunks of the text from a file, the clipboard, or a pipe."""
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("file", nargs="?", type=Path, help="text file to split")
     parser.add_argument(

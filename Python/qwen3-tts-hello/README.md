@@ -8,6 +8,10 @@ Runs on Linux with an NVIDIA GPU via `qwen-tts`, and on Apple Silicon via
 [mlx-audio](https://github.com/Blaizzy/mlx-audio). `qwen3_backend.py` picks the
 library by platform.
 
+The model is really good, much slower than kokoro though.
+However, the Qwen3 works with chunks and can stream, meaning it can output parts
+before the whole generation is done, which makes it real-time capable.
+
 ## Setup
 
 ```bash
@@ -19,7 +23,10 @@ The first run of each model downloads its weights from Hugging Face.
 ## Usage
 
 ```bash
-uv run gradio-qwen3-tts-hello.py        # browser app on http://127.0.0.1:7860
+# Interactive Gradio webapp
+uv run gradio-qwen3-tts-hello.py                           # browser app on http://127.0.0.1:7860
+uv run gradio gradio-qwen3-tts-hello.py                    # same but with hot reloading
+GRADIO_SERVER_PORT=1234 uv run gradio-qwen3-tts-hello.py   # http://127.0.0.1:1234
 uv run main.py                          # non-interactive one line with speaker Aiden to output.wav
 
 # Proper CLI tool
@@ -29,25 +36,36 @@ uv run qwen3-speak.py text.txt --speaker ryan --instruct "Calm audiobook narrati
 uv run qwen3-speak.py text.txt --voice andreas-de --precision 4bit  # smaller model, Mac only
 uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"
 
-uv run chunking.py text.txt             # print the chunks; also --clipboard or a pipe
+uv run chunking.py --help
+uv run chunking.py text.txt     # chunk given text, outputs to stdout
 
-./ctts.sh --voice andreas-de notes.md   # Transform readable text, tehm convert to audio
+./run-time-benchmark.sh         # time Kokoro and every Qwen3 precision on text.txt
 
+# untested / dirty helpers
+
+uv run create-audiobook-from-textfiles.py --help
+uv run create-audiobook-from-textfiles.py --only-chapters 1  # test run, preset speaker Ryan
+uv run create-audiobook-from-textfiles.py --language german --voice andreas-de  # saved voice clone
+
+./ctts.sh --voice andreas-de notes.md   # Transform readable text, then convert to audio
 ./friendlify.sh book.txt                # Make book.txt text-to-speech - friendly
-
-./run-time-benchmark.sh                 # time Kokoro and every Qwen3 precision on text.txt
 ```
 
 - The text is spoken in chunks of at most `--max-chars` characters (default
   500, a slider in the Gradio app), split by `chunking.py`: line breaks within
-  a paragraph become spaces, each chunk ends at the last `. `, `? `, `! `,
-  `, `, or `; ` that fits (else at the last space), and a chunk never crosses
-  a blank line. Short sentences are packed together.
+  a paragraph become spaces, and each chunk ends after the last sentence end
+  that fits (`. `, `? `, `! `, also before closing quotes), else after the
+  last `; `, else after the last `, `, else at the last space; a chunk never
+  crosses a blank line. Short sentences are packed together.
 - `chunking.py` also runs alone and prints the chunks, one per line with a
   blank line between paragraphs.
+- The Gradio app's live player, a separate page at
+  http://127.0.0.1:7860/live, plays the speech while the model generates it:
+  in pieces of about 2 s on the Mac, whole chunks on Linux.
 - The Gradio app lists every chunk below the output with its own player and
-  download button, and offers all chunks as one zip of WAV files plus
-  `chunks.txt`, which has the text of each chunk on its own line.
+  download button. One link downloads all chunks as a zip of WAV files plus
+  `chunks.txt`, which has the text of each chunk on its own line; another
+  opens `chunks.txt` in a new browser tab.
 - The Gradio app's "Save voice" button stores a voice clone in the git-ignored
   `voices/NAME/` folder; `--voice NAME` uses it.
 - `qwen3-speak.py` has the same settings as the Gradio app.
@@ -137,10 +155,9 @@ the voice is cloned:
   voice, not like you speaking.
 - With a transcript, the whole recording goes into the model's context before
   every chunk, which costs time and memory; a longer recording costs more.
-- A longer recording is not better. It costs more time and memory (6 minutes
-  are about 4500 positions in the context, 20 seconds about 250), and
-  `mlx-audio` warns in its source that long reference audio makes the output
-  degenerate. Use a clean clip of up to about 30 seconds.
+- A longer recording is not better. It costs more time and memory (6 minutes are
+  about 4500 positions in the context, 20 seconds about 250), a long reference
+  audio makes the output degenerate. Use a clean clip of up to about 30 seconds.
 - On the Mac, `mlx-audio` raises the repetition penalty to at least 1.5 in
   this mode to keep the output from looping.
 - A wrong transcript misleads the model about which sounds are which words.
@@ -182,9 +199,9 @@ RAM of the `mlx-community` models used on the Mac:
 └─────────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
 ```
 
-RAM idle is the memory MLX holds right after loading a model.
-RAM peak is the highest memory MLX held while the model also spoke one short line
-Peaks vary by up to about 1 GB between runs.
+RAM idle is the memory MLX holds right after loading a model.  
+RAM peak is the highest memory MLX held while the model also spoke one short line.
+Peaks vary by up to about 1 GB between runs.  
 The peaks were measured on one text of 151 characters (two sentences), which
 came out as 8 to 17 seconds of audio. Generation memory grows with the length
 of the audio, so a longer chunk (`--max-chars`) peaks higher than the table

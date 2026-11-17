@@ -37,7 +37,8 @@ import qwen3_backend
 def parse_args() -> argparse.Namespace:
     """Parse the command-line arguments."""
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "file",
@@ -63,7 +64,8 @@ def parse_args() -> argparse.Namespace:
         help="preset speaker of the CustomVoice model",
     )
     voice.add_argument(
-        "--voice-design", help="description of a new voice, e.g. 'A deep, calm voice'"
+        "--voice-design",
+        help="description of a new voice, e.g. 'A deep, calm voice'",
     )
     parser.add_argument("--ref-text", help="transcript of --ref-audio")
     parser.add_argument("--instruct", help="style instruction for --speaker")
@@ -87,7 +89,10 @@ def parse_args() -> argparse.Namespace:
         help="lower is steadier, higher livelier (default: 0.9)",
     )
     parser.add_argument(
-        "--top-k", type=int, default=50, help="candidate sounds per step (default: 50)"
+        "--top-k",
+        type=int,
+        default=50,
+        help="candidate sounds per step (default: 50)",
     )
     parser.add_argument(
         "--top-p",
@@ -114,7 +119,10 @@ def parse_args() -> argparse.Namespace:
         help="chunk size limit in characters (default: %(default)s)",
     )
     parser.add_argument(
-        "--seed", type=int, default=0, help="random seed; 0 for random (default: 0)"
+        "--seed",
+        type=int,
+        default=0,
+        help="random seed; 0 for random (default: 0)",
     )
     return parser.parse_args()
 
