@@ -21,9 +21,8 @@ Settings:
 - Repetition penalty: discourages repeating the same sounds; on the Mac, voice
   cloning with a transcript uses at least 1.5
 - Max tokens: limit per chunk of text; 12.5 tokens are one second of audio
-- Max characters: the text is spoken in chunks of at most this size;
-  consecutive lines are merged until the limit, a longer line is split at
-  sentence endings, and a chunk never crosses a blank line
+- Max characters: the text is spoken in chunks of at most this size, split
+  by chunking.py; a chunk never crosses a blank line
 - Below the output, every chunk has its own player with a download button;
   one zip holds all chunk WAV files and chunks.txt with the chunk texts
 
@@ -43,6 +42,7 @@ import gradio as gr
 import numpy as np
 import soundfile as sf
 
+import chunking
 import qwen3_backend
 
 MODES = {
@@ -83,6 +83,9 @@ def generate(
     max_chars: float,
     seed: float,
 ) -> tuple[tuple[int, np.ndarray], str, list[tuple[str, int, np.ndarray]], str]:
+    """Speak the text; return the joined audio, an info line, the chunks for
+    the chunk players, and the path of the chunk zip.
+    """
     if seed != 0:
         qwen3_backend.seed(int(seed))
 
@@ -122,7 +125,8 @@ def generate(
 
 def zip_chunks(chunks: list[tuple[str, np.ndarray]], sample_rate: int) -> str:
     """Write the chunks as 0001.wav, 0002.wav, ... plus chunks.txt, with the
-    text of each chunk on its own line, into a zip file and return its path."""
+    text of each chunk on its own line, into a zip file and return its path.
+    """
     zip_path = Path(tempfile.mkdtemp(prefix="qwen3-chunks-")) / "chunks.zip"
     with zipfile.ZipFile(zip_path, "w") as archive:
         for index, (_, chunk_audio) in enumerate(chunks, start=1):
@@ -136,6 +140,7 @@ def zip_chunks(chunks: list[tuple[str, np.ndarray]], sample_rate: int) -> str:
 def save_voice(
     name: str, reference_audio: str | None, reference_text: str
 ) -> gr.Dropdown:
+    """Store the reference audio and transcript in voices/NAME/."""
     name = name.strip()
     if not name or reference_audio is None:
         raise gr.Error("Saving a voice needs a name and a reference audio.")
@@ -150,6 +155,7 @@ def save_voice(
 
 
 def load_voice(name: str | None) -> tuple[str, str]:
+    """Return the reference audio path and transcript of a saved voice."""
     if not name:
         raise gr.Error("Pick a saved voice first.")
     reference, transcript = qwen3_backend.load_saved_voice(name)
@@ -157,6 +163,7 @@ def load_voice(name: str | None) -> tuple[str, str]:
 
 
 def change_mode(mode: str) -> tuple[str, gr.Group, gr.Dropdown, gr.Textbox]:
+    """Show the inputs that the selected mode uses."""
     instruct_labels = {
         "Voice cloning": "Instruction (not used for voice cloning)",
         "Preset voice": "Style instruction (optional), e.g. Calm, even audiobook narration",
@@ -171,6 +178,7 @@ def change_mode(mode: str) -> tuple[str, gr.Group, gr.Dropdown, gr.Textbox]:
 
 
 def main() -> None:
+    """Build and launch the Gradio app."""
     with gr.Blocks(title="Qwen3-TTS Hello") as demo:
         with gr.Row():
             with gr.Column():
@@ -195,11 +203,12 @@ def main() -> None:
                     50,
                     1000,
                     step=10,
-                    value=300,
-                    label="Max characters per chunk (default 300)",
-                    info="The text is spoken chunk by chunk. Consecutive lines are merged "
-                    "until this size, a longer line is split at sentence endings, and a "
-                    "chunk never crosses a blank line. Longer chunks flow more naturally, "
+                    value=chunking.DEFAULT_MAX_CHARS,
+                    label=f"Max characters per chunk (default {chunking.DEFAULT_MAX_CHARS})",
+                    info="The text is spoken chunk by chunk. Line breaks within a paragraph "
+                    "become spaces, and each chunk ends at the last sentence end, comma, or "
+                    "semicolon that fits; a chunk never crosses a blank line. Longer chunks "
+                    "flow more naturally, "
                     "but can drift or repeat, need more memory, and cost more to redo.",
                 )
                 max_tokens = gr.Slider(
@@ -213,7 +222,7 @@ def main() -> None:
                     "runaway generation; 2048 tokens are about 2.7 minutes. Too low "
                     "cuts the speech off: a chunk needs roughly 1 token per character, "
                     "more for slow speech. A cap of 2.5 to 3 tokens per character of "
-                    "max characters is safe: 800 for 300 characters, 1600 for 600.",
+                    "max characters is safe: 1400 for 500 characters, 800 for 300.",
                 )
                 language = gr.Dropdown(
                     choices=qwen3_backend.LANGUAGES, value="auto", label="Language"

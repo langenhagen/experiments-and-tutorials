@@ -14,7 +14,6 @@ The three model kinds:
 - CustomVoice: 9 preset speakers, optionally steered by a style instruction
 - VoiceDesign: a new voice described in words by the instruction
 
-- `split_chunks()` cuts a text into chunks of at most a number of characters
 - `generate_chunks()` synthesizes a text and returns the text and audio of
   each chunk as its own piece, plus the sample rate
 - `generate()` does the same and joins the pieces into one audio
@@ -24,11 +23,12 @@ The three model kinds:
 """
 
 import functools
-import re
 import sys
 from pathlib import Path
 
 import numpy as np
+
+import chunking
 
 USES_MLX = sys.platform == "darwin"
 
@@ -74,6 +74,7 @@ SPEAKERS = {
 
 @functools.lru_cache(maxsize=1)  # Keep only one model in memory at a time
 def load_model(kind: str, precision: str):
+    """Load a model kind in a precision with the library of this platform."""
     if USES_MLX:
         return load(f"mlx-community/Qwen3-TTS-12Hz-1.7B-{kind}-{precision}")
     if precision != "bf16":
@@ -95,6 +96,7 @@ def _clone_prompt(model, ref_audio: str, ref_text: str | None):
 
 
 def saved_voice_names() -> list[str]:
+    """Return the names of the voice clones saved in voices/."""
     return sorted(path.parent.name for path in VOICES_DIR.glob("*/transcript.txt"))
 
 
@@ -110,38 +112,11 @@ def load_saved_voice(name: str) -> tuple[str, str | None]:
 
 
 def seed(value: int) -> None:
+    """Seed the random generator of the platform library."""
     if USES_MLX:
         mx.random.seed(value)
     else:
         torch.manual_seed(value)
-
-
-def split_chunks(text: str, max_chars: int) -> list[str]:
-    """Split text into the chunks that are spoken one by one.
-
-    Blank lines separate paragraphs; a chunk never crosses one. Within a
-    paragraph, consecutive lines are merged into one chunk until max_chars is
-    reached. A line longer than max_chars is first split at sentence endings.
-    A single sentence longer than max_chars stays whole.
-    """
-    chunks = []
-    for paragraph in re.split(r"\n\s*\n", text):
-        current = ""
-        for line in paragraph.splitlines():
-            line = line.strip()
-            units = (
-                re.split(r"(?<=[.!?])\s+", line) if len(line) > max_chars else [line]
-            )
-            for unit in units:
-                if current and len(current) + 1 + len(unit) <= max_chars:
-                    current += " " + unit
-                else:
-                    if current:
-                        chunks.append(current)
-                    current = unit
-        if current:
-            chunks.append(current)
-    return chunks
 
 
 def _generate_piece(
@@ -200,9 +175,9 @@ def generate_chunks(
     top_p: float = 1.0,
     repetition_penalty: float = 1.05,
     max_new_tokens: int = 2048,
-    max_chars: int = 300,
+    max_chars: int = chunking.DEFAULT_MAX_CHARS,
 ) -> tuple[list[tuple[str, np.ndarray]], int]:
-    """Synthesize text chunk by chunk (see split_chunks) and return each chunk's
+    """Synthesize text chunk by chunk (see chunking.py) and return each chunk's
     text and audio, plus the sample rate. Speaker is for CustomVoice, instruct
     for CustomVoice and VoiceDesign, ref_audio and the optional ref_text for
     Base.
@@ -215,7 +190,7 @@ def generate_chunks(
     }[kind]
 
     chunks = []
-    for chunk in split_chunks(text, max_chars):
+    for chunk in chunking.split_chunks(text, max_chars):
         sampling = {
             "temperature": temperature,
             "top_k": top_k,

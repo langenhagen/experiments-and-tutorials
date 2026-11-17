@@ -2,8 +2,7 @@
 """Speak a text file with Qwen3-TTS and write the audio to a file.
 
 Offers the same settings as gradio-qwen3-tts-hello.py. The text is spoken in
-chunks of at most --max-chars characters: consecutive lines are merged until
-the limit, a longer line is split at sentence endings, and a chunk never
+chunks of at most --max-chars characters, split by chunking.py; a chunk never
 crosses a blank line. The output format follows the extension of --out-file,
 for example .mp3 or .wav.
 
@@ -31,17 +30,19 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
+import chunking
 import qwen3_backend
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse the command-line arguments."""
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
         "file",
         type=Path,
-        help="text file, one sentence per line, blank line between paragraphs",
+        help="text file; blank lines separate paragraphs",
     )
     parser.add_argument(
         "--out-file",
@@ -109,8 +110,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-chars",
         type=int,
-        default=300,
-        help="chunk size limit in characters (default: 300)",
+        default=chunking.DEFAULT_MAX_CHARS,
+        help="chunk size limit in characters (default: %(default)s)",
     )
     parser.add_argument(
         "--seed", type=int, default=0, help="random seed; 0 for random (default: 0)"
@@ -119,6 +120,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Speak the text file chunk by chunk and write the audio file."""
     args = parse_args()
 
     if args.ref_audio:
@@ -134,7 +136,7 @@ def main() -> None:
     if args.seed != 0:
         qwen3_backend.seed(args.seed)
 
-    chunks = qwen3_backend.split_chunks(args.file.read_text(), args.max_chars)
+    chunks = chunking.split_chunks(args.file.read_text(), args.max_chars)
     out_file = args.out_file or args.file.with_suffix(".mp3")
 
     pieces = []

@@ -29,6 +29,8 @@ uv run qwen3-speak.py text.txt --speaker ryan --instruct "Calm audiobook narrati
 uv run qwen3-speak.py text.txt --voice andreas-de --precision 4bit  # smaller model, Mac only
 uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"
 
+uv run chunking.py text.txt             # print the chunks; also --clipboard or a pipe
+
 ./ctts.sh --voice andreas-de notes.md   # Transform readable text, tehm convert to audio
 
 ./friendlify.sh book.txt                # Make book.txt text-to-speech - friendly
@@ -37,9 +39,12 @@ uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"
 ```
 
 - The text is spoken in chunks of at most `--max-chars` characters (default
-  300, a slider in the Gradio app): consecutive lines are merged until the
-  limit, a longer line is split at sentence endings, and a chunk never crosses
-  a blank line.
+  500, a slider in the Gradio app), split by `chunking.py`: line breaks within
+  a paragraph become spaces, each chunk ends at the last `. `, `? `, `! `,
+  `, `, or `; ` that fits (else at the last space), and a chunk never crosses
+  a blank line. Short sentences are packed together.
+- `chunking.py` also runs alone and prints the chunks, one per line with a
+  blank line between paragraphs.
 - The Gradio app lists every chunk below the output with its own player and
   download button, and offers all chunks as one zip of WAV files plus
   `chunks.txt`, which has the text of each chunk on its own line.
@@ -68,8 +73,8 @@ uv run create-audiobook-from-textfiles.py --only-chapters 1          # test run,
 uv run create-audiobook-from-textfiles.py --language german --voice andreas-de  # saved voice clone
 ```
 
-The script reads `text/chapter_NN.txt`, splits each chapter at sentence
-boundaries into chunks of at most `--max-chars` characters (default 300),
+The script reads `text/chapter_NN.txt`, splits each chapter with `chunking.py`
+into chunks of at most `--max-chars` characters (default 500),
 speaks every chunk, and stitches them into one WAV per chapter in
 `audiobook/`. The chunks stay in `audio/chapter_NN/`; a rerun skips existing
 chunks, so an interrupted run continues where it stopped. It warns about
@@ -88,9 +93,9 @@ Guesstimated good values for audiobooks:
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Precision          │ bf16, or 8bit if bf16 is too slow                                                             │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Language           │ Set it, for example german                                                                    │
+│ Language           │ not `auto`, set it, for example to `German`                                                   │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Max characters     │ 200 - 300                                                                                     │
+│ Max characters     │ 200 - 300 to avoid runaway effects (speakers become faster or crazy)                          │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Temperature        │ 0.7 to 0.8                                                                                    │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤

@@ -2,9 +2,9 @@
 """Create per-chapter WAV audiobook files from a folder of text files.
 
 Reads every chapter_NN.txt file from the text directory (default:
-./text/, override with --text-dir), cleans conversion leftovers,
-splits each chapter at sentence boundaries into chunks of at most
---max-chars characters, synthesizes every chunk with Qwen3-TTS, and
+./text/, override with --text-dir), drops page-number lines, splits
+each chapter into chunks of at most --max-chars characters with
+chunking.py, synthesizes every chunk with Qwen3-TTS, and
 stitches the chunk audio into one WAV file per chapter.
 
 Runs on Linux with an NVIDIA GPU or on an Apple Silicon Mac; see
@@ -39,13 +39,13 @@ from typing import NamedTuple
 import numpy as np
 import soundfile as sf
 
+import chunking
 import qwen3_backend
 
 MIN_CHUNK_SEC_PER_WORD = 0.27
 MAX_CHUNK_SEC_PER_WORD = 0.75
 MANIFEST_NAME = "manifest.json"
 CHAPTER_PATTERN = re.compile(r"^chapter_(\d+)\.txt$")
-SENTENCE_END = re.compile(r"[.!?]+[\"'\u2019\u201d)\]]*")
 
 
 class Voice(NamedTuple):
@@ -166,15 +166,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-chars",
         type=int,
-        default=300,
+        default=chunking.DEFAULT_MAX_CHARS,
         help=(
             "Maximum characters per synthesis call. The TTS model degrades "
             "on long inputs (voice drift, repeated words), so each chapter "
-            "is split at sentence boundaries into chunks up to this size - "
-            "roughly 2-4 sentences or 10-20 seconds of audio per chunk. "
+            "is split by chunking.py into chunks up to this size - "
+            "roughly 3-6 sentences or half a minute of audio per chunk. "
             "Lower values give a more stable voice but slower runtime and "
             "more stitch points; higher values reduce seams but risk "
-            "mid-chunk artifacts. Default: 300"
+            "mid-chunk artifacts. Default: %(default)s"
         ),
     )
     parser.add_argument(
@@ -201,75 +201,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def read_paragraphs(path: Path) -> list[str]:
-    """Join hard-wrapped lines into paragraphs and drop page-number lines."""
-    blocks: list[list[str]] = [[]]
-    for line in path.read_text(encoding="utf-8").splitlines():
-        stripped = line.strip()
-        if not stripped:
-            if blocks[-1]:
-                blocks.append([])
-            continue
-        if stripped.isdigit():
-            continue
-        blocks[-1].append(stripped)
-    paragraphs = []
-    for lines in blocks:
-        if lines:
-            text = re.sub(r"\s+", " ", " ".join(lines)).strip()
-            if text:
-                paragraphs.append(text)
-    return paragraphs
-
-
-def split_sentences(text: str) -> list[str]:
-    """Split text at sentence-ending punctuation, keeping the punctuation."""
-    sentences = []
-    start = 0
-    for match in SENTENCE_END.finditer(text):
-        piece = text[start : match.end()].strip()
-        if piece:
-            sentences.append(piece)
-        start = match.end()
-    tail = text[start:].strip()
-    if tail:
-        sentences.append(tail)
-    return sentences
-
-
-def hard_split(text: str, max_chars: int) -> list[str]:
-    """Split an oversized single sentence at word boundaries."""
-    if len(text) <= max_chars:
-        return [text]
-    parts = []
-    rest = text
-    while len(rest) > max_chars:
-        cut = rest.rfind(" ", 0, max_chars)
-        if cut <= 0:
-            cut = max_chars
-        parts.append(rest[:cut].strip())
-        rest = rest[cut:].strip()
-    if rest:
-        parts.append(rest)
-    return parts
-
-
-def build_chunks(paragraphs: list[str], max_chars: int) -> list[str]:
-    """Group sentences into chunks of at most max_chars characters."""
-    chunks: list[str] = []
-    current = ""
-    for paragraph in paragraphs:
-        for sentence in split_sentences(paragraph):
-            if not current:
-                current = sentence
-            elif len(current) + 1 + len(sentence) <= max_chars:
-                current = f"{current} {sentence}"
-            else:
-                chunks.append(current)
-                current = sentence
-    if current:
-        chunks.append(current)
-    return [part for chunk in chunks for part in hard_split(chunk, max_chars)]
+def read_text(path: Path) -> str:
+    """Return the text of a chapter file without its page-number lines."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return "\n".join(line for line in lines if not line.strip().isdigit())
 
 
 def format_duration(seconds: float) -> str:
@@ -464,11 +399,10 @@ def main() -> None:
     for _number, text_path in chapters:
         label = text_path.stem
         print(f"\n== {label} ({text_path}) ==")
-        paragraphs = read_paragraphs(text_path)
-        if not paragraphs:
+        chunks = chunking.split_chunks(read_text(text_path), args.max_chars)
+        if not chunks:
             print("  Skipped: no usable text.")
             continue
-        chunks = build_chunks(paragraphs, args.max_chars)
         print(f"  {len(chunks)} chunk(s)")
         chunk_paths = synthesize_chapter(
             chunks,
