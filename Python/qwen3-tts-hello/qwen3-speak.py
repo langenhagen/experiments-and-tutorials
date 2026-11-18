@@ -20,7 +20,13 @@ Usage:
     qwen3-speak.py FILE --speaker ryan --instruct "Calm audiobook narration"
     qwen3-speak.py FILE --ref-audio me.wav --ref-text "What I say in me.wav"
     qwen3-speak.py FILE --voice-design "A deep, calm male voice" --out-file x.wav
+    qwen3-speak.py FILE --voice andreas-de --model 0.6B --precision 4
+    qwen3-speak.py FILE --speaker ryan --model 1.7B --precision bf16
     qwen3-speak.py --help
+
+--model picks the model size, 1.7B (default) or the smaller, faster 0.6B,
+which has no --voice-design. --precision is bf16 (default) or the bits of a
+smaller version: 8, 6, 5, or 4; only on the Mac.
 """
 
 import argparse
@@ -77,10 +83,18 @@ def parse_args() -> argparse.Namespace:
         help="auto detects the language from the text (default: auto)",
     )
     parser.add_argument(
+        "--model",
+        default=qwen3_backend.MODEL_SIZES[0],
+        choices=qwen3_backend.MODEL_SIZES,
+        help="model size; 0.6B is smaller and faster but has no --voice-design "
+        "(default: 1.7B)",
+    )
+    parser.add_argument(
         "--precision",
         default=qwen3_backend.PRECISIONS[0],
         choices=qwen3_backend.PRECISIONS,
-        help="lower bits are smaller and faster; Mac only (default: bf16)",
+        help="bf16 is full precision; 8, 6, 5, and 4 are the bits of smaller, "
+        "faster versions, Mac only (default: bf16)",
     )
     parser.add_argument(
         "--temperature",
@@ -154,6 +168,7 @@ def main() -> None:
             kind,
             chunk,
             args.language,
+            model_size=args.model,
             precision=args.precision,
             speaker=args.speaker,
             instruct=args.voice_design or args.instruct,

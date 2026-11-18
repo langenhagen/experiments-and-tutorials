@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Interactive Qwen3-TTS Gradio browser app.
 
-Runs Qwen3-TTS 1.7B on Linux with an NVIDIA GPU or on an Apple Silicon Mac;
-see qwen3_backend.py. Each mode uses its own model, which downloads on first use:
+Runs Qwen3-TTS (1.7B or the smaller 0.6B) on Linux with an NVIDIA GPU or on an
+Apple Silicon Mac; see qwen3_backend.py. Each mode uses its own model, which
+downloads on first use:
 
 - Voice cloning (Base model): speaks in the voice of a reference recording.
   With the transcript of the recording, the clone is closer to the original;
@@ -13,8 +14,9 @@ see qwen3_backend.py. Each mode uses its own model, which downloads on first use
   e.g. "A deep, calm male voice"
 
 Settings:
-- Precision: bf16 is full precision; 8, 6, 5, and 4-bit are smaller and
-  faster, and only available on the Mac
+- Model size: 0.6B is smaller and faster than 1.7B, but has no Voice design
+- Precision: bf16 is full precision; 8, 6, 5, and 4 are the bits of smaller,
+  faster versions, only available on the Mac
 - Language: auto detects the language from the text
 - Temperature: randomness of the delivery; lower is steadier, higher livelier
 - Top-k and top-p: how many candidate sounds the model may pick from
@@ -295,6 +297,7 @@ def clear_outputs() -> tuple[None, str, list, str]:
 
 def generate(
     mode: str,
+    model_size: str,
     precision: str,
     text: str,
     language: str,
@@ -317,6 +320,9 @@ def generate(
     and chunks.txt instead of the progress line. Stops after the current chunk
     when a newer run has started.
     """
+    if mode == "Voice design" and model_size == "0.6B":
+        raise gr.Error("Voice design has no 0.6B model. Pick model size 1.7B.")
+
     if seed != 0:
         qwen3_backend.seed(int(seed))
 
@@ -342,6 +348,7 @@ def generate(
         MODES[mode],
         text,
         language,
+        model_size=model_size,
         precision=precision,
         speaker=speaker,
         instruct=instruct.strip() or None,
@@ -426,11 +433,17 @@ def build_demo() -> gr.Blocks:
                         info="Where the voice comes from",
                     )
                     mode_description = gr.Markdown(MODE_DESCRIPTIONS["Voice cloning"])
+                    model_size = gr.Dropdown(
+                        choices=qwen3_backend.MODEL_SIZES,
+                        value=qwen3_backend.MODEL_SIZES[0],
+                        label="Model size (0.6B is smaller and faster than 1.7B, "
+                        "but has no Voice design)",
+                    )
                     precision = gr.Dropdown(
                         choices=qwen3_backend.PRECISIONS,
                         value=qwen3_backend.PRECISIONS[0],
-                        label="Precision (bf16 is full precision; lower bits are "
-                        "smaller and faster, Mac only)",
+                        label="Precision (bf16 is full precision; 8, 6, 5, and 4 "
+                        "are the bits of smaller, faster versions, Mac only)",
                     )
                     text = gr.Textbox(
                         value=SAMPLE_TEXT,
@@ -630,6 +643,7 @@ def build_demo() -> gr.Blocks:
             fn=generate,
             inputs=[
                 mode,
+                model_size,
                 precision,
                 text,
                 language,

@@ -52,6 +52,7 @@ class Voice(NamedTuple):
     """Model kind and voice settings for synthesis; see qwen3_backend.generate()."""
 
     kind: str
+    model_size: str
     precision: str
     language: str
     speaker: str
@@ -144,12 +145,21 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--model",
+        default="1.7B",
+        choices=qwen3_backend.MODEL_SIZES,
+        help=(
+            "Model size; 0.6B is smaller and faster than 1.7B but has no "
+            "voice design. Default: 1.7B"
+        ),
+    )
+    parser.add_argument(
         "--precision",
         default="bf16",
         choices=qwen3_backend.PRECISIONS,
         help=(
-            "Model precision; 8, 6, 5, and 4-bit are smaller and faster "
-            "and only available on the Mac. Default: bf16"
+            "Model precision: bf16, or the bits 8, 6, 5, and 4 of smaller, "
+            "faster versions, only available on the Mac. Default: bf16"
         ),
     )
     parser.add_argument(
@@ -271,6 +281,7 @@ def synthesize_chapter(
                 voice.kind,
                 text,
                 voice.language,
+                model_size=voice.model_size,
                 precision=voice.precision,
                 speaker=voice.speaker,
                 instruct=voice.instruct,
@@ -385,6 +396,7 @@ def main() -> None:
 
     voice = Voice(
         kind=kind,
+        model_size=args.model,
         precision=args.precision,
         language=args.language,
         speaker=args.speaker,

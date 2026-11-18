@@ -1,16 +1,22 @@
 # Qwen3 TTS Hello
 
-Showcase Alibaba's [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) 1.7B for
-text-to-speech in 10 languages, including English and German: voice cloning,
-9 preset speakers with style instructions, and voice design from a description.
+Showcase Alibaba's [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) for
+text-to-speech in 10 languages, including English and German:
 
-Runs on Linux with an NVIDIA GPU via `qwen-tts`, and on Apple Silicon via
-[mlx-audio](https://github.com/Blaizzy/mlx-audio). `qwen3_backend.py` picks the
-library by platform.
+- Voice cloning
+- 9 preset speakers with style instructions
+- Voice design from a description
 
-The model is really good, much slower than kokoro though.
-However, the Qwen3 works with chunks and can stream, meaning it can output parts
-before the whole generation is done, which makes it real-time capable.
+It runs on:
+
+- Linux with an NVIDIA GPU, via `qwen-tts`
+- Apple Silicon, via [mlx-audio](https://github.com/Blaizzy/mlx-audio)
+
+`qwen3_backend.py` picks the library by platform.
+
+The model is really good, much slower than Kokoro though. However, Qwen3 works
+with chunks and can stream, meaning it can output parts before the whole
+generation is done, which makes it real-time capable.
 
 ## Setup
 
@@ -33,13 +39,15 @@ uv run main.py                          # non-interactive one line with speaker 
 uv run qwen3-speak.py --help
 uv run qwen3-speak.py text.txt --voice andreas-de   # saved voice clone to text.mp3
 uv run qwen3-speak.py text.txt --speaker ryan --instruct "Calm audiobook narration"
-uv run qwen3-speak.py text.txt --voice andreas-de --precision 4bit  # smaller model, Mac only
-uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"
+uv run qwen3-speak.py text.txt --voice andreas-de --precision 4                # 1.7B model in 4 bit, Mac only
+uv run qwen3-speak.py text.txt --voice andreas-de --model 0.6B --precision 4   # smaller 0.6B model in 4 bit, Mac only
+uv run qwen3-speak.py text.txt --speaker ryan --model 0.6B                     # 0.6B model in full precision (bf16)
+uv run qwen3-speak.py text.txt --voice-design "A deep, calm male voice"        # 1.7B only; there is no 0.6B voice design
 
 uv run chunking.py --help
 uv run chunking.py text.txt     # chunk given text, outputs to stdout
 
-./run-time-benchmark.sh         # time Kokoro and every Qwen3 precision on text.txt
+./run-time-benchmark.sh         # time Kokoro and every Qwen3 size and precision on text.txt
 
 # untested / dirty helpers
 
@@ -48,40 +56,51 @@ uv run create-audiobook-from-textfiles.py --only-chapters 1  # test run, preset 
 uv run create-audiobook-from-textfiles.py --language german --voice andreas-de  # saved voice clone
 
 ./ctts.sh --voice andreas-de notes.md   # Transform readable text, then convert to audio
-./friendlify.sh book.txt                # Make book.txt text-to-speech - friendly
+./friendlify.sh book.txt                # Make book.txt text-to-speech-friendly
 ```
 
-- The text is spoken in chunks of at most `--max-chars` characters (default
-  500, a slider in the Gradio app), split by `chunking.py`: line breaks within
-  a paragraph become spaces, and each chunk ends after the last sentence end
-  that fits (`. `, `? `, `! `, also before closing quotes), else after the
-  last `; `, else after the last `, `, else at the last space; a chunk never
-  crosses a blank line. Short sentences are packed together.
+- The text is spoken in chunks of at most `--max-chars` characters (default 500,
+  a slider in the Gradio app), split by `chunking.py`. Line breaks within a
+  paragraph become spaces, a chunk never crosses a blank line, and short
+  sentences are packed together. Each chunk ends:
+  - after the last sentence end that fits (`. `, `? `, `! `, also before
+    closing quotes),
+  - else after the last `; `,
+  - else after the last `, `,
+  - else at the last space.
 - `chunking.py` also runs alone and prints the chunks, one per line with a
   blank line between paragraphs.
 - The Gradio app's live player, a separate page at
-  http://127.0.0.1:7860/live, plays the speech while the model generates it:
-  in pieces of about 2 s on the Mac, whole chunks on Linux.
+  http://127.0.0.1:7860/live, plays the speech while the model generates it: in
+  pieces of about 2 s on the Mac, whole chunks on Linux.
 - The Gradio app lists every chunk below the output with its own player and
-  download button. One link downloads all chunks as a zip of WAV files plus
-  `chunks.txt`, which has the text of each chunk on its own line; another
-  opens `chunks.txt` in a new browser tab.
+  download button. It also offers two links:
+  - One downloads all chunks as a zip of WAV files plus `chunks.txt`, which has
+    the text of each chunk on its own line.
+  - One opens `chunks.txt` in a new browser tab.
 - The Gradio app's "Save voice" button stores a voice clone in the git-ignored
   `voices/NAME/` folder; `--voice NAME` uses it.
 - `qwen3-speak.py` has the same settings as the Gradio app.
-- The voice option picks the model: `--voice` and `--ref-audio` use Base,
-  `--speaker` uses CustomVoice, `--voice-design` uses VoiceDesign.
-  `--precision` picks its size (see Models).
+- The voice option picks the model:
+  - `--voice` and `--ref-audio` use Base.
+  - `--speaker` uses CustomVoice.
+  - `--voice-design` uses VoiceDesign.
+- `--model` and `--precision` pick the size and precision of that model (see
+  Models).
 - `ctts.sh` lets Claude rewrite the text as prose with one sentence per line,
   then passes all other options to `qwen3-speak.py`.
-- `run-time-benchmark.sh` runs Kokoro and Qwen3 voice cloning (4bit up to bf16)
-  three times each and writes the seconds per run and the mean to
-  `benchmark-results.txt`; the audio lands in `benchmark-kokoro-N.wav` and
-  `benchmark-qwen3-PRECISION-N.wav`.
+- `run-time-benchmark.sh` runs Kokoro and Qwen3 voice cloning three times each
+  and writes the seconds per run and the mean to `benchmark-results.txt`.
+  - Two of the three renderings of the 0.6B 4-bit variant showed runaway
+    effects in the audio, which explains their poor performance.
 - `friendlify.sh` lets Claude clean a text, for example one copied from a PDF,
-  without rewriting it: it joins broken lines, writes all-caps words, acronyms,
-  and abbreviations as spoken, removes Markdown, and puts one sentence per
-  line. Everything else stays verbatim.
+  without rewriting it. It only:
+  - joins broken lines,
+  - writes all-caps words, acronyms, and abbreviations as spoken,
+  - removes Markdown,
+  - puts one sentence per line.
+
+  Everything else stays verbatim.
 
 ## Audiobooks
 
@@ -91,16 +110,23 @@ uv run create-audiobook-from-textfiles.py --only-chapters 1          # test run,
 uv run create-audiobook-from-textfiles.py --language german --voice andreas-de  # saved voice clone
 ```
 
-The script reads `text/chapter_NN.txt`, splits each chapter with `chunking.py`
-into chunks of at most `--max-chars` characters (default 500),
-speaks every chunk, and stitches them into one WAV per chapter in
-`audiobook/`. The chunks stay in `audio/chapter_NN/`; a rerun skips existing
-chunks, so an interrupted run continues where it stopped. It warns about
-chunks that sound too fast or too slow for their word count.
+`create-audiobook-from-textfiles.py` does:
+- reads `text/chapter_NN.txt`,
+- splits each chapter with `chunking.py` into chunks of at most `--max-chars`
+  characters (default 500),
+- speaks every chunk and stitches them into one WAV per chapter in
+  `audiobook/`,
+- keeps the chunks in `audio/chapter_NN/`; a rerun skips existing chunks, so an
+  interrupted run continues where it stopped,
+- warns about chunks that sound too fast or too slow for their word count.
 
-The voice comes from `--speaker` with optional `--instruct`, `--voice NAME`,
-`--ref-audio` with optional `--ref-text`, or `--voice-design`. `--temperature`
-(default 0.9) sets the randomness of the delivery.
+The voice comes from one of:
+- `--speaker`, with optional `--instruct`
+- `--voice NAME`
+- `--ref-audio`, with optional `--ref-text`
+- `--voice-design`
+
+`--temperature` (default 0.9) sets the randomness of the delivery.
 
 Guesstimated good values for audiobooks:
 
@@ -109,11 +135,11 @@ Guesstimated good values for audiobooks:
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Mode               │ Voice cloning with a transcript, or Preset voice (Ryan) with "Calm, even audiobook narration" │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Precision          │ bf16, or 8bit if bf16 is too slow                                                             │
+│ Precision          │ bf16                                                                                          │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Language           │ not `auto`, set it, for example to `German`                                                   │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Max characters     │ 200 - 300 to avoid runaway effects (speakers become faster or crazy)                          │
+│ Max characters     │ 200 to 300 to avoid runaway effects (speakers become faster or crazy)                         │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Temperature        │ 0.7 to 0.8                                                                                    │
 ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -126,11 +152,10 @@ Guesstimated good values for audiobooks:
 │ Seed               │ Set it                                                                                        │
 └────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────┘
 
-
 ## Temperature
 
-`--temperature` (default 0.9) sets how adventurous the model is when picking
-the next bit of sound.
+`--temperature` sets how adventurous the model is when picking the next bit of
+sound.
 
 - Below about 0.6 the delivery is steadier but flatter, which gets tiring over
   hours of audio. A chunk can also run away: it never ends and fills the time
@@ -155,9 +180,10 @@ the voice is cloned:
   voice, not like you speaking.
 - With a transcript, the whole recording goes into the model's context before
   every chunk, which costs time and memory; a longer recording costs more.
-- A longer recording is not better. It costs more time and memory (6 minutes are
-  about 4500 positions in the context, 20 seconds about 250), a long reference
-  audio makes the output degenerate. Use a clean clip of up to about 30 seconds.
+- A longer recording is not better. It costs more time and memory (6 minutes
+  are about 4500 positions in the context, 20 seconds about 250), and a long
+  reference audio makes the output degenerate. Use a clean clip of up to about
+  30 seconds.
 - On the Mac, `mlx-audio` raises the repetition penalty to at least 1.5 in
   this mode to keep the output from looping.
 - A wrong transcript misleads the model about which sounds are which words.
@@ -176,11 +202,18 @@ the voice is cloned:
 └───────────────┴─────────────┴────────────────────────────────────────────────────┘
 ```
 
-On the Mac, `--precision` also offers 8, 6, 5, and 4-bit versions.
-Linux uses full precision only.
+`--model` and `--precision` pick the model that loads:
 
-RAM of the `mlx-community` models used on the Mac:
+- `--model`, the size:
+  - `1.7B` (default)
+  - `0.6B`: smaller and faster; can do voice cloning and preset voices,
+    not for voice design
+- `--precision`:
+  - `bf16` (default): full precision
+  - `8`, `6`, `5`, `4`: the bits of smaller, faster versions; Mac only, Linux
+    uses full precision only
 
+RAM of the 1.7B `mlx-community` models used on the Mac:
 ```
 ┌─────────────┬───────────────────┬───────────────────┬───────────────────┐
 │             │      Base RAM     │  CustomVoice RAM  │  VoiceDesign RAM  │
@@ -189,22 +222,43 @@ RAM of the `mlx-community` models used on the Mac:
 ├─────────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
 │ bf16        │ 4.61 GB │ 8.40 GB │ 4.58 GB │ 9.09 GB │ 4.58 GB │ 8.38 GB │
 ├─────────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-│ 8bit        │ 3.17 GB │ 6.79 GB │ 3.14 GB │ 6.83 GB │ 3.14 GB │ 7.40 GB │
+│ 8           │ 3.17 GB │ 6.79 GB │ 3.14 GB │ 6.83 GB │ 3.14 GB │ 7.40 GB │
 ├─────────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-│ 6bit        │ 2.78 GB │ 6.72 GB │ 2.76 GB │ 7.88 GB │ 2.76 GB │ 6.94 GB │
+│ 6           │ 2.78 GB │ 6.72 GB │ 2.76 GB │ 7.88 GB │ 2.76 GB │ 6.94 GB │
 ├─────────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-│ 5bit        │ 2.59 GB │ 6.42 GB │ 2.57 GB │ 6.64 GB │ 2.57 GB │ 6.68 GB │
+│ 5           │ 2.59 GB │ 6.42 GB │ 2.57 GB │ 6.64 GB │ 2.57 GB │ 6.68 GB │
 ├─────────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-│ 4bit        │ 2.40 GB │ 6.41 GB │ 2.37 GB │ 6.50 GB │ 2.37 GB │ 6.70 GB │
+│ 4           │ 2.40 GB │ 6.41 GB │ 2.37 GB │ 6.50 GB │ 2.37 GB │ 6.70 GB │
 └─────────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
 ```
 
-RAM idle is the memory MLX holds right after loading a model.  
-RAM peak is the highest memory MLX held while the model also spoke one short line.
-Peaks vary by up to about 1 GB between runs.  
-The peaks were measured on one text of 151 characters (two sentences), which
-came out as 8 to 17 seconds of audio. Generation memory grows with the length
-of the audio, so a longer chunk (`--max-chars`) peaks higher than the table
-shows.
+RAM of the 0.6B models, measured the same way (there is no 0.6B VoiceDesign):
+```
+┌─────────────┬───────────────────┬───────────────────┐
+│             │      Base RAM     │  CustomVoice RAM  │
+│             ├─────────┬─────────┼─────────┬─────────┤
+│ --precision │   idle  │   peak  │   idle  │   peak  │
+├─────────────┼─────────┼─────────┼─────────┼─────────┤
+│ bf16        │ 2.58 GB │ 6.30 GB │ 2.56 GB │ 6.75 GB │
+├─────────────┼─────────┼─────────┼─────────┼─────────┤
+│ 8           │ 2.05 GB │ 5.60 GB │ 2.04 GB │ 6.36 GB │
+├─────────────┼─────────┼─────────┼─────────┼─────────┤
+│ 6           │ 1.91 GB │ 5.14 GB │ 1.90 GB │ 5.63 GB │
+├─────────────┼─────────┼─────────┼─────────┼─────────┤
+│ 5           │ 1.84 GB │ 5.46 GB │ 1.83 GB │ 6.01 GB │
+├─────────────┼─────────┼─────────┼─────────┼─────────┤
+│ 4           │ 1.77 GB │ 5.63 GB │ 1.76 GB │ 6.01 GB │
+└─────────────┴─────────┴─────────┴─────────┴─────────┘
+```
 
-For comparison: Kokoro 2.00 GB RAM idle; 5.71 GB at peak.
+- RAM idle is the memory MLX holds right after loading a model.
+- RAM peak is the highest memory MLX held while the model also spoke one short
+  line. Peaks vary by up to about 1 GB between runs.
+- The peaks were measured on one text:
+  - 1.7B: 151 characters (two sentences), which came out as 8 to 17 seconds of
+    audio.
+  - 0.6B: 133 characters.
+- Generation memory grows with the length of the audio, so a longer chunk
+  (`--max-chars`) peaks higher than the tables show.
+
+For comparison, Kokoro uses 2.00 GB RAM idle and 5.71 GB at peak.

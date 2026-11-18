@@ -4,9 +4,13 @@
 - macOS: the MLX port in `mlx-audio` on the Apple Silicon GPU, in full
   precision (bf16) or smaller 8, 6, 5, and 4-bit versions
 
-Both libraries load the same three Qwen3-TTS 1.7B models and use the same
-lowercase language and speaker names. This module hides what differs: model
-IDs, loading, the voice-cloning call, and the type of the returned audio.
+Both libraries load the same Qwen3-TTS models and use the same lowercase
+language and speaker names. This module hides what differs: model IDs,
+loading, the voice-cloning call, and the type of the returned audio.
+
+The models come in two sizes, 1.7B and the smaller, faster 0.6B (model_size).
+The 0.6B size has no VoiceDesign model. The precision is bf16 (full) or the
+number of bits, 8, 6, 5, or 4; fewer bits are smaller and faster.
 
 The three model kinds:
 - Base: voice cloning from a reference recording, ideally with its transcript;
@@ -47,7 +51,8 @@ else:
 VOICES_DIR = Path(__file__).parent / "voices"
 
 MODEL_KINDS = ["Base", "CustomVoice", "VoiceDesign"]
-PRECISIONS = ["bf16", "8bit", "6bit", "5bit", "4bit"] if USES_MLX else ["bf16"]
+MODEL_SIZES = ["1.7B", "0.6B"]
+PRECISIONS = ["bf16", "8", "6", "5", "4"] if USES_MLX else ["bf16"]
 
 LANGUAGES = [
     "auto",
@@ -78,14 +83,17 @@ SPEAKERS = {
 
 
 @functools.lru_cache(maxsize=1)  # Keep only one model in memory at a time
-def load_model(kind: str, precision: str):
-    """Load a model kind in a precision with the library of this platform."""
+def load_model(kind: str, model_size: str, precision: str):
+    """Load a model kind in a size and precision with the library of this
+    platform.
+    """
     if USES_MLX:
-        return load(f"mlx-community/Qwen3-TTS-12Hz-1.7B-{kind}-{precision}")
+        bits = precision if precision == "bf16" else f"{precision}bit"
+        return load(f"mlx-community/Qwen3-TTS-12Hz-{model_size}-{kind}-{bits}")
     if precision != "bf16":
         raise ValueError(f"qwen-tts on Linux supports only bf16, not {precision}")
     return Qwen3TTSModel.from_pretrained(
-        f"Qwen/Qwen3-TTS-12Hz-1.7B-{kind}",
+        f"Qwen/Qwen3-TTS-12Hz-{model_size}-{kind}",
         device_map="cuda:0",
         dtype=torch.bfloat16,
         attn_implementation="sdpa",
@@ -208,6 +216,7 @@ def iter_chunks(
     text: str,
     language: str = "auto",
     *,
+    model_size: str = "1.7B",
     precision: str = "bf16",
     speaker: str | None = None,
     instruct: str | None = None,
@@ -227,7 +236,7 @@ def iter_chunks(
     optional ref_text for Base. on_audio, if given, receives the audio while it
     is generated, in pieces of about 2 s on the Mac and whole chunks on Linux.
     """
-    model = load_model(kind, precision)
+    model = load_model(kind, model_size, precision)
     voice = {
         "Base": {"ref_audio": ref_audio, "ref_text": ref_text},
         "CustomVoice": {"speaker": speaker, "instruct": instruct},
