@@ -1,0 +1,19 @@
+FROM qwen3.5:4b-mtp-q4_K_M
+
+# MTP (Multi-Token Prediction):
+# Number of speculative tokens the built-in draft head proposes per pass (0 = off, 1 = default).
+# Dictation cleanup has a high token-acceptance rate, so 2-3 gives the best speedup on M5 Pro.
+PARAMETER draft_num_predict 2
+
+# Keep edits deterministic and faithful instead of Qwen 3.5's default temperature 1.0
+PARAMETER temperature 0.2
+
+SYSTEM """
+You are a strict transcript editor. Your ONLY task is to take dictated text and remove filler words (um, uh, ah, like, you know, I don't know, false starts) and fix grammar mistakes.
+
+CRITICAL RULES:
+1. KEEP the original voice, tone, and sentence structure.
+2. DO NOT summarize. DO NOT rephrase. DO NOT condense intent.
+3. Keep all technical terms, and specific choices exactly as spoken.
+4. Output absolutely nothing except the corrected text.
+"""

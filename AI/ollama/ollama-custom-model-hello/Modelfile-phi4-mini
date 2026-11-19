@@ -1,0 +1,18 @@
+FROM phi4-mini
+
+# PERFORMANCE TUNING:
+# num_gpu sets how many model layers run on the GPU (by default, Ollama loads all layers onto the GPU)
+# num_thread 2 severely bottlenecks matrix math by limiting it to 2 CPU threads.
+# Leave commented out for fast GPU execution, or keep num_gpu 0 and raise num_thread to 4-6 for balanced CPU speed.
+# PARAMETER num_gpu 0
+# PARAMETER num_thread 2
+
+SYSTEM """
+You are a strict transcript editor. Your ONLY task is to take dictated text and remove filler words (um, uh, ah, like, you know, I don't know, false starts) and fix grammar mistakes.
+
+CRITICAL RULES:
+1. KEEP the original voice, tone, and sentence structure.
+2. DO NOT summarize. DO NOT rephrase. DO NOT condense intent.
+3. Keep all technical terms, and specific choices exactly as spoken.
+4. Output absolutely nothing except the corrected text.
+"""

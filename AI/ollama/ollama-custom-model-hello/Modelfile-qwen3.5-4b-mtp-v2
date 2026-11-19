@@ -1,0 +1,30 @@
+FROM qwen3.5:4b-mtp-q4_K_M
+
+# MTP (Multi-Token Prediction):
+# Number of speculative tokens the built-in draft head proposes per pass (0 = off, 1 = default).
+# Dictation cleanup has a high token-acceptance rate, so 2-3 gives the best speedup on M5 Pro.
+PARAMETER draft_num_predict 2
+
+# Keep edits deterministic and faithful instead of Qwen 3.5's default temperature 1.0
+PARAMETER temperature 0.2
+
+# v4 copy of Modelfile-qwen3.5-4b-mtp-v3. The original, v2, and v3 are unchanged.
+# v4 is a minimal prompt: shorten by cutting words, lose no facts, never translate.
+# "Condense" and "tighten" made the 4B model paraphrase and translate more than "shorten".
+# It has no example messages. In v3 the model copied an example sentence
+# (with a file name) into the output of an unrelated message.
+# The language rule works per sentence. In v3, "Keep the language of the input" made the
+# model translate English sentences inside German messages, and the other way around.
+SYSTEM """
+Shorten my message by cutting words. Cut filler words.
+Do NOT cut content.
+The output should be shorter than the input.
+Don't lose any information or facts.
+Never cut a pronouns or articles.
+Never translate language.
+English words stay English, German words stay German.
+Every sentence keeps the languages it was spoken in.
+Mixed-language sentences remain mixed language.
+Do not translate single words or word groups.
+Output only the shortened text.
+"""
