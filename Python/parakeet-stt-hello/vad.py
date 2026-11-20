@@ -50,8 +50,14 @@ class SpeechSegmenter:
         self._threshold = threshold
         # Hysteresis as in Silero's reference code: speech ends below this.
         self._neg_threshold = threshold - 0.15
-        self._min_silence_frames = max(1, min_silence_ms * SAMPLE_RATE // 1000 // FRAME_SAMPLES)
-        self._max_segment_frames = max(1, int(max_segment_seconds * SAMPLE_RATE / FRAME_SAMPLES))
+        self._min_silence_frames = max(
+            1,
+            min_silence_ms * SAMPLE_RATE // 1000 // FRAME_SAMPLES,
+        )
+        self._max_segment_frames = max(
+            1,
+            int(max_segment_seconds * SAMPLE_RATE / FRAME_SAMPLES),
+        )
 
         self._state = np.zeros((2, 1, 128), dtype=np.float32)
         self._context = np.zeros(CONTEXT_SAMPLES, dtype=np.float32)
@@ -98,7 +104,9 @@ class SpeechSegmenter:
             return None
 
         self._segment.append(frame)
-        self._silent_frames = self._silent_frames + 1 if probability < self._neg_threshold else 0
+        self._silent_frames = (
+            self._silent_frames + 1 if probability < self._neg_threshold else 0
+        )
         if (
             self._silent_frames >= self._min_silence_frames
             or len(self._segment) >= self._max_segment_frames

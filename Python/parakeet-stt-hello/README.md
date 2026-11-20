@@ -28,6 +28,9 @@ uv run python stream_stdout.py                       # ONNX Runtime on the CPU
 uv run python stream_stdout.py --device gpu          # MLX on the GPU
 uv run python stream_stdout.py --min-silence-ms 300  # end phrases at shorter pauses
 uv run python stream_stdout.py --partial-seconds 0   # final lines only
+uv run python stream_stdout.py --stop-after 10       # finalize after 10 seconds and exit
 ```
 
-Press `Ctrl+C` to stop.
+The `--stop-after` countdown starts once the model is loaded.
+
+Press `Ctrl+C` to stop manually.

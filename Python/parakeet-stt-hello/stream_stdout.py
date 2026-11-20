@@ -8,6 +8,8 @@ and is replaced by the final text at the pause.
 
 --device cpu (default) runs the int8 ONNX export via onnx-asr, --device gpu
 runs the MLX port via mlx-audio. The language is detected automatically.
+--stop-after <seconds> records for that long after the model is loaded, then
+finalizes the last segment and exits.
 
 Usage
 
@@ -16,6 +18,7 @@ Usage
     uv run python stream_stdout.py --device gpu
     uv run python stream_stdout.py --min-silence-ms 300
     uv run python stream_stdout.py --partial-seconds 0
+    uv run python stream_stdout.py --stop-after 10
 
 The first run of each device downloads its weights (gpu about 2.5 GB, cpu
 about 0.7 GB). Later runs load the cached weights without network access.
@@ -23,19 +26,25 @@ about 0.7 GB). Later runs load the cached weights without network access.
 author: andreasl
 """
 
-# pylint: disable=import-error
+from __future__ import annotations
 
+# pylint: disable=import-error
 import argparse
 import shutil
 import sys
 import threading
-from collections.abc import Callable
+import time
+from contextlib import suppress
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import sounddevice as sd
 
 from vad import SAMPLE_RATE, SpeechSegmenter
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 MLX_REPO = "mlx-community/parakeet-tdt-0.6b-v3"
 ONNX_MODEL = "nemo-parakeet-tdt-0.6b-v3"
@@ -77,12 +86,21 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--stop-after",
+        type=float,
+        metavar="SECONDS",
+        help="Stop recording after SECONDS, finalize the last segment, and exit",
+    )
+    parser.add_argument(
         "--poll-ms",
         type=int,
         default=150,
         help="Microphone polling interval in milliseconds",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.stop_after is not None and args.stop_after <= 0:
+        parser.error("--stop-after must be greater than 0")
+    return args
 
 
 def stdout(message: str) -> None:
@@ -115,7 +133,7 @@ def resolve_mlx_model_path(repo: str) -> Path:
                 repo,
                 local_files_only=True,
                 allow_patterns=DEFAULT_ALLOW_PATTERNS,
-            )
+            ),
         )
     except LocalEntryNotFoundError:
         stderr(f"{repo} is not cached yet, downloading...\n")
@@ -188,10 +206,27 @@ def print_partial(text: str) -> None:
     stdout(f"{CLEAR_LINE}{text[-width:]}")
 
 
-def print_final(text: str, show_partials: bool) -> None:
+def print_final(text: str, *, show_partials: bool) -> None:
     """Print a finished segment, replacing its provisional line if one is shown."""
     prefix = CLEAR_LINE if show_partials else ""
     stdout(f"{prefix}{text}\n" if text else prefix)
+
+
+def finalize(
+    pending_chunks: list[np.ndarray],
+    lock: threading.Lock,
+    segmenter: SpeechSegmenter,
+    transcribe: Callable[[np.ndarray], str],
+    *,
+    show_partials: bool,
+) -> None:
+    """Transcribe captured audio and the unfinished segment, then reset."""
+    fresh = drain_pending(pending_chunks, lock)
+    if fresh:
+        for segment in segmenter.feed(np.concatenate(fresh)):
+            print_final(transcribe(segment), show_partials=show_partials)
+    if (segment := segmenter.flush()) is not None:
+        print_final(transcribe(segment), show_partials=show_partials)
 
 
 def run_stream(args: argparse.Namespace) -> None:
@@ -207,41 +242,57 @@ def run_stream(args: argparse.Namespace) -> None:
     show_partials = args.partial_seconds > 0 and sys.stdout.isatty()
     partial_samples = int(args.partial_seconds * SAMPLE_RATE)
     last_partial_len = 0
-    stderr("Streaming... press Ctrl+C to stop.\n")
+    deadline: float | None = None
+    if args.stop_after is not None:
+        deadline = time.monotonic() + args.stop_after
+        stderr(
+            f"Streaming for {args.stop_after:g} seconds... "
+            "press Ctrl+C to stop earlier.\n",
+        )
+    else:
+        stderr("Streaming... press Ctrl+C to stop.\n")
 
-    try:
-        with sd.InputStream(
+    with (
+        suppress(KeyboardInterrupt),
+        sd.InputStream(
             samplerate=SAMPLE_RATE,
             channels=1,
             dtype="float32",
             callback=callback,
-        ):
-            while True:
-                sd.sleep(args.poll_ms)
-                fresh = drain_pending(pending_chunks, lock)
-                if not fresh:
-                    continue
+        ),
+    ):
+        while deadline is None or time.monotonic() < deadline:
+            remaining_ms = (
+                args.poll_ms
+                if deadline is None
+                else int(max(0, (deadline - time.monotonic()) * 1000))
+            )
+            sd.sleep(min(args.poll_ms, remaining_ms))
+            fresh = drain_pending(pending_chunks, lock)
+            if not fresh:
+                continue
 
-                for segment in segmenter.feed(np.concatenate(fresh)):
-                    print_final(transcribe(segment), show_partials)
-                    last_partial_len = 0
-
-                current = segmenter.current_segment
-                if (
-                    show_partials
-                    and current is not None
-                    and len(current) - last_partial_len >= partial_samples
-                ):
-                    print_partial(transcribe(current))
-                    last_partial_len = len(current)
-    except KeyboardInterrupt:
-        fresh = drain_pending(pending_chunks, lock)
-        if fresh:
             for segment in segmenter.feed(np.concatenate(fresh)):
-                print_final(transcribe(segment), show_partials)
-        if (segment := segmenter.flush()) is not None:
-            print_final(transcribe(segment), show_partials)
-        stderr("Stopped.\n")
+                print_final(transcribe(segment), show_partials=show_partials)
+                last_partial_len = 0
+
+            current = segmenter.current_segment
+            if (
+                show_partials
+                and current is not None
+                and len(current) - last_partial_len >= partial_samples
+            ):
+                print_partial(transcribe(current))
+                last_partial_len = len(current)
+
+    finalize(
+        pending_chunks,
+        lock,
+        segmenter,
+        transcribe,
+        show_partials=show_partials,
+    )
+    stderr("Stopped.\n")
 
 
 def main() -> None:
