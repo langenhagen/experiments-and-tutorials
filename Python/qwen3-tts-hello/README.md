@@ -188,6 +188,26 @@ the voice is cloned:
   this mode to keep the output from looping.
 - A wrong transcript misleads the model about which sounds are which words.
 
+## Voice Design
+
+You can specify the voice via short prompt. Tipps, according to my reasearch:
+
+- Prompt length: approx. 1–3 sentences
+- Recommended length: 15–40 words
+- Shorter prompts often work better.
+- Maximum length: approx. 2,048 characters.
+- Describable characteristics:
+  - Gender
+  - Age
+  - Vocal range and pitch
+  - Voice quality and texture
+  - Speaking speed
+  - Emotions and mood
+  - Accent and pronunciation
+  - Speaking style and emphasis
+- Avoid vague descriptions.
+- Use clear and specific characteristics.
+
 ## Models
 
 ```
